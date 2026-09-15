@@ -1,0 +1,132 @@
+[
+  {
+    "year": 2021,
+    "sort": "2021-06-01",
+    "date": "June 2021",
+    "kind": "Presentation",
+    "title": "Forging legal contracts and smart contracts using the Minimum Hybrid Contract (MHC)",
+    "meta": "EASE 2021, online conference",
+    "authors": "Jørgen Svennevik Notland, Jakob Svennevik Notland, Donn Morrison",
+    "description": "Conference presentation of the MHC paper.",
+    "links": [
+      {
+        "label": "Watch on YouTube",
+        "href": "https://youtu.be/2ImYru2DyZ8",
+        "primary": true
+      },
+      {
+        "label": "ResearchGate",
+        "href": "https://www.researchgate.net/publication/357081176_The_Minimum_Hybrid_Contract_MHC_Combining_legal_and_blockchain_smart_contracts_httpsarxivorgabs200206850_httpsdlacmorgdoi10114533832193383275"
+      }
+    ]
+  },
+  {
+    "year": 2020,
+    "sort": "2020-06-01",
+    "date": "June 2020",
+    "kind": "Conference paper, peer reviewed",
+    "title": "The Minimum Hybrid Contract (MHC): Combining Legal and Blockchain Smart Contracts",
+    "meta": "EASE 2020, 24th International Conference on Evaluation and Assessment in Software Engineering, ACM",
+    "authors": "Jørgen Svennevik Notland, Jakob Svennevik Notland, Donn Morrison",
+    "description": "Proposes the Minimum Hybrid Contract: an online smart contract immutably linked to an offline legal contract, so that a contract's financial transactions become auditable, transparent and immutable while disputes stay with the civil courts. Preprint on arXiv, February 2020.",
+    "citations": [
+      {
+        "source": "Google Scholar",
+        "count": 10,
+        "href": "https://scholar.google.com/citations?hl=en&user=HddorGcAAAAJ"
+      },
+      {
+        "source": "ResearchGate",
+        "count": 6,
+        "href": "https://www.researchgate.net/publication/341127835_The_Minimum_Hybrid_Contract_MHC_Combining_Legal_and_Blockchain_Smart_Contracts"
+      },
+      {
+        "source": "Semantic Scholar",
+        "count": 5,
+        "href": "https://www.semanticscholar.org/paper/f0767a578d652336cabb014c22cfea946e072ee7"
+      },
+      {
+        "source": "Crossref",
+        "count": 4,
+        "href": "https://api.crossref.org/works/10.1145/3383219.3383275"
+      }
+    ],
+    "links": [
+      {
+        "label": "ACM Digital Library (DOI 10.1145/3383219.3383275)",
+        "href": "https://dl.acm.org/doi/10.1145/3383219.3383275",
+        "primary": true
+      },
+      {
+        "label": "Preprint on arXiv (2002.06850)",
+        "href": "https://arxiv.org/abs/2002.06850"
+      },
+      {
+        "label": "ResearchGate",
+        "href": "https://www.researchgate.net/publication/341127835_The_Minimum_Hybrid_Contract_MHC_Combining_Legal_and_Blockchain_Smart_Contracts"
+      },
+      {
+        "label": "Medium summary",
+        "href": "https://jqrgen.medium.com/the-minimum-hybrid-contract-mhc-tying-legal-effect-to-blockchain-immutability-a9ed1cd8b0f5"
+      }
+    ]
+  },
+  {
+    "year": 2019,
+    "sort": "2019-06-01",
+    "date": "June 2019",
+    "kind": "Master's thesis",
+    "title": "The Minimum Hybrid Contract (MHC): Combining Legal and Blockchain Smart Contracts",
+    "meta": "NTNU School of Entrepreneurship, Norwegian University of Science and Technology",
+    "authors": "Jørgen Svennevik Notland. Supervisors: Roger Sørheim and Donn Morrison",
+    "description": "Having identified contracts as the nexus of corruption, the thesis asks how contracts, blockchain smart contracts and financial regulation can be combined to make contracts secure, accountable, transparent and inclusive, and introduces the term Minimum Hybrid Contract.",
+    "links": [
+      {
+        "label": "ResearchGate (full text)",
+        "href": "https://www.researchgate.net/publication/333755664_Master_Thesis_The_Minimum_Hybrid_Contract_MHC_Combining_Legal_and_Blockchain_Smart_Contracts_Master_Thesis",
+        "primary": true
+      }
+    ],
+    "citations": [
+      {
+        "source": "ResearchGate",
+        "count": 0,
+        "href": "https://www.researchgate.net/publication/333755664_Master_Thesis_The_Minimum_Hybrid_Contract_MHC_Combining_Legal_and_Blockchain_Smart_Contracts_Master_Thesis"
+      }
+    ]
+  },
+  {
+    "year": 2017,
+    "sort": "2017-02-01",
+    "date": "Autumn 2016, published February 2017",
+    "kind": "Project thesis",
+    "title": "Blockchain enabled Trust & Transparency in supply chains",
+    "meta": "NTNU School of Entrepreneurship, Norwegian University of Science and Technology",
+    "authors": "Jørgen Svennevik Notland, Anders Viet Hua",
+    "description": "Investigates the nature of trust in supply chains and whether blockchain can increase it. Blockchain gives high integrity but unstable information reliability: how data is recorded on-chain is the critical step, and actors need a clear incentive before they adopt it.",
+    "citations": [
+      {
+        "source": "ResearchGate",
+        "count": 29,
+        "href": "https://www.researchgate.net/publication/313309221_Project_Thesis_Blockchain_enabled_Trust_Transparency_in_supply_chains"
+      },
+      {
+        "source": "Google Scholar",
+        "count": 17,
+        "href": "https://scholar.google.com/citations?hl=en&user=HddorGcAAAAJ"
+      }
+    ],
+    "links": [
+      {
+        "label": "ResearchGate (full text)",
+        "href": "https://www.researchgate.net/publication/313309221_Project_Thesis_Blockchain_enabled_Trust_Transparency_in_supply_chains",
+        "primary": true
+      },
+      {
+        "label": "Medium summary",
+        "href": "https://jqrgen.medium.com/link-to-original-paper-https-www-pdf-archive-com-2017-02-01-project-thesis-anders-j-rgen-project-3921bf4cbdd7"
+      }
+    ],
+    "note": "Google Scholar lists this thesis under two records (12 and 5 citations); 17 is the sum. Counts overlap between sources, so they are not added together."
+  }
+]

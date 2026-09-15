@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nexa vs Bitcoin and Ethereum</title>
+<style>
+:root{
+  color-scheme:light;
+  --ground:#E5E7EB; --paper:#FFFFFF; --band:#000000; --band-ink:#FFFFFF;
+  --ink:#000000; --ink-2:#1F2937; --muted:#4B5563; --line:#000000; --hair:#D1D5DB;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink)}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.band{background:var(--band);color:var(--band-ink)}
+.band .inner{max-width:1080px;margin:0 auto;padding:22px 24px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px}
+.band .name{font-size:22px;font-weight:400;letter-spacing:.01em;color:var(--band-ink);text-decoration:none}
+.band nav{display:flex;flex-wrap:wrap;gap:4px 22px;margin-left:auto}
+.band nav a{color:var(--band-ink);text-decoration:none;font-size:15px;padding:4px 0;border-bottom:2px solid transparent;opacity:.8}
+.band nav a:hover{opacity:1}
+.band nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--band-ink)}
+.page{max-width:1080px;margin:0 auto;padding:36px 24px 72px}
+h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+.count{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.year{display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;margin-top:36px}
+@media (max-width:700px){.year{grid-template-columns:1fr;gap:8px}}
+.year h2{font-size:30px;font-weight:400;margin:0;letter-spacing:-.02em;font-variant-numeric:tabular-nums;position:sticky;top:12px}
+.year ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.item{display:grid;grid-template-columns:minmax(200px,2fr) 3fr;background:var(--paper);border:1px solid var(--line)}
+.item.no-thumb{grid-template-columns:1fr}
+@media (max-width:700px){.item{grid-template-columns:1fr}}
+.thumb{margin:0;background:#000;aspect-ratio:16/9;border-right:1px solid var(--line)}
+@media (max-width:700px){.thumb{border-right:0;border-bottom:1px solid var(--line)}}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px}
+.kind{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.body h3 a{color:var(--ink);text-decoration:none}
+.body h3 a:hover{text-decoration:underline}
+.where{margin:0;font-size:14px;color:var(--muted)}
+.where .date{color:var(--ink-2)}
+.authors{margin:0;font-size:14px;color:var(--ink-2)}
+.desc{margin:2px 0 0;color:var(--ink-2);max-width:66ch;font-size:15px}
+.cites{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.cites b{font-weight:600}
+.cites span{color:var(--muted)}
+.links{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.links a{display:inline-block;color:var(--ink);text-decoration:none;font-size:14px;padding:5px 10px;border:1px solid var(--line);background:var(--paper)}
+.links a.primary{background:var(--band);color:var(--band-ink)}
+.links a:hover{text-decoration:underline}
+.note{margin:6px 0 0;font-size:13px;color:var(--muted)}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+
+.deck-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;margin-bottom:16px}
+.deck-head h1{font-size:24px;margin:0}
+.deck-head .meta{font-size:14px;color:var(--muted)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start}
+@media (max-width:900px){main{grid-template-columns:1fr}}
+.frame{margin:0;background:#000;border:1px solid var(--line);overflow:hidden;aspect-ratio:16/9;position:relative;cursor:pointer;outline:none}
+.frame:focus-visible{box-shadow:0 0 0 3px var(--ink)}
+.frame img{display:block;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none}
+.frame:fullscreen{background:#000;cursor:none}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:12px}
+.controls button,.controls a.dl{font:500 14px var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--line);padding:7px 11px;cursor:pointer;line-height:1.2;text-decoration:none}
+.controls button:hover,.controls a.dl:hover{text-decoration:underline}
+.controls button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.controls button[aria-pressed="true"]{background:var(--band);color:var(--band-ink)}
+.counter{font-size:14px;color:var(--ink-2);min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
+.stitle{flex:1 1 240px;font-size:15px;font-weight:500;color:var(--ink);min-width:0}
+.hint{margin:8px 0 0;font-size:13px;color:var(--muted)}
+.notes{margin-top:20px;padding:16px 20px;background:var(--paper);border:1px solid var(--line)}
+.notes h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:500}
+.notes p{margin:0;max-width:72ch;color:var(--ink-2);font-size:15.5px;line-height:1.6;white-space:pre-line}
+.toc h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:500}
+.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.toc button{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start;width:100%;text-align:left;font:400 14px/1.35 var(--sans);color:var(--ink-2);background:transparent;border:0;padding:7px 8px;cursor:pointer}
+.toc button:hover{background:var(--paper)}
+.toc button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.toc button[aria-current="true"]{background:var(--band);color:var(--band-ink)}
+.toc .n{font-size:12px;line-height:1.6;color:var(--muted);text-align:right;padding-right:2px;font-variant-numeric:tabular-nums}
+.toc button[aria-current="true"] .n{color:var(--band-ink)}
+</style>
+</head>
+<body><div class="band"><div class="inner">
+    <a class="name" href="../../">Jørgen S. Notland</a>
+    <nav aria-label="Sections"><a href="../../" aria-current="page">Presentations</a><a href="../../talks/">Talks</a><a href="../../articles/">Articles</a><a href="../../papers/">Papers</a></nav>
+  </div></div>
+<div class="page">
+  <header class="deck-head">
+    <h1>Nexa vs Bitcoin and Ethereum</h1>
+    <span class="meta">15 slides · Jørgen S. Notland · Norway 2026</span>
+  </header>
+  <main>
+    <section aria-label="Nexa vs Bitcoin and Ethereum">
+      <figure class="frame" id="frame" tabindex="0">
+        <img id="slide" src="slides/01.png" alt="Sound money at internet scale" width="1600" height="900">
+      </figure>
+      <div class="controls">
+        <button type="button" id="prev" aria-label="Previous slide">←</button>
+        <div class="counter"><span id="cur">1</span> of 15</div>
+        <button type="button" id="next" aria-label="Next slide">→</button>
+        <div class="stitle" id="stitle">Sound money at internet scale</div>
+        <button type="button" id="notesBtn" aria-pressed="true">Notes</button>
+        <button type="button" id="fsBtn">Fullscreen</button>
+        <a class="dl" href="../Nexa-vs-Bitcoin-Ethereum.pptx" download>Download .pptx</a>
+        <a class="dl" href="../Nexa-vs-Bitcoin-Ethereum.pdf" download>Download .pdf</a>
+      </div>
+      <p class="hint">← → to move between slides · N toggles notes · F for fullscreen</p>
+      <div class="notes" id="notes">
+        <h2>Speaker notes</h2>
+        <p id="ntext">Introduce yourself briefly: informatics and the School of Entrepreneurship at NTNU Norway in Trondheim, and you teach Bitcoin and Nexa blockchain at the University of Exeter. For this audience the NTNU Norway link matters: the environmental research on slide 6 comes from your own university. Opening. This deck is written for a sceptical audience. The first content slide concedes the criticism before answering it. Sources for every number are in the notes of each slide.</p>
+      </div>
+    </section>
+    <aside class="toc" aria-label="Slides">
+      <h2>Slides</h2>
+      <ol id="toc">
+        <li><button type="button" data-n="1" aria-current="true"><span class="n">1</span><span>Sound money at internet scale</span></button></li>
+        <li><button type="button" data-n="2"><span class="n">2</span><span>The critique of crypto is mostly right</span></button></li>
+        <li><button type="button" data-n="3"><span class="n">3</span><span>At scale, Nexa is up to 13,000× more energy efficient than Bitcoin</span></button></li>
+        <li><button type="button" data-n="4"><span class="n">4</span><span>Same joules, different denominator</span></button></li>
+        <li><button type="button" data-n="5"><span class="n">5</span><span>Nexa can use as much electricity as Bitcoin if enough people mine. At scale, it is far more energy efficient</span></button></li>
+        <li><button type="button" data-n="6"><span class="n">6</span><span>NTNU Norway research: the greenest kilowatt-hour is the one you never need</span></button></li>
+        <li><button type="button" data-n="7"><span class="n">7</span><span>No single-purpose hardware, no mountain of e-waste</span></button></li>
+        <li><button type="button" data-n="8"><span class="n">8</span><span>Fair launch: zero premine, zero ICO, zero venture capital</span></button></li>
+        <li><button type="button" data-n="9"><span class="n">9</span><span>Scale: 42,000 transactions per second on today's hardware</span></button></li>
+        <li><button type="button" data-n="10"><span class="n">10</span><span>Payments that feel like Vipps: under two seconds, about 3 NEXA (under $0.0001)</span></button></li>
+        <li><button type="button" data-n="11"><span class="n">11</span><span>Tokens and NFTs are built into the protocol, not bolted on</span></button></li>
+        <li><button type="button" data-n="12"><span class="n">12</span><span>Smart contracts without the EVM</span></button></li>
+        <li><button type="button" data-n="13"><span class="n">13</span><span>Why this matters in Norway</span></button></li>
+        <li><button type="button" data-n="14"><span class="n">14</span><span>Comparison overview</span></button></li>
+        <li><button type="button" data-n="15"><span class="n">15</span><span>Three things to remember</span></button></li>
+      </ol>
+    </aside>
+  </main>
+</div>
+<script>
+(function(){
+  var S = [{"t":"Sound money at internet scale","n":"Introduce yourself briefly: informatics and the School of Entrepreneurship at NTNU Norway in Trondheim, and you teach Bitcoin and Nexa blockchain at the University of Exeter. For this audience the NTNU Norway link matters: the environmental research on slide 6 comes from your own university. Opening. This deck is written for a sceptical audience. The first content slide concedes the criticism before answering it. Sources for every number are in the notes of each slide.","i":"slides/01.png"},{"t":"The critique of crypto is mostly right","n":"Concede first. Energy: Cambridge CBECI live estimate 138 TWh/yr, Digiconomist ~204 TWh/yr; Norway's national consumption is about 140 TWh/yr. E-waste: de Vries & Stoll (2021), 30.7 kt/yr, ASIC lifespan 1.29 years, 272 g per transaction. Financialization: Ethereum's 72M ETH genesis allocation and stake-weighted rewards; NFT minting on Ethereum L1 historically cost tens of dollars in gas.","i":"slides/02.png"},{"t":"At scale, Nexa is up to 13,000× more energy efficient than Bitcoin","n":"Method from the Medium article 'Nexa is 13,000x more energy efficient than Bitcoin' (Sept 2026): kWh per tx = 4,376 / TPS at 138 TWh/yr. Bitcoin 7.5 TPS -> 580 kWh; busiest day 10.3 TPS -> 425 kWh. Nexa 42,000 TPS is a benchmark on today's hardware; 100,000 with Blitz is a projection. Be explicit that this is a like-for-like capacity comparison at equal network power. Sources: Cambridge CBECI, Digiconomist, Blockchair.","i":"slides/03.png"},{"t":"Same joules, different denominator","n":"Chart reproduced from the interactive artifact 'The Denominator Chart' (claude.ai/artifact/QTRwhPcMUUQ6PwhibYYbQ2), which also lets you toggle to Digiconomist's 204 TWh/yr. How to read it: one numerator, miners burn whatever the block reward pays for, so network electricity is the same for both lines. Bitcoin's denominator is stuck: throughput has sat near 7 TPS since 2010 and the protocol caps it at 7 to 14, so extra demand lengthens the queue instead of adding transactions. Nexa's denominator grows: the same joules divided by 42,000 TPS are 5,600x thinner than Bitcoin today, and 13,000x at 100,000 TPS with Blitz. That ratio does not depend on which electricity estimate you believe. Bitcoin's busiest day ever, 10.3 TPS, would sit at 425 kWh per transaction; its theoretical 14 TPS ceiling at 313. Sources: Cambridge CBECI, Digiconomist, Blockchair, 2026.","i":"slides/04.png"},{"t":"Nexa can use as much electricity as Bitcoin if enough people mine. At scale, it is far more energy efficient","n":"Be upfront: proof-of-work energy follows the coin's value, not its usage, and that applies to Nexa as much as to Bitcoin. If Nexa were as valuable as Bitcoin, its miners would plausibly spend as much on electricity. The claim is not that Nexa is small, it is that the same electricity does thousands of times more work. Bitcoin: CBECI Aug 2026 estimate 16.09 GW / 141 TWh per year. Norway consumes ~140 TWh/yr = ~16 GW average. Ethereum: ethereum.org, ~0.0026 TWh/yr = ~0.3 MW average. Nexa today: network hashrate 2.5 to 4.8 TH/s (2Miners, Kryptex, 2026); an RTX 4090 does ~203 MH/s at ~306 W. 4.84 TH/s / 0.66 MH/W = ~7 MW; older cards are less efficient, hence 5 to 15 MW.","i":"slides/05.png"},{"t":"NTNU Norway research: the greenest kilowatt-hour is the one you never need","n":"Why this slide: the organisers' objection is environmental, so the answer should come from Norwegian environmental research, not from crypto. Borgelt J., Gilad D., May R., Verones F. (2026), Cleaner Energy Systems vol. 13, NTNU Norway Industrial Ecology Programme: six scenarios for Norway's electricity build-out to 2050; habitat loss up to +28%; wind has the largest potential for new habitat loss, the transmission grid the second largest; quote from the NTNU Norway press release (May 2026): the most effective way to substantially reduce biodiversity impacts is to lower electricity demand through energy efficiency measures. Hertwich E.G., Gibon T. et al. (2014), PNAS 112(20): 6277-6282, published online Oct 2014, NTNU Norway: global LCA of electricity supply to 2050; low-carbon technologies have far lower impacts than fossil, but non-zero land, material and emission footprints. HighEFF (FME centre led by SINTEF Energy with NTNU Norway), NTNU Norway Energy Transition Week 2024: EU 'energy efficiency first' principle; Norway's COP28 pledge to put energy efficiency as the first fuel at the core of policymaking; director Petter Røkke's 'conflict-free measure' quote. Supporting: Sandberg et al. (SINTEF/NTNU Norway) estimate 12.7 TWh (2030) to 21.3 TWh (2050) of savings potential in Norwegian buildings; the Energy Commission (NOU 2023:3, 'Mer av alt – raskere') calls efficiency the fastest, cheapest and least nature-destructive way to close the power gap. The tie-in: at equal electricity, Nexa does thousands of times more payments than Bitcoin, which is exactly the kind of demand reduction per unit of value these researchers ask for.","i":"slides/06.png"},{"t":"No single-purpose hardware, no mountain of e-waste","n":"E-waste figures: de Vries & Stoll, 'Bitcoin's growing e-waste problem', Resources, Conservation & Recycling (2021). NexaPoW mixes SHA-256 with Schnorr signature creation, deliberately so that any specialised hardware also accelerates signature validation (spec.nexa.org/mining/NexaPOW). Blitz: FPGA signature-verification engine announced Nov 2024, in development and testing through 2026 (Nexa July 2026 newsletter). Honest caveat: GPU mining still consumes hardware; the point is reuse, not zero footprint.","i":"slides/07.png"},{"t":"Fair launch: zero premine, zero ICO, zero venture capital","n":"Nexa: nexa.org, 'Nexa was 100% fair launched, with no team coins, no premine, and no VCs, and 100% of its supply will be mined via Proof of Work.' Launch date 21 June 2022. Ethereum: 72M ETH at genesis (about 60M sold in the 2014 crowdsale, 12M to the foundation and early contributors); circulating supply ~120M ETH, so roughly 60%. Bitcoin: estimates of ~1M BTC mined by Satoshi in 2009-2010.","i":"slides/08.png"},{"t":"Scale: 42,000 transactions per second on today's hardware","n":"42,000 TPS is a Nexa benchmark; nexa.org states '>60,000 TPS'. 100,000 with Blitz is a projection. Ethereum: daily average mainnet TPS 25.78 in Q1 2026 (ethereum.org, 'Building on Ethereum in 2026'); gas limit 60M, with plans to raise it further. Post-quantum signature sizes from the article: Schnorr 64 bytes, Falcon 666, Dilithium 2,420.","i":"slides/09.png"},{"t":"Payments that feel like Vipps: under two seconds, about 3 NEXA (under $0.0001)","n":"Fee figures from explorer.nexa.org on 15 Sept 2026: the network fee rate is 1 satoshi per byte and a simple transaction is 250 to 320 bytes, so it pays 2.5 to 3.2 NEXA (100 satoshis = 1 NEXA). At the explorer's rate of $0.0000013 per NEXA that is about $0.000004, or roughly 0.004 øre. Update the price before presenting. nexa.org: 'confirms in under two seconds with near-zero fees', 'under $0.0001 per transaction'. Zero-conf with double-spend proofs is Bitcoin Unlimited technology carried into Nexa. Vipps reference: Norway is close to cashless; the point is that the user experience Norwegians expect is already the baseline here.","i":"slides/10.png"},{"t":"Tokens and NFTs are built into the protocol, not bolted on","n":"spec.nexa.org/tokens/grouptokens: 'Groups implement native tokens; that is, the tokens are a fundamental primitive in the blockchain rather than implemented as a smart contract or in a layer 2 data-carrier protocol.' Address the NFT critique directly: the speculation the organisers describe is a product of scarcity plus high minting cost plus marketing. Nexa removes the cost and the contract risk; whether an item is speculative is then up to the game designer, not the chain.","i":"slides/11.png"},{"t":"Smart contracts without the EVM","n":"nexa.org: 'Native on-chain programmability without EVM complexity', 'No EVM overhead'. The developer stack: Wally wallet, TDPP payment protocol, nexid identity, CAPD messaging, NexaJS and libnexakotlin. Keep this slide short for a non-developer audience; expand only if asked.","i":"slides/12.png"},{"t":"Why this matters in Norway","n":"SSB: 98% of Norway's electricity from hydro and wind (late 2025); normal annual production ~157 TWh, consumption ~140 TWh. June 2025: the government announced a temporary ban on new proof-of-work mining data centres, with a mandatory data-centre registry; officials have hinted it may become permanent. Be honest: the ban applies to PoW mining generally, so a Nexa farm would be covered too. The point is that Nexa's network does not depend on farms anywhere.","i":"slides/13.png"},{"t":"Comparison overview","n":"One-slide answer to the organisers' three themes: energy and e-waste, who benefits, and NFT speculation. Every figure appears earlier in the deck with its source.","i":"slides/14.png"},{"t":"Three things to remember","n":"Close on the three answers to the three concerns. If challenged on the 13,000x figure: it is a capacity comparison at equal network power, 5,600x on today's benchmark and 13,000x with Blitz; the floor is 1,000x because Bitcoin cannot exceed ~14 TPS.","i":"slides/15.png"}];
+  var cur = 0;
+  var img = document.getElementById('slide'), curEl = document.getElementById('cur');
+  var stitle = document.getElementById('stitle'), ntext = document.getElementById('ntext');
+  var notes = document.getElementById('notes'), notesBtn = document.getElementById('notesBtn');
+  var frame = document.getElementById('frame');
+  var tocBtns = Array.prototype.slice.call(document.querySelectorAll('#toc button'));
+  var cache = {};
+  function preload(i){ if (i<0||i>=S.length||cache[i]) return; var im = new Image(); im.src = S[i].i; cache[i] = im; }
+  function go(i, push){
+    i = Math.max(0, Math.min(S.length-1, i));
+    cur = i;
+    img.src = S[i].i; img.alt = S[i].t;
+    curEl.textContent = i+1; stitle.textContent = S[i].t; if (ntext) ntext.textContent = S[i].n;
+    tocBtns.forEach(function(b, k){ if (k===i) b.setAttribute('aria-current','true'); else b.removeAttribute('aria-current'); });
+    if (push !== false) { try { history.replaceState(null, '', '#' + (i+1)); } catch(e){} }
+    preload(i+1); preload(i-1);
+  }
+  document.getElementById('prev').addEventListener('click', function(){ go(cur-1); });
+  document.getElementById('next').addEventListener('click', function(){ go(cur+1); });
+  frame.addEventListener('click', function(e){
+    var r = frame.getBoundingClientRect();
+    go(e.clientX - r.left < r.width * 0.25 ? cur-1 : cur+1);
+  });
+  tocBtns.forEach(function(b){ b.addEventListener('click', function(){ go(+b.dataset.n - 1); }); });
+  if (notesBtn) {
+    notesBtn.addEventListener('click', function(){
+      var on = notesBtn.getAttribute('aria-pressed') !== 'true';
+      notesBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      notes.hidden = !on;
+      try { localStorage.setItem('deck-notes', on ? '1' : '0'); } catch(e){}
+    });
+    try { if (localStorage.getItem('deck-notes') === '0') { notesBtn.setAttribute('aria-pressed','false'); notes.hidden = true; } } catch(e){}
+  }
+  document.getElementById('fsBtn').addEventListener('click', function(){
+    if (document.fullscreenElement) { document.exitFullscreen(); }
+    else if (frame.requestFullscreen) { frame.requestFullscreen(); }
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': case ' ': e.preventDefault(); go(cur+1); break;
+      case 'ArrowLeft': case 'PageUp': e.preventDefault(); go(cur-1); break;
+      case 'Home': e.preventDefault(); go(0); break;
+      case 'End': e.preventDefault(); go(S.length-1); break;
+      case 'n': case 'N': if (notesBtn) notesBtn.click(); break;
+      case 'f': case 'F': document.getElementById('fsBtn').click(); break;
+    }
+  });
+  window.addEventListener('hashchange', function(){ var h = parseInt(location.hash.slice(1), 10); if (h>=1 && h<=S.length) go(h-1, false); });
+  var h0 = parseInt(location.hash.slice(1), 10);
+  go(h0>=1 && h0<=S.length ? h0-1 : 0, false);
+})();
+</script>
+</body>
+</html>

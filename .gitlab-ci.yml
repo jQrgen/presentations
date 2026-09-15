@@ -1,0 +1,10 @@
+# Mirrors docs/ to GitLab Pages (GitHub Pages serves docs/ directly).
+pages:
+  stage: deploy
+  image: alpine:3.20
+  script:
+    - mkdir -p public && cp -R docs/. public/
+  artifacts:
+    paths: [public]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
