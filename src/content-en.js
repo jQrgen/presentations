@@ -104,11 +104,11 @@ module.exports = {
   payments: {
     title: "Payments that feel like Vipps: under two seconds, about 3 NEXA (under $0.0001)",
     cards: [
-      { label: "Instant", desc: "Zero-confirmation payments secured by double-spend proofs confirm in under two seconds. Blocks follow every two minutes. No waiting an hour for six confirmations." },
+      { label: "Instant", desc: "Zero-confirmation payments secured by double-spend proofs confirm in under two seconds. Blocks follow every two minutes, and after Hard Fork 2 Tailstorm adds a proof-of-work-backed sub-block every second." },
       { label: "Near-zero fees", desc: "A typical transaction pays about 3 NEXA in fees, roughly $0.000004 at today's price and a fraction of an øre. Compare fees measured in dollars on Bitcoin and gas auctions on Ethereum's base layer." },
       { label: "New kinds of payments", desc: "Micropayments, in-game economies and machine-to-machine payments that card networks, Bitcoin and Ethereum cannot price. Sound money that also works as cash." },
     ],
-    notes: "Fee figures from explorer.nexa.org on 15 Sept 2026: the network fee rate is 1 satoshi per byte and a simple transaction is 250 to 320 bytes, so it pays 2.5 to 3.2 NEXA (100 satoshis = 1 NEXA). At the explorer's rate of $0.0000013 per NEXA that is about $0.000004, or roughly 0.004 øre. Update the price before presenting. nexa.org: 'confirms in under two seconds with near-zero fees', 'under $0.0001 per transaction'. Zero-conf with double-spend proofs is Bitcoin Unlimited technology carried into Nexa. Vipps reference: Norway is close to cashless; the point is that the user experience Norwegians expect is already the baseline here.",
+    notes: "Tailstorm (spec.nexa.org/blocks/tailstorm): after Hard Fork 2 each two-minute summary block is backed by 120 sub-blocks, one about every second, giving a probabilistic, energy-backed inclusion signal within a second and lower income variance for miners; the ledger itself is still settled by the two-minute summary chain. Fee figures from explorer.nexa.org on 15 Sept 2026: the network fee rate is 1 satoshi per byte and a simple transaction is 250 to 320 bytes, so it pays 2.5 to 3.2 NEXA (100 satoshis = 1 NEXA). At the explorer's rate of $0.0000013 per NEXA that is about $0.000004, or roughly 0.004 øre. Update the price before presenting. nexa.org: 'confirms in under two seconds with near-zero fees', 'under $0.0001 per transaction'. Zero-conf with double-spend proofs is Bitcoin Unlimited technology carried into Nexa. Vipps reference: Norway is close to cashless; the point is that the user experience Norwegians expect is already the baseline here.",
   },
 
   tokens: {
@@ -121,6 +121,16 @@ module.exports = {
     notes: "spec.nexa.org/tokens/grouptokens: 'Groups implement native tokens; that is, the tokens are a fundamental primitive in the blockchain rather than implemented as a smart contract or in a layer 2 data-carrier protocol.' Address the NFT critique directly: the speculation the organisers describe is a product of scarcity plus high minting cost plus marketing. Nexa removes the cost and the contract risk; whether an item is speculative is then up to the game designer, not the chain.",
   },
 
+  batons: {
+    title: "Minting rights are coins too: authority batons",
+    cards: [
+      { label: "Authority lives in a UTXO", desc: "A token group's powers, MINT, MELT, SUBGROUP, RESCRIPT and BATON, are flags on a special output. Minting means spending a MINT authority in a transaction that creates the new tokens. There is no admin key inside a contract and no owner() function to hack." },
+      { label: "Send a baton like any coin", desc: "BATON is the right to create new authorities. Split the baton into a pool of MINT-only authorities, hand one to a partner who may issue but never destroy, and keep the baton itself cold. Used as a read-only input, a baton grants its powers without being consumed." },
+      { label: "Or hand it to a smart contract", desc: "Pay an authority into a script-template contract and the contract's rules decide when tokens are minted: mint-on-demand where the NFT is created only when the buyer pays, or a covenant that only lets the authority continue inside the same contract. Lose the authority output and you lose the mint." },
+    ],
+    notes: "Source: spec.nexa.org/tokens/grouptokens and the libnexakotlin token library. Authority outputs carry a negative sign-magnitude value in the quantity slot with flag bits AUTHORITY, MINT, MELT, BATON, RESCRIPT and SUBGROUP. Minting is spending a MINT authority; melting needs MELT; SUBGROUP creates child groups (NFTs and SFTs under a parent). BATON is the master right to create child authorities, so routine mints should spend a plain MINT authority and preserve the baton; wallets keep a pool of spare MINT authorities so concurrent mints do not contend for one UTXO. Authorities are ordinary outputs: pay one to another address to delegate, or to a contract's locking script so the contract governs issuance (mint-on-demand as a half-signed transaction the buyer funds). Read-only inputs (spec.nexa.org/script/read-only-inputs) let a BATON authority grant powers to a transaction without being spent. Contrast: ERC-20 minting is a privileged function guarded by an owner key inside the contract; on Nexa the right is a coin you can split, send, lock or destroy.",
+  },
+
   capd: {
     title: "Open outcry trading over CAPD: shout an offer, anyone can take it",
     cards: [
@@ -131,6 +141,16 @@ module.exports = {
     notes: "CAPD is unique to Nexa: a decentralised, proof-of-work-rate-limited, ephemeral message bus on the P2P network (spec: spec.nexa.org/network/capd). Open outcry: the trading-floor model where offers are called out publicly and anyone can take them. Mechanics: the offer is a partially signed transaction; the advertised summary (which token for which) is only indicative, the half-signed transaction is authoritative, so a lying advertisement is harmless: the taker gets exactly what the transaction says or it is invalid. Messages carry a create time and an expiration, relay priority decays to zero after about 600 seconds, and a rescind hash lets the sender withdraw an offer early. Uses: token and NFT marketplaces without a marketplace operator, in-game item trading, atomic swaps, multisig wallet formation and signing rounds. Contrast: Bitcoin has no discovery layer, so trading means centralised exchanges; Ethereum needs an on-chain DEX contract and pays gas for every order and trade.",
   },
 
+  secrets: {
+    title: "Token Secrets: sell the secret together with the token",
+    cards: [
+      { label: "A token that carries a secret", desc: "The token commits to the public key of a secret, an elliptic-curve private key, at mint or inside the group id. Whoever holds the token holds the secret: a game key, a ticket, the key to encrypted content." },
+      { label: "Revealed to the buyer, hidden from everyone else", desc: "The transfer transaction runs a Diffie-Hellman key exchange, so the secret is delivered to the buyer encrypted inside the transaction. The public chain leaks nothing, and the chain verifies that it is the real secret, so the seller cannot swap in a fake one." },
+      { label: "Atomic exchange, not DRM", desc: "Token and secret change hands in the same transaction, with no trusted middleman. The seller still knows the secret afterwards, so this secures the exchange rather than copy protection. Bitcoin and Ethereum have no equivalent primitive." },
+    ],
+    notes: "Source: spec.nexa.org/tokensecret (Token Secrets, also called Atomic Secret Exchange, ASE, and the basis for private NFTs). Requirements the protocol meets: the transfer reveals the secret to the recipient at the same time as the token; the transaction reveals nothing to third parties even though it sits on a public chain; the recipient or the chain verifies that the communicated secret matches the one the token committed to. Mechanics: the secret must be an EC private key whose public key is committed in the mint or the group id; Alice and Bob build a half-transaction where Bob's input needs two signatures, one from the secret's key and one from a key only Bob has; an ECDH shared secret encrypts the private key for Bob. Caveat from the spec: after the transfer Alice still knows the key, so it suits selling access to content where perfect DRM is unrealistic; the value is verification against substitution during the trade.",
+  },
+
   contracts: {
     title: "Smart contracts without the EVM",
     cards: [
@@ -139,6 +159,16 @@ module.exports = {
       { label: "A full platform", desc: "Wallet login with on-chain identity, payment requests to the user's wallet and peer-to-peer messaging are part of the stack, with Kotlin and JavaScript libraries." },
     ],
     notes: "nexa.org: 'Native on-chain programmability without EVM complexity', 'No EVM overhead'. The developer stack: Wally wallet, TDPP payment protocol, nexid identity, CAPD messaging, NexaJS and libnexakotlin. Keep this slide short for a non-developer audience; expand only if asked.",
+  },
+
+  identity: {
+    title: "Identity and payments live in the wallet, not on the merchant's server",
+    cards: [
+      { label: "Log in with the phone, no password (nexid)", desc: "The site shows a challenge in a QR code, the phone signs it with a key derived per site, and the answer goes straight from the phone to the server. The key never leaves the phone, every site gets its own identity, and lookalike domains fail. The BankID experience without a bank." },
+      { label: "Prove ownership without spending", desc: "Challenge transactions: you sign a deliberately invalid transaction that is never broadcast. That proves control of coins, NFTs or a multisig under any script, and it is what makes token-gated access possible." },
+      { label: "Subscriptions the wallet controls (DPP)", desc: "A merchant registers with your wallet and proposes limits per payment, day, week and month. The wallet decides whether a payment runs automatically or asks you; the merchant cannot force it, and you cancel everything in one place. The opposite of a card on file." },
+    ],
+    notes: "Sources: spec.nexa.org/nexid (Nexa Identity Protocol), spec.nexa.org/transactions/challengeTransaction, spec.nexa.org/dpp (Delegated Payment Protocol). nexid: the website presents a login offer with a random challenge via QR or browser plugin; the wallet derives a site-specific private key from the master key plus an optional site password, signs, and sends the signed message directly to the server, bypassing the untrusted computer; backup is the 12-word phrase. Challenge transactions: a transaction with the version high bit set is invalid forever; a single data output carries the challenger's identity and a random challenge; signing it proves control of the referenced UTXOs under any script, which ordinary message signing cannot do for multisig or contracts. DPP: the entity registers with proposed limits and sends signed payment requests; the wallet, not the merchant, decides automatic versus prompted execution. For a Norwegian audience: BankID for login, AvtaleGiro and card-on-file for payments are the familiar comparisons.",
   },
 
   norway: {

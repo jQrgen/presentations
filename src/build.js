@@ -214,7 +214,7 @@ const withChain = (arr) => arr.map((it, i) => ({ ...it, ...CHAIN[i] }));
 async function build() {
   const ICON_NAMES = ["FiZap", "FiCpu", "FiTrendingUp", "FiRefreshCw", "FiMonitor", "FiBox", "FiUsers",
     "FiServer", "FiClock", "FiTag", "FiShield", "FiCode", "FiLayers", "FiPackage", "FiDroplet", "FiGlobe",
-    "FiSmartphone", "FiDollarSign", "FiCheckCircle", "FiRadio", "FiRepeat"];
+    "FiSmartphone", "FiDollarSign", "FiCheckCircle", "FiRadio", "FiRepeat", "FiKey", "FiSend", "FiLock", "FiUnlock", "FiEyeOff", "FiUserCheck", "FiCreditCard"];
   const ic = {};
   for (const n of ICON_NAMES) ic[n] = { dark: await iconData(n, BG), white: await iconData(n, WHITE) };
   const withIcons = (arr, names, colors) =>
@@ -379,6 +379,16 @@ async function build() {
     footer(s);
   }
 
+  // ---------- 10a. Authority batons ----------
+  {
+    const s = newSlide();
+    const t = T.batons;
+    title(s, t.title);
+    cards(s, withIcons(t.cards, ["FiKey", "FiSend", "FiCpu"]), { h: 4.6 });
+    s.addNotes(t.notes);
+    footer(s);
+  }
+
   // ---------- 10b. CAPD open outcry ----------
   {
     const s = newSlide();
@@ -389,12 +399,32 @@ async function build() {
     footer(s);
   }
 
+  // ---------- 10c. Token Secrets ----------
+  {
+    const s = newSlide();
+    const t = T.secrets;
+    title(s, t.title);
+    cards(s, withIcons(t.cards, ["FiLock", "FiEyeOff", "FiUnlock"]), { h: 4.6 });
+    s.addNotes(t.notes);
+    footer(s);
+  }
+
   // ---------- 11. Smart contracts ----------
   {
     const s = newSlide();
     const t = T.contracts;
     title(s, t.title);
     cards(s, withIcons(t.cards, ["FiCode", "FiLayers", "FiGlobe"]));
+    s.addNotes(t.notes);
+    footer(s);
+  }
+
+  // ---------- 11b. Identity and payments in the wallet ----------
+  {
+    const s = newSlide();
+    const t = T.identity;
+    title(s, t.title);
+    cards(s, withIcons(t.cards, ["FiSmartphone", "FiUserCheck", "FiCreditCard"]), { h: 4.6 });
     s.addNotes(t.notes);
     footer(s);
   }

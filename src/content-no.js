@@ -104,11 +104,11 @@ module.exports = {
   payments: {
     title: "Betalinger som føles som Vipps: under to sekunder, rundt 3 NEXA (under 0,0001 dollar)",
     cards: [
-      { label: "Umiddelbart", desc: "Nullbekreftelses-betalinger sikret med bevis mot dobbeltforbruk bekreftes på under to sekunder. Blokker kommer hvert andre minutt. Ingen venting i en time på seks bekreftelser." },
+      { label: "Umiddelbart", desc: "Nullbekreftelses-betalinger sikret med bevis mot dobbeltforbruk bekreftes på under to sekunder. Blokker kommer hvert andre minutt, og etter Hard Fork 2 gir Tailstorm en proof-of-work-støttet underblokk hvert sekund." },
       { label: "Nesten null gebyr", desc: "En vanlig transaksjon betaler rundt 3 NEXA i gebyr, omtrent 0,000004 dollar med dagens kurs og en brøkdel av et øre. Sammenlign med gebyrer målt i dollar på Bitcoin og gassauksjoner på Ethereums grunnlag." },
       { label: "Nye typer betalinger", desc: "Mikrobetalinger, økonomier i spill og maskin-til-maskin-betalinger som kortnettverk, Bitcoin og Ethereum ikke kan prise. Energieffektive penger som også fungerer som kontanter." },
     ],
-    notes: "Gebyrtall fra explorer.nexa.org 15. sept. 2026: nettverkets gebyrsats er 1 satoshi per byte, og en enkel transaksjon er 250 til 320 byte, altså 2,5 til 3,2 NEXA (100 satoshi = 1 NEXA). Med explorerens kurs på 0,0000013 dollar per NEXA blir det rundt 0,000004 dollar, omtrent 0,004 øre. Oppdater kursen før du presenterer. nexa.org: «confirms in under two seconds with near-zero fees», «under $0.0001 per transaction». Nullbekreftelse med bevis mot dobbeltforbruk er Bitcoin Unlimited-teknologi videreført i Nexa. Vipps-referansen: Norge er nesten kontantløst; poenget er at brukeropplevelsen nordmenn forventer allerede er grunnlinjen her.",
+    notes: "Tailstorm (spec.nexa.org/blocks/tailstorm): etter Hard Fork 2 støttes hver to-minutters oppsummeringsblokk av 120 underblokker, omtrent én i sekundet, som gir et sannsynlig, energistøttet signal om inkludering innen ett sekund og jevnere inntekt for minere; selve hovedboken gjøres fortsatt opp av to-minutters-kjeden. Gebyrtall fra explorer.nexa.org 15. sept. 2026: nettverkets gebyrsats er 1 satoshi per byte, og en enkel transaksjon er 250 til 320 byte, altså 2,5 til 3,2 NEXA (100 satoshi = 1 NEXA). Med explorerens kurs på 0,0000013 dollar per NEXA blir det rundt 0,000004 dollar, omtrent 0,004 øre. Oppdater kursen før du presenterer. nexa.org: «confirms in under two seconds with near-zero fees», «under $0.0001 per transaction». Nullbekreftelse med bevis mot dobbeltforbruk er Bitcoin Unlimited-teknologi videreført i Nexa. Vipps-referansen: Norge er nesten kontantløst; poenget er at brukeropplevelsen nordmenn forventer allerede er grunnlinjen her.",
   },
 
   tokens: {
@@ -121,6 +121,16 @@ module.exports = {
     notes: "spec.nexa.org/tokens/grouptokens: «Groups implement native tokens; that is, the tokens are a fundamental primitive in the blockchain rather than implemented as a smart contract or in a layer 2 data-carrier protocol.» Møt NFT-kritikken direkte: spekulasjonen arrangørene beskriver er et produkt av knapphet pluss høy utstedelseskostnad pluss markedsføring. Nexa fjerner kostnaden og kontraktrisikoen; om en gjenstand blir spekulativ er da opp til spilldesigneren, ikke kjeden.",
   },
 
+  batons: {
+    title: "Utstedelsesretten er også en mynt: autoritetsbatonger",
+    cards: [
+      { label: "Autoriteten ligger i en UTXO", desc: "En tokengruppes rettigheter, MINT, MELT, SUBGROUP, RESCRIPT og BATON, er flagg på et eget output. Å utstede tokens betyr å bruke en MINT-autoritet i en transaksjon som skaper de nye tokenene. Ingen admin-nøkkel inne i en kontrakt, ingen owner()-funksjon å hacke." },
+      { label: "Send batongen som en hvilken som helst mynt", desc: "BATON er retten til å lage nye autoriteter. Del batongen i en pool av rene MINT-autoriteter, gi en partner én som kan utstede men aldri destruere, og hold selve batongen kald. Brukt som read-only input gir en batong rettighetene sine uten å bli brukt opp." },
+      { label: "Eller gi den til en smartkontrakt", desc: "Betal en autoritet inn i en skriptmal-kontrakt, så bestemmer kontraktens regler når tokens utstedes: mint-on-demand der NFT-en først skapes når kjøperen betaler, eller en covenant som bare lar autoriteten fortsette inne i samme kontrakt. Mister du kontrollen over et autoritets-output, mister du utstedelsen." },
+    ],
+    notes: "Kilde: spec.nexa.org/tokens/grouptokens og token-biblioteket i libnexakotlin. Autoritets-outputs bærer en negativ fortegn-og-størrelse-verdi i mengdefeltet med flaggbitene AUTHORITY, MINT, MELT, BATON, RESCRIPT og SUBGROUP. Utstedelse er å bruke en MINT-autoritet; destruksjon krever MELT; SUBGROUP lager undergrupper (NFT-er og SFT-er under en forelder). BATON er hovedretten til å lage nye autoriteter, så rutinemessig utstedelse bør bruke en ren MINT-autoritet og bevare batongen; lommebøker holder en pool av ledige MINT-autoriteter så samtidige utstedelser ikke slåss om én UTXO. Autoriteter er vanlige outputs: betal én til en annen adresse for å delegere, eller til en kontrakts låseskript så kontrakten styrer utstedelsen (mint-on-demand som en halvsignert transaksjon kjøperen finansierer). Read-only inputs (spec.nexa.org/script/read-only-inputs) lar en BATON-autoritet gi rettigheter til en transaksjon uten å bli brukt. Kontrast: ERC-20-utstedelse er en privilegert funksjon beskyttet av en eiernøkkel inne i kontrakten; på Nexa er retten en mynt du kan dele, sende, låse eller destruere.",
+  },
+
   capd: {
     title: "Open outcry-handel over CAPD: rop ut et tilbud, hvem som helst kan ta det",
     cards: [
@@ -131,6 +141,16 @@ module.exports = {
     notes: "CAPD er unikt for Nexa: en desentralisert, proof-of-work-begrenset, flyktig meldingsbuss på P2P-nettverket (spesifikasjon: spec.nexa.org/network/capd). Open outcry: børsgulv-modellen der tilbud ropes ut offentlig og hvem som helst kan ta dem. Mekanikk: tilbudet er en delvis signert transaksjon; det annonserte sammendraget (hvilken token for hvilken) er bare veiledende, den halvsignerte transaksjonen er det som gjelder, så en løgnaktig annonse er ufarlig: den som tar tilbudet får nøyaktig det transaksjonen sier, ellers er den ugyldig. Meldinger har opprettelsestid og utløp, videresendingsprioriteten faller til null etter rundt 600 sekunder, og en tilbakekallingshash lar avsenderen trekke tilbudet tidlig. Bruk: token- og NFT-markedsplasser uten markedsplassoperatør, handel med gjenstander i spill, atomiske bytter, oppretting av multisig-lommebøker og signeringsrunder. Kontrast: Bitcoin har ikke noe oppdagelseslag, så handel betyr sentraliserte børser; Ethereum trenger en DEX-kontrakt på kjeden og betaler gass for hver ordre og handel.",
   },
 
+  secrets: {
+    title: "Token Secrets: selg hemmeligheten sammen med tokenet",
+    cards: [
+      { label: "En token som bærer en hemmelighet", desc: "Tokenet forplikter seg til den offentlige nøkkelen til en hemmelighet, en privat EC-nøkkel, ved utstedelse eller i selve gruppe-ID-en. Den som holder tokenet, holder hemmeligheten: en spillnøkkel, en billett, nøkkelen til kryptert innhold." },
+      { label: "Avslørt for kjøperen, skjult for alle andre", desc: "Overføringstransaksjonen gjør en Diffie-Hellman-nøkkelutveksling, så hemmeligheten leveres kryptert til kjøperen inne i transaksjonen. Den offentlige kjeden lekker ingenting, og kjeden verifiserer at det er den ekte hemmeligheten, så selgeren kan ikke bytte den ut med en falsk." },
+      { label: "Atomisk bytte, ikke DRM", desc: "Token og hemmelighet skifter eier i samme transaksjon, uten en betrodd mellommann. Selgeren kjenner fortsatt hemmeligheten etterpå, så dette sikrer byttet, ikke kopibeskyttelsen. Bitcoin og Ethereum har ingen tilsvarende primitiv." },
+    ],
+    notes: "Kilde: spec.nexa.org/tokensecret (Token Secrets, også kalt Atomic Secret Exchange, ASE, og grunnlaget for private NFT-er). Kravene protokollen oppfyller: overføringen avslører hemmeligheten for mottakeren samtidig med tokenet; transaksjonen avslører ingenting for tredjeparter selv om den ligger på en offentlig kjede; mottakeren eller kjeden verifiserer at den kommuniserte hemmeligheten stemmer med den tokenet forpliktet seg til. Mekanikk: hemmeligheten må være en privat EC-nøkkel med offentlig nøkkel forpliktet i utstedelsen eller gruppe-ID-en; Alice og Bob bygger en halvtransaksjon der Bobs input krever to signaturer, én fra hemmelighetens nøkkel og én fra en nøkkel bare Bob har; en ECDH-delt hemmelighet krypterer den private nøkkelen til Bob. Forbehold fra spesifikasjonen: etter overføringen kjenner Alice fortsatt nøkkelen, så dette passer for salg av tilgang til innhold der perfekt DRM er urealistisk; verdien er verifisering mot utbytting under handelen.",
+  },
+
   contracts: {
     title: "Smartkontrakter uten EVM",
     cards: [
@@ -139,6 +159,16 @@ module.exports = {
       { label: "En hel plattform", desc: "Lommebokinnlogging med identitet på kjeden, betalingsforespørsler til brukerens lommebok og peer-to-peer-meldinger er del av stacken, med Kotlin- og JavaScript-biblioteker." },
     ],
     notes: "nexa.org: «Native on-chain programmability without EVM complexity», «No EVM overhead». Utviklerstacken: Wally-lommebok, TDPP-betalingsprotokoll, nexid-identitet, CAPD-meldinger, NexaJS og libnexakotlin. Hold denne sliden kort for et ikke-teknisk publikum; utdyp bare hvis noen spør.",
+  },
+
+  identity: {
+    title: "Identitet og betalinger bor i lommeboken, ikke hos butikken",
+    cards: [
+      { label: "Logg inn med mobilen, uten passord (nexid)", desc: "Nettstedet viser en utfordring i en QR-kode, mobilen signerer den med en nøkkel avledet per nettsted, og svaret går rett fra mobilen til serveren. Nøkkelen forlater aldri telefonen, hvert nettsted får sin egen identitet, og lookalike-domener feiler. BankID-opplevelsen uten bank." },
+      { label: "Bevis eierskap uten å bruke noe", desc: "Challenge transactions: du signerer en bevisst ugyldig transaksjon som aldri sendes. Det beviser kontroll over mynter, NFT-er eller en multisig under et hvilket som helst skript, og er det som gjør tokenstyrt tilgang mulig." },
+      { label: "Abonnement som lommeboken styrer (DPP)", desc: "Butikken registrerer seg hos lommeboken din og foreslår grenser per betaling, dag, uke og måned. Lommeboken bestemmer om en betaling går automatisk eller spør deg; butikken kan ikke tvinge den gjennom, og du sier opp alt ett sted. Det motsatte av kort på fil." },
+    ],
+    notes: "Kilder: spec.nexa.org/nexid (Nexa Identity Protocol), spec.nexa.org/transactions/challengeTransaction, spec.nexa.org/dpp (Delegated Payment Protocol). nexid: nettstedet presenterer et innloggingstilbud med en tilfeldig utfordring via QR eller nettleserutvidelse; lommeboken avleder en nettstedsspesifikk privat nøkkel fra hovednøkkelen pluss et valgfritt nettstedspassord, signerer og sender den signerte meldingen direkte til serveren utenom den ubetrodde datamaskinen; sikkerhetskopi er de 12 ordene. Challenge transactions: en transaksjon med høyeste bit i versjonsfeltet satt er ugyldig for alltid; ett data-output bærer utfordrerens identitet og en tilfeldig utfordring; å signere den beviser kontroll over de refererte UTXO-ene under et hvilket som helst skript, noe vanlig meldingssignering ikke kan for multisig eller kontrakter. DPP: aktøren registrerer seg med foreslåtte grenser og sender signerte betalingsforespørsler; lommeboken, ikke butikken, avgjør automatisk eller godkjent utførelse. For et norsk publikum: BankID for innlogging, AvtaleGiro og kort på fil for betalinger er de kjente sammenligningene.",
   },
 
   norway: {
