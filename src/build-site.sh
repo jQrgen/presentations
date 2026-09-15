@@ -14,6 +14,7 @@ cp render/Nexa-vs-Bitcoin-Ethereum.pdf render-no/Nexa-vs-Bitcoin-Ethereum-NO.pdf
 # old talks as original PDFs
 cp talk1/render/deck.pdf "$D/talks/files/patch.pdf"; cp pages/public/patch/cover.png "$D/talks/files/patch-cover.png"
 cp oldtalks/tobm-2017.pdf "$D/talks/files/tobm-2017.pdf"; cp oldtalks/tobm-2017-cover.png "$D/talks/files/tobm-2017-cover.png"
+cp oldtalks/bitcoin-securities-2018.pdf "$D/talks/files/bitcoin-securities-2018.pdf"; cp oldtalks/bitcoin-securities-2018-cover.png "$D/talks/files/bitcoin-securities-2018-cover.png"
 # pages
 node home.js data "$D" "$REPO"
 node cards.js data/talks.json "$D/talks" talks "$REPO"
