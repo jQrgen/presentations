@@ -4,7 +4,7 @@
 // Slides are expected at <outDir>/slides/NN.png (1600x900).
 const fs = require("fs");
 const path = require("path");
-const { band, head, esc } = require("./theme.js");
+const { head, esc } = require("./theme.js");
 
 const UI = {
   en: { of: "of", prev: "Previous slide", next: "Next slide", notes: "Notes", fullscreen: "Fullscreen",
@@ -16,6 +16,7 @@ const UI = {
 };
 
 const EXTRA = `
+.band .tag{font-size:14px;opacity:.8}
 .deck-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;margin-bottom:16px}
 .deck-head h1{font-size:24px;margin:0}
 .deck-head .meta{font-size:14px;color:var(--muted)}
@@ -50,7 +51,7 @@ function renderViewer(spec) {
   const U = UI[spec.lang] || UI.en;
   const slides = spec.slides.map((s, i) => ({ n: i + 1, title: s.title, notes: s.notes || "", img: `slides/${String(i + 1).padStart(2, "0")}.png` }));
   const hasNotes = slides.some((s) => s.notes.trim().length > 0);
-  return head(spec.pageTitle).replace("</style>", EXTRA + "</style>").replace('<html lang="en">', `<html lang="${U.lang}">`) + band("presentations", spec.depth ?? "../../") + `
+  return head(spec.pageTitle).replace("</style>", EXTRA + "</style>").replace('<html lang="en">', `<html lang="${U.lang}">`) + `<div class="band"><div class="inner"><a class="name" href="${spec.depth ?? "../../"}">J\u00f8rgen S. Notland</a><span class="tag">${esc(spec.homeLabel || "All talks, articles and papers")}</span></div></div>` + `
 <div class="page">
   <header class="deck-head">
     <h1>${esc(spec.pageTitle)}</h1>
