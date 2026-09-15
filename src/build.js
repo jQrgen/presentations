@@ -214,7 +214,7 @@ const withChain = (arr) => arr.map((it, i) => ({ ...it, ...CHAIN[i] }));
 async function build() {
   const ICON_NAMES = ["FiZap", "FiCpu", "FiTrendingUp", "FiRefreshCw", "FiMonitor", "FiBox", "FiUsers",
     "FiServer", "FiClock", "FiTag", "FiShield", "FiCode", "FiLayers", "FiPackage", "FiDroplet", "FiGlobe",
-    "FiSmartphone", "FiDollarSign", "FiCheckCircle"];
+    "FiSmartphone", "FiDollarSign", "FiCheckCircle", "FiRadio", "FiRepeat"];
   const ic = {};
   for (const n of ICON_NAMES) ic[n] = { dark: await iconData(n, BG), white: await iconData(n, WHITE) };
   const withIcons = (arr, names, colors) =>
@@ -379,6 +379,16 @@ async function build() {
     footer(s);
   }
 
+  // ---------- 10b. CAPD open outcry ----------
+  {
+    const s = newSlide();
+    const t = T.capd;
+    title(s, t.title);
+    cards(s, withIcons(t.cards, ["FiRadio", "FiRepeat", "FiClock"]));
+    s.addNotes(t.notes);
+    footer(s);
+  }
+
   // ---------- 11. Smart contracts ----------
   {
     const s = newSlide();
@@ -418,7 +428,7 @@ async function build() {
     ];
     s.addTable(rows, {
       x: MARGIN, y: 1.85, w: W - 2 * MARGIN, colW: [2.3, 3.1, 3.1, 3.633],
-      rowH: [0.5, 1.3, 1.3, 1.3], fontFace: FONT,
+      rowH: [0.5, 1.1, 1.1, 1.1, 1.1], fontFace: FONT,
       border: { type: "solid", color: BG, pt: 2 },
     });
     s.addNotes(t.notes);

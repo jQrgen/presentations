@@ -121,6 +121,16 @@ module.exports = {
     notes: "spec.nexa.org/tokens/grouptokens: 'Groups implement native tokens; that is, the tokens are a fundamental primitive in the blockchain rather than implemented as a smart contract or in a layer 2 data-carrier protocol.' Address the NFT critique directly: the speculation the organisers describe is a product of scarcity plus high minting cost plus marketing. Nexa removes the cost and the contract risk; whether an item is speculative is then up to the game designer, not the chain.",
   },
 
+  capd: {
+    title: "Open outcry trading over CAPD: shout an offer, anyone can take it",
+    cards: [
+      { label: "Shout the offer to the network", desc: "CAPD (Counterparty and Protocol Discovery) is a message bus carried by the same nodes that relay transactions. You broadcast a half-signed offer, say 100 tokens for 5,000 NEXA, and every node passes it on, like a trader calling out a price on the floor." },
+      { label: "No exchange, no order-book server", desc: "Whoever wants the deal completes the half-signed transaction and broadcasts it. The swap settles on-chain in one atomic transaction, with no exchange, listing fee or matching server in between. Bitcoin has no such layer; on Ethereum it takes a DEX contract and gas per trade." },
+      { label: "Proof of work instead of fees, then it disappears", desc: "Senders solve a small proof of work instead of paying a fee, which keeps spam out. Offers are ephemeral: they fade from relay in about ten minutes unless re-broadcast, can be withdrawn early, and never touch the blockchain until someone takes them." },
+    ],
+    notes: "CAPD is unique to Nexa: a decentralised, proof-of-work-rate-limited, ephemeral message bus on the P2P network (spec: spec.nexa.org/network/capd). Open outcry: the trading-floor model where offers are called out publicly and anyone can take them. Mechanics: the offer is a partially signed transaction; the advertised summary (which token for which) is only indicative, the half-signed transaction is authoritative, so a lying advertisement is harmless: the taker gets exactly what the transaction says or it is invalid. Messages carry a create time and an expiration, relay priority decays to zero after about 600 seconds, and a rescind hash lets the sender withdraw an offer early. Uses: token and NFT marketplaces without a marketplace operator, in-game item trading, atomic swaps, multisig wallet formation and signing rounds. Contrast: Bitcoin has no discovery layer, so trading means centralised exchanges; Ethereum needs an on-chain DEX contract and pays gas for every order and trade.",
+  },
+
   contracts: {
     title: "Smart contracts without the EVM",
     cards: [
@@ -157,6 +167,10 @@ module.exports = {
        "Not native. Inscriptions compete for scarce block space.",
        "Smart-contract tokens: gas auctions and contract exploits.",
        "Protocol-native, a fraction of a cent to mint. Designed as tickets, items and identity, not a market."],
+      ["Finding a counterparty",
+       "No native layer. Trading means a centralised exchange.",
+       "On-chain DEX contracts, gas for every order and trade.",
+       "CAPD open outcry: broadcast the offer off-chain, settle on-chain, no exchange in between."],
     ],
     notes: "One-slide answer to the organisers' three themes: energy and e-waste, who benefits, and NFT speculation. Every figure appears earlier in the deck with its source.",
   },
@@ -166,7 +180,7 @@ module.exports = {
     cards: [
       { label: "Energy", desc: "Proof of work costs what miners are paid, on any chain. At scale, Nexa gets up to 13,000× more transactions out of every kilowatt-hour than Bitcoin, on reusable GPUs, not throw-away ASICs." },
       { label: "Fairness", desc: "No premine, no ICO, no venture capital. 100% of the supply mined in public since 2022, open to anyone with a graphics card." },
-      { label: "Utility", desc: "Two-second, sub-cent payments and protocol-native tokens for games, tickets and identity. Built for use, not for speculation." },
+      { label: "Utility", desc: "Two-second, sub-cent payments, protocol-native tokens for games, tickets and identity, and open outcry trading over CAPD. Built for use, not for speculation." },
     ],
     sources: "Sources: Cambridge CBECI (2026) · de Vries & Stoll, Bitcoin's growing e-waste problem (2021) · ethereum.org · nexa.org and spec.nexa.org · Statistics Norway (SSB) · Norwegian government data-centre regulation (June 2025) · NTNU Norway: Borgelt et al. (2026), Hertwich et al. (2014), HighEFF (2024) · jqrgen.medium.com (Sept 2026)",
     notes: "Close on the three answers to the three concerns. If challenged on the 13,000x figure: it is a capacity comparison at equal network power, 5,600x on today's benchmark and 13,000x with Blitz; the floor is 1,000x because Bitcoin cannot exceed ~14 TPS.",

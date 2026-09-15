@@ -5,11 +5,11 @@ const { writeViewer } = require("./viewer.js");
 
 const LANG = process.argv[2] || "en";
 const T = require(`./content-${LANG}.js`);
-const ORDER = ["title", "critique", "perTx", "chart", "absolute", "ntnu", "ewaste", "fair", "scale", "payments", "tokens", "contracts", "norway", "table", "closing"];
+const ORDER = ["title", "critique", "perTx", "chart", "absolute", "ntnu", "ewaste", "fair", "scale", "payments", "tokens", "capd", "contracts", "norway", "table", "closing"];
 
 const META = {
-  en: { pageTitle: "Nexa vs Bitcoin and Ethereum", meta: "15 slides · Jørgen S. Notland · Norway 2026" },
-  no: { pageTitle: "Nexa mot Bitcoin og Ethereum", meta: "15 slides · Jørgen S. Notland · Norge 2026" },
+  en: { pageTitle: "Nexa vs Bitcoin and Ethereum", meta: "16 slides · Jørgen S. Notland · Norway 2026" },
+  no: { pageTitle: "Nexa mot Bitcoin og Ethereum", meta: "16 slides · Jørgen S. Notland · Norge 2026" },
 }[LANG];
 
 const spec = {

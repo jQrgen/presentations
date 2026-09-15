@@ -121,6 +121,16 @@ module.exports = {
     notes: "spec.nexa.org/tokens/grouptokens: «Groups implement native tokens; that is, the tokens are a fundamental primitive in the blockchain rather than implemented as a smart contract or in a layer 2 data-carrier protocol.» Møt NFT-kritikken direkte: spekulasjonen arrangørene beskriver er et produkt av knapphet pluss høy utstedelseskostnad pluss markedsføring. Nexa fjerner kostnaden og kontraktrisikoen; om en gjenstand blir spekulativ er da opp til spilldesigneren, ikke kjeden.",
   },
 
+  capd: {
+    title: "Open outcry-handel over CAPD: rop ut et tilbud, hvem som helst kan ta det",
+    cards: [
+      { label: "Rop tilbudet ut til nettverket", desc: "CAPD (Counterparty and Protocol Discovery) er en meldingsbuss som bæres av de samme nodene som videresender transaksjoner. Du kringkaster et halvsignert tilbud, si 100 tokens for 5\u00a0000 NEXA, og alle noder sender det videre, som en megler som roper ut en pris på gulvet." },
+      { label: "Ingen børs, ingen ordrebok-server", desc: "Den som vil ha handelen, fullfører den halvsignerte transaksjonen og kringkaster den. Byttet gjøres opp på kjeden i én atomisk transaksjon, uten børs, noteringsgebyr eller matchingserver imellom. Bitcoin har ikke noe slikt lag; på Ethereum krever det en DEX-kontrakt og gass per handel." },
+      { label: "Proof of work i stedet for gebyr, så forsvinner det", desc: "Avsenderen løser et lite proof of work i stedet for å betale gebyr, og det holder spam ute. Tilbud er flyktige: de faller ut av videresendingen etter rundt ti minutter om de ikke sendes på nytt, kan trekkes tilbake tidlig, og rører aldri blokkjeden før noen tar dem." },
+    ],
+    notes: "CAPD er unikt for Nexa: en desentralisert, proof-of-work-begrenset, flyktig meldingsbuss på P2P-nettverket (spesifikasjon: spec.nexa.org/network/capd). Open outcry: børsgulv-modellen der tilbud ropes ut offentlig og hvem som helst kan ta dem. Mekanikk: tilbudet er en delvis signert transaksjon; det annonserte sammendraget (hvilken token for hvilken) er bare veiledende, den halvsignerte transaksjonen er det som gjelder, så en løgnaktig annonse er ufarlig: den som tar tilbudet får nøyaktig det transaksjonen sier, ellers er den ugyldig. Meldinger har opprettelsestid og utløp, videresendingsprioriteten faller til null etter rundt 600 sekunder, og en tilbakekallingshash lar avsenderen trekke tilbudet tidlig. Bruk: token- og NFT-markedsplasser uten markedsplassoperatør, handel med gjenstander i spill, atomiske bytter, oppretting av multisig-lommebøker og signeringsrunder. Kontrast: Bitcoin har ikke noe oppdagelseslag, så handel betyr sentraliserte børser; Ethereum trenger en DEX-kontrakt på kjeden og betaler gass for hver ordre og handel.",
+  },
+
   contracts: {
     title: "Smartkontrakter uten EVM",
     cards: [
@@ -157,6 +167,10 @@ module.exports = {
        "Ikke innebygd. Inskripsjoner konkurrerer om knapp blokkplass.",
        "Smartkontrakt-tokens: gassauksjoner og kontraktutnyttelser.",
        "Innebygd i protokollen, en brøkdel av et øre å utstede. Designet som billetter, gjenstander og identitet, ikke et marked."],
+      ["Å finne en motpart",
+       "Ikke noe innebygd lag. Handel betyr en sentralisert børs.",
+       "DEX-kontrakter på kjeden, gass for hver ordre og handel.",
+       "CAPD open outcry: kringkast tilbudet utenfor kjeden, gjør opp på kjeden, ingen børs imellom."],
     ],
     notes: "Ett-slides svar på arrangørenes tre temaer: energi og e-avfall, hvem som tjener på det, og NFT-spekulasjon. Hvert tall står tidligere i presentasjonen med kilde.",
   },
@@ -166,7 +180,7 @@ module.exports = {
     cards: [
       { label: "Energi", desc: "Proof of work koster det minerne får betalt, på enhver kjede. I stor skala får Nexa inntil 13 000× flere transaksjoner ut av hver kilowattime enn Bitcoin, på gjenbrukbare GPU-er, ikke ASIC-er som kastes." },
       { label: "Rettferdighet", desc: "Ingen premine, ingen ICO, ingen venturekapital. 100 % av tilbudet utvunnet offentlig siden 2022, åpent for alle med et skjermkort." },
-      { label: "Nytte", desc: "Betalinger på to sekunder for under et øre og protokoll-innebygde tokens for spill, billetter og identitet. Bygget for bruk, ikke for spekulasjon." },
+      { label: "Nytte", desc: "Betalinger på to sekunder for under et øre, protokoll-innebygde tokens for spill, billetter og identitet, og open outcry-handel over CAPD. Bygget for bruk, ikke for spekulasjon." },
     ],
     sources: "Kilder: Cambridge CBECI (2026) · de Vries & Stoll, Bitcoin's growing e-waste problem (2021) · ethereum.org · nexa.org og spec.nexa.org · Statistisk sentralbyrå (SSB) · Regjeringens datasenterregulering (juni 2025) · NTNU: Borgelt m.fl. (2026), Hertwich m.fl. (2014), HighEFF (2024) · jqrgen.medium.com (sept. 2026)",
     notes: "Avslutt med de tre svarene på de tre bekymringene. Hvis 13 000×-tallet utfordres: det er en kapasitetssammenligning ved lik nettverkseffekt, 5 600× på dagens benchmark og 13 000× med Blitz; gulvet er 1 000× fordi Bitcoin ikke kan overstige ~14 TPS.",
