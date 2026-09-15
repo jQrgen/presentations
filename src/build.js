@@ -409,6 +409,16 @@ async function build() {
     footer(s);
   }
 
+  // ---------- 10d. Practical use cases ----------
+  {
+    const s = newSlide();
+    const t = T.usecases;
+    title(s, t.title);
+    cards(s, withIcons(t.cards, ["FiBox", "FiRadio", "FiLock"]), { h: 4.9 });
+    s.addNotes(t.notes);
+    footer(s);
+  }
+
   // ---------- 11. Smart contracts ----------
   {
     const s = newSlide();

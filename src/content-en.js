@@ -151,6 +151,16 @@ module.exports = {
     notes: "Source: spec.nexa.org/tokensecret (Token Secrets, also called Atomic Secret Exchange, ASE, and the basis for private NFTs). Requirements the protocol meets: the transfer reveals the secret to the recipient at the same time as the token; the transaction reveals nothing to third parties even though it sits on a public chain; the recipient or the chain verifies that the communicated secret matches the one the token committed to. Mechanics: the secret must be an EC private key whose public key is committed in the mint or the group id; Alice and Bob build a half-transaction where Bob's input needs two signatures, one from the secret's key and one from a key only Bob has; an ECDH shared secret encrypts the private key for Bob. Caveat from the spec: after the transfer Alice still knows the key, so it suits selling access to content where perfect DRM is unrealistic; the value is verification against substitution during the trade.",
   },
 
+  usecases: {
+    title: "What you can build with it: practical use cases",
+    cards: [
+      { label: "Tokens and batons", desc: "A game studio mints its items as native tokens and keeps the baton cold. The in-game shop holds a MINT-only authority inside a mint-on-demand contract, so a sword exists only once a player has paid. A season pass is a subgroup melted when the season ends; a festival hands a partner venue a MINT authority for its own ticket allotment." },
+      { label: "CAPD open outcry", desc: "A player-to-player item market with no marketplace operator: sellers broadcast half-signed offers, buyers take them, and the swap settles atomically. A ticket exchange where a covenant caps resale at face value. A local NEXA-for-tokens board at a meetup or a LAN party, running on nothing but the nodes." },
+      { label: "Token Secrets", desc: "A game key delivered inside the purchase transaction: the buyer gets the token and the licence key in one step, and nobody else can read it. Encrypted DLC or a paywalled article where the token carries the decryption key. A concert ticket that carries the door code, revealed only to the holder." },
+    ],
+    notes: "These are design patterns, not products; each maps to a primitive from the previous slides. Tokens and batons: native group tokens (spec.nexa.org/tokens/grouptokens), MINT-only authorities split from the baton, mint-on-demand as a half-signed transaction the buyer funds, subgroups for seasons or editions, MELT to retire them. CAPD: half-signed offers broadcast on the message bus and completed by the taker (spec.nexa.org/network/capd); resale caps are a covenant in the token's script template. Token Secrets: the token commits to a secret's public key and the transfer reveals it to the buyer via ECDH (spec.nexa.org/tokensecret). This is the answer to the organisers' 'financialisation' worry: every example is a thing people use, priced in fractions of an øre, with no exchange, marketplace operator or gas market in between.",
+  },
+
   contracts: {
     title: "Smart contracts without the EVM",
     cards: [

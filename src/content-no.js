@@ -151,6 +151,16 @@ module.exports = {
     notes: "Kilde: spec.nexa.org/tokensecret (Token Secrets, også kalt Atomic Secret Exchange, ASE, og grunnlaget for private NFT-er). Kravene protokollen oppfyller: overføringen avslører hemmeligheten for mottakeren samtidig med tokenet; transaksjonen avslører ingenting for tredjeparter selv om den ligger på en offentlig kjede; mottakeren eller kjeden verifiserer at den kommuniserte hemmeligheten stemmer med den tokenet forpliktet seg til. Mekanikk: hemmeligheten må være en privat EC-nøkkel med offentlig nøkkel forpliktet i utstedelsen eller gruppe-ID-en; Alice og Bob bygger en halvtransaksjon der Bobs input krever to signaturer, én fra hemmelighetens nøkkel og én fra en nøkkel bare Bob har; en ECDH-delt hemmelighet krypterer den private nøkkelen til Bob. Forbehold fra spesifikasjonen: etter overføringen kjenner Alice fortsatt nøkkelen, så dette passer for salg av tilgang til innhold der perfekt DRM er urealistisk; verdien er verifisering mot utbytting under handelen.",
   },
 
+  usecases: {
+    title: "Hva du kan bygge med det: praktiske bruksområder",
+    cards: [
+      { label: "Tokens og batonger", desc: "Et spillstudio utsteder gjenstandene sine som native tokens og holder batongen kald. Butikken i spillet holder en ren MINT-autoritet i en mint-on-demand-kontrakt, så sverdet finnes først når spilleren har betalt. Et sesongpass er en undergruppe som destrueres etter sesongen; en festival gir et partnersted en MINT-autoritet for sin egen billettkvote." },
+      { label: "CAPD open outcry", desc: "Et spiller-til-spiller-marked for gjenstander uten markedsplassoperatør: selgere kringkaster halvsignerte tilbud, kjøpere tar dem, og byttet gjøres opp atomisk. En billettbørs der en covenant setter tak på videresalg til pålydende. En lokal tavle for NEXA mot tokens på en meetup eller et LAN, som bare trenger nodene." },
+      { label: "Token Secrets", desc: "En spillnøkkel levert inne i kjøpstransaksjonen: kjøperen får tokenet og lisensnøkkelen i ett steg, og ingen andre kan lese den. Kryptert DLC eller en artikkel bak betalingsmur der tokenet bærer dekrypteringsnøkkelen. En konsertbillett som bærer dørkoden, avslørt bare for innehaveren." },
+    ],
+    notes: "Dette er designmønstre, ikke produkter; hvert av dem bygger på en primitiv fra de forrige slidene. Tokens og batonger: native gruppetokens (spec.nexa.org/tokens/grouptokens), rene MINT-autoriteter delt fra batongen, mint-on-demand som en halvsignert transaksjon kjøperen finansierer, undergrupper for sesonger eller utgaver, MELT for å avvikle dem. CAPD: halvsignerte tilbud kringkastet på meldingsbussen og fullført av den som tar dem (spec.nexa.org/network/capd); tak på videresalg er en covenant i tokenets skriptmal. Token Secrets: tokenet forplikter seg til en hemmelighets offentlige nøkkel, og overføringen avslører den for kjøperen via ECDH (spec.nexa.org/tokensecret). Dette er svaret på arrangørenes bekymring for finansialisering: hvert eksempel er noe folk bruker, priset i brøkdeler av et øre, uten børs, markedsplassoperatør eller gassmarked imellom.",
+  },
+
   contracts: {
     title: "Smartkontrakter uten EVM",
     cards: [
