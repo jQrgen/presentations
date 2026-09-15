@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jørgen S. Notland</title>
+<style>
+:root{
+  color-scheme:light;
+  --ground:#E5E7EB; --paper:#FFFFFF; --band:#000000; --band-ink:#FFFFFF;
+  --ink:#000000; --ink-2:#1F2937; --muted:#4B5563; --line:#000000; --hair:#D1D5DB;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink)}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.band{background:var(--band);color:var(--band-ink)}
+.band .inner{max-width:1080px;margin:0 auto;padding:22px 24px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px}
+.band .name{font-size:22px;font-weight:400;letter-spacing:.01em;color:var(--band-ink);text-decoration:none}
+.band nav{display:flex;flex-wrap:wrap;gap:4px 22px;margin-left:auto}
+.band nav a{color:var(--band-ink);text-decoration:none;font-size:15px;padding:4px 0;border-bottom:2px solid transparent;opacity:.8}
+.band nav a:hover{opacity:1}
+.band nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--band-ink)}
+.page{max-width:1080px;margin:0 auto;padding:36px 24px 72px}
+h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+.count{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.year{display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;margin-top:36px}
+@media (max-width:700px){.year{grid-template-columns:1fr;gap:8px}}
+.year h2{font-size:30px;font-weight:400;margin:0;letter-spacing:-.02em;font-variant-numeric:tabular-nums;position:sticky;top:12px}
+.year ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.item{display:grid;grid-template-columns:minmax(200px,2fr) 3fr;background:var(--paper);border:1px solid var(--line)}
+.item.no-thumb{grid-template-columns:1fr}
+@media (max-width:700px){.item{grid-template-columns:1fr}}
+.thumb{margin:0;background:#000;aspect-ratio:16/9;border-right:1px solid var(--line)}
+@media (max-width:700px){.thumb{border-right:0;border-bottom:1px solid var(--line)}}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px}
+.kind{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.body h3 a{color:var(--ink);text-decoration:none}
+.body h3 a:hover{text-decoration:underline}
+.where{margin:0;font-size:14px;color:var(--muted)}
+.where .date{color:var(--ink-2)}
+.authors{margin:0;font-size:14px;color:var(--ink-2)}
+.desc{margin:2px 0 0;color:var(--ink-2);max-width:66ch;font-size:15px}
+.cites{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.cites b{font-weight:600}
+.cites span{color:var(--muted)}
+.links{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.links a{display:inline-block;color:var(--ink);text-decoration:none;font-size:14px;padding:5px 10px;border:1px solid var(--line);background:var(--paper)}
+.links a.primary{background:var(--band);color:var(--band-ink)}
+.links a:hover{text-decoration:underline}
+.note{margin:6px 0 0;font-size:13px;color:var(--muted)}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+
+.band .inner{gap:8px 18px}
+.band .tag{font-size:14px;opacity:.8}
+.counts{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.counts a{color:var(--ink)}
+.kind{display:inline-flex;align-items:center;gap:8px}
+.kind .sec{padding:2px 7px;border:1px solid var(--line);color:var(--ink);letter-spacing:.08em}
+.kind .sec.talk{background:var(--band);color:var(--band-ink);border-color:var(--band)}
+.years{display:flex;flex-wrap:wrap;gap:6px 14px;margin:18px 0 0;padding:0;list-style:none;font-size:14px}
+.years a{color:var(--ink)}
+.filter{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+.filter button{font:500 14px var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--line);padding:7px 12px;cursor:pointer}
+.filter button[aria-pressed="true"]{background:var(--band);color:var(--band-ink)}
+.filter button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.filter button .n{opacity:.7;margin-left:6px;font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+</style>
+</head>
+<body><div class="band"><div class="inner">
+    <a class="name" href="./">Jørgen S. Notland</a>
+    <span class="tag">Talks, articles and papers</span>
+  </div></div>
+<div class="page">
+  <header>
+    <h1>Talks, articles and papers</h1>
+    <p class="lede">Everything in one timeline, newest first. New decks open in the browser with speaker notes and can be downloaded as PowerPoint or PDF; older talks are kept as the original slides. Citation counts on papers are per source, as the sources overlap.</p>
+    <p class="counts">18 talks · 41 articles · 4 papers · 2014–2026</p>
+    <div class="filter" role="group" aria-label="Show">
+      <button type="button" data-filter="all" aria-pressed="true">All<span class="n">63</span></button>
+      <button type="button" data-filter="talk" aria-pressed="false">Talks<span class="n">18</span></button>
+      <button type="button" data-filter="article" aria-pressed="false">Articles<span class="n">41</span></button>
+      <button type="button" data-filter="paper" aria-pressed="false">Papers<span class="n">4</span></button>
+    </div>
+    <ul class="years"><li><a href="#y2026" data-year="2026">2026</a></li><li><a href="#y2025" data-year="2025">2025</a></li><li><a href="#y2024" data-year="2024">2024</a></li><li><a href="#y2023" data-year="2023">2023</a></li><li><a href="#y2022" data-year="2022">2022</a></li><li><a href="#y2021" data-year="2021">2021</a></li><li><a href="#y2020" data-year="2020">2020</a></li><li><a href="#y2019" data-year="2019">2019</a></li><li><a href="#y2018" data-year="2018">2018</a></li><li><a href="#y2017" data-year="2017">2017</a></li><li><a href="#y2015" data-year="2015">2015</a></li><li><a href="#y2014" data-year="2014">2014</a></li></ul>
+  </header>
+
+  <section class="year" aria-labelledby="y2026">
+    <h2 id="y2026">2026</h2>
+    <ol>
+      <li class="item" data-section="talk">
+        <figure class="thumb"><img src="nexa-vs-bitcoin-ethereum/en/slides/01.png" alt="" width="1600" height="900" loading="lazy"></figure>
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="nexa-vs-bitcoin-ethereum/en/">Nexa vs Bitcoin and Ethereum</a></h3>
+          <p class="where">Presentation for the Norwegian market · Norway <span class="date">September 2026</span></p>
+          
+          <p class="desc">What makes Nexa different from Bitcoin and Ethereum: energy per transaction, e-waste, fair launch, scale and native tokens, with the environmental case backed by NTNU research. Concedes the critique of crypto before answering it.</p>
+          
+          <ul class="links"><li><a href="nexa-vs-bitcoin-ethereum/en/" class="primary">Open the deck (English)</a></li><li><a href="nexa-vs-bitcoin-ethereum/no/" class="primary">Åpne presentasjonen (norsk)</a></li><li><a href="nexa-vs-bitcoin-ethereum/Nexa-vs-Bitcoin-Ethereum.pptx" download>.pptx (EN)</a></li><li><a href="nexa-vs-bitcoin-ethereum/Nexa-vs-Bitcoin-Ethereum.pdf" download>.pdf (EN)</a></li><li><a href="nexa-vs-bitcoin-ethereum/Nexa-vs-Bitcoin-Ethereum-NO.pptx" download>.pptx (NO)</a></li><li><a href="nexa-vs-bitcoin-ethereum/Nexa-vs-Bitcoin-Ethereum-NO.pdf" download>.pdf (NO)</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://medium.com/keeping-stock/nexa-is-13-000-more-energy-efficient-than-bitcoin-0afe18ef14a7" rel="noopener">Nexa is 13,000× more energy efficient than Bitcoin</a></h3>
+          <p class="where">Keeping Stock on Medium <span class="date">13 September 2026</span></p>
+          
+          <p class="desc">1 Bitcoin transaction: 580 kWh. Two weeks of electricity for a home.</p>
+          
+          <ul class="links"><li><a href="https://medium.com/keeping-stock/nexa-is-13-000-more-energy-efficient-than-bitcoin-0afe18ef14a7" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2025">
+    <h2 id="y2025">2025</h2>
+    <ol>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/this-script-is-for-a-youtube-video-intended-for-universities-with-a-brief-follow-up-exercise-free-ea9168f154e7" rel="noopener">Nexa native tokens: YouTube video script for universities</a></h3>
+          <p class="where">Medium <span class="date">14 October 2025</span></p>
+          
+          <p class="desc">Script for a YouTube video intended for universities, with a brief follow-up exercise.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/this-script-is-for-a-youtube-video-intended-for-universities-with-a-brief-follow-up-exercise-free-ea9168f154e7" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://drive.google.com/file/d/1sOi2U6MEwmTVVyrKTRGSDYrwt-eZ_Ibd/view" rel="noopener">Tokenising game ownership: GameFi on Nexa</a></h3>
+          <p class="where">GameFi Unleashed, TOKEN2049 side event · Singapore <span class="date">30 September 2025</span></p>
+          
+          <p class="desc">Short talk on tokenising game ownership: on Steam a game is a licence you cannot resell; on Nexa a developer can sell the game itself as a token. Co-hosted by All Things Block and Evolvh3r on a rooftop during TOKEN2049.</p>
+          
+          <ul class="links"><li><a href="https://drive.google.com/file/d/1sOi2U6MEwmTVVyrKTRGSDYrwt-eZ_Ibd/view" class="primary" rel="noopener">Slides (Keynote on Google Drive, 150 MB)</a></li><li><a href="https://x.com/jqrgensn/status/1972887110844551201" rel="noopener">Post on X (@jqrgensn)</a></li><li><a href="https://x.com/nexamoney/status/1973009946007486661" rel="noopener">Post on X (@nexamoney)</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://www.canva.com/design/DAGhsNcMSkg/wMAIXExSLV40xP7JcHsD-g/view" rel="noopener">Nexa at Web3 Amsterdam</a></h3>
+          <p class="where">Web3 Amsterdam 2025 · Amsterdam <span class="date">2025</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://www.canva.com/design/DAGhsNcMSkg/wMAIXExSLV40xP7JcHsD-g/view" class="primary" rel="noopener">Slides (Canva)</a></li><li><a href="https://www.youtube.com/live/Xm-kahqG6KA?t=7392" class="primary" rel="noopener">Video (YouTube, from 2:03:12)</a></li><li><a href="https://web3amsterdam.com/" rel="noopener">Web3 Amsterdam</a></li><li><a href="https://x.com/web3globalmedia" rel="noopener">Web3 Global Media on X</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://www.canva.com/design/DAGhS0ha2K0/Qpl25msN84VShN0hs67UyA/view" rel="noopener">Nexa x Exeter lecture: the Nexa blockchain</a></h3>
+          <p class="where">University of Exeter · Exeter, UK <span class="date">11 March 2025</span></p>
+          
+          <p class="desc">Guest lecture at the University of Exeter with a hands-on NexScript lab workbook.</p>
+          
+          <ul class="links"><li><a href="https://www.canva.com/design/DAGhS0ha2K0/Qpl25msN84VShN0hs67UyA/view" class="primary" rel="noopener">Slides and NexScript lab workbook (Canva)</a></li><li><a href="https://medium.com/@nexacoin/nexa-x-exeter-lecture-the-nexa-blockchain-6b6d1b7c6eb7" rel="noopener">Article on Medium</a></li><li><a href="https://forum.nexa.org/t/nexa-x-exeter-lecture-the-nexa-blockchain/531/1" rel="noopener">Nexa forum post</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/bitcoin-transactions-break-at-scale-and-miners-income-couldo-collapse-2c6a78b0c75e" rel="noopener">Bitcoin transactions break at scale and miners’ income could collapse</a></h3>
+          <p class="where">Medium <span class="date">4 March 2025</span></p>
+          
+          <p class="desc">The Bitcoin block size limit arbitrarily limits Bitcoin to seven transactions per second on a good day, though it is usually closer to five.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/bitcoin-transactions-break-at-scale-and-miners-income-couldo-collapse-2c6a78b0c75e" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/why-was-the-block-size-limit-added-to-bitcoin-9403175368b8" rel="noopener">Why was the block size limit added to Bitcoin?</a></h3>
+          <p class="where">Medium <span class="date">26 February 2025</span></p>
+          
+          <p class="desc">Satoshi Nakamoto added the block size limit in Bitcoin v0.3.1 on 7 September 2010. Why, and what it means today.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/why-was-the-block-size-limit-added-to-bitcoin-9403175368b8" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2024">
+    <h2 id="y2024">2024</h2>
+    <ol>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/seven-wally-wallet-use-cases-61d6743824ba" rel="noopener">Seven Wally Wallet use cases</a></h3>
+          <p class="where">Medium <span class="date">29 December 2024</span></p>
+          
+          <p class="desc">The Wally Wallet for iOS and Android allows digital payments and asset management, offering a decentralized, secure and agile way to pay.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/seven-wally-wallet-use-cases-61d6743824ba" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/wally-nexa-wallet-features-d54f8c78546d" rel="noopener">Wally Nexa Wallet features</a></h3>
+          <p class="where">Medium <span class="date">29 December 2024</span></p>
+          
+          <p class="desc">Wally Wallet is your gateway to the Nexa blockchain and its decentralized financial ecosystem.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/wally-nexa-wallet-features-d54f8c78546d" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/nexscript-playground-how-to-deploy-and-interact-with-the-default-smart-contract-049fc501c2d4" rel="noopener">NexScript Playground: how to deploy and interact with the default smart contract</a></h3>
+          <p class="where">Medium <span class="date">8 September 2024</span></p>
+          
+          <p class="desc">NexScript is a high-level programming language for Nexa smart contracts with a strong abstraction layer over Nexa Script.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/nexscript-playground-how-to-deploy-and-interact-with-the-default-smart-contract-049fc501c2d4" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/how-to-query-nexa-rostrum-api-using-postman-91f8c595057e" rel="noopener">How to query the Nexa Rostrum API using Postman</a></h3>
+          <p class="where">Medium <span class="date">3 September 2024</span></p>
+          
+          <p class="desc">The Nexa blockchain provides a robust platform for decentralized transactions and custom tokens; this walks through querying it with Postman.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/how-to-query-nexa-rostrum-api-using-postman-91f8c595057e" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://medium.com/hackernoon/how-to-create-or-mint-a-nexa-nft-743058d24f01" rel="noopener">How to create or “mint” a Nexa NFT</a></h3>
+          <p class="where">HackerNoon on Medium <span class="date">26 August 2024</span></p>
+          
+          <p class="desc">How to create a Nexa non-fungible token at the NiftyArt.cash NFT marketplace and sell it.</p>
+          
+          <ul class="links"><li><a href="https://medium.com/hackernoon/how-to-create-or-mint-a-nexa-nft-743058d24f01" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/iphone-beta-for-wally-nexa-wallet-210c78e63765" rel="noopener">iPhone BETA for Wally Nexa Wallet</a></h3>
+          <p class="where">Medium <span class="date">6 April 2024</span></p>
+          
+          <p class="desc">Use the Wally Nexa Wallet beta to access Nexa features, focusing on cryptocurrency as cash and a language for irreversible payments.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/iphone-beta-for-wally-nexa-wallet-210c78e63765" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2023">
+    <h2 id="y2023">2023</h2>
+    <ol>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/e/2PACX-1vT4srC-Z5OwCzYStyZPCZCwD22S9Aq6EyXD7_u9wpysFjQxHzYEDzyq5M5JvF3xor08FEWQP7Fsth6H/pub?start=false&amp;loop=false&amp;delayms=3000" rel="noopener">What is money?</a></h3>
+          <p class="where">Blockheim 2023, Trondheim Open Blockchain Meetup · Nerdekollektivet, Kjøpmannsgata 59, Trondheim <span class="date">15 April 2023</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/e/2PACX-1vT4srC-Z5OwCzYStyZPCZCwD22S9Aq6EyXD7_u9wpysFjQxHzYEDzyq5M5JvF3xor08FEWQP7Fsth6H/pub?start=false&amp;loop=false&amp;delayms=3000" class="primary" rel="noopener">Slides (published Google Slides)</a></li><li><a href="http://blockheim.no" rel="noopener">Blockheim</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/how-to-mint-a-nexa-token-b8b6cedbbf18" rel="noopener">How to mint a Nexa token</a></h3>
+          <p class="where">Medium <span class="date">25 January 2023</span></p>
+          
+          <p class="desc">Creating your token on the Nexa blockchain through the Nexa wallet or full node, step by step.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/how-to-mint-a-nexa-token-b8b6cedbbf18" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/nexa-how-to-see-current-connections-65db347da7b3" rel="noopener">Nexa: how to see current p2p connections</a></h3>
+          <p class="where">Medium <span class="date">25 January 2023</span></p>
+          
+          <p class="desc">Nexa relies on a peer-to-peer network to propagate transactions and blocks; here is how to inspect your node's connections.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/nexa-how-to-see-current-connections-65db347da7b3" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/nexa-blockchain-scalability-with-fpgas-and-asics-7dad9c8a82e6" rel="noopener">Nexa Blockchain’s vision for FPGAs and ASICs</a></h3>
+          <p class="where">Medium <span class="date">21 January 2023</span></p>
+          
+          <p class="desc">Blockchain scalability is a bottleneck for mass adoption; how Nexa plans to use FPGAs and ASICs to remove it.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/nexa-blockchain-scalability-with-fpgas-and-asics-7dad9c8a82e6" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/how-nexa-solves-the-blockchain-trilemma-b3da1a044985" rel="noopener">How Nexa solves the blockchain trilemma</a></h3>
+          <p class="where">Coinmonks on Medium <span class="date">20 January 2023</span></p>
+          
+          <p class="desc">The blockchain trilemma is the challenge of creating a decentralized, secure and scalable blockchain at the same time.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/how-nexa-solves-the-blockchain-trilemma-b3da1a044985" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/adoptive-block-size-of-nexa-ee1e058f73ef" rel="noopener">The adaptive block size algorithm of Nexa</a></h3>
+          <p class="where">Medium <span class="date">20 January 2023</span></p>
+          
+          <p class="desc">A ChatGPT-assisted explanation of Nexa's adaptive block size, based on the documentation, with a code example.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/adoptive-block-size-of-nexa-ee1e058f73ef" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/chatgpt-article-based-on-a-nexa-tweet-3a12d6d9fce6" rel="noopener">ChatGPT article based on a $Nexa tweet by @mahoonwahen</a></h3>
+          <p class="where">Coinmonks on Medium <span class="date">19 January 2023</span></p>
+          
+          <p class="desc">An experiment in turning a Twitter thread about Nexa into an article with ChatGPT.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/chatgpt-article-based-on-a-nexa-tweet-3a12d6d9fce6" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/nexa-native-tokens-vs-ethereum-virtual-machine-dc99997aa238" rel="noopener">Nexa native tokens vs the Ethereum Virtual Machine</a></h3>
+          <p class="where">Medium <span class="date">18 January 2023</span></p>
+          
+          <p class="desc">Written with ChatGPT from notes taken during the Nexa AMA with Andrew Stone and Paul Church.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/nexa-native-tokens-vs-ethereum-virtual-machine-dc99997aa238" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/chatgpt-give-me-three-reasons-for-using-tokens-on-nexa-instead-of-using-erc-20-tokens-on-ethereum-184f9dd62ad3" rel="noopener">ChatGPT: three reasons for using tokens on $NEXA instead of ERC-20 tokens on Ethereum</a></h3>
+          <p class="where">Medium <span class="date">17 January 2023</span></p>
+          
+          <p class="desc">ChatGPT summarises a Twitter thread on native tokens versus ERC-20.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/chatgpt-give-me-three-reasons-for-using-tokens-on-nexa-instead-of-using-erc-20-tokens-on-ethereum-184f9dd62ad3" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/chatgpt-what-is-delegated-payment-protocol-in-nexa-462c84234e9" rel="noopener">ChatGPT: what is the Delegated Payment Protocol in Nexa?</a></h3>
+          <p class="where">Medium <span class="date">17 January 2023</span></p>
+          
+          <p class="desc">ChatGPT answers the question, with commentary.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/chatgpt-what-is-delegated-payment-protocol-in-nexa-462c84234e9" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/chatgpt-write-a-medium-post-introducing-the-nexa-cryptocurrency-from-nexa-org-10a226123087" rel="noopener">ChatGPT: write a Medium post introducing the Nexa cryptocurrency from Nexa.org</a></h3>
+          <p class="where">Medium <span class="date">17 January 2023</span></p>
+          
+          <p class="desc">The answer from ChatGPT, published as-is.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/chatgpt-write-a-medium-post-introducing-the-nexa-cryptocurrency-from-nexa-org-10a226123087" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/im-not-sure-if-the-comment-from-chatgpt-is-entirely-accurate-here-13de4360810f" rel="noopener">I'm not sure if the comment from ChatGPT is entirely accurate here</a></h3>
+          <p class="where">Medium <span class="date">17 January 2023</span></p>
+          
+          <p class="desc">A short note on checking ChatGPT's claims about Nexa.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/im-not-sure-if-the-comment-from-chatgpt-is-entirely-accurate-here-13de4360810f" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/nexa-proof-of-work-that-creates-useful-asics-4c976b50eb22" rel="noopener">NEXA: proof of work that creates useful ASICs</a></h3>
+          <p class="where">Medium <span class="date">17 January 2023</span></p>
+          
+          <p class="desc">Generated by querying ChatGPT and edited with Grammarly: why NexaPoW is designed to make ASICs that do useful work.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/nexa-proof-of-work-that-creates-useful-asics-4c976b50eb22" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2022">
+    <h2 id="y2022">2022</h2>
+    <ol>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/e/2PACX-1vQ6Aa1DAVtoepoVKFiGfg0rqHrKm0I70-e1QJtE4xsb_SfBvvDjRvTn4o-49IWLpynnYa4sm_TO7SWK/pub?start=false&amp;loop=false&amp;delayms=3000" rel="noopener">Bitcoin Unlimited meetup in Venice</a></h3>
+          <p class="where">Bitcoin Unlimited · Murano, Venice <span class="date">18 October 2022</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/e/2PACX-1vQ6Aa1DAVtoepoVKFiGfg0rqHrKm0I70-e1QJtE4xsb_SfBvvDjRvTn4o-49IWLpynnYa4sm_TO7SWK/pub?start=false&amp;loop=false&amp;delayms=3000" class="primary" rel="noopener">Slides (published Google Slides)</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/e/2PACX-1vRUjERfOo3mEqfYFSySWDSD6GTPK4_XOUv9DkoL0w0khJ_962Iy_69S5ynG6ej_ljEc6CtUC1b-HKj_/pub?start=false&amp;loop=false&amp;delayms=3000" rel="noopener">Bitcoins og blockchain</a></h3>
+          <p class="where">NITO · Norway <span class="date">10 September 2022</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/e/2PACX-1vRUjERfOo3mEqfYFSySWDSD6GTPK4_XOUv9DkoL0w0khJ_962Iy_69S5ynG6ej_ljEc6CtUC1b-HKj_/pub?start=false&amp;loop=false&amp;delayms=3000" class="primary" rel="noopener">Slides (published Google Slides)</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/e/2PACX-1vQ6071sEOJJdDmLFChYz7FQOgaoqKLE5nL4UV7jqmJIfRztu2sz5cVBVleKAj0HBoKAOMH0S4c5U8Ig/pub?start=false&amp;loop=false&amp;delayms=3000" rel="noopener">VotePeer and the Bitcoin Unlimited DAO</a></h3>
+          <p class="where">Trondheim Open Blockchain Meetup · DIGS coworking space rooftop, Trondheim <span class="date">20 May 2022</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/e/2PACX-1vQ6071sEOJJdDmLFChYz7FQOgaoqKLE5nL4UV7jqmJIfRztu2sz5cVBVleKAj0HBoKAOMH0S4c5U8Ig/pub?start=false&amp;loop=false&amp;delayms=3000" class="primary" rel="noopener">Slides (published Google Slides)</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2021">
+    <h2 id="y2021">2021</h2>
+    <ol>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/world-first-research-paper-nft-45dbaa4675e4" rel="noopener">(*Almost) world-first research paper NFT</a></h3>
+          <p class="where">Medium <span class="date">30 December 2021</span></p>
+          
+          <p class="desc">The Minimum Hybrid Contract paper deployed as an NFT on Ethereum, so readers can reward useful research.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/world-first-research-paper-nft-45dbaa4675e4" class="primary" rel="noopener">Read on Medium</a></li><li><a href="https://mirror.xyz/0xb72941dB114D0D46f052d60C6a395ae1C7c473E7/bR_FMGOtSHYtKFS0oUaYG-1ykKMzoeABzS4bEGCPWIE" rel="noopener">The NFT on Mirror</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/kompendie-innovasjonskontrakt-48b5d540b33c" rel="noopener">Kompendie: Innovasjonskontrakt</a></h3>
+          <p class="where">Medium <span class="date">2 July 2021</span></p>
+          
+          <p class="desc">Notater utredet fra forskjellige kilder hos Innovasjon Norge sine nettsider.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/kompendie-innovasjonskontrakt-48b5d540b33c" class="primary" rel="noopener">Les på Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="paper">
+        
+        <div class="body">
+          <span class="kind"><span class="sec paper">PAPER</span>Presentation</span>
+          <h3><a href="https://youtu.be/2ImYru2DyZ8" rel="noopener">Forging legal contracts and smart contracts using the Minimum Hybrid Contract (MHC)</a></h3>
+          <p class="where">EASE 2021, online conference <span class="date">June 2021</span></p>
+          <p class="authors">Jørgen Svennevik Notland, Jakob Svennevik Notland, Donn Morrison</p>
+          <p class="desc">Conference presentation of the MHC paper.</p>
+          
+          <ul class="links"><li><a href="https://youtu.be/2ImYru2DyZ8" class="primary" rel="noopener">Watch on YouTube</a></li><li><a href="https://www.researchgate.net/publication/357081176_The_Minimum_Hybrid_Contract_MHC_Combining_legal_and_blockchain_smart_contracts_httpsarxivorgabs200206850_httpsdlacmorgdoi10114533832193383275" rel="noopener">ResearchGate</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/e/2PACX-1vRiV3h3fhPs-RbGBY4MjJGpPdbuVAto7p2jKYy-wwKNWvzSEdKLFjev5Gn1HgR-Jjaeiffa_dopcIsE/pub?start=false&amp;loop=false&amp;delayms=3000" rel="noopener">VotePeer: an on-chain voting system</a></h3>
+          <p class="where">The Blockchain Hangout (THB talk) · London <span class="date">2021</span></p>
+          
+          <p class="desc">VotePeer lets anyone set up and hold a vote or poll on top of the Bitcoin Cash blockchain, built at Bitcoin Unlimited.</p>
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/e/2PACX-1vRiV3h3fhPs-RbGBY4MjJGpPdbuVAto7p2jKYy-wwKNWvzSEdKLFjev5Gn1HgR-Jjaeiffa_dopcIsE/pub?start=false&amp;loop=false&amp;delayms=3000" class="primary" rel="noopener">Slides (published Google Slides)</a></li><li><a href="https://docs.voter.cash/" rel="noopener">VotePeer documentation</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2020">
+    <h2 id="y2020">2020</h2>
+    <ol>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/bitcoin-unlimited-membership-application-abd3021ceaa" rel="noopener">Bitcoin Unlimited membership application</a></h3>
+          <p class="where">Medium <span class="date">26 November 2020</span></p>
+          
+          <p class="desc">A repost of the application on the Bitcoin Unlimited forum.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/bitcoin-unlimited-membership-application-abd3021ceaa" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="paper">
+        
+        <div class="body">
+          <span class="kind"><span class="sec paper">PAPER</span>Conference paper, peer reviewed</span>
+          <h3><a href="https://dl.acm.org/doi/10.1145/3383219.3383275" rel="noopener">The Minimum Hybrid Contract (MHC): Combining Legal and Blockchain Smart Contracts</a></h3>
+          <p class="where">EASE 2020, 24th International Conference on Evaluation and Assessment in Software Engineering, ACM <span class="date">June 2020</span></p>
+          <p class="authors">Jørgen Svennevik Notland, Jakob Svennevik Notland, Donn Morrison</p>
+          <p class="desc">Proposes the Minimum Hybrid Contract: an online smart contract immutably linked to an offline legal contract, so that a contract's financial transactions become auditable, transparent and immutable while disputes stay with the civil courts. Preprint on arXiv, February 2020.</p>
+          <p class="cites"><b>10 citations</b> <span>Google Scholar: 10 · ResearchGate: 6 · Semantic Scholar: 5 · Crossref: 4</span></p>
+          <ul class="links"><li><a href="https://dl.acm.org/doi/10.1145/3383219.3383275" class="primary" rel="noopener">ACM Digital Library (DOI 10.1145/3383219.3383275)</a></li><li><a href="https://arxiv.org/abs/2002.06850" rel="noopener">Preprint on arXiv (2002.06850)</a></li><li><a href="https://www.researchgate.net/publication/341127835_The_Minimum_Hybrid_Contract_MHC_Combining_Legal_and_Blockchain_Smart_Contracts" rel="noopener">ResearchGate</a></li><li><a href="https://jqrgen.medium.com/the-minimum-hybrid-contract-mhc-tying-legal-effect-to-blockchain-immutability-a9ed1cd8b0f5" rel="noopener">Medium summary</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/the-minimum-hybrid-contract-mhc-tying-legal-effect-to-blockchain-immutability-a9ed1cd8b0f5" rel="noopener">The Minimum Hybrid Contract (MHC): tying legal effect to blockchain immutability</a></h3>
+          <p class="where">Coinmonks on Medium <span class="date">7 April 2020</span></p>
+          
+          <p class="desc">How can a free-market economy be secure, accountable, transparent and inclusive to the actors involved?</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/the-minimum-hybrid-contract-mhc-tying-legal-effect-to-blockchain-immutability-a9ed1cd8b0f5" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/legal-strategy-for-regulating-blockchain-cae9df6e33cd" rel="noopener">Legal strategy for regulating blockchain</a></h3>
+          <p class="where">The Capital on Medium <span class="date">10 February 2020</span></p>
+          
+          <p class="desc">By Jørgen Svennevik Notland on The Capital.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/legal-strategy-for-regulating-blockchain-cae9df6e33cd" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/oracles-5824a580d856" rel="noopener">Oracles</a></h3>
+          <p class="where">Keeping Stock on Medium <span class="date">20 January 2020</span></p>
+          
+          <p class="desc">Smart contracts cannot guarantee information reliability outside their own network; they can only read what oracles bring in.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/oracles-5824a580d856" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2019">
+    <h2 id="y2019">2019</h2>
+    <ol>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/smart-contract-history-and-law-9b2f3331d1a" rel="noopener">Smart contract history and law</a></h3>
+          <p class="where">Medium <span class="date">26 June 2019</span></p>
+          
+          <p class="desc">A smart contract is a piece of computer code that executes on a blockchain such as Ethereum and can transfer value.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/smart-contract-history-and-law-9b2f3331d1a" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/financial-innovation-regulation-95c2c1064a5d" rel="noopener">Financial innovation and regulation</a></h3>
+          <p class="where">Keeping Stock on Medium <span class="date">14 June 2019</span></p>
+          
+          <p class="desc">Blockchain is a financial innovation interconnected with the existing legal and regulatory space.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/financial-innovation-regulation-95c2c1064a5d" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="paper">
+        
+        <div class="body">
+          <span class="kind"><span class="sec paper">PAPER</span>Master's thesis</span>
+          <h3><a href="https://www.researchgate.net/publication/333755664_Master_Thesis_The_Minimum_Hybrid_Contract_MHC_Combining_Legal_and_Blockchain_Smart_Contracts_Master_Thesis" rel="noopener">The Minimum Hybrid Contract (MHC): Combining Legal and Blockchain Smart Contracts</a></h3>
+          <p class="where">NTNU School of Entrepreneurship, Norwegian University of Science and Technology <span class="date">June 2019</span></p>
+          <p class="authors">Jørgen Svennevik Notland. Supervisors: Roger Sørheim and Donn Morrison</p>
+          <p class="desc">Having identified contracts as the nexus of corruption, the thesis asks how contracts, blockchain smart contracts and financial regulation can be combined to make contracts secure, accountable, transparent and inclusive, and introduces the term Minimum Hybrid Contract.</p>
+          <p class="cites"><b>0 citations</b> <span>ResearchGate: 0</span></p>
+          <ul class="links"><li><a href="https://www.researchgate.net/publication/333755664_Master_Thesis_The_Minimum_Hybrid_Contract_MHC_Combining_Legal_and_Blockchain_Smart_Contracts_Master_Thesis" class="primary" rel="noopener">ResearchGate (full text)</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/fungible-money-67a57717b2fe" rel="noopener">Fungible money</a></h3>
+          <p class="where">Keeping Stock on Medium <span class="date">29 May 2019</span></p>
+          
+          <p class="desc">Fungible: replaceable by another identical item, mutually interchangeable. What that means for cryptocurrency.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/fungible-money-67a57717b2fe" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/cryptocurrency-as-money-80a1feccc6a8" rel="noopener">Cryptocurrency as money</a></h3>
+          <p class="where">Keeping Stock on Medium <span class="date">22 May 2019</span></p>
+          
+          <p class="desc">Money is a store of value, medium of exchange, standard of deferred payment and unit of account. Does cryptocurrency qualify?</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/cryptocurrency-as-money-80a1feccc6a8" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/consensus-protocols-83bc7e4adda" rel="noopener">Consensus protocols</a></h3>
+          <p class="where">Medium <span class="date">7 March 2019</span></p>
+          
+          <p class="desc">A short overview of some consensus protocols.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/consensus-protocols-83bc7e4adda" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/contracting-in-brazil-a-ricardian-contracts-backdrop-cc3152e71ad8" rel="noopener">Contracting in Brazil: a Ricardian contracts backdrop</a></h3>
+          <p class="where">Medium <span class="date">28 February 2019</span></p>
+          
+          <p class="desc">A backdrop on Brazilian contracting, for further research on Ricardian contracts.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/contracting-in-brazil-a-ricardian-contracts-backdrop-cc3152e71ad8" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/working-paper-blockchain-and-transparency-in-trade-1-e637f4a3206c" rel="noopener">Blockchain and transparency in trade</a></h3>
+          <p class="where">Cryptolinks on Medium <span class="date">25 February 2019</span></p>
+          
+          <p class="desc">Can blockchain smart contracts enable trust in supply chains and prevent moral hazard and cheating, in symbiosis with conventional contracts?</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/working-paper-blockchain-and-transparency-in-trade-1-e637f4a3206c" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/kryptovaluta-private-transaksjoner-ad36adab9f73" rel="noopener">Kryptovaluta og private transaksjoner</a></h3>
+          <p class="where">Medium <span class="date">22 February 2019</span></p>
+          
+          <p class="desc">Skal vi la privatlivet vike til fordel for kriminalitetsbekjempelse?</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/kryptovaluta-private-transaksjoner-ad36adab9f73" class="primary" rel="noopener">Les på Medium</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2018">
+    <h2 id="y2018">2018</h2>
+    <ol>
+      <li class="item" data-section="talk">
+        <figure class="thumb"><img src="talks/files/bitcoin-securities-2018-cover.png" alt="" width="1600" height="900" loading="lazy"></figure>
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="talks/files/bitcoin-securities-2018.pdf">Bitcoin and securities</a></h3>
+          <p class="where">Trondheim Open Blockchain Meetup · NTNU Gløshaugen, Gamle fysikk, Trondheim <span class="date">18 September 2018</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="talks/files/bitcoin-securities-2018.pdf" class="primary">Open the original slides (PDF)</a></li><li><a href="https://www.youtube.com/watch?v=-450-WH-N7E" class="primary" rel="noopener">Video (YouTube)</a></li><li><a href="https://docs.google.com/presentation/d/1cTsinhqKxlc90Y5cufFtCtwPmxkk5In9YoIwCWhOZGo/edit" rel="noopener">Google Slides</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/1_hG3e2C3bc4trFC-JzruZV3mKHWJNqk99u8R6Kp8R4g/edit" rel="noopener">Bitcoin introduction and more</a></h3>
+          <p class="where">Dustin.no · Aker Brygge, Oslo <span class="date">2018</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/1_hG3e2C3bc4trFC-JzruZV3mKHWJNqk99u8R6Kp8R4g/edit" class="primary" rel="noopener">Slides on Google Slides</a></li></ul>
+          <p class="note">The Google Slides deck is private; share it with anyone with the link to get a PDF copy here.</p>
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/e/2PACX-1vR75ZKpUtcMjB0aNtgw6b2V2xulOj05iuje8qX2EZJmQW2Ds0ikEYvj7cqNRbyzTpY1xdiymMZWX9yr/pub?start=false&amp;loop=false&amp;delayms=3000" rel="noopener">Bitcoin and blockchain: introduction and current events</a></h3>
+          <p class="where">BI Norwegian Business School · Trondheim <span class="date">8 April 2018</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/e/2PACX-1vR75ZKpUtcMjB0aNtgw6b2V2xulOj05iuje8qX2EZJmQW2Ds0ikEYvj7cqNRbyzTpY1xdiymMZWX9yr/pub?start=false&amp;loop=false&amp;delayms=3000" class="primary" rel="noopener">Slides (published Google Slides)</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2017">
+    <h2 id="y2017">2017</h2>
+    <ol>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/e/2PACX-1vRco54vrs8boa4ykl8QF6qq08KN29Vyujn0K2Xw0uTVa6ptw3hVcaROyPiRrsrpu4y8ClxqPZdeo_Bk/pub?start=false&amp;loop=false&amp;delayms=3000" rel="noopener">Blockchain revolution: decentralize everything</a></h3>
+          <p class="where">Trondheim Developer Conference (TDC) · Clarion Congress, Trondheim <span class="date">30 October 2017</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/e/2PACX-1vRco54vrs8boa4ykl8QF6qq08KN29Vyujn0K2Xw0uTVa6ptw3hVcaROyPiRrsrpu4y8ClxqPZdeo_Bk/pub?start=false&amp;loop=false&amp;delayms=3000" class="primary" rel="noopener">Slides (published Google Slides)</a></li><li><a href="https://2017.trondheimdc.no/program#15:45-2" rel="noopener">Event page</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/1skjjGRoa67oebVqHAaJqO5b_3hyJkpnxr-9faf4uWis/edit" rel="noopener">Revolusjon: Blockchain</a></h3>
+          <p class="where">NITO Bergen · Bergen <span class="date">28 October 2017</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/1skjjGRoa67oebVqHAaJqO5b_3hyJkpnxr-9faf4uWis/edit" class="primary" rel="noopener">Slides on Google Slides</a></li></ul>
+          <p class="note">The Google Slides deck is private; share it with anyone with the link to get a PDF copy here.</p>
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/decentralized-cloud-storage-848c8de9f647" rel="noopener">Decentralized cloud storage</a></h3>
+          <p class="where">Keeping Stock on Medium <span class="date">22 June 2017</span></p>
+          
+          <p class="desc">Current storage architecture relies almost entirely on large providers such as Google and Amazon acting as trusted third parties.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/decentralized-cloud-storage-848c8de9f647" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/e/2PACX-1vQpGi5qYHOGrDouXqA5nzz1dASxqNuU8Ly7dWKvMtxrzI3lcx_FUqlXq1U_ieNwkATPbfQ629GzNbIF/pub?start=false&amp;loop=false&amp;delayms=3000" rel="noopener">Blockchain og orakler</a></h3>
+          <p class="where">Presentation (Norwegian) <span class="date">2017</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/e/2PACX-1vQpGi5qYHOGrDouXqA5nzz1dASxqNuU8Ly7dWKvMtxrzI3lcx_FUqlXq1U_ieNwkATPbfQ629GzNbIF/pub?start=false&amp;loop=false&amp;delayms=3000" class="primary" rel="noopener">View the published slides</a></li><li><a href="https://docs.google.com/presentation/d/119b5YI0Gc0oop5ZaMhQ3Te4uV2z5UaaYgKAuMk5PSdQ/edit" rel="noopener">Google Slides</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="talk">
+        
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="https://docs.google.com/presentation/d/e/2PACX-1vRZQEKg3FgJMgRkRvyL0lKzGC2zZjL_MgVIMcqimrHjTQyCeO_v4iHMU6-I21HMX9PN1t5MJzpb7eDR/pub?start=false&amp;loop=false&amp;delayms=3000" rel="noopener">Desentraliser alt</a></h3>
+          <p class="where">Presentation (Norwegian) <span class="date">2017</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="https://docs.google.com/presentation/d/e/2PACX-1vRZQEKg3FgJMgRkRvyL0lKzGC2zZjL_MgVIMcqimrHjTQyCeO_v4iHMU6-I21HMX9PN1t5MJzpb7eDR/pub?start=false&amp;loop=false&amp;delayms=3000" class="primary" rel="noopener">View the published slides</a></li><li><a href="https://docs.google.com/presentation/d/1KFW0Wspza0FqxI30E4UXjjMxMJwP36XhDMlpFbogmBQ/edit" rel="noopener">Google Slides</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/the-self-sustaining-blockchain-casino-eef499b2e277" rel="noopener">The self-sustaining blockchain casino</a></h3>
+          <p class="where">Keeping Stock on Medium <span class="date">27 February 2017</span></p>
+          
+          <p class="desc">Thanks to Håvard Kittelsen for the discussion that led to this post.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/the-self-sustaining-blockchain-casino-eef499b2e277" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/blockchain-enabled-trust-transparency-in-supply-chains-journal-format-2744fa4f37d" rel="noopener">Blockchain enabled trust and transparency in supply chains (journal format)</a></h3>
+          <p class="where">Medium <span class="date">14 February 2017</span></p>
+          
+          <p class="desc">Authors: Jørgen S. Notland and Anders V. Hua.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/blockchain-enabled-trust-transparency-in-supply-chains-journal-format-2744fa4f37d" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item" data-section="talk">
+        <figure class="thumb"><img src="talks/files/tobm-2017-cover.png" alt="" width="1600" height="900" loading="lazy"></figure>
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="talks/files/tobm-2017.pdf">Current applications and proof of concepts</a></h3>
+          <p class="where">Trondheim Open Blockchain Meetup · Trondheim <span class="date">9 February 2017</span></p>
+          
+          
+          
+          <ul class="links"><li><a href="talks/files/tobm-2017.pdf" class="primary">Open the original slides (PDF)</a></li><li><a href="https://docs.google.com/presentation/d/1LWkeHCsmcd6Xj-kgv5j0YhOqeKoYY3_Ww_WoUAM__oM/edit" rel="noopener">Google Slides</a></li></ul>
+          
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="paper">
+        
+        <div class="body">
+          <span class="kind"><span class="sec paper">PAPER</span>Project thesis</span>
+          <h3><a href="https://www.researchgate.net/publication/313309221_Project_Thesis_Blockchain_enabled_Trust_Transparency_in_supply_chains" rel="noopener">Blockchain enabled Trust &amp; Transparency in supply chains</a></h3>
+          <p class="where">NTNU School of Entrepreneurship, Norwegian University of Science and Technology <span class="date">Autumn 2016, published February 2017</span></p>
+          <p class="authors">Jørgen Svennevik Notland, Anders Viet Hua</p>
+          <p class="desc">Investigates the nature of trust in supply chains and whether blockchain can increase it. Blockchain gives high integrity but unstable information reliability: how data is recorded on-chain is the critical step, and actors need a clear incentive before they adopt it.</p>
+          <p class="cites"><b>29 citations</b> <span>ResearchGate: 29 · Google Scholar: 17</span></p>
+          <ul class="links"><li><a href="https://www.researchgate.net/publication/313309221_Project_Thesis_Blockchain_enabled_Trust_Transparency_in_supply_chains" class="primary" rel="noopener">ResearchGate (full text)</a></li><li><a href="https://jqrgen.medium.com/link-to-original-paper-https-www-pdf-archive-com-2017-02-01-project-thesis-anders-j-rgen-project-3921bf4cbdd7" rel="noopener">Medium summary</a></li></ul>
+          <p class="note">Google Scholar lists this thesis under two records (12 and 5 citations); 17 is the sum. Counts overlap between sources, so they are not added together.</p>
+        </div>
+      </li>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/link-to-original-paper-https-www-pdf-archive-com-2017-02-01-project-thesis-anders-j-rgen-project-3921bf4cbdd7" rel="noopener">Blockchain enabled trust and transparency in supply chains</a></h3>
+          <p class="where">Keeping Stock on Medium <span class="date">1 February 2017</span></p>
+          
+          <p class="desc">Link to the original project thesis, with a summary.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/link-to-original-paper-https-www-pdf-archive-com-2017-02-01-project-thesis-anders-j-rgen-project-3921bf4cbdd7" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2015">
+    <h2 id="y2015">2015</h2>
+    <ol>
+      <li class="item no-thumb" data-section="article">
+        
+        <div class="body">
+          <span class="kind"><span class="sec article">ARTICLE</span></span>
+          <h3><a href="https://jqrgen.medium.com/flare-networking-effects-f47fdc2a2739" rel="noopener">Flare and networking effects</a></h3>
+          <p class="where">Medium <span class="date">14 December 2015</span></p>
+          
+          <p class="desc">At Flare we are pioneering crowdsourced safety: an app for iOS and Android where you can ask for help from people nearby.</p>
+          
+          <ul class="links"><li><a href="https://jqrgen.medium.com/flare-networking-effects-f47fdc2a2739" class="primary" rel="noopener">Read on Medium</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+  <section class="year" aria-labelledby="y2014">
+    <h2 id="y2014">2014</h2>
+    <ol>
+      <li class="item" data-section="talk">
+        <figure class="thumb"><img src="talks/files/patch-cover.png" alt="" width="1600" height="900" loading="lazy"></figure>
+        <div class="body">
+          <span class="kind"><span class="sec talk">TALK</span></span>
+          <h3><a href="talks/files/patch.pdf">Patch: MyStory before Snapchat launched My Story</a></h3>
+          <p class="where">Startup post-mortem · NTNU, Trondheim <span class="date">2014</span></p>
+          
+          <p class="desc">A student team from StartNTNU builds a social app for sharing photos and videos that vanish after 24 hours, then watches Snapchat ship the same feature. What went wrong, what the team learned about momentum, roles and honesty about your own capabilities, and where the team went next.</p>
+          
+          <ul class="links"><li><a href="talks/files/patch.pdf" class="primary">Open the original slides (PDF)</a></li><li><a href="https://docs.google.com/presentation/d/1THaBYS9DK9L5GD1yDqb_0GtY8sEpoANCap14bCxFjGU/edit" rel="noopener">Google Slides</a></li></ul>
+          
+        </div>
+      </li>
+    </ol>
+  </section>
+<script>
+(function(){
+  var btns = Array.prototype.slice.call(document.querySelectorAll('.filter button'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('li.item'));
+  var years = Array.prototype.slice.call(document.querySelectorAll('section.year'));
+  var yearLinks = Array.prototype.slice.call(document.querySelectorAll('.years a'));
+  function apply(f, push){
+    btns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.filter === f ? 'true' : 'false'); });
+    cards.forEach(function(c){ c.hidden = !(f === 'all' || c.dataset.section === f); });
+    years.forEach(function(y){ y.hidden = !y.querySelector('li.item:not([hidden])'); });
+    yearLinks.forEach(function(a){ var sec = document.getElementById('y' + a.dataset.year); a.parentNode.hidden = !sec || sec.hidden; });
+    if (push !== false) { try { var u = new URL(location.href); if (f === 'all') u.searchParams.delete('show'); else u.searchParams.set('show', f); history.replaceState(null, '', u); } catch(e){} }
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ apply(b.dataset.filter); }); });
+  var q = 'all'; try { q = new URL(location.href).searchParams.get('show') || 'all'; } catch(e){}
+  if (['all','talk','article','paper'].indexOf(q) < 0) q = 'all';
+  apply(q, false);
+})();
+</script>
+  <footer class="site">Source: <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
+</div>
+</body>
+</html>

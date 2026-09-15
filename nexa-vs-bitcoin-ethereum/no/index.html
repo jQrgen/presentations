@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nexa mot Bitcoin og Ethereum</title>
+<style>
+:root{
+  color-scheme:light;
+  --ground:#E5E7EB; --paper:#FFFFFF; --band:#000000; --band-ink:#FFFFFF;
+  --ink:#000000; --ink-2:#1F2937; --muted:#4B5563; --line:#000000; --hair:#D1D5DB;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink)}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.band{background:var(--band);color:var(--band-ink)}
+.band .inner{max-width:1080px;margin:0 auto;padding:22px 24px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px}
+.band .name{font-size:22px;font-weight:400;letter-spacing:.01em;color:var(--band-ink);text-decoration:none}
+.band nav{display:flex;flex-wrap:wrap;gap:4px 22px;margin-left:auto}
+.band nav a{color:var(--band-ink);text-decoration:none;font-size:15px;padding:4px 0;border-bottom:2px solid transparent;opacity:.8}
+.band nav a:hover{opacity:1}
+.band nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--band-ink)}
+.page{max-width:1080px;margin:0 auto;padding:36px 24px 72px}
+h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+.count{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.year{display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;margin-top:36px}
+@media (max-width:700px){.year{grid-template-columns:1fr;gap:8px}}
+.year h2{font-size:30px;font-weight:400;margin:0;letter-spacing:-.02em;font-variant-numeric:tabular-nums;position:sticky;top:12px}
+.year ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.item{display:grid;grid-template-columns:minmax(200px,2fr) 3fr;background:var(--paper);border:1px solid var(--line)}
+.item.no-thumb{grid-template-columns:1fr}
+@media (max-width:700px){.item{grid-template-columns:1fr}}
+.thumb{margin:0;background:#000;aspect-ratio:16/9;border-right:1px solid var(--line)}
+@media (max-width:700px){.thumb{border-right:0;border-bottom:1px solid var(--line)}}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px}
+.kind{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.body h3 a{color:var(--ink);text-decoration:none}
+.body h3 a:hover{text-decoration:underline}
+.where{margin:0;font-size:14px;color:var(--muted)}
+.where .date{color:var(--ink-2)}
+.authors{margin:0;font-size:14px;color:var(--ink-2)}
+.desc{margin:2px 0 0;color:var(--ink-2);max-width:66ch;font-size:15px}
+.cites{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.cites b{font-weight:600}
+.cites span{color:var(--muted)}
+.links{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.links a{display:inline-block;color:var(--ink);text-decoration:none;font-size:14px;padding:5px 10px;border:1px solid var(--line);background:var(--paper)}
+.links a.primary{background:var(--band);color:var(--band-ink)}
+.links a:hover{text-decoration:underline}
+.note{margin:6px 0 0;font-size:13px;color:var(--muted)}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+
+.band .tag{font-size:14px;opacity:.8}
+.deck-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;margin-bottom:16px}
+.deck-head h1{font-size:24px;margin:0}
+.deck-head .meta{font-size:14px;color:var(--muted)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start}
+@media (max-width:900px){main{grid-template-columns:1fr}}
+.frame{margin:0;background:#000;border:1px solid var(--line);overflow:hidden;aspect-ratio:16/9;position:relative;cursor:pointer;outline:none}
+.frame:focus-visible{box-shadow:0 0 0 3px var(--ink)}
+.frame img{display:block;width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none}
+.frame:fullscreen{background:#000;cursor:none}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:12px}
+.controls button,.controls a.dl{font:500 14px var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--line);padding:7px 11px;cursor:pointer;line-height:1.2;text-decoration:none}
+.controls button:hover,.controls a.dl:hover{text-decoration:underline}
+.controls button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.controls button[aria-pressed="true"]{background:var(--band);color:var(--band-ink)}
+.counter{font-size:14px;color:var(--ink-2);min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
+.stitle{flex:1 1 240px;font-size:15px;font-weight:500;color:var(--ink);min-width:0}
+.hint{margin:8px 0 0;font-size:13px;color:var(--muted)}
+.notes{margin-top:20px;padding:16px 20px;background:var(--paper);border:1px solid var(--line)}
+.notes h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:500}
+.notes p{margin:0;max-width:72ch;color:var(--ink-2);font-size:15.5px;line-height:1.6;white-space:pre-line}
+.toc h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:500}
+.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.toc button{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start;width:100%;text-align:left;font:400 14px/1.35 var(--sans);color:var(--ink-2);background:transparent;border:0;padding:7px 8px;cursor:pointer}
+.toc button:hover{background:var(--paper)}
+.toc button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.toc button[aria-current="true"]{background:var(--band);color:var(--band-ink)}
+.toc .n{font-size:12px;line-height:1.6;color:var(--muted);text-align:right;padding-right:2px;font-variant-numeric:tabular-nums}
+.toc button[aria-current="true"] .n{color:var(--band-ink)}
+</style>
+</head>
+<body><div class="band"><div class="inner"><a class="name" href="../../">Jørgen S. Notland</a><span class="tag">All talks, articles and papers</span></div></div>
+<div class="page">
+  <header class="deck-head">
+    <h1>Nexa mot Bitcoin og Ethereum</h1>
+    <span class="meta">20 slides · Jørgen S. Notland · Norge 2026</span>
+  </header>
+  <main>
+    <section aria-label="Nexa mot Bitcoin og Ethereum">
+      <figure class="frame" id="frame" tabindex="0">
+        <img id="slide" src="slides/01.png" alt="Energieffektive penger i internettskala" width="1600" height="900">
+      </figure>
+      <div class="controls">
+        <button type="button" id="prev" aria-label="Forrige slide">←</button>
+        <div class="counter"><span id="cur">1</span> av 20</div>
+        <button type="button" id="next" aria-label="Neste slide">→</button>
+        <div class="stitle" id="stitle">Energieffektive penger i internettskala</div>
+        <button type="button" id="notesBtn" aria-pressed="true">Notater</button>
+        <button type="button" id="fsBtn">Fullskjerm</button>
+        <a class="dl" href="../Nexa-vs-Bitcoin-Ethereum-NO.pptx" download>Last ned .pptx</a>
+        <a class="dl" href="../Nexa-vs-Bitcoin-Ethereum-NO.pdf" download>Last ned .pdf</a>
+      </div>
+      <p class="hint">← → for å bla · N viser notater · F for fullskjerm</p>
+      <div class="notes" id="notes">
+        <h2>Talenotater</h2>
+        <p id="ntext">Presenter deg kort: informatikk og NTNUs Entreprenørskole i Trondheim, og at du underviser i Bitcoin og Nexa blokkjede ved University of Exeter. For dette publikummet betyr NTNU-koblingen noe: miljøforskningen på slide 6 kommer fra ditt eget universitet. Åpning. Presentasjonen er skrevet for et skeptisk publikum. Den første innholdssliden innrømmer kritikken før den besvares. Kilder for hvert tall ligger i notatene til hver slide.</p>
+      </div>
+    </section>
+    <aside class="toc" aria-label="Slides">
+      <h2>Slides</h2>
+      <ol id="toc">
+        <li><button type="button" data-n="1" aria-current="true"><span class="n">1</span><span>Energieffektive penger i internettskala</span></button></li>
+        <li><button type="button" data-n="2"><span class="n">2</span><span>Kritikken av krypto er stort sett riktig</span></button></li>
+        <li><button type="button" data-n="3"><span class="n">3</span><span>I stor skala er Nexa inntil 13 000× mer energieffektiv enn Bitcoin</span></button></li>
+        <li><button type="button" data-n="4"><span class="n">4</span><span>Samme joule, ulik nevner</span></button></li>
+        <li><button type="button" data-n="5"><span class="n">5</span><span>Nexa kan bruke like mye strøm som Bitcoin hvis mange nok miner. I stor skala er den langt mer energieffektiv</span></button></li>
+        <li><button type="button" data-n="6"><span class="n">6</span><span>NTNU-forskning: den grønneste kilowattimen er den du aldri trenger</span></button></li>
+        <li><button type="button" data-n="7"><span class="n">7</span><span>Ingen spesialbygd maskinvare, ingen fjell av e-avfall</span></button></li>
+        <li><button type="button" data-n="8"><span class="n">8</span><span>Rettferdig start: null premine, null ICO, null venturekapital</span></button></li>
+        <li><button type="button" data-n="9"><span class="n">9</span><span>Skala: 42 000 transaksjoner i sekundet på dagens maskinvare</span></button></li>
+        <li><button type="button" data-n="10"><span class="n">10</span><span>Betalinger som føles som Vipps: under to sekunder, rundt 3 NEXA (under 0,0001 dollar)</span></button></li>
+        <li><button type="button" data-n="11"><span class="n">11</span><span>Tokens og NFT-er er bygget inn i protokollen, ikke skrudd på utenpå</span></button></li>
+        <li><button type="button" data-n="12"><span class="n">12</span><span>Utstedelsesretten er også en mynt: autoritetsbatonger</span></button></li>
+        <li><button type="button" data-n="13"><span class="n">13</span><span>Open outcry-handel over CAPD: rop ut et tilbud, hvem som helst kan ta det</span></button></li>
+        <li><button type="button" data-n="14"><span class="n">14</span><span>Token Secrets: selg hemmeligheten sammen med tokenet</span></button></li>
+        <li><button type="button" data-n="15"><span class="n">15</span><span>Hva du kan bygge med det: praktiske bruksområder</span></button></li>
+        <li><button type="button" data-n="16"><span class="n">16</span><span>Smartkontrakter uten EVM</span></button></li>
+        <li><button type="button" data-n="17"><span class="n">17</span><span>Identitet og betalinger bor i lommeboken, ikke hos butikken</span></button></li>
+        <li><button type="button" data-n="18"><span class="n">18</span><span>Hvorfor dette betyr noe i Norge</span></button></li>
+        <li><button type="button" data-n="19"><span class="n">19</span><span>Sammenligning i oversikt</span></button></li>
+        <li><button type="button" data-n="20"><span class="n">20</span><span>Tre ting å huske</span></button></li>
+      </ol>
+    </aside>
+  </main>
+</div>
+<script>
+(function(){
+  var S = [{"t":"Energieffektive penger i internettskala","n":"Presenter deg kort: informatikk og NTNUs Entreprenørskole i Trondheim, og at du underviser i Bitcoin og Nexa blokkjede ved University of Exeter. For dette publikummet betyr NTNU-koblingen noe: miljøforskningen på slide 6 kommer fra ditt eget universitet. Åpning. Presentasjonen er skrevet for et skeptisk publikum. Den første innholdssliden innrømmer kritikken før den besvares. Kilder for hvert tall ligger i notatene til hver slide.","i":"slides/01.png"},{"t":"Kritikken av krypto er stort sett riktig","n":"Innrøm først. Energi: Cambridge CBECI live-anslag 138 TWh/år, Digiconomist ~204 TWh/år; Norges nasjonale forbruk er rundt 140 TWh/år. E-avfall: de Vries & Stoll (2021), 30,7 kt/år, ASIC-levetid 1,29 år, 272 g per transaksjon. Finansialisering: Ethereums 72M ETH ved genesis og innsatsvektet belønning; NFT-utstedelse på Ethereum L1 har historisk kostet titalls dollar i gass.","i":"slides/02.png"},{"t":"I stor skala er Nexa inntil 13 000× mer energieffektiv enn Bitcoin","n":"Metode fra Medium-artikkelen «Nexa is 13,000x more energy efficient than Bitcoin» (sept. 2026): kWh per transaksjon = 4 376 / TPS ved 138 TWh/år. Bitcoin 7,5 TPS -> 580 kWh; travleste dag 10,3 TPS -> 425 kWh. Nexa 42 000 TPS er en benchmark på dagens maskinvare; 100 000 med Blitz er et anslag. Vær tydelig på at dette er en kapasitetssammenligning ved lik nettverkseffekt. Kilder: Cambridge CBECI, Digiconomist, Blockchair.","i":"slides/03.png"},{"t":"Samme joule, ulik nevner","n":"Grafen er gjenskapt fra det interaktive artefaktet «The Denominator Chart» (claude.ai/artifact/QTRwhPcMUUQ6PwhibYYbQ2), der du også kan bytte til Digiconomists 204 TWh/år. Slik leses den: én teller, minerne brenner det blokkbelønningen betaler for, så nettverksstrømmen er den samme for begge linjene. Bitcoins nevner står fast: gjennomstrømningen har ligget nær 7 TPS siden 2010 og protokollen begrenser den til 7 til 14, så mer etterspørsel gir lengre kø, ikke flere transaksjoner. Nexas nevner vokser: samme joule delt på 42 000 TPS blir 5 600× tynnere enn Bitcoin i dag, og 13 000× ved 100 000 TPS med Blitz. Forholdet avhenger ikke av hvilket strømanslag du tror på. Bitcoins travleste dag noensinne, 10,3 TPS, ville ligget på 425 kWh per transaksjon; det teoretiske taket på 14 TPS på 313. Kilder: Cambridge CBECI, Digiconomist, Blockchair, 2026.","i":"slides/04.png"},{"t":"Nexa kan bruke like mye strøm som Bitcoin hvis mange nok miner. I stor skala er den langt mer energieffektiv","n":"Vær ærlig: proof-of-work-energi følger myntens verdi, ikke bruken, og det gjelder Nexa like mye som Bitcoin. Var Nexa like verdifull som Bitcoin, ville minerne trolig brukt like mye på strøm. Påstanden er ikke at Nexa er liten, men at samme strøm gjør tusenvis av ganger mer arbeid. Bitcoin: CBECI-anslag aug. 2026 16,09 GW / 141 TWh per år. Norge bruker ~140 TWh/år = ~16 GW i snitt. Ethereum: ethereum.org, ~0,0026 TWh/år = ~0,3 MW i snitt. Nexa i dag: nettverkshashrate 2,5 til 4,8 TH/s (2Miners, Kryptex, 2026); et RTX 4090 gjør ~203 MH/s ved ~306 W. 4,84 TH/s / 0,66 MH/W = ~7 MW; eldre kort er mindre effektive, derav 5 til 15 MW.","i":"slides/05.png"},{"t":"NTNU-forskning: den grønneste kilowattimen er den du aldri trenger","n":"Hvorfor denne sliden: arrangørenes innvending er miljømessig, så svaret bør komme fra norsk miljøforskning, ikke fra kryptomiljøet. Borgelt J., Gilad D., May R., Verones F. (2026), Cleaner Energy Systems vol. 13, NTNU Industrial Ecology Programme: seks scenarioer for Norges kraftutbygging mot 2050; habitattap inntil +28 %; vind har størst potensial for nytt habitattap, overføringsnettet nest størst; sitat fra NTNUs pressemelding (mai 2026): den mest effektive måten å redusere naturtap vesentlig på er å senke strømetterspørselen gjennom energieffektivisering. Hertwich E.G., Gibon T. m.fl. (2014), PNAS 112(20): 6277-6282, publisert på nett okt. 2014, NTNU: global LCA av kraftforsyning mot 2050; lavkarbonteknologier har langt lavere påvirkning enn fossilt, men ikke null areal-, material- og utslippsavtrykk. HighEFF (FME-senter ledet av SINTEF Energi med NTNU), NTNU Energy Transition Week 2024: EUs «energy efficiency first»-prinsipp; Norges COP28-løfte om å sette energieffektivisering som «first fuel» i kjernen av politikkutforming; direktør Petter Røkkes sitat om «konfliktfritt tiltak». Støtte: Sandberg m.fl. (SINTEF/NTNU) anslår 12,7 TWh (2030) til 21,3 TWh (2050) sparepotensial i norske bygg; Energikommisjonen (NOU 2023:3, «Mer av alt – raskere») kaller effektivisering den raskeste, billigste og minst naturødeleggende måten å tette kraftgapet på. Koblingen: ved lik strøm gjør Nexa tusenvis av ganger flere betalinger enn Bitcoin, som er nettopp den typen reduksjon i etterspørsel per enhet verdi disse forskerne ber om.","i":"slides/06.png"},{"t":"Ingen spesialbygd maskinvare, ingen fjell av e-avfall","n":"E-avfallstall: de Vries & Stoll, «Bitcoin's growing e-waste problem», Resources, Conservation & Recycling (2021). NexaPoW kombinerer SHA-256 med Schnorr-signering, bevisst, slik at spesialisert maskinvare også akselererer signaturvalidering (spec.nexa.org/mining/NexaPOW). Blitz: FPGA-motor for signaturverifisering annonsert nov. 2024, under utvikling og testing gjennom 2026 (Nexas nyhetsbrev juli 2026). Ærlig forbehold: GPU-mining bruker fortsatt maskinvare; poenget er gjenbruk, ikke null fotavtrykk.","i":"slides/07.png"},{"t":"Rettferdig start: null premine, null ICO, null venturekapital","n":"Nexa: nexa.org, «Nexa was 100% fair launched, with no team coins, no premine, and no VCs, and 100% of its supply will be mined via Proof of Work.» Lansert 21. juni 2022. Ethereum: 72M ETH ved genesis (rundt 60M solgt i crowdsale i 2014, 12M til stiftelsen og tidlige bidragsytere); sirkulerende tilbud ~120M ETH, altså omtrent 60 %. Bitcoin: anslag på ~1M BTC utvunnet av Satoshi i 2009-2010. Merk: engelsk «21 trillion» = 21 billioner på norsk.","i":"slides/08.png"},{"t":"Skala: 42 000 transaksjoner i sekundet på dagens maskinvare","n":"42 000 TPS er en Nexa-benchmark; nexa.org oppgir «>60,000 TPS». 100 000 med Blitz er et anslag. Ethereum: daglig snitt på mainnet 25,78 TPS i 1. kvartal 2026 (ethereum.org, «Building on Ethereum in 2026»); gassgrense 60M, med planer om å heve den videre. Postkvante-signaturstørrelser fra artikkelen: Schnorr 64 byte, Falcon 666, Dilithium 2 420.","i":"slides/09.png"},{"t":"Betalinger som føles som Vipps: under to sekunder, rundt 3 NEXA (under 0,0001 dollar)","n":"Tailstorm (spec.nexa.org/blocks/tailstorm): etter Hard Fork 2 støttes hver to-minutters oppsummeringsblokk av 120 underblokker, omtrent én i sekundet, som gir et sannsynlig, energistøttet signal om inkludering innen ett sekund og jevnere inntekt for minere; selve hovedboken gjøres fortsatt opp av to-minutters-kjeden. Gebyrtall fra explorer.nexa.org 15. sept. 2026: nettverkets gebyrsats er 1 satoshi per byte, og en enkel transaksjon er 250 til 320 byte, altså 2,5 til 3,2 NEXA (100 satoshi = 1 NEXA). Med explorerens kurs på 0,0000013 dollar per NEXA blir det rundt 0,000004 dollar, omtrent 0,004 øre. Oppdater kursen før du presenterer. nexa.org: «confirms in under two seconds with near-zero fees», «under $0.0001 per transaction». Nullbekreftelse med bevis mot dobbeltforbruk er Bitcoin Unlimited-teknologi videreført i Nexa. Vipps-referansen: Norge er nesten kontantløst; poenget er at brukeropplevelsen nordmenn forventer allerede er grunnlinjen her.","i":"slides/10.png"},{"t":"Tokens og NFT-er er bygget inn i protokollen, ikke skrudd på utenpå","n":"spec.nexa.org/tokens/grouptokens: «Groups implement native tokens; that is, the tokens are a fundamental primitive in the blockchain rather than implemented as a smart contract or in a layer 2 data-carrier protocol.» Møt NFT-kritikken direkte: spekulasjonen arrangørene beskriver er et produkt av knapphet pluss høy utstedelseskostnad pluss markedsføring. Nexa fjerner kostnaden og kontraktrisikoen; om en gjenstand blir spekulativ er da opp til spilldesigneren, ikke kjeden.","i":"slides/11.png"},{"t":"Utstedelsesretten er også en mynt: autoritetsbatonger","n":"Kilde: spec.nexa.org/tokens/grouptokens og token-biblioteket i libnexakotlin. Autoritets-outputs bærer en negativ fortegn-og-størrelse-verdi i mengdefeltet med flaggbitene AUTHORITY, MINT, MELT, BATON, RESCRIPT og SUBGROUP. Utstedelse er å bruke en MINT-autoritet; destruksjon krever MELT; SUBGROUP lager undergrupper (NFT-er og SFT-er under en forelder). BATON er hovedretten til å lage nye autoriteter, så rutinemessig utstedelse bør bruke en ren MINT-autoritet og bevare batongen; lommebøker holder en pool av ledige MINT-autoriteter så samtidige utstedelser ikke slåss om én UTXO. Autoriteter er vanlige outputs: betal én til en annen adresse for å delegere, eller til en kontrakts låseskript så kontrakten styrer utstedelsen (mint-on-demand som en halvsignert transaksjon kjøperen finansierer). Read-only inputs (spec.nexa.org/script/read-only-inputs) lar en BATON-autoritet gi rettigheter til en transaksjon uten å bli brukt. Kontrast: ERC-20-utstedelse er en privilegert funksjon beskyttet av en eiernøkkel inne i kontrakten; på Nexa er retten en mynt du kan dele, sende, låse eller destruere.","i":"slides/12.png"},{"t":"Open outcry-handel over CAPD: rop ut et tilbud, hvem som helst kan ta det","n":"CAPD er unikt for Nexa: en desentralisert, proof-of-work-begrenset, flyktig meldingsbuss på P2P-nettverket (spesifikasjon: spec.nexa.org/network/capd). Open outcry: børsgulv-modellen der tilbud ropes ut offentlig og hvem som helst kan ta dem. Mekanikk: tilbudet er en delvis signert transaksjon; det annonserte sammendraget (hvilken token for hvilken) er bare veiledende, den halvsignerte transaksjonen er det som gjelder, så en løgnaktig annonse er ufarlig: den som tar tilbudet får nøyaktig det transaksjonen sier, ellers er den ugyldig. Meldinger har opprettelsestid og utløp, videresendingsprioriteten faller til null etter rundt 600 sekunder, og en tilbakekallingshash lar avsenderen trekke tilbudet tidlig. Bruk: token- og NFT-markedsplasser uten markedsplassoperatør, handel med gjenstander i spill, atomiske bytter, oppretting av multisig-lommebøker og signeringsrunder. Kontrast: Bitcoin har ikke noe oppdagelseslag, så handel betyr sentraliserte børser; Ethereum trenger en DEX-kontrakt på kjeden og betaler gass for hver ordre og handel.","i":"slides/13.png"},{"t":"Token Secrets: selg hemmeligheten sammen med tokenet","n":"Kilde: spec.nexa.org/tokensecret (Token Secrets, også kalt Atomic Secret Exchange, ASE, og grunnlaget for private NFT-er). Kravene protokollen oppfyller: overføringen avslører hemmeligheten for mottakeren samtidig med tokenet; transaksjonen avslører ingenting for tredjeparter selv om den ligger på en offentlig kjede; mottakeren eller kjeden verifiserer at den kommuniserte hemmeligheten stemmer med den tokenet forpliktet seg til. Mekanikk: hemmeligheten må være en privat EC-nøkkel med offentlig nøkkel forpliktet i utstedelsen eller gruppe-ID-en; Alice og Bob bygger en halvtransaksjon der Bobs input krever to signaturer, én fra hemmelighetens nøkkel og én fra en nøkkel bare Bob har; en ECDH-delt hemmelighet krypterer den private nøkkelen til Bob. Forbehold fra spesifikasjonen: etter overføringen kjenner Alice fortsatt nøkkelen, så dette passer for salg av tilgang til innhold der perfekt DRM er urealistisk; verdien er verifisering mot utbytting under handelen.","i":"slides/14.png"},{"t":"Hva du kan bygge med det: praktiske bruksområder","n":"Dette er designmønstre, ikke produkter; hvert av dem bygger på en primitiv fra de forrige slidene. Tokens og batonger: native gruppetokens (spec.nexa.org/tokens/grouptokens), rene MINT-autoriteter delt fra batongen, mint-on-demand som en halvsignert transaksjon kjøperen finansierer, undergrupper for sesonger eller utgaver, MELT for å avvikle dem. CAPD: halvsignerte tilbud kringkastet på meldingsbussen og fullført av den som tar dem (spec.nexa.org/network/capd); tak på videresalg er en covenant i tokenets skriptmal. Token Secrets: tokenet forplikter seg til en hemmelighets offentlige nøkkel, og overføringen avslører den for kjøperen via ECDH (spec.nexa.org/tokensecret). Dette er svaret på arrangørenes bekymring for finansialisering: hvert eksempel er noe folk bruker, priset i brøkdeler av et øre, uten børs, markedsplassoperatør eller gassmarked imellom.","i":"slides/15.png"},{"t":"Smartkontrakter uten EVM","n":"nexa.org: «Native on-chain programmability without EVM complexity», «No EVM overhead». Utviklerstacken: Wally-lommebok, TDPP-betalingsprotokoll, nexid-identitet, CAPD-meldinger, NexaJS og libnexakotlin. Hold denne sliden kort for et ikke-teknisk publikum; utdyp bare hvis noen spør.","i":"slides/16.png"},{"t":"Identitet og betalinger bor i lommeboken, ikke hos butikken","n":"Kilder: spec.nexa.org/nexid (Nexa Identity Protocol), spec.nexa.org/transactions/challengeTransaction, spec.nexa.org/dpp (Delegated Payment Protocol). nexid: nettstedet presenterer et innloggingstilbud med en tilfeldig utfordring via QR eller nettleserutvidelse; lommeboken avleder en nettstedsspesifikk privat nøkkel fra hovednøkkelen pluss et valgfritt nettstedspassord, signerer og sender den signerte meldingen direkte til serveren utenom den ubetrodde datamaskinen; sikkerhetskopi er de 12 ordene. Challenge transactions: en transaksjon med høyeste bit i versjonsfeltet satt er ugyldig for alltid; ett data-output bærer utfordrerens identitet og en tilfeldig utfordring; å signere den beviser kontroll over de refererte UTXO-ene under et hvilket som helst skript, noe vanlig meldingssignering ikke kan for multisig eller kontrakter. DPP: aktøren registrerer seg med foreslåtte grenser og sender signerte betalingsforespørsler; lommeboken, ikke butikken, avgjør automatisk eller godkjent utførelse. For et norsk publikum: BankID for innlogging, AvtaleGiro og kort på fil for betalinger er de kjente sammenligningene.","i":"slides/17.png"},{"t":"Hvorfor dette betyr noe i Norge","n":"SSB: 98 % av Norges strøm fra vann og vind (sent 2025); normal årsproduksjon ~157 TWh, forbruk ~140 TWh. Juni 2025: regjeringen varslet et midlertidig forbud mot nye proof-of-work-datasentre for mining, med obligatorisk datasenterregister; myndighetene har antydet at det kan bli permanent. Vær ærlig: forbudet gjelder PoW-mining generelt, så en Nexa-farm ville også vært omfattet. Poenget er at Nexas nettverk ikke er avhengig av farmer noe sted.","i":"slides/18.png"},{"t":"Sammenligning i oversikt","n":"Ett-slides svar på arrangørenes tre temaer: energi og e-avfall, hvem som tjener på det, og NFT-spekulasjon. Hvert tall står tidligere i presentasjonen med kilde.","i":"slides/19.png"},{"t":"Tre ting å huske","n":"Avslutt med de tre svarene på de tre bekymringene. Hvis 13 000×-tallet utfordres: det er en kapasitetssammenligning ved lik nettverkseffekt, 5 600× på dagens benchmark og 13 000× med Blitz; gulvet er 1 000× fordi Bitcoin ikke kan overstige ~14 TPS.","i":"slides/20.png"}];
+  var cur = 0;
+  var img = document.getElementById('slide'), curEl = document.getElementById('cur');
+  var stitle = document.getElementById('stitle'), ntext = document.getElementById('ntext');
+  var notes = document.getElementById('notes'), notesBtn = document.getElementById('notesBtn');
+  var frame = document.getElementById('frame');
+  var tocBtns = Array.prototype.slice.call(document.querySelectorAll('#toc button'));
+  var cache = {};
+  function preload(i){ if (i<0||i>=S.length||cache[i]) return; var im = new Image(); im.src = S[i].i; cache[i] = im; }
+  function go(i, push){
+    i = Math.max(0, Math.min(S.length-1, i));
+    cur = i;
+    img.src = S[i].i; img.alt = S[i].t;
+    curEl.textContent = i+1; stitle.textContent = S[i].t; if (ntext) ntext.textContent = S[i].n;
+    tocBtns.forEach(function(b, k){ if (k===i) b.setAttribute('aria-current','true'); else b.removeAttribute('aria-current'); });
+    if (push !== false) { try { history.replaceState(null, '', '#' + (i+1)); } catch(e){} }
+    preload(i+1); preload(i-1);
+  }
+  document.getElementById('prev').addEventListener('click', function(){ go(cur-1); });
+  document.getElementById('next').addEventListener('click', function(){ go(cur+1); });
+  frame.addEventListener('click', function(e){
+    var r = frame.getBoundingClientRect();
+    go(e.clientX - r.left < r.width * 0.25 ? cur-1 : cur+1);
+  });
+  tocBtns.forEach(function(b){ b.addEventListener('click', function(){ go(+b.dataset.n - 1); }); });
+  if (notesBtn) {
+    notesBtn.addEventListener('click', function(){
+      var on = notesBtn.getAttribute('aria-pressed') !== 'true';
+      notesBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      notes.hidden = !on;
+      try { localStorage.setItem('deck-notes', on ? '1' : '0'); } catch(e){}
+    });
+    try { if (localStorage.getItem('deck-notes') === '0') { notesBtn.setAttribute('aria-pressed','false'); notes.hidden = true; } } catch(e){}
+  }
+  document.getElementById('fsBtn').addEventListener('click', function(){
+    if (document.fullscreenElement) { document.exitFullscreen(); }
+    else if (frame.requestFullscreen) { frame.requestFullscreen(); }
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': case ' ': e.preventDefault(); go(cur+1); break;
+      case 'ArrowLeft': case 'PageUp': e.preventDefault(); go(cur-1); break;
+      case 'Home': e.preventDefault(); go(0); break;
+      case 'End': e.preventDefault(); go(S.length-1); break;
+      case 'n': case 'N': if (notesBtn) notesBtn.click(); break;
+      case 'f': case 'F': document.getElementById('fsBtn').click(); break;
+    }
+  });
+  window.addEventListener('hashchange', function(){ var h = parseInt(location.hash.slice(1), 10); if (h>=1 && h<=S.length) go(h-1, false); });
+  var h0 = parseInt(location.hash.slice(1), 10);
+  go(h0>=1 && h0<=S.length ? h0-1 : 0, false);
+})();
+</script>
+</body>
+</html>
