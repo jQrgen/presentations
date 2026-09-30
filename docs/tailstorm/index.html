@@ -52,9 +52,10 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;co
   <h1><span class="g">Nexa Tailstorm</span> · live DAG</h1>
   <span class="tag">stormtest demo</span>
 </header>
-<div class="note"><b>Demo, not mainnet.</b> This is a <b>private stormtest chain</b> mined by a <b>single local miner</b> (one subblock every ~2–3 s).
-It shows how Tailstorm works: subblocks form a DAG on top of the last summary block, and when the DAG has k−1 = 39 subblocks the next summary block (the 40th) closes it.
-Because there is one miner, the DAG is mostly a single chain; with competing miners it would branch. None of this is live Nexa mainnet data.</div>
+<div class="note"><b>Demo, not mainnet.</b> This is a <b>private stormtest chain</b> mined by <b>4 local miners</b>, each on its own node, on one machine.
+The nodes are connected through an artificial ~1 s network delay, so miners often find subblocks in parallel on the same parent. That makes the DAG branch, and the next subblock merges the branches by listing every tip as a parent.
+When the DAG holds k−1 = 39 subblocks, the next summary block (the 40th) closes it. Subblocks left out become <i>uncles</i> that the following summary block includes.
+None of this is live Nexa mainnet data.</div>
 <div class="stale" id="stale">Data is stale.</div>
 <div class="cards">
   <div class="card"><div class="k">Summary height</div><div class="v gold" id="c-h">–</div></div>
@@ -62,26 +63,22 @@ Because there is one miner, the DAG is mostly a single chain; with competing min
   <div class="card"><div class="k">Last update</div><div class="v" id="c-age">–</div></div>
   <div class="card"><div class="k">Tailstorm active</div><div class="v" id="c-act">–</div></div>
   <div class="card"><div class="k">Miner rate</div><div class="v" id="c-rate">–</div></div>
+  <div class="card"><div class="k">Branching (current DAG)</div><div class="v" id="c-br">–</div></div>
   <div class="card"><div class="k">DAG tip</div><div class="v" style="font-size:15px;margin-top:8px"><code id="c-tip">–</code></div></div>
 </div>
 <section>
   <h2>Current DAG (in progress) <span class="m" id="cur-m"></span></h2>
-  <div class="legend">
-    <span><i class="sw" style="background:var(--gold);border-radius:3px"></i>summary block</span>
-    <span><i class="sw" style="background:#1d2430;border:2px solid var(--sub)"></i>subblock</span>
-    <span><i class="sw" style="background:var(--gold2)"></i>newest subblock (DAG tip)</span>
-    <span><i class="sw" style="border:1.5px dashed #4a5060"></i>slot still to be mined</span>
-    <span>arrows point from a subblock to its parent(s)</span>
-  </div>
+  <div class="legend" id="legend"></div>
   <svg id="cur" viewBox="0 0 1200 200"></svg>
 </section>
 <section>
   <h2>Recent summary blocks <span class="m">each closes a completed DAG of subblocks</span></h2>
+  <div class="legend" id="legend2"></div>
   <div id="prev"></div>
 </section>
 <footer>
   Source: a Nexa node (<code>-stormtest</code>, k = 40) running Tailstorm, read via <code>gettailstorminfo</code>, <code>getbestdagtiphash</code>, <code>getsubblock</code> and <code>getblock</code>.
-  A publisher on that machine builds a snapshot every ~3 s and serves it through an outbound Cloudflare quick tunnel; this page polls it every 3 s.
+  Four miner loops each mine on their own node; the nodes relay to each other through a ~1 s delay proxy. A publisher reading node 1 builds a snapshot every ~3 s and serves it through an outbound Cloudflare quick tunnel; this page polls it every 3 s.
   <span id="src"></span>
 </footer>
 </div>
@@ -150,10 +147,20 @@ function tick() {
   st.textContent = msg; st.classList.toggle("on", !!msg);
 }
 
-// ---- DAG layout: depth = longest path from the base summary block; columns wrap into snake rows
-function layout(subs) {
-  const byH = new Map(subs.map(s => [s.h, s]));
-  const depth = new Map();
+// ---- miners, legend
+const MC = {1: "#4fd1b5", 2: "#a78bfa", 3: "#f2896b", 4: "#62b3f5", 0: "#9fb3c8"};
+const MF = {1: "#133a33", 2: "#2a2346", 3: "#43241c", 4: "#152e45", 0: "#1d2430"};
+const UNC = "#ff6b8a";
+function legendHtml(pm) {
+  let h = `<span><i class="sw" style="background:var(--gold);border-radius:3px"></i>summary block</span>`;
+  for (const m of [1, 2, 3, 4]) h += `<span><i class="sw" style="background:${MF[m]};border:2px solid ${MC[m]}"></i>miner ${m}${pm ? ` <small>(${pm[m] || 0} blocks / 5 min)</small>` : ""}</span>`;
+  h += `<span><i class="sw" style="border:2px dashed ${UNC}"></i>uncle</span><span><i class="sw" style="background:#fff3cf;box-shadow:0 0 6px #f5d27a"></i>DAG tip</span>`;
+  return h;
+}
+
+// ---- DAG layout: column = depth (longest path from the base summary); parallel subblocks share a column.
+function depths(subs) {
+  const byH = new Map(subs.map(s => [s.h, s])), depth = new Map();
   const d = s => {
     if (depth.has(s.h)) return depth.get(s.h);
     depth.set(s.h, 1);
@@ -161,22 +168,24 @@ function layout(subs) {
     depth.set(s.h, m + 1); return m + 1;
   };
   subs.forEach(d);
-  const lanes = new Map(), pos = new Map();
-  for (const s of subs) { const k = depth.get(s.h); const l = lanes.get(k) || 0; lanes.set(k, l + 1); pos.set(s.h, {col: k, lane: l}); }
-  const maxLane = Math.max(1, ...lanes.values());
-  return {byH, pos, maxDepth: Math.max(0, ...depth.values()), maxLane};
+  return {byH, depth};
+}
+function branchStats(subs) {
+  const {depth} = depths(subs), c = {};
+  for (const v of depth.values()) c[v] = (c[v] || 0) + 1;
+  return {width: Math.max(0, ...Object.values(c)), multi: subs.filter(s => s.p.length > 1).length, depth: Math.max(0, ...depth.values())};
 }
 
-function arrow(g, x1, y1, x2, y2, r2, cls, color) {
+function arrow(g, x1, y1, x2, y2, r1, r2, cls, color, dash) {
   const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1;
-  const ex = x2 - dx / L * (r2 + 2), ey = y2 - dy / L * (r2 + 2);
-  const sx = x1 + dx / L * (r2 + 1), sy = y1 + dy / L * (r2 + 1);
-  el("line", {x1: sx, y1: sy, x2: ex, y2: ey, stroke: color, "stroke-width": 1.4, "marker-end": `url(#${cls})`, opacity: .9}, g);
+  const a = {x1: x1 + dx / L * (r1 + 1), y1: y1 + dy / L * (r1 + 1), x2: x2 - dx / L * (r2 + 2), y2: y2 - dy / L * (r2 + 2),
+    stroke: color, "stroke-width": 1.3, "marker-end": `url(#${cls})`, opacity: .85};
+  if (dash) a["stroke-dasharray"] = dash;
+  el("line", a, g);
 }
-
 function defs(svg) {
   const df = el("defs", {}, svg);
-  for (const [id, c] of [["ah", "#7d8aa0"], ["ahg", "#e0b341"]]) {
+  for (const [id, c] of [["ah", "#8793a8"], ["ahg", "#e0b341"]]) {
     const m = el("marker", {id, viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 6, markerHeight: 6, orient: "auto-start-reverse"}, df);
     el("path", {d: "M0,0 L10,5 L0,10 z", fill: c}, m);
   }
@@ -184,116 +193,123 @@ function defs(svg) {
   el("feGaussianBlur", {stdDeviation: 3, result: "b"}, f);
   const mg = el("feMerge", {}, f); el("feMergeNode", {in: "b"}, mg); el("feMergeNode", {in: "SourceGraphic"}, mg);
 }
+function summaryNode(g, x, y, sq, label, title, opts) {
+  const gg = el("g", opts.ghost ? {class: "pulse"} : {}, g);
+  if (opts.ghost) el("rect", {x: x - sq, y: y - sq, width: 2 * sq, height: 2 * sq, rx: 3, fill: "none", stroke: "#e0b341", "stroke-dasharray": "4 3", "stroke-width": 1.5}, gg);
+  else el("rect", {x: x - sq, y: y - sq, width: 2 * sq, height: 2 * sq, rx: 3, fill: "#e0b341", stroke: opts.m ? MC[opts.m] : "none", "stroke-width": opts.m ? 2 : 0, filter: "url(#glow)"}, gg);
+  if (sq >= 10) el("text", {x, y: y + 4, "text-anchor": "middle", "font-size": Math.min(12, sq), "font-weight": 700, fill: opts.ghost ? "#e0b341" : "#1a1405"}, gg, label);
+  else el("text", {x, y: y - sq - 4, "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: "#f5d27a"}, gg, "#" + label);
+  el("title", {}, gg, title);
+}
 
-// draws base summary -> subblock DAG -> (next/closing summary). opts: {W, cols, r, ghost, closing, base, animate, tip}
+// o: {W, cols, r, ghost(bool), base{height,hash}, closing{height,hash,m}|null, uncles[], animate, tip}
 function drawDag(svg, subs, o) {
   svg.innerHTML = ""; defs(svg);
-  const {byH, pos, maxDepth, maxLane} = layout(subs);
-  const slots = o.ghost ? Math.max(K - 1, maxDepth) : maxDepth;       // columns for subblocks
-  const totalCols = slots + 2;                                        // + base summary + closing summary
-  const cols = Math.min(o.cols, totalCols);
-  const rows = Math.ceil(totalCols / cols);
-  const padX = o.r * 2.2, stepX = (o.W - 2 * padX) / Math.max(1, cols - 1);
-  const laneH = o.r * 2.6, rowH = maxLane * laneH + o.r * 1.6, padY = Math.max(o.r * 1.6, 26);
-  const H = padY * 2 + rows * rowH - (rowH - maxLane * laneH);
-  svg.setAttribute("viewBox", `0 0 ${o.W} ${Math.max(H, o.r * 4)}`);
-  const at = (col, lane) => {           // snake: even rows left->right, odd rows right->left
-    const row = Math.floor(col / cols); let c = col % cols; if (row % 2) c = cols - 1 - c;
-    return [padX + c * stepX, padY + row * rowH + (lane - (0)) * laneH + (maxLane - 1) * laneH / 2 - (0)];
-  };
-  // center lanes within a depth
-  const laneCount = new Map(); for (const [, p] of pos) laneCount.set(p.col, (laneCount.get(p.col) || 0) + 1);
+  const uncles = o.uncles || [];
+  const inc = subs.filter(s => !s.u), out = subs.filter(s => s.u);      // out = left out of the closing summary
+  const {byH, depth} = depths(subs);
+  const maxD = Math.max(0, ...depth.values());
+  const colItems = new Map();                    // col -> [keys]
+  const put = (c, k) => { if (!colItems.has(c)) colItems.set(c, []); colItems.get(c).push(k); };
+  put(0, "BASE"); uncles.forEach(u => put(0, "U:" + u.h));
+  for (const s of subs) put(depth.get(s.h), s.h);
+  let last = maxD;
+  if (o.ghost) {
+    const left = Math.max(0, K - 1 - inc.length - uncles.length);
+    for (let i = 1; i <= left; i++) put(maxD + i, "G" + i);
+    last = maxD + left;
+  }
+  put(last + 1, "CLOSE");
+  const totalCols = last + 2, cols = Math.min(o.cols, totalCols), rows = Math.ceil(totalCols / cols);
+  let maxLane = 1; for (let r = 0; r < rows; r++) for (let c = r * cols; c < (r + 1) * cols; c++) maxLane = Math.max(maxLane, (colItems.get(c) || []).length);
+  const padX = o.r * 2.4, stepX = (o.W - 2 * padX) / Math.max(1, cols - 1);
+  const laneH = o.r * 2.5, rowH = maxLane * laneH + o.r * 1.4, padY = Math.max(o.r * 1.4, 24);
+  const H = padY * 2 + (rows - 1) * rowH + (maxLane - 1) * laneH;
+  svg.setAttribute("viewBox", `0 0 ${o.W} ${H}`);
   const xy = new Map();
-  for (const [h, p] of pos) {
-    const [x, y0] = at(p.col, 0); const n = laneCount.get(p.col);
-    xy.set(h, [x, y0 - (maxLane - 1) * laneH / 2 + (p.lane - (n - 1) / 2) * laneH]);
+  for (const [c, items] of colItems) {
+    const row = Math.floor(c / cols); let cc = c % cols; if (row % 2) cc = cols - 1 - cc;
+    const x = padX + cc * stepX, yc = padY + row * rowH + (maxLane - 1) * laneH / 2;
+    items.forEach((k, i) => xy.set(k, [x, yc + (i - (items.length - 1) / 2) * laneH]));
   }
   const gE = el("g", {}, svg), gN = el("g", {}, svg);
-  const base = at(0, 0); base[1] -= 0;
-  const bY = base[1] - (maxLane - 1) * laneH / 2;
-  const B = [base[0], bY];
-  const closeCol = (o.ghost ? slots : maxDepth) + 1, C = at(closeCol, 0); C[1] -= (maxLane - 1) * laneH / 2;
-  // ghost slots
-  if (o.ghost) for (let c = maxDepth + 1; c <= slots; c++) {
-    const [x, y] = at(c, 0);
-    el("circle", {cx: x, cy: y - (maxLane - 1) * laneH / 2, r: o.r * .8, fill: "none", stroke: "#3b4150", "stroke-dasharray": "3 3"}, gN);
-  }
-  // edges
+  const sq = o.r * 1.15, B = xy.get("BASE"), C = xy.get("CLOSE");
+  // edges: subblock -> its parent(s); roots -> base summary
   for (const s of subs) {
-    const [x, y] = xy.get(s.h);
-    const ps = s.p.filter(p => byH.has(p));
-    if (!ps.length) arrow(gE, x, y, B[0], B[1], o.r * 1.15, "ahg", "#b8952f");
-    for (const p of ps) { const [px, py] = xy.get(p); arrow(gE, x, y, px, py, o.r, "ah", "#7d8aa0"); }
+    const [x, y] = xy.get(s.h), ps = s.p.filter(p => byH.has(p));
+    if (!ps.length) arrow(gE, x, y, B[0], B[1], o.r, sq, "ahg", "#b8952f");
+    for (const p of ps) { const [px, py] = xy.get(p); arrow(gE, x, y, px, py, o.r, o.r, "ah", s.p.length > 1 ? "#c3cbe0" : "#7d8aa0"); }
   }
-  // closing summary: points to the DAG tips (subblocks nobody references)
-  const referenced = new Set(subs.flatMap(s => s.p));
-  const tips = subs.filter(s => !referenced.has(s.h));
-  if (o.closing) for (const t of tips) { const [x, y] = xy.get(t.h); arrow(gE, C[0], C[1], x, y, o.r, "ahg", "#b8952f"); }
-  // base summary node
-  const sq = o.r * 1.15;
-  const bg = el("g", {}, gN);
-  el("rect", {x: B[0] - sq, y: B[1] - sq, width: 2 * sq, height: 2 * sq, rx: 3, fill: "#e0b341", filter: "url(#glow)"}, bg);
-  if (o.r >= 9) el("text", {x: B[0], y: B[1] + 4, "text-anchor": "middle", "font-size": Math.min(12, o.r), "font-weight": 700, fill: "#1a1405"}, bg, o.base.height);
-  if (o.r < 9) el("text", {x: B[0], y: B[1] - sq - 4, "text-anchor": "middle", "font-size": 11, fill: "#e0b341"}, bg, "#" + o.base.height);
-  el("title", {}, bg, `summary block #${o.base.height}\n${o.base.hash}`);
-  // closing / next summary
+  // closing summary -> tips of what it includes (+ included uncles)
+  const ref = new Set(inc.flatMap(s => s.p));
   if (o.closing) {
-    const cg = el("g", {}, gN);
-    el("rect", {x: C[0] - sq, y: C[1] - sq, width: 2 * sq, height: 2 * sq, rx: 3, fill: "#e0b341", filter: "url(#glow)"}, cg);
-    if (o.r >= 9) el("text", {x: C[0], y: C[1] + 4, "text-anchor": "middle", "font-size": Math.min(12, o.r), "font-weight": 700, fill: "#1a1405"}, cg, o.closing.height);
-    if (o.r < 9) el("text", {x: C[0], y: C[1] - sq - 4, "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: "#f5d27a"}, cg, "#" + o.closing.height);
-    el("title", {}, cg, `summary block #${o.closing.height}\n${o.closing.hash}\nincludes ${subs.length} subblocks`);
-  } else if (o.ghost) {
-    const cg = el("g", {class: "pulse"}, gN);
-    el("rect", {x: C[0] - sq, y: C[1] - sq, width: 2 * sq, height: 2 * sq, rx: 3, fill: "none", stroke: "#e0b341", "stroke-dasharray": "4 3", "stroke-width": 1.5}, cg);
-    if (o.r >= 9) el("text", {x: C[0], y: C[1] + 4, "text-anchor": "middle", "font-size": Math.min(11, o.r), fill: "#e0b341"}, cg, o.base.height + 1);
-    el("title", {}, cg, `next summary block #${o.base.height + 1} (mined after the ${K - 1}th subblock)`);
+    for (const t of inc.filter(s => !ref.has(s.h))) { const [x, y] = xy.get(t.h); arrow(gE, C[0], C[1], x, y, sq, o.r, "ahg", "#b8952f"); }
   }
-  // subblock nodes
-  subs.forEach((s, i) => {
-    const [x, y] = xy.get(s.h), isTip = o.tip && s.h === o.tip;
+  for (const [i, u] of uncles.entries()) { const [x, y] = xy.get("U:" + u.h); if (o.closing) arrow(gE, C[0], C[1], x, y, sq, o.r, "ahg", UNC, "4 3"); }
+  // ghosts
+  for (const [k, [x, y]] of xy) if (k[0] === "G") el("circle", {cx: x, cy: y, r: o.r * .75, fill: "none", stroke: "#3b4150", "stroke-dasharray": "3 3"}, gN);
+  summaryNode(gN, B[0], B[1], sq, o.base.height, `summary block #${o.base.height}\n${o.base.hash}…`, {});
+  if (o.closing) summaryNode(gN, C[0], C[1], sq, o.closing.height, `summary block #${o.closing.height}\n${o.closing.hash}…\nmined by miner ${o.closing.m || "?"}\nincludes ${inc.length} subblocks + ${uncles.length} uncles`, {m: o.closing.m});
+  else if (o.ghost) summaryNode(gN, C[0], C[1], sq, o.base.height + 1, `next summary block #${o.base.height + 1} (the ${K}th block, after ${K - 1} subblocks/uncles)`, {ghost: true});
+  const node = (s, x, y, kind) => {
+    const isTip = o.tip && s.h === o.tip, m = s.m || 0;
     const g = el("g", {}, gN);
     if (o.animate && !firstRender && !known.has(s.h)) g.setAttribute("class", "new");
-    el("circle", {cx: x, cy: y, r: o.r, fill: isTip ? "#f5d27a" : "#1d2430", stroke: isTip ? "#fff3cf" : "#9fb3c8", "stroke-width": isTip ? 2 : 1.6, filter: isTip ? "url(#glow)" : ""}, g);
-    if (o.r >= 11) el("text", {x, y: y + 3.5, "text-anchor": "middle", "font-size": 9.5, fill: isTip ? "#1a1405" : "#c9d4e0"}, g, pos.get(s.h).col);
-    el("title", {}, g, `subblock ${pos.get(s.h).col} of ${K - 1}\n${s.h}…\nmined ${hhmmss(s.t)}\nparent: ${s.p.length ? s.p.join(", ") : "summary #" + o.base.height}`);
-  });
+    const a = {cx: x, cy: y, r: o.r, fill: isTip ? "#fff3cf" : MF[m], stroke: kind ? UNC : MC[m], "stroke-width": kind ? 2 : 1.8};
+    if (kind) a["stroke-dasharray"] = "3 2";
+    if (isTip) a.filter = "url(#glow)";
+    el("circle", a, g);
+    if (kind && o.r >= 7) el("text", {x, y: y + 3.5, "text-anchor": "middle", "font-size": Math.min(10, o.r), "font-weight": 700, fill: UNC}, g, "U");
+    else if (o.r >= 11) el("text", {x, y: y + 3.5, "text-anchor": "middle", "font-size": 9.5, fill: isTip ? "#1a1405" : "#dfe6ee"}, g, s.p.length > 1 ? "⋈" : "");
+    const what = kind === "in" ? `UNCLE from the previous DAG, carried into this one (the next summary includes it)` :
+                 kind === "out" ? `not included in summary #${o.closing ? o.closing.height : "?"}: becomes an uncle in summary #${s.u}` : `subblock at depth ${depth.get(s.h)}`;
+    el("title", {}, g, `${what}\n${s.h}…  mined by miner ${m || "?"} at ${hhmmss(s.t)}\nparents: ${s.p.length ? s.p.join(", ") : "summary #" + o.base.height}${s.p.length > 1 ? "  (merges " + s.p.length + " branches)" : ""}`);
+  };
+  for (const s of subs) { const [x, y] = xy.get(s.h); node(s, x, y, s.u && o.closing ? "out" : null); }
+  for (const u of uncles) { const [x, y] = xy.get("U:" + u.h); node(u, x, y, "in"); }
 }
 
 function render() {
   const d = data; if (!d || !d.ok) return;
-  const n = d.cur.subs.length;
+  const subs = d.cur.subs, uncles = d.cur.uncles || [], n = subs.length + uncles.length;
   $("c-h").textContent = d.height;
-  $("c-dag").innerHTML = `${n}<small> / ${K - 1} subblocks</small>`;
+  $("c-dag").innerHTML = `${n}<small> / ${K - 1}${uncles.length ? ` (${uncles.length} uncle${uncles.length > 1 ? "s" : ""})` : ""}</small>`;
   $("c-bar").style.width = Math.min(100, n / (K - 1) * 100) + "%";
   $("c-act").textContent = d.active ? "YES" : "NO"; $("c-act").className = "v " + (d.active ? "ok" : "bad");
-  $("c-rate").innerHTML = `${d.rate_per_min}<small> blocks/min</small>`;
+  $("c-rate").innerHTML = `${d.rate_per_min}<small> blocks/min · ${d.miners || 1} miners</small>`;
+  const bs = branchStats(subs);
+  $("c-br").innerHTML = `${bs.width}<small> wide · ${bs.multi} merges</small>`;
   $("c-tip").textContent = d.dagtip;
-  const t0 = n ? d.cur.subs[0].t : null;
-  $("cur-m").textContent = `on top of summary #${d.height} (${d.tip}…) · ${n}/${K - 1} subblocks` + (t0 ? ` · started ${hhmmss(d.tiptime || t0)}` : "") + ` · next summary #${d.height + 1} when full`;
-  const w = $("cur").parentNode.clientWidth;
-  const W = Math.max(300, w), cols = w < 520 ? 8 : w < 800 ? 13 : 21;
-  drawDag($("cur"), d.cur.subs, {W, cols, r: w < 520 ? 13 : 15, ghost: true, base: d.cur.base, animate: true, tip: d.dagtip});
-  // previous summary blocks: group for summary H = subblocks built on H-1, closed by H
+  $("legend").innerHTML = legendHtml(d.per_miner_5min) + `<span>arrows point from a subblock to its parent(s); ⋈ = merges several branches</span>`;
+  $("legend2").innerHTML = legendHtml(null) + `<span>dashed red = left out of this summary, included later as an uncle</span>`;
+  $("cur-m").textContent = `on top of summary #${d.height} (${d.tip}…) · ${n}/${K - 1} · depth ${bs.depth} · next summary #${d.height + 1} when full`;
+  const w = $("cur").parentNode.clientWidth, W = Math.max(300, w);
+  const cols = w < 520 ? 8 : w < 800 ? 13 : 21;
+  drawDag($("cur"), subs, {W, cols, r: w < 520 ? 12 : 14, ghost: true, base: d.cur.base, uncles, animate: true, tip: d.dagtip});
   const box = $("prev"); box.innerHTML = "";
   const pv = d.prev || [];
   for (let i = 0; i < pv.length; i++) {
-    const b = pv[i], parent = pv[i + 1];
+    const b = pv[i];
     const div = document.createElement("div"); div.className = "grp"; box.appendChild(div);
-    const subs = b.subs || [];
-    const span = subs.length ? (subs[subs.length - 1].t - subs[0].t) : null;
-    div.innerHTML = `<div class="hd"><b>Summary #${b.height}</b><span><code>${b.hash}…</code></span><span>mined ${hhmmss(b.time)}</span>` +
-      (b.mdv === 2 ? `<span>${b.nsub} subblocks + ${b.nunc} uncles (minerData v2)</span>` : `<span>minerData v${b.mdv} (pre-Tailstorm)</span>`) +
-      (span != null ? `<span>DAG built in ${span} s</span>` : "") + `<span>${b.tx} tx</span></div>`;
-    if (subs.length) {
+    const all = b.subs || [], inc = all.filter(s => !s.u);
+    // uncles this summary included: subblocks of the group before it that were flagged as carried to this height
+    const older = pv[i + 1] ? (pv[i + 1].subs || []) : [];
+    const unc = older.filter(s => s.u === b.height);
+    const st = branchStats(inc);
+    const span = inc.length ? (Math.max(...inc.map(s => s.t)) - Math.min(...inc.map(s => s.t))) : null;
+    div.innerHTML = `<div class="hd"><b>Summary #${b.height}</b><span><code>${b.hash}…</code></span><span>mined ${hhmmss(b.time)}${b.m ? ` by <span style="color:${MC[b.m]}">miner ${b.m}</span>` : ""}</span>` +
+      (b.mdv === 2 ? `<span>${b.nsub} subblocks + ${b.nunc} uncle${b.nunc === 1 ? "" : "s"}</span>` : `<span>minerData v${b.mdv} (pre-Tailstorm)</span>`) +
+      (inc.length ? `<span>width ${st.width} · ${st.multi} merges · depth ${st.depth}</span>` : "") +
+      (span != null ? `<span>built in ${span} s</span>` : "") + `</div>`;
+    if (all.length) {
       const svg = document.createElementNS(NS, "svg"); div.appendChild(svg);
       const wide = w >= 800;
-      drawDag(svg, subs, {W, cols: wide ? 42 : 14, r: wide ? 8 : 8, ghost: false, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash}});
+      drawDag(svg, all, {W, cols: wide ? 42 : 14, r: 8, ghost: false, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash, m: b.m}, uncles: unc});
     } else if (b.mdv === 2) {
-      div.insertAdjacentHTML("beforeend", `<div style="color:var(--muted);font-size:13px;padding:4px 0">Subblock details for this group are no longer held in the node's recent-DAG view.</div>`);
+      div.insertAdjacentHTML("beforeend", `<div style="color:var(--muted);font-size:13px;padding:4px 0">The node's recent-DAG view no longer holds subblock details for this group.</div>`);
     }
   }
-  for (const s of d.cur.subs) known.add(s.h);
+  for (const s of subs) known.add(s.h);
   firstRender = false;
 }
 
