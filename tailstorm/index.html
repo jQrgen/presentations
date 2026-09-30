@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nexa Tailstorm: live DAG (stormtest demo)</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect x=%272%27 y=%272%27 width=%2712%27 height=%2712%27 rx=%272%27 fill=%27%23e0b341%27/%3E%3C/svg%3E">
+<meta name="description" content="Live view of a Tailstorm DAG on a private Nexa stormtest chain: subblocks, parents and summary blocks, updating every few seconds.">
+<style>
+:root{--bg:#0a0c10;--panel:#12151c;--panel2:#181c25;--line:#262b36;--text:#e7e3d8;--muted:#8d93a1;--gold:#e0b341;--gold2:#f5d27a;--golddim:#6f5a22;--sub:#9fb3c8;--ok:#5fbf7f;--warn:#e8704f}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--gold2)}
+.wrap{max-width:1280px;margin:0 auto;padding:22px 18px 40px}
+header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+h1{margin:0;font-size:26px;font-weight:700;letter-spacing:.2px}
+h1 .g{color:var(--gold)}
+.tag{font-size:12px;color:var(--gold);border:1px solid var(--golddim);padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.08em}
+.note{margin:14px 0 16px;padding:10px 14px;border-left:3px solid var(--gold);background:var(--panel);color:#cfcabd;border-radius:0 8px 8px 0;font-size:14px}
+.stale{display:none;margin:0 0 14px;padding:10px 14px;background:#3a1a12;border:1px solid var(--warn);color:#ffd2c4;border-radius:8px;font-weight:600}
+.stale.on{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.card .k{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.card .v{font-size:24px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.card .v small{font-size:13px;color:var(--muted);font-weight:500}
+.v.gold{color:var(--gold)} .v.ok{color:var(--ok)} .v.bad{color:var(--warn)}
+.bar{height:6px;background:#222733;border-radius:6px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--golddim),var(--gold));width:0;transition:width .6s}
+section{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px 10px;margin-bottom:14px}
+section h2{margin:0 0 4px;font-size:16px;font-weight:650}
+section h2 .m{color:var(--muted);font-weight:400;font-size:13px;margin-left:8px}
+svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:6px 0 2px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:50%;display:inline-block}
+.grp{border-top:1px solid var(--line);padding:8px 0 4px}
+.grp:first-of-type{border-top:0}
+.grp .hd{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.grp .hd b{color:var(--gold);font-size:14px}
+footer{color:var(--muted);font-size:12.5px;margin-top:18px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:#cfd6e0}
+@keyframes pop{0%{transform:scale(.2);opacity:0}70%{transform:scale(1.25);opacity:1}100%{transform:scale(1)}}
+.new{animation:pop .7s ease-out;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:.9}}
+.pulse{animation:pulse 1.6s infinite}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1><span class="g">Nexa Tailstorm</span> · live DAG</h1>
+  <span class="tag">stormtest demo</span>
+</header>
+<div class="note"><b>Demo, not mainnet.</b> This is a <b>private stormtest chain</b> mined by a <b>single local miner</b> (one subblock every ~2–3 s).
+It shows how Tailstorm works: subblocks form a DAG on top of the last summary block, and when the DAG has k−1 = 39 subblocks the next summary block (the 40th) closes it.
+Because there is one miner, the DAG is mostly a single chain; with competing miners it would branch. None of this is live Nexa mainnet data.</div>
+<div class="stale" id="stale">Data is stale.</div>
+<div class="cards">
+  <div class="card"><div class="k">Summary height</div><div class="v gold" id="c-h">–</div></div>
+  <div class="card"><div class="k">Current DAG</div><div class="v" id="c-dag">–</div><div class="bar"><i id="c-bar"></i></div></div>
+  <div class="card"><div class="k">Last update</div><div class="v" id="c-age">–</div></div>
+  <div class="card"><div class="k">Tailstorm active</div><div class="v" id="c-act">–</div></div>
+  <div class="card"><div class="k">Miner rate</div><div class="v" id="c-rate">–</div></div>
+  <div class="card"><div class="k">DAG tip</div><div class="v" style="font-size:15px;margin-top:8px"><code id="c-tip">–</code></div></div>
+</div>
+<section>
+  <h2>Current DAG (in progress) <span class="m" id="cur-m"></span></h2>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--gold);border-radius:3px"></i>summary block</span>
+    <span><i class="sw" style="background:#1d2430;border:2px solid var(--sub)"></i>subblock</span>
+    <span><i class="sw" style="background:var(--gold2)"></i>newest subblock (DAG tip)</span>
+    <span><i class="sw" style="border:1.5px dashed #4a5060"></i>slot still to be mined</span>
+    <span>arrows point from a subblock to its parent(s)</span>
+  </div>
+  <svg id="cur" viewBox="0 0 1200 200"></svg>
+</section>
+<section>
+  <h2>Recent summary blocks <span class="m">each closes a completed DAG of subblocks</span></h2>
+  <div id="prev"></div>
+</section>
+<footer>
+  Source: a Nexa node (<code>-stormtest</code>, k = 40) running Tailstorm, read via <code>gettailstorminfo</code>, <code>getbestdagtiphash</code>, <code>getsubblock</code> and <code>getblock</code>.
+  A publisher on that machine builds a snapshot every ~3 s and serves it through an outbound Cloudflare quick tunnel; this page polls it every 3 s.
+  <span id="src"></span>
+</footer>
+</div>
+<script>
+"use strict";
+const GIST = "8eb96c91e7354760a1c0394652c4bbf7";
+const POLL_MS = 3000, STALE_S = 20, K = 40;
+const $ = id => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+let dataUrl = new URLSearchParams(location.search).get("src");
+let data = null, lastOkAt = 0, fails = 0, lastPointerAt = 0, lastSeq = -1;
+const known = new Set(); let firstRender = true;
+
+function el(tag, attrs, parent, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const hhmmss = t => t ? new Date(t * 1000).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false}) : "–";
+
+async function getPointer() {
+  lastPointerAt = Date.now();
+  try {
+    const r = await fetch(`https://api.github.com/gists/${GIST}`, {cache: "no-store"});
+    if (r.ok) { const j = await r.json(); const p = JSON.parse(j.files["tunnel.json"].content); if (p.url) return p.url; }
+  } catch (e) {}
+  try {
+    const r = await fetch(`https://gist.githubusercontent.com/jQrgen/${GIST}/raw/tunnel.json?cb=${Date.now()}`, {cache: "no-store"});
+    if (r.ok) { const p = await r.json(); if (p.url) return p.url; }
+  } catch (e) {}
+  return null;
+}
+
+async function poll() {
+  try {
+    if (!dataUrl) { const u = await getPointer(); if (u) dataUrl = u.replace(/\/$/, "") + "/dag.json"; }
+    if (!dataUrl) throw new Error("no pointer");
+    const r = await fetch(dataUrl + (dataUrl.includes("?") ? "&" : "?") + "t=" + Date.now(), {cache: "no-store"});
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const j = await r.json();
+    data = j; lastOkAt = Date.now(); fails = 0;
+    $("src").textContent = " Data endpoint: " + dataUrl.replace(/^https?:\/\//, "") + " · seq " + j.seq;
+    if (j.seq !== lastSeq) { lastSeq = j.seq; render(); }
+  } catch (e) {
+    fails++;
+    // the tunnel URL changes when the publisher restarts: re-read the pointer (at most once a minute)
+    if (fails >= 3 && Date.now() - lastPointerAt > 60000 && !new URLSearchParams(location.search).get("src")) dataUrl = null;
+  }
+  tick();
+}
+
+function tick() {
+  const st = $("stale");
+  const age = data ? Date.now() / 1000 - data.ts : null;
+  if (age != null) {
+    $("c-age").innerHTML = (age < 0 ? 0 : age).toFixed(age < 10 ? 1 : 0) + "<small> s ago</small>";
+    $("c-age").className = "v " + (age > STALE_S ? "bad" : "ok");
+  }
+  let msg = "";
+  if (!data) msg = fails ? "Cannot reach the live data feed right now (the demo publisher may be offline). Retrying…" : "";
+  else if (!data.ok) msg = "The publisher is running but the stormtest node is not responding.";
+  else if (age > STALE_S) msg = `Data is stale: last snapshot ${Math.round(age)} s ago (${hhmmss(data.ts)}). The publisher, tunnel or miner machine may be offline; the view will resume when it is back.`;
+  else if (data.last_mined && data.ts - data.last_mined > STALE_S) msg = `The feed is live, but no new block for ${Math.round(data.ts - data.last_mined)} s: the local miner looks paused.`;
+  st.textContent = msg; st.classList.toggle("on", !!msg);
+}
+
+// ---- DAG layout: depth = longest path from the base summary block; columns wrap into snake rows
+function layout(subs) {
+  const byH = new Map(subs.map(s => [s.h, s]));
+  const depth = new Map();
+  const d = s => {
+    if (depth.has(s.h)) return depth.get(s.h);
+    depth.set(s.h, 1);
+    let m = 0; for (const p of s.p) { const ps = byH.get(p); if (ps) m = Math.max(m, d(ps)); }
+    depth.set(s.h, m + 1); return m + 1;
+  };
+  subs.forEach(d);
+  const lanes = new Map(), pos = new Map();
+  for (const s of subs) { const k = depth.get(s.h); const l = lanes.get(k) || 0; lanes.set(k, l + 1); pos.set(s.h, {col: k, lane: l}); }
+  const maxLane = Math.max(1, ...lanes.values());
+  return {byH, pos, maxDepth: Math.max(0, ...depth.values()), maxLane};
+}
+
+function arrow(g, x1, y1, x2, y2, r2, cls, color) {
+  const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1;
+  const ex = x2 - dx / L * (r2 + 2), ey = y2 - dy / L * (r2 + 2);
+  const sx = x1 + dx / L * (r2 + 1), sy = y1 + dy / L * (r2 + 1);
+  el("line", {x1: sx, y1: sy, x2: ex, y2: ey, stroke: color, "stroke-width": 1.4, "marker-end": `url(#${cls})`, opacity: .9}, g);
+}
+
+function defs(svg) {
+  const df = el("defs", {}, svg);
+  for (const [id, c] of [["ah", "#7d8aa0"], ["ahg", "#e0b341"]]) {
+    const m = el("marker", {id, viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 6, markerHeight: 6, orient: "auto-start-reverse"}, df);
+    el("path", {d: "M0,0 L10,5 L0,10 z", fill: c}, m);
+  }
+  const f = el("filter", {id: "glow", x: "-50%", y: "-50%", width: "200%", height: "200%"}, df);
+  el("feGaussianBlur", {stdDeviation: 3, result: "b"}, f);
+  const mg = el("feMerge", {}, f); el("feMergeNode", {in: "b"}, mg); el("feMergeNode", {in: "SourceGraphic"}, mg);
+}
+
+// draws base summary -> subblock DAG -> (next/closing summary). opts: {W, cols, r, ghost, closing, base, animate, tip}
+function drawDag(svg, subs, o) {
+  svg.innerHTML = ""; defs(svg);
+  const {byH, pos, maxDepth, maxLane} = layout(subs);
+  const slots = o.ghost ? Math.max(K - 1, maxDepth) : maxDepth;       // columns for subblocks
+  const totalCols = slots + 2;                                        // + base summary + closing summary
+  const cols = Math.min(o.cols, totalCols);
+  const rows = Math.ceil(totalCols / cols);
+  const padX = o.r * 2.2, stepX = (o.W - 2 * padX) / Math.max(1, cols - 1);
+  const laneH = o.r * 2.6, rowH = maxLane * laneH + o.r * 1.6, padY = Math.max(o.r * 1.6, 26);
+  const H = padY * 2 + rows * rowH - (rowH - maxLane * laneH);
+  svg.setAttribute("viewBox", `0 0 ${o.W} ${Math.max(H, o.r * 4)}`);
+  const at = (col, lane) => {           // snake: even rows left->right, odd rows right->left
+    const row = Math.floor(col / cols); let c = col % cols; if (row % 2) c = cols - 1 - c;
+    return [padX + c * stepX, padY + row * rowH + (lane - (0)) * laneH + (maxLane - 1) * laneH / 2 - (0)];
+  };
+  // center lanes within a depth
+  const laneCount = new Map(); for (const [, p] of pos) laneCount.set(p.col, (laneCount.get(p.col) || 0) + 1);
+  const xy = new Map();
+  for (const [h, p] of pos) {
+    const [x, y0] = at(p.col, 0); const n = laneCount.get(p.col);
+    xy.set(h, [x, y0 - (maxLane - 1) * laneH / 2 + (p.lane - (n - 1) / 2) * laneH]);
+  }
+  const gE = el("g", {}, svg), gN = el("g", {}, svg);
+  const base = at(0, 0); base[1] -= 0;
+  const bY = base[1] - (maxLane - 1) * laneH / 2;
+  const B = [base[0], bY];
+  const closeCol = (o.ghost ? slots : maxDepth) + 1, C = at(closeCol, 0); C[1] -= (maxLane - 1) * laneH / 2;
+  // ghost slots
+  if (o.ghost) for (let c = maxDepth + 1; c <= slots; c++) {
+    const [x, y] = at(c, 0);
+    el("circle", {cx: x, cy: y - (maxLane - 1) * laneH / 2, r: o.r * .8, fill: "none", stroke: "#3b4150", "stroke-dasharray": "3 3"}, gN);
+  }
+  // edges
+  for (const s of subs) {
+    const [x, y] = xy.get(s.h);
+    const ps = s.p.filter(p => byH.has(p));
+    if (!ps.length) arrow(gE, x, y, B[0], B[1], o.r * 1.15, "ahg", "#b8952f");
+    for (const p of ps) { const [px, py] = xy.get(p); arrow(gE, x, y, px, py, o.r, "ah", "#7d8aa0"); }
+  }
+  // closing summary: points to the DAG tips (subblocks nobody references)
+  const referenced = new Set(subs.flatMap(s => s.p));
+  const tips = subs.filter(s => !referenced.has(s.h));
+  if (o.closing) for (const t of tips) { const [x, y] = xy.get(t.h); arrow(gE, C[0], C[1], x, y, o.r, "ahg", "#b8952f"); }
+  // base summary node
+  const sq = o.r * 1.15;
+  const bg = el("g", {}, gN);
+  el("rect", {x: B[0] - sq, y: B[1] - sq, width: 2 * sq, height: 2 * sq, rx: 3, fill: "#e0b341", filter: "url(#glow)"}, bg);
+  if (o.r >= 9) el("text", {x: B[0], y: B[1] + 4, "text-anchor": "middle", "font-size": Math.min(12, o.r), "font-weight": 700, fill: "#1a1405"}, bg, o.base.height);
+  if (o.r < 9) el("text", {x: B[0], y: B[1] - sq - 4, "text-anchor": "middle", "font-size": 11, fill: "#e0b341"}, bg, "#" + o.base.height);
+  el("title", {}, bg, `summary block #${o.base.height}\n${o.base.hash}`);
+  // closing / next summary
+  if (o.closing) {
+    const cg = el("g", {}, gN);
+    el("rect", {x: C[0] - sq, y: C[1] - sq, width: 2 * sq, height: 2 * sq, rx: 3, fill: "#e0b341", filter: "url(#glow)"}, cg);
+    if (o.r >= 9) el("text", {x: C[0], y: C[1] + 4, "text-anchor": "middle", "font-size": Math.min(12, o.r), "font-weight": 700, fill: "#1a1405"}, cg, o.closing.height);
+    if (o.r < 9) el("text", {x: C[0], y: C[1] - sq - 4, "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: "#f5d27a"}, cg, "#" + o.closing.height);
+    el("title", {}, cg, `summary block #${o.closing.height}\n${o.closing.hash}\nincludes ${subs.length} subblocks`);
+  } else if (o.ghost) {
+    const cg = el("g", {class: "pulse"}, gN);
+    el("rect", {x: C[0] - sq, y: C[1] - sq, width: 2 * sq, height: 2 * sq, rx: 3, fill: "none", stroke: "#e0b341", "stroke-dasharray": "4 3", "stroke-width": 1.5}, cg);
+    if (o.r >= 9) el("text", {x: C[0], y: C[1] + 4, "text-anchor": "middle", "font-size": Math.min(11, o.r), fill: "#e0b341"}, cg, o.base.height + 1);
+    el("title", {}, cg, `next summary block #${o.base.height + 1} (mined after the ${K - 1}th subblock)`);
+  }
+  // subblock nodes
+  subs.forEach((s, i) => {
+    const [x, y] = xy.get(s.h), isTip = o.tip && s.h === o.tip;
+    const g = el("g", {}, gN);
+    if (o.animate && !firstRender && !known.has(s.h)) g.setAttribute("class", "new");
+    el("circle", {cx: x, cy: y, r: o.r, fill: isTip ? "#f5d27a" : "#1d2430", stroke: isTip ? "#fff3cf" : "#9fb3c8", "stroke-width": isTip ? 2 : 1.6, filter: isTip ? "url(#glow)" : ""}, g);
+    if (o.r >= 11) el("text", {x, y: y + 3.5, "text-anchor": "middle", "font-size": 9.5, fill: isTip ? "#1a1405" : "#c9d4e0"}, g, pos.get(s.h).col);
+    el("title", {}, g, `subblock ${pos.get(s.h).col} of ${K - 1}\n${s.h}…\nmined ${hhmmss(s.t)}\nparent: ${s.p.length ? s.p.join(", ") : "summary #" + o.base.height}`);
+  });
+}
+
+function render() {
+  const d = data; if (!d || !d.ok) return;
+  const n = d.cur.subs.length;
+  $("c-h").textContent = d.height;
+  $("c-dag").innerHTML = `${n}<small> / ${K - 1} subblocks</small>`;
+  $("c-bar").style.width = Math.min(100, n / (K - 1) * 100) + "%";
+  $("c-act").textContent = d.active ? "YES" : "NO"; $("c-act").className = "v " + (d.active ? "ok" : "bad");
+  $("c-rate").innerHTML = `${d.rate_per_min}<small> blocks/min</small>`;
+  $("c-tip").textContent = d.dagtip;
+  const t0 = n ? d.cur.subs[0].t : null;
+  $("cur-m").textContent = `on top of summary #${d.height} (${d.tip}…) · ${n}/${K - 1} subblocks` + (t0 ? ` · started ${hhmmss(d.tiptime || t0)}` : "") + ` · next summary #${d.height + 1} when full`;
+  const w = $("cur").parentNode.clientWidth;
+  const W = Math.max(300, w), cols = w < 520 ? 8 : w < 800 ? 13 : 21;
+  drawDag($("cur"), d.cur.subs, {W, cols, r: w < 520 ? 13 : 15, ghost: true, base: d.cur.base, animate: true, tip: d.dagtip});
+  // previous summary blocks: group for summary H = subblocks built on H-1, closed by H
+  const box = $("prev"); box.innerHTML = "";
+  const pv = d.prev || [];
+  for (let i = 0; i < pv.length; i++) {
+    const b = pv[i], parent = pv[i + 1];
+    const div = document.createElement("div"); div.className = "grp"; box.appendChild(div);
+    const subs = b.subs || [];
+    const span = subs.length ? (subs[subs.length - 1].t - subs[0].t) : null;
+    div.innerHTML = `<div class="hd"><b>Summary #${b.height}</b><span><code>${b.hash}…</code></span><span>mined ${hhmmss(b.time)}</span>` +
+      (b.mdv === 2 ? `<span>${b.nsub} subblocks + ${b.nunc} uncles (minerData v2)</span>` : `<span>minerData v${b.mdv} (pre-Tailstorm)</span>`) +
+      (span != null ? `<span>DAG built in ${span} s</span>` : "") + `<span>${b.tx} tx</span></div>`;
+    if (subs.length) {
+      const svg = document.createElementNS(NS, "svg"); div.appendChild(svg);
+      const wide = w >= 800;
+      drawDag(svg, subs, {W, cols: wide ? 42 : 14, r: wide ? 8 : 8, ghost: false, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash}});
+    } else if (b.mdv === 2) {
+      div.insertAdjacentHTML("beforeend", `<div style="color:var(--muted);font-size:13px;padding:4px 0">Subblock details for this group are no longer held in the node's recent-DAG view.</div>`);
+    }
+  }
+  for (const s of d.cur.subs) known.add(s.h);
+  firstRender = false;
+}
+
+window.addEventListener("resize", () => { clearTimeout(window._rz); window._rz = setTimeout(render, 200); });
+poll(); setInterval(poll, POLL_MS); setInterval(tick, 1000);
+</script>
+</body>
+</html>
