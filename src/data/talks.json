@@ -1,6 +1,36 @@
 [
   {
     "year": 2026,
+    "sort": "2026-09-30",
+    "date": "September 2026",
+    "title": "Blockchain Game Jam: break it out of the game",
+    "meta": "Pitch deck for organizers (universities, student associations)",
+    "description": "A 48-hour game jam where students build games whose items belong to the players and can leave the game. Grounded in Steven van den Meiracker's Nexa gaming webinar and the Nexa Warriors demo; organizer, date, venue, budget and prizes are left as placeholders.",
+    "thumb": "../blockchain-game-jam/slides/01.png",
+    "links": [
+      {
+        "label": "Open the deck",
+        "href": "../blockchain-game-jam/",
+        "primary": true
+      },
+      {
+        "label": ".pptx",
+        "href": "../blockchain-game-jam/blockchain-game-jam.pptx",
+        "download": true
+      },
+      {
+        "label": ".pdf",
+        "href": "../blockchain-game-jam/blockchain-game-jam.pdf",
+        "download": true
+      },
+      {
+        "label": "Source talk (YouTube)",
+        "href": "https://www.youtube.com/watch?v=NHAPE0JRhCM"
+      }
+    ]
+  },
+  {
+    "year": 2026,
     "sort": "2026-09-15",
     "date": "September 2026",
     "featured": true,
