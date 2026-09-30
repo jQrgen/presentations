@@ -14,6 +14,8 @@ cp render/Nexa-vs-Bitcoin-Ethereum.pdf render-no/Nexa-vs-Bitcoin-Ethereum-NO.pdf
 # Blockchain Game Jam deck: slides/NN.png, .pptx and .pdf live in docs/blockchain-game-jam (rendered from the python-pptx build); the viewer is regenerated
 mkdir -p "$D/blockchain-game-jam"; cp -R "$WS/docs/blockchain-game-jam/." "$D/blockchain-game-jam/"
 node site-gamejam.js data/blockchain-game-jam-notes.json "$D/blockchain-game-jam" >/dev/null
+# Live Tailstorm DAG view (stormtest demo): static page, data comes live from the Nexa core dev publisher
+mkdir -p "$D/tailstorm"; cp -R "$WS/docs/tailstorm/." "$D/tailstorm/"
 # old talks as original PDFs
 cp talk1/render/deck.pdf "$D/talks/files/patch.pdf"; cp pages/public/patch/cover.png "$D/talks/files/patch-cover.png"
 cp oldtalks/tobm-2017.pdf "$D/talks/files/tobm-2017.pdf"; cp oldtalks/tobm-2017-cover.png "$D/talks/files/tobm-2017-cover.png"
