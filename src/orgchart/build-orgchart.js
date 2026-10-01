@@ -20,10 +20,11 @@ const SNAP = path.join(SRC, "data", "nexa-team.json");
 const CONTRIB = path.join(SRC, "data", "nexa-contributions.json"); // hand-maintained, keyed by role name
 
 // ---- who is not part of the Nexa team (private / generic bots and their group)
-const EXCLUDE_IDS = new Set(["680befcc-f236-40de-a77d-7f0930ecb7d0", "207cf11b-c754-45d8-b61a-404d9cb352f2"]);
-// Privacy: an ALLOWLIST decides who is published; this denylist is a second safety net on top of it.
-const EXCLUDE_NAMES = new Set(["Grok Bot", "Personal trainer", "Nutritionist", "Padel coach", "Kenyan run coach",
-  "Fastlege", "Gastrolege", "Lege", "Personal health team"].map((n) => n.toLowerCase()));
+// Privacy: an ALLOWLIST decides who is published; these ids are a second safety net (ids only, so no private names live in this public file).
+const EXCLUDE_IDS = new Set(["680befcc-f236-40de-a77d-7f0930ecb7d0", "207cf11b-c754-45d8-b61a-404d9cb352f2",
+  "1a0fab0a-7eb5-4e42-a543-f0e28e728c53", "61d77712-38b4-4333-832f-423f7ece4983", "9f4094f5-2dbf-4013-8468-88a097458e5d",
+  "aef0a6e5-5dda-4769-a594-eb6c540d1164", "d77b0e24-721f-43f1-b1df-895871971563", "fd5c438a-a008-4d84-8db7-42a335ff16a1"]);
+const EXCLUDE_NAMES = new Set(["Grok Bot"].map((n) => n.toLowerCase()));
 const EXCLUDE_PREFIXES = ["jqrgencorp"]; // jQrgen's personal company team (agents and group)
 const denied = (name) => { const n = String(name || "").trim().toLowerCase(); return EXCLUDE_NAMES.has(n) || EXCLUDE_PREFIXES.some((x) => n.startsWith(x)); };
 // Allowlist: a group is a Nexa group if its name contains "Nexa"; an agent is published only if it is a named
@@ -35,6 +36,7 @@ const TOP = ["jQrgen", "Nexa Team Lead"];
 const DEPARTMENTS = [
   ["Strategy", ["Nexa strategist"]],
   ["Leadership", ["Nexa lead dev", "Nexa chief scientist"]],
+  ["Research", ["Nexa research liaison"]],
   ["Engineering", ["Nexa core dev", "Nexa solution architect", "Rostrum dev", "Wally Dev", "Nexa game dev", "Nexa FPGA engineer", "Nexa security & audit"]],
   ["Product & Design", ["Nexa product manager", "Nexa designer", "Presentations"]],
   ["Go-to-market & Community", ["Marketing strategy", "Nexa media & communications", "Nexa DevRel & BON grants", "Nexa community manager", "Nexa exchanges & conferences"]],
@@ -43,7 +45,7 @@ const DEPARTMENTS = [
 const LEADS = new Set(["Nexa trading strategist"]);
 // one colour per team (always shown with its text label); teams beyond this list cycle through the palette
 const TEAM_COLOURS = ["#B91C1C", "#1D4ED8", "#047857", "#7C3AED", "#B45309", "#0E7490", "#BE185D", "#4D7C0F", "#374151"];
-const GROUP_ORDER = ["Team Nexa", "Nexa leadership", "Nexa lead devs", "Nexa devs", "Nexa product", "Nexa go-to-market", "Nexa security", "Nexa on-chain trading"];
+const GROUP_ORDER = ["Team Nexa", "Nexa leadership", "Nexa lead devs", "Nexa devs", "Nexa product", "Nexa go-to-market", "Nexa security", "Nexa research", "Nexa on-chain trading"];
 
 // ---- one-line role summaries (curated; new agents fall back to a line derived from their description)
 const SUMMARY = {
@@ -51,6 +53,7 @@ const SUMMARY = {
   "Nexa strategist": "Overall strategy, positioning, Scandinavia-first plan and goals",
   "Nexa lead dev": "Technical direction: architecture, roadmap, protocol changes",
   "Nexa chief scientist": "Protocol and consensus research, papers, design reviews",
+  "Nexa research liaison": "Research partnerships with universities",
   "Nexa core dev": "Full node, consensus, Tailstorm, block size and releases",
   "Nexa solution architect": "Reference architectures and integrations for builders",
   "Rostrum dev": "Rostrum, Nexa's Electrum-protocol indexing server",
