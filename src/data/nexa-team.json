@@ -220,6 +220,14 @@
       "contributions": []
     },
     {
+      "name": "Nexa QA & infra",
+      "type": "ai",
+      "role": "Testing, CI and release checklists, test infrastructure and deploys",
+      "department": "Engineering",
+      "groups": [],
+      "contributions": []
+    },
+    {
       "name": "Nexa research liaison",
       "type": "ai",
       "role": "Research partnerships with universities",
