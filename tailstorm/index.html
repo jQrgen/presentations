@@ -31,7 +31,7 @@ h1 .g{color:var(--gold)}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--golddim),var(--gold));width:0;transition:width .6s}
 section{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px 10px;margin-bottom:14px}
 section h2{margin:0 0 4px;font-size:16px;font-weight:650}
-section h2 .m{color:var(--muted);font-weight:400;font-size:13px;margin-left:8px}
+section h2 .m{color:var(--muted);font-weight:400;font-size:13px;margin-left:8px}.roundShort{display:none}.swipeHint{display:none}
 svg{display:block;width:100%;height:auto}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:6px 0 2px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -139,6 +139,35 @@ html.kiosk #explain .faqrot .q{color:var(--gold2);font-weight:700;font-size:clam
 html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);line-height:1.15;margin-top:.3em;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
 .kclock{display:none;margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:1.1em}
 @media (max-width:1700px){html.kiosk .card .k{font-size:clamp(16px,1.05vw,22px);white-space:normal;overflow:visible;text-overflow:clip;line-height:1.1}html.kiosk #explain{gap:.25vh}html.kiosk #explain .lg dd{font-size:clamp(14px,1vw,18px)}html.kiosk #explain .faqrot{padding:.6vh .8vw}html.kiosk #explain .faqrot .q{font-size:clamp(19px,1.45vw,25px)}html.kiosk #explain .faqrot .a{font-size:clamp(16px,1.15vw,20px)}}
+
+@media (max-width:600px){
+  html:not(.kiosk) .wrap{padding:12px 10px 28px;max-width:none}
+  html:not(.kiosk) header{gap:8px}
+  html:not(.kiosk) h1{font-size:22px}
+  html:not(.kiosk) .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+  html:not(.kiosk) .card{min-width:0;min-height:62px;padding:9px 10px}
+  html:not(.kiosk) .card .k{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html:not(.kiosk) .card .v{font-size:22px;white-space:nowrap}
+  html:not(.kiosk) section{padding:10px 9px;margin-bottom:12px;overflow-x:auto}
+  html:not(.kiosk) section h2{font-size:16px;line-height:1.3;white-space:normal}
+  html:not(.kiosk) section h2 .m{display:block;margin:2px 0 0;font-size:12px;line-height:1.35}
+  html:not(.kiosk) .roundLong{display:none}
+  html:not(.kiosk) .roundShort{display:inline}
+  html:not(.kiosk) .legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;margin:8px 0 5px;font-size:12px}
+  html:not(.kiosk) .legend span{min-width:0;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2;gap:5px}
+  html:not(.kiosk) .legend .sw{flex:none}
+  html:not(.kiosk) .legend small{display:none}
+  html:not(.kiosk) #legend .hintLegend{grid-column:1/-1}
+  html:not(.kiosk) #legend2{display:none!important}
+  html:not(.kiosk) #legend .progressTrack{grid-column:1/-1;min-width:0;width:100%;height:1.7em;padding:1px 8px}
+  html:not(.kiosk) #sec-cur,html:not(.kiosk) #sec-prev{overflow:visible}
+  html:not(.kiosk) .dagScroll{width:100%;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;overscroll-behavior-x:contain;touch-action:pan-x pan-y}
+  html:not(.kiosk) #cur{width:1100px;max-width:none;height:210px}
+  html:not(.kiosk) #prev .grp{min-width:0}
+  html:not(.kiosk) #prev .grp svg{width:1000px;max-width:none;height:170px}
+  html:not(.kiosk) .swipeHint{display:block;color:var(--muted);font-size:12px;margin:2px 0 3px;text-align:right}
+  html:not(.kiosk) .fsbtn,#sbinfo .x{min-width:44px;min-height:44px}
+}
 </style>
 </head>
 <body>
@@ -190,13 +219,15 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
   <div class="card"><div class="k">DAG tip</div><div class="v" id="c-tipv" style="font-size:15px;margin-top:8px"><code id="c-tip">–</code></div></div>
 </div>
 <section id="sec-cur">
-  <h2>This round: subblocks since the last summary block <span class="m" id="cur-m"></span></h2>
+  <h2><span class="roundLong">This round: subblocks since the last summary block</span><span class="roundShort">Round subblocks</span> <span class="m" id="cur-m"></span></h2>
   <div class="legend" id="legend"></div>
-  <svg id="cur" viewBox="0 0 1200 200"></svg>
+  <div id="curSwipe" class="swipeHint" aria-hidden="true">swipe → to explore the DAG</div>
+  <div id="curScroll" class="dagScroll"><svg id="cur" viewBox="0 0 1200 200"></svg></div>
 </section>
 <section id="sec-prev">
   <h2>Recent summary blocks <span class="m">Each row is one finished round: start summary, its subblocks, sealing summary</span></h2>
   <div class="legend" id="legend2"></div>
+  <div id="prevSwipe" class="swipeHint" aria-hidden="true">swipe → to explore each finished round</div>
   <div id="prev"></div>
 </section>
 <details class="note" id="faq"><summary><b>Questions visitors ask</b></summary>
@@ -419,6 +450,8 @@ function drawDag(svg, subs, o) {
     const isTip = o.tip && s.h === o.tip, m = s.m || 0;
     const g = el("g", {class: "sb" + (selHash === s.h ? " sel" : ""), tabindex: "0", role: "button", "aria-label": `Subblock ${s.h.slice(0, 4)}…, miner ${m || "?"}`}, gN);
     if (o.animate && !firstRender && !known.has(s.h)) g.classList.add("new");
+    // Keep touch targets at least 44px even when the visible node is small.
+    el("circle", {cx: x, cy: y, r: Math.max(o.r, 22), fill: "transparent", "pointer-events": "all"}, g);
     const a = {cx: x, cy: y, r: o.r, fill: kind === "in" ? "#ff6b8a33" : (isTip ? "#fff3cf" : MF[m]), stroke: kind ? UNC : MC[m], "stroke-width": kind ? 2 : 1.8};
     if (kind) a["stroke-dasharray"] = "3 2";
     if (isTip) a.filter = "url(#glow)";
@@ -564,26 +597,31 @@ function summaryArrived(d, oldHeight) {
 
 function render() {
   const d = data; if (!d || !d.ok) return;
-  const KI = isKiosk();
+  const KI = isKiosk(), mobile = !KI && window.innerWidth <= 600;
   const subs = d.cur.subs, uncles = d.cur.uncles || [], n = subs.length + uncles.length;
+  const shownN = Math.min(n, K - 1);
   $("c-h").textContent = d.height;
   const fresh = firstRender ? 0 : [...subs, ...uncles].filter(s => !known.has(s.h)).length;
-  $("c-dag").innerHTML = `${n}<small> / ${K - 1}${uncles.length ? ` (${uncles.length} uncle${uncles.length > 1 ? "s" : ""})` : ""}</small>`;
+  $("c-dag").innerHTML = `${shownN}<small> / ${K - 1}${uncles.length ? ` (${uncles.length} uncle${uncles.length > 1 ? "s" : ""})` : ""}</small>`;
   const chip = $("newChip"); if (chip) { chip.textContent = fresh ? `+${fresh} new` : ""; chip.classList.toggle("show", !!fresh); }
-  $("c-bar").style.width = Math.min(100, n / (K - 1) * 100) + "%";
+  $("c-bar").style.width = Math.min(100, shownN / (K - 1) * 100) + "%";
   $("c-act").textContent = d.active ? "YES" : "NO"; $("c-act").className = "v " + (d.active ? "ok" : "bad");
   $("c-rate").innerHTML = KI ? `${d.rate_per_min}<small> /min · ${d.miners || 1} miners</small>` : `${d.rate_per_min}<small> blocks/min · ${d.miners || 1} miners</small>`;
   const bs = branchStats(subs);
   $("c-br").innerHTML = `${bs.width}<small> wide · ${bs.multi} merges</small>`;
   $("c-tip").textContent = d.dagtip;
   const left = Math.max(0, K - 1 - n);
-  $("legend").innerHTML = legendHtml(d.per_miner_5min) + `<span class="progressTrack"><i style="width:${Math.min(100, n / (K - 1) * 100)}%"></i><b>${left} more subblocks, then summary #${d.height + 1}</b></span>` + (!KI ? `<span class="hintLegend">Tap or click any subblock to see its details.</span>` : "");
+  const progressLabel = left <= 0 ? `Round full, waiting for summary #${d.height + 1}` : `${left} more subblocks, then summary #${d.height + 1}`;
+  $("legend").innerHTML = legendHtml(mobile ? null : d.per_miner_5min) + `<span class="progressTrack"><i style="width:${Math.min(100, shownN / (K - 1) * 100)}%"></i><b>${progressLabel}</b></span>` + (!KI ? `<span class="hintLegend">Tap or click any subblock to see its details.</span>` : "");
   $("legend2").innerHTML = legendHtml(null) + `<span class="lx">dashed red = left out of this summary, included later as an uncle</span>`;
-  $("cur-m").textContent = KI ? `on top of summary #${d.height} · ${n}/${K - 1} · depth ${bs.depth}` : `on top of summary #${d.height} (${d.tip}…) · ${n}/${K - 1} · depth ${bs.depth} · next summary #${d.height + 1} when full`;
-  const w = $("cur").parentNode.clientWidth, W = Math.max(300, w);
+  $("cur-m").textContent = KI ? `on top of summary #${d.height} · ${shownN}/${K - 1} · depth ${bs.depth}` : `on top of summary #${d.height} (${d.tip}…) · ${shownN}/${K - 1} · depth ${bs.depth} · next summary #${d.height + 1} when full`;
+  const w = $("cur").parentNode.clientWidth, W = mobile ? Math.max(1100, (bs.depth + 2) * 22) : Math.max(300, w);
   const cols = w < 520 ? 8 : w < 800 ? 13 : 21;
-  const curO = {W, cols, r: w < 520 ? 12 : 14, ghost: true, oneRow: true, base: d.cur.base, uncles, animate: true, tip: d.dagtip, mini: false};
-  if (KI) fitDag($("cur"), subs, curO, 3.3); else drawDag($("cur"), subs, curO);
+  const curSvg = $("cur");
+  curSvg.style.width = mobile ? `${W}px` : "";
+  const curO = {W, cols, r: mobile ? 10 : (w < 520 ? 12 : 14), ghost: true, oneRow: true, base: d.cur.base, uncles, animate: true, tip: d.dagtip, mini: false};
+  if (KI) fitDag(curSvg, subs, curO, 3.3); else drawDag(curSvg, subs, curO);
+  if (mobile && (firstRender || fresh)) requestAnimationFrame(() => { const sc = $("curScroll"); sc.scrollLeft = sc.scrollWidth; });
   const box = $("prev"); box.innerHTML = "";
   const pv = (d.prev || []).slice(0, KI ? 2 : undefined);
   for (let i = 0; i < pv.length; i++) {
@@ -600,9 +638,11 @@ function render() {
       (inc.length ? `<span>width ${st.width} · ${st.multi} merges · depth ${st.depth}</span>` : "") +
       (span != null ? `<span>round took ${span} s</span>` : "") + `</div>`;
     if (all.length) {
-      const svg = document.createElementNS(NS, "svg"); div.appendChild(svg);
-      const wide = w >= 800;
-      const pO = {W, cols: wide ? 42 : 14, r: 8, ghost: false, oneRow: true, mini: true, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash, m: b.m}, uncles: unc};
+      const scroll = document.createElement("div"); scroll.className = "dagScroll"; div.appendChild(scroll);
+      const svg = document.createElementNS(NS, "svg"); scroll.appendChild(svg);
+      const wide = w >= 800, miniW = mobile ? Math.max(1000, (st.depth + 2) * 18) : W;
+      svg.style.width = mobile ? `${miniW}px` : "";
+      const pO = {W: miniW, cols: wide ? 42 : 14, r: mobile ? 9 : 8, ghost: false, oneRow: true, mini: true, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash, m: b.m}, uncles: unc, labelRight: mobile ? miniW - 4 : null};
       if (KI) fitDag(svg, all, pO, 3.1); else drawDag(svg, all, pO);
     } else if (b.mdv === 2) {
       div.insertAdjacentHTML("beforeend", `<div style="color:var(--muted);font-size:13px;padding:4px 0">The node's recent-DAG view no longer holds subblock details for this group.</div>`);
