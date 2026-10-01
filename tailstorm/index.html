@@ -55,13 +55,14 @@ svg g.sb{cursor:pointer}svg g.sel circle{stroke:#fff3cf!important;stroke-width:3
 .fsbtn{margin-left:auto;align-self:center;background:var(--panel2);color:var(--gold2);border:1px solid var(--golddim);border-radius:8px;padding:6px 12px;font:600 13px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer;text-decoration:none}
 .fsbtn:hover,.fsbtn:focus-visible{border-color:var(--gold);color:#fff3cf}
 .fsbtn kbd{font:inherit;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 4px;margin-left:6px}
+.rd{font-size:13px;color:var(--muted)}.rd a{color:var(--gold2)}
 #kbar{display:none}
 /* Display (kiosk) layout: ?kiosk=1, #kiosk, or while in full screen. One screen, no scrolling, sized from the viewport. */
 html.kiosk{scrollbar-width:none;--muted:#b4bac6}
 html.kiosk::-webkit-scrollbar,html.kiosk body::-webkit-scrollbar{display:none}
 html.kiosk,html.kiosk body{height:100%;overflow:hidden;font-size:clamp(14px,calc(1.25vh + .4vw),46px)}
 html.kiosk .wrap{max-width:none;height:100vh;height:100dvh;margin:0;padding:1.6vh 1.4vw;display:grid;grid-template-rows:auto auto minmax(0,1.3fr) minmax(0,1fr);gap:1.3vh}
-html.kiosk .note,html.kiosk .whatsnew,html.kiosk footer,html.kiosk .hint,html.kiosk #sbinfo,html.kiosk header .fsbtn,html.kiosk .lx{display:none!important}
+html.kiosk .note,html.kiosk .whatsnew,html.kiosk footer,html.kiosk .hint,html.kiosk #sbinfo,html.kiosk header .fsbtn,html.kiosk .lx,html.kiosk .rd{display:none!important}
 html.kiosk header{align-items:center;gap:1vw}
 html.kiosk h1{font-size:2em}
 html.kiosk .tag{font-size:.75em}
@@ -142,6 +143,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 <header>
   <h1><span class="g">Nexa Tailstorm</span> · live blocks</h1>
   <span class="tag">STORMTEST DEMO · 4 TEST MINERS</span>
+  <span class="rd" id="explainer">Read the explainer: <a href="https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9" rel="noopener">article on Medium</a> · <a href="https://x.com/jQrgensn/status/2105689136757604437" rel="noopener">thread on X</a></span>
   <button type="button" class="fsbtn" id="fsbtn" title="Show this page full screen as an office display (shortcut: F, exit: Esc)">⛶ Full screen<kbd>F</kbd></button>
   <span class="kclock" id="kclock"></span>
 </header>
@@ -205,6 +207,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 </dl></details>
 <section class="note" id="changelog"><b>Changelog</b> <span style="color:#8a93a6;font-size:13px">(newest first, Oslo time)</span>
 <ol>
+<li><time>1 Oct 2026, 18:30</time>Links to the explainer article on Medium and the thread on X, in the header and the footer.</li>
 <li><time>1 Oct 2026, 18:00</time>A &ldquo;What you&#39;re watching&rdquo; explainer with Tailstorm&#39;s purpose and a legend (also a side panel on the office display, with rotating answers to common questions), a &ldquo;Questions visitors ask&rdquo; section, and clearer labels.</li>
 <li><time>1 Oct 2026, 16:16</time>Office display mode: a Full screen button (or press F, Esc to leave), and <a href="?kiosk=1"><code>?kiosk=1</code></a> for a one-screen layout sized for a wall or desk monitor, with a hidden cursor, the screen kept awake and automatic recovery.</li>
 <li><time>1 Oct 2026, 12:10</time>Click or tap any subblock to see its hash, miner, time, parents and the subblocks built on it. Branch and merge are now explained in plain words. Added this changelog.</li>
@@ -219,6 +222,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
   Source: a Nexa node (<code>-stormtest</code>) running Tailstorm, read via <code>gettailstorminfo</code>, <code>getbestdagtiphash</code>, <code>getsubblock</code> and <code>getblock</code>.
   k = 120 is the value in the current code for mainnet, and the demo uses the same value; it isn't a final activation setting. Four miner loops each mine on their own node; the nodes relay to each other through a ~1.2 s delay proxy. A publisher reading node 1 builds a snapshot every ~3 s and serves it through an outbound Cloudflare quick tunnel; this page polls it every 3 s.
   <span id="src"></span><br>
+  Read the explainer: <a href="https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9" rel="noopener">&ldquo;Seconds, Not Minutes: What Tailstorm Means for Developers Building on Nexa&rdquo;</a> on Medium, and the <a href="https://x.com/jQrgensn/status/2105689136757604437" rel="noopener">thread on X</a>.<br>
   Office display: open <a href="?kiosk=1"><code>?kiosk=1</code></a> for a full-screen layout without scrolling (or press <b>F</b> / the Full screen button; <b>Esc</b> leaves it).
 </footer>
 </div>
