@@ -1,6 +1,32 @@
 [
   {
     "year": 2026,
+    "sort": "2026-10-02",
+    "date": "2 October 2026",
+    "title": "Nexa: Scaling Bitcoin",
+    "meta": "Oslo Blockchain Meetup",
+    "place": "Oslo",
+    "description": "How Nexa, built by Bitcoin Unlimited engineers, scales Bitcoin's design: Graphene block propagation, parallel validation, an adaptive block size, Tailstorm (implemented, activation pending), the mining saga from CPU to ASIC, NexaPoW 2 for FPGAs and the Blitz signature card. Ends with a live demo minting and melting drink tokens in Wally Wallet.",
+    "thumb": "../oslo-meetup-2026/thumb.png",
+    "links": [
+      {
+        "label": "Open the deck",
+        "href": "../oslo-meetup-2026/",
+        "primary": true
+      },
+      {
+        "label": "Spoken manuscript",
+        "href": "../oslo-meetup-2026/manuscript.html"
+      },
+      {
+        "label": "Manuscript .pdf",
+        "href": "../oslo-meetup-2026/manuscript.pdf",
+        "download": true
+      }
+    ]
+  },
+  {
+    "year": 2026,
     "sort": "2026-10-01",
     "date": "October 2026",
     "title": "Nexa Tailstorm: live DAG",
