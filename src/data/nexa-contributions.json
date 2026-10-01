@@ -16,5 +16,29 @@
       "url": "https://jqrgen.github.io/presentations/tailstorm/#faq",
       "date": "2026-10-01"
     }
+  ],
+  "Nexa chief scientist": [
+    {
+      "title": "Tailstorm explainer article on Medium (technical review and edits)",
+      "url": "https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9",
+      "date": "2026-10-01"
+    },
+    {
+      "title": "Tailstorm explainer thread on X (technical review)",
+      "url": "https://x.com/jQrgensn/status/2105689136757604437",
+      "date": "2026-10-01"
+    }
+  ],
+  "Nexa core dev": [
+    {
+      "title": "Tailstorm explainer article on Medium (k-value fact check)",
+      "url": "https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9",
+      "date": "2026-10-01"
+    },
+    {
+      "title": "Tailstorm explainer thread on X (k-value fact check)",
+      "url": "https://x.com/jQrgensn/status/2105689136757604437",
+      "date": "2026-10-01"
+    }
   ]
 }

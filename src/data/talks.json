@@ -14,6 +14,10 @@
         "primary": true
       },
       {
+        "label": "Read the explainer (Medium)",
+        "href": "https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9"
+      },
+      {
         "label": "Tailstorm paper (AFT 2023)",
         "href": "https://doi.org/10.4230/LIPIcs.AFT.2023.6"
       }
