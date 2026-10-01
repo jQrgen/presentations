@@ -129,7 +129,7 @@ html.kiosk #explain .lg div{display:flex;align-items:baseline;gap:.5em;min-width
 html.kiosk #explain .lg dt{white-space:nowrap}
 html.kiosk #explain .lg dt{font-size:clamp(19px,1.56vw,46px)}
 html.kiosk #explain .lg dd{font-size:clamp(16px,1.25vw,36px);line-height:1.15;white-space:nowrap;margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis}
-html.kiosk #explain .testnet{font-size:.88em;margin:0;line-height:1.3}
+html.kiosk #explain .testnet{display:none;font-size:.88em;margin:0;line-height:1.3}
 html.kiosk #explain .faqrot{display:block;margin-top:1vh;background:#1b202b;border-left:.25em solid var(--gold);border-radius:.4em;padding:1vh 1vw;transition:opacity .6s;min-height:0}
 html.kiosk #explain .faqrot.fade{opacity:0}
 html.kiosk #explain .faqrot .q{color:var(--gold2);font-weight:700;font-size:clamp(19px,1.56vw,46px);line-height:1.15}
@@ -156,6 +156,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 <div><dt><i class="ico unc">U</i>Uncle (late subblock)</dt><dd>Late.</dd></div>
 </dl>
 <div class="minerkey" aria-label="Colour equals miner"><span class="minerlabel">Colour = miner 1–4</span><i class="mdot m1" title="Miner 1"></i><i class="mdot m2" title="Miner 2"></i><i class="mdot m3" title="Miner 3"></i><i class="mdot m4" title="Miner 4"></i><span class="tipkey"><i class="tipdot"></i>DAG tip</span></div>
+<p class="testnet"><b>Private test network, not mainnet:</b> 4 test miners · ~1.2 s simulated delay.</p>
 <div class="faqrot" id="faqrot" aria-live="off"><div class="faqhead">Visitors ask · <span id="faqcount">1/6</span></div><div class="faqprogress"><i id="faqprogress"></i></div><div class="q"></div><div class="a"></div></div>
 </aside>
 <p class="whatsnew" style="margin:-4px 0 10px;font-size:13px"><a href="#changelog">What&#39;s new on this page</a></p>
@@ -195,8 +196,8 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 </section>
 <details class="note" id="faq"><summary><b>Questions visitors ask</b></summary>
 <dl>
-<dt>What is a summary block?</dt><dd data-k="Closes each round; about 1/k of its reward.">The regular block of the chain, about every 2 minutes. It closes a round by committing to the subblocks found since the previous one, and its height is the chain height. It receives about 1/k of the round&#39;s reward, a bit more when the round branches. In Nexa it is the last piece of work of the round, found at the same difficulty as a subblock.</dd>
-<dt>What is an uncle?</dt><dd data-k="Late block; score 4 points below a perfectly linked subblock.">A valid subblock that arrived after its round was already full. Instead of being thrown away, the next summary block includes it; its score is 4 points below a perfectly linked subblock. &ldquo;Uncle&rdquo; is Nexa&#39;s word, not the paper&#39;s.</dd>
+<dt>What is a summary block?</dt><dd data-k="About 1/k of the round's reward, a bit more when the round branches.">The regular block of the chain, about every 2 minutes. It closes a round by committing to the subblocks found since the previous one, and its height is the chain height. It receives about 1/k of the round&#39;s reward, a bit more when the round branches. In Nexa it is the last piece of work of the round, found at the same difficulty as a subblock.</dd>
+<dt>What is an uncle?</dt><dd data-k="Late block; its score is 4 points below a perfectly linked subblock.">A valid subblock that arrived after its round was already full. Instead of being thrown away, the next summary block includes it; its score is 4 points below a perfectly linked subblock. &ldquo;Uncle&rdquo; is Nexa&#39;s word, not the paper&#39;s.</dd>
 <dt>Does Tailstorm increase TPS?</dt><dd data-k="Fast confirmations and fair mining, not mainly TPS.">That is not its main goal. The goal is fast, reliable confirmations and fair mining: a payment shows up in a subblock within seconds, and full settlement still comes with the next summary blocks. Capacity is still set by the block size limit.</dd>
 <dt>Can subblocks be reorganised?</dt><dd data-k="Parallel blocks merge; late ones become uncles.">Rarely, and cheaply. Parallel subblocks are merged, not discarded. Until the summary block arrives, which subblocks it includes can still change (a late one becomes an uncle), so wait for a summary block for large payments. After that, undoing them means a normal blockchain reorg.</dd>
 <dt>Does one miner mine the summary block on top of the subblocks?</dt><dd data-k="No extra job; the next piece becomes summary.">No extra big job. Whoever finds the next piece of work once the round is full (119 subblocks in this demo) turns it into the summary block. In the paper the summary needs no proof of work at all: anyone holding k subblocks assembles it.</dd>
