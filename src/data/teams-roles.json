@@ -70,27 +70,35 @@
   },
   "Trading": {
     "c63239ab-d6f9-41e1-b7f9-145c6e8722c9": {
-      "displayName": "Trading strategist",
-      "role": "Leads the Trading team: a written, testable trading plan"
+      "name": "Trading strategist",
+      "role": "Leads the team's simulated trading plan"
     },
     "cdebf3c8-a41e-44ad-885c-9a927bb8fa22": {
-      "displayName": "DEX trader",
-      "role": "DEX trading research, starting with Cauldron on Bitcoin Cash (simulated)"
+      "name": "DEX trader",
+      "role": "Simulated trading research"
     },
     "392bcfe4-ea15-4f84-ab39-4d76a8cadd93": {
-      "displayName": "On-chain analyst",
-      "role": "On-chain flow and token activity analysis"
+      "name": "On-chain analyst",
+      "role": "On-chain activity analysis for simulated trades"
     },
     "7178889a-2ed9-482b-8d16-4f4a939325c5": {
-      "displayName": "Risk manager",
-      "role": "Risk and stop rules for simulated trades"
+      "name": "Risk manager",
+      "role": "Risk rules for simulated trades"
     },
     "7208d9c1-eb70-4b34-806a-89ba02ad8e3f": {
-      "displayName": "Quant dev",
-      "role": "Data collectors, backtesting and paper trading"
+      "name": "Quant dev",
+      "role": "Backtesting and paper-trading tools"
+    },
+    "680befcc-f236-40de-a77d-7f0930ecb7d0": {
+      "name": "Grok Bot",
+      "role": "General-purpose assistant"
     }
   },
   "jQrgenCorp": {
+    "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2": {
+      "name": "jQrgenCorp stabssjef",
+      "role": "Chief of staff for the company"
+    },
     "ad1d3ecd-77fe-4d7a-8138-1cea4def9d71": {
       "name": "jQrgenCorp strategist",
       "role": "Business strategy advisor for jQrgen's company"
@@ -99,17 +107,21 @@
       "name": "jQrgenCorp CFO",
       "role": "Company finance advisor"
     },
+    "747093be-e915-4aef-a2e9-47804a4db1a5": {
+      "name": "jQrgenCorp admin",
+      "role": "Company admin and paperwork assistant"
+    },
     "b2b9975e-3419-4263-b6c5-9cd916d63a54": {
       "name": "jQrgenCorp accountant",
       "role": "Bookkeeping assistant"
     },
+    "6abac111-1e2b-4f36-bbe4-3b0e3296d10b": {
+      "name": "jQrgenCorp revisor",
+      "role": "Reviews the company's bookkeeping (not an authorised auditor)"
+    },
     "ed2061ee-5d2c-4cf9-a610-fc2b8da9ceab": {
       "name": "jQrgenCorp tax & compliance",
       "role": "Tax and compliance assistant"
-    },
-    "747093be-e915-4aef-a2e9-47804a4db1a5": {
-      "name": "jQrgenCorp admin",
-      "role": "Company admin and paperwork assistant"
     },
     "680befcc-f236-40de-a77d-7f0930ecb7d0": {
       "name": "Grok Bot",

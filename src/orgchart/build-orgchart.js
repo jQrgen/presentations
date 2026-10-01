@@ -38,7 +38,7 @@ const nexaName = (name) => /nexa/i.test(String(name || ""));
 const TOP = ["jQrgen", "Nexa Team Lead"];
 const DEPARTMENTS = [
   ["Strategy", ["Nexa strategist"]],
-  ["Leadership", ["Nexa lead dev", "Nexa chief scientist"]],
+  ["Leadership", ["Nexa lead dev", "Nexa chief scientist", "Nexa chief of staff"]],
   ["Research", ["Nexa research liaison"]],
   ["Engineering", ["Nexa core dev", "Nexa solution architect", "Rostrum dev", "Wally Dev", "Nexa game dev", "Nexa FPGA engineer", "Nexa security & audit"]],
   ["Product & Design", ["Nexa product manager", "Nexa designer", "Presentations"]],
@@ -49,12 +49,14 @@ const LEADS = new Set([]);
 const TEAM_COLOURS = ["#B91C1C", "#1D4ED8", "#047857", "#7C3AED", "#B45309", "#0E7490", "#BE185D", "#4D7C0F", "#374151"];
 const GROUP_ORDER = ["Team Nexa", "Nexa leadership", "Nexa lead devs", "Nexa devs", "Nexa product", "Nexa go-to-market", "Nexa security", "Nexa research"];
 
-// ---- one-line role summaries (curated; new agents fall back to a line derived from their description)
+// ---- one-line role summaries (curated). A new agent with no line here gets a neutral placeholder and a warning;
+// profile descriptions are never published.
 const SUMMARY = {
   "Nexa Team Lead": "Coordinates the team: priorities, owners, follow-ups and status",
   "Nexa strategist": "Overall strategy, positioning, Scandinavia-first plan and goals",
   "Nexa lead dev": "Technical direction: architecture, roadmap, protocol changes",
   "Nexa chief scientist": "Protocol and consensus research, papers, design reviews",
+  "Nexa chief of staff": "Chief of staff: plans, follow-ups and coordination across the team",
   "Nexa research liaison": "Research partnerships with universities",
   "Nexa core dev": "Full node, consensus, Tailstorm, block size and releases",
   "Nexa solution architect": "Reference architectures and integrations for builders",
@@ -72,12 +74,6 @@ const SUMMARY = {
   "Nexa community manager": "Developer community channels, updates, onboarding",
   "Nexa conferences": "Developer conferences, hackathons and meetups, Scandinavia first",
 };
-function derive(desc) {
-  let d = String(desc || "").replace(/\s*\([^)]*\)/g, "").replace(/\s+/g, " ").trim();
-  const sents = d.split(/(?<=\.)\s+/).filter((s) => !/^(Covers the|jQrgen |Your job|Member of|Before adding|Ask jQrgen|Never )/.test(s));
-  let s = (sents[1] || sents[0] || "").replace(/\.$/, "").split(/[:;]/)[0];
-  return s.length > 70 ? s.slice(0, 67).replace(/\s+\S*$/, "") + "…" : s;
-}
 
 // ---- hand-maintained public work, merged in on every run (kept in its own file so regeneration never loses it)
 function loadContrib() {
@@ -90,6 +86,7 @@ function loadContrib() {
   return c;
 }
 const CONTRIBS = loadContrib();
+const PENDING = "AI agent (role line to come)";
 const contributions = (name) => [...(CONTRIBS[name] || [])].sort((a, b) => b.date.localeCompare(a.date)).map(({ title, url, date }) => ({ title, url, date }));
 
 // ---- snapshot
@@ -115,12 +112,14 @@ function snapshot() {
   const members = Object.values(agents).map((p) => ({
     name: p.name,
     type: "ai",
-    role: SUMMARY[p.name] || derive(p.description),
+    role: SUMMARY[p.name] || PENDING,
     department: p.name === "Nexa Team Lead" ? "Team lead" : deptOf[p.name] || "Unassigned",
     ...(LEADS.has(p.name) ? { lead: true } : {}),
     groups: gl.filter((g) => g.members.includes(p.name)).map((g) => g.name),
     contributions: contributions(p.name),
   })).sort((a, b) => a.name.localeCompare(b.name));
+  const todo = members.filter((m) => m.role === PENDING || m.department === "Unassigned");
+  if (todo.length) console.warn(`WARNING: ${todo.length} Nexa agent(s) need a hand-written SUMMARY line and/or a DEPARTMENTS entry in orgchart/build-orgchart.js: ${todo.map((m) => `${m.name} (${m.role === PENDING ? "no role line" : "ok"}, ${m.department})`).join("; ")}`);
   // jQrgen is the only human; every roster entry is an AI agent
   const people = [{ name: "jQrgen", fullName: "Jørgen S. Notland", type: "human", role: "Runs the team · Bitcoin Unlimited / Nexa" }];
   const data = { source: "jQrgen's AI team roster", people, departments: DEPARTMENTS.map(([d]) => d), members, groups: gl };

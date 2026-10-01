@@ -23,12 +23,25 @@ const missing = missingRoles(roster, roles);
 warnMissing(missing);
 const order = cfg.teams.map((t) => t.name);
 // roster order is the curated order; the public name is the one sync-teams.js stored (displayName overrides applied)
+const shown = (t) => t.members.filter((m) => m.name && entry(roles, t.name, m.id))
+  .map((m) => { const e = entry(roles, t.name, m.id); return { id: m.id, name: e.displayName || m.name, role: e.role.trim() }; });
 const teams = roster.teams
   .filter((t) => order.includes(t.name))
   .sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name))
-  .map((t) => ({ name: t.name, members: t.members.filter((m) => m.name && entry(roles, t.name, m.id)).map((m) => { const e = entry(roles, t.name, m.id); return { name: e.displayName || m.name, role: e.role.trim() }; }) }))
+  .map((t) => {
+    const members = shown(t), byId = Object.fromEntries(members.map((m) => [m.id, m]));
+    const tc = cfg.teams.find((c) => c.name === t.name) || {};
+    // subteams (e.g. jQrgenCorp: Regnskap, Ledelse); team members in no subteam go to a final "other" group
+    let subteams = (t.subteams || []).map((s) => ({ name: s.name, label: s.label, members: s.memberIds.map((id) => byId[id]).filter(Boolean) })).filter((s) => s.members.length);
+    if (t.subteams && t.subteams.length) {
+      const inSub = new Set(t.subteams.flatMap((s) => s.memberIds));
+      const rest = members.filter((m) => !inSub.has(m.id));
+      if (rest.length) subteams.push({ name: tc.otherLabel || "Other", members: rest });
+    }
+    return { name: t.name, members, subteams };
+  })
   .filter((t) => t.members.length);
-const nAgents = new Set(teams.flatMap((t) => t.members.map((m) => m.name))).size;
+const nAgents = new Set(teams.flatMap((t) => t.members.map((m) => m.id))).size;
 const COLOURS = ["#B91C1C", "#1D4ED8", "#047857", "#7C3AED", "#B45309", "#0E7490", "#BE185D", "#4D7C0F"];
 
 const CSS = `
@@ -70,6 +83,10 @@ const CSS = `
 .dept>ol>li::after{content:"";position:absolute;left:-12px;top:-8px;bottom:0;border-left:1px solid var(--line)}
 .dept>ol>li:last-child::after{bottom:auto;height:26px}
 .dept>ol>li::before{content:"";position:absolute;left:-12px;top:18px;width:12px;border-top:1px solid var(--line)}
+.dept.has-subs{flex:2 1 0}
+.depts.subs{gap:8px}
+.dept.subteam h4{margin:0;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;line-height:1.3;background:var(--paper);color:var(--ink);border:1px solid var(--ink);border-bottom:6px solid var(--tc);padding:6px 8px;text-align:center}
+.dept.subteam h4 small{display:block;font-size:10.5px;font-weight:400;letter-spacing:.02em;text-transform:none;color:var(--muted)}
 @media (max-width:980px){
   .depts{flex-direction:column;gap:18px}
   .dept{padding-top:0}
@@ -82,9 +99,13 @@ footer.site a{color:inherit}
 const BADGE = { human: '<span class="badge human">\u{1F464} Human</span>', ai: '<span class="badge ai">\u{1F916} AI agent</span>', link: '<span class="badge link">\u{1F517} Separate chart</span>' };
 const top = cfg.top;
 const fmt = new Date(roster.updated + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+const card = (m) => `<li><div class="node ai">${BADGE.ai}<div class="n">${esc(m.name)}</div><div class="r">${esc(m.role)}</div></div></li>`;
+const plural = (n) => `${n} AI agent${n === 1 ? "" : "s"}`;
+// a team with subteams branches again under its header, the same way the teams branch under jQrgen
+const subCol = (s) => `<section class="dept subteam" aria-label="${esc(s.name)}"><h4>${esc(s.name)}<small>${s.label ? esc(s.label) + " · " : ""}${plural(s.members.length)}</small></h4><ol>${s.members.map(card).join("")}</ol></section>`;
 const teamCols = teams.map((t, i) => `
-      <section class="dept" style="--tc:${COLOURS[i % COLOURS.length]}" aria-label="${esc(t.name)}"><h3>${esc(t.name)}<small>${t.members.length} AI agent${t.members.length === 1 ? "" : "s"}</small></h3>
-        <ol>${t.members.map((m) => `<li><div class="node ai">${BADGE.ai}<div class="n">${esc(m.name)}</div><div class="r">${esc(m.role)}</div></div></li>`).join("")}</ol></section>`).join("");
+      <section class="dept${t.subteams.length ? " has-subs" : ""}" style="--tc:${COLOURS[i % COLOURS.length]}" aria-label="${esc(t.name)}"><h3>${esc(t.name)}<small>${plural(t.members.length)}${t.subteams.length ? ` · ${t.subteams.length} sub-teams` : ""}</small></h3>
+        ${t.subteams.length ? `<div class="vline"></div><div class="depts subs">${t.subteams.map(subCol).join("")}</div>` : `<ol>${t.members.map(card).join("")}</ol>`}</section>`).join("");
 const linkCols = (cfg.links || []).map((l, i) => `
       <section class="dept linked" style="--tc:${COLOURS[(teams.length + i) % COLOURS.length]}" aria-label="${esc(l.name)}"><h3>${esc(l.name)}<small>own org chart</small></h3>
         <ol><li><div class="node link">${BADGE.link}<div class="n">${esc(l.name)}</div><div class="r">${esc(l.role)}</div><a class="go" href="${esc(l.url)}">Open the ${esc(l.name)} org chart \u2192</a></div></li></ol></section>`).join("");

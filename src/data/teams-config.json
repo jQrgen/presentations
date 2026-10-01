@@ -1,15 +1,63 @@
 {
-  "_note": "Which teams the /teams/ page shows and how sync-teams.js finds their members (group, ids = agent ids, names = exact names, namePattern = regex). Only agent names, group membership and ids are read from the roster; descriptions are never read.",
-  "top": { "name": "jQrgen", "fullName": "Jørgen S. Notland", "role": "Runs all the teams" },
+  "_note": "Which teams the /teams/ page shows and how sync-teams.js finds their members: groupId = a group chat's agent id (preferred, survives renames), group = group chat name, ids = agent ids, names = exact agent names, namePattern = regex on agent names. A team may have subteams (each matched the same way); team members are the union of the team's own matches and its subteams. Only agent names, group memberIds and ids are read from the roster; descriptions are never read.",
+  "top": {
+    "name": "jQrgen",
+    "fullName": "Jørgen S. Notland",
+    "role": "Runs all the teams"
+  },
   "teams": [
-    { "name": "Personal health team", "group": "Personal health team" },
-    { "name": "Personal finance", "names": ["Personal finance"] },
-    { "name": "Personal dev team", "namePattern": "^Personal (dev|web dev)\\b" },
-    { "name": "Philosophers' symposium", "group": "Philosophers' symposium" },
-    { "name": "Trading", "ids": ["c63239ab-d6f9-41e1-b7f9-145c6e8722c9", "cdebf3c8-a41e-44ad-885c-9a927bb8fa22", "392bcfe4-ea15-4f84-ab39-4d76a8cadd93", "7178889a-2ed9-482b-8d16-4f4a939325c5", "7208d9c1-eb70-4b34-806a-89ba02ad8e3f"], "names": ["Trading strategist", "DEX trader", "Nebula Trader", "On-chain analyst", "Risk manager", "Quant dev", "Nexa trading strategist", "Nexa on-chain analyst", "Nexa risk manager", "Nexa quant dev"] },
-    { "name": "jQrgenCorp", "group": "jQrgenCorp", "namePattern": "^jQrgenCorp\\b" }
+    {
+      "name": "Personal health team",
+      "groupId": "207cf11b-c754-45d8-b61a-404d9cb352f2"
+    },
+    {
+      "name": "Personal finance",
+      "names": [
+        "Personal finance"
+      ]
+    },
+    {
+      "name": "Personal dev team",
+      "namePattern": "^Personal (dev|web dev)\\b"
+    },
+    {
+      "name": "Philosophers' symposium",
+      "groupId": "2cbe022d-b3e8-4e16-a3bf-9bc46e695514"
+    },
+    {
+      "name": "Trading",
+      "groupId": "693435ee-ebea-474a-bb19-ba2839ef9adc",
+      "ids": [
+        "c63239ab-d6f9-41e1-b7f9-145c6e8722c9",
+        "cdebf3c8-a41e-44ad-885c-9a927bb8fa22",
+        "392bcfe4-ea15-4f84-ab39-4d76a8cadd93",
+        "7178889a-2ed9-482b-8d16-4f4a939325c5",
+        "7208d9c1-eb70-4b34-806a-89ba02ad8e3f"
+      ]
+    },
+    {
+      "name": "jQrgenCorp",
+      "namePattern": "^jQrgenCorp\\b",
+      "subteams": [
+        {
+          "name": "Regnskap",
+          "label": "accounting",
+          "groupId": "13d63222-bc17-4204-9dc5-9429e8af3fbd"
+        },
+        {
+          "name": "Ledelse",
+          "label": "leadership",
+          "groupId": "5ba11eea-59ad-4ca0-bd70-39ec4e4f50e9"
+        }
+      ],
+      "otherLabel": "Other jQrgenCorp agents"
+    }
   ],
   "links": [
-    { "name": "Nexa team", "role": "AI agents for Nexa work, on their own org chart", "url": "https://jqrgen.github.io/presentations/nexa-team/" }
+    {
+      "name": "Nexa team",
+      "role": "AI agents for Nexa work, on their own org chart",
+      "url": "https://jqrgen.github.io/presentations/nexa-team/"
+    }
   ]
 }
