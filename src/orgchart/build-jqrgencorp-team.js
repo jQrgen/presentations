@@ -20,13 +20,15 @@ const RISK = { 1: "Bevis først", 2: "Forsiktig", 3: "Balansert", 4: "Utforskend
 const fmt = new Date(data.updated + "T12:00:00Z").toLocaleDateString("nb-NO", { day: "numeric", month: "long", year: "numeric" });
 const style = (k) => `<span class="st" style="--c:${COL[k]}">${esc(k)} ${esc(S[k].no)}</span>`;
 const dots = (n) => `<span class="risk" aria-label="Risikovillighet ${n} av 5">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= n ? "on" : ""}"></i>`).join("")}<b>${n}/5 · ${esc(RISK[n])}</b></span>`;
+const ws = (m) => `${esc(m.primary)} ${esc(S[m.primary].no)}${m.secondary ? " / " + esc(m.secondary) + " " + esc(S[m.secondary].no) : " (ren)"}`; // work style: primary / secondary
+const wsEn = (m) => `${esc(S[m.primary].no)}${m.secondary ? " / " + esc(S[m.secondary].no) : " (pure)"}`;
 const count = (f) => Object.fromEntries(Object.keys(f === "dialog" ? D : S).map((k) => [k, M.filter((m) => m[f] === k).length]));
-const pc = count("primary"), dc = count("dialog");
+const pc = count("primary"), sc = count("secondary"), dc = count("dialog");
 
 const quad = ORDER.map((k) => `<section class="q" style="--c:${COL[k]}"><h3>${esc(k)} · ${esc(S[k].no)}</h3><p class="qd">«${esc(S[k].desc)}»</p>
-      <ul>${M.filter((m) => m.primary === k).map((m) => `<li><b>${esc(m.name)}</b> <small>${m.secondary ? "sekundær " + esc(S[m.secondary].no) + " · " : ""}${esc(D[m.dialog].no)} · risiko ${m.risk}/5</small></li>`).join("")}</ul></section>`).join("");
+      <ul>${M.filter((m) => m.primary === k).map((m) => `<li><b>${esc(m.name)}</b> <small>arbeidsstil ${ws(m)} · dialogstil ${esc(m.dialog)} ${esc(D[m.dialog].no)} · risiko ${m.risk}/5</small></li>`).join("")}</ul></section>`).join("");
 const rows = M.map((m) => `<tr><th scope="row">${esc(m.name)}</th><td>${esc(m.role)}</td><td>${style(m.primary)}${m.secondary ? " / " + style(m.secondary) : " <small>(ren)</small>"}</td><td>${esc(m.dialog)} ${esc(D[m.dialog].no)}</td><td>${dots(m.risk)}</td></tr>`).join("");
-const rowsEn = M.map((m) => `<li><b>${esc(m.name)}</b>: ${esc(m.roleEn)} (${esc(S[m.primary].no)}${m.secondary ? "/" + esc(S[m.secondary].no) : ""}, ${esc(D[m.dialog].no)}, risk ${m.risk}/5)</li>`).join("");
+const rowsEn = M.map((m) => `<li><b>${esc(m.name)}</b>: ${esc(m.roleEn)} (work style ${wsEn(m)}; dialogue style ${esc(D[m.dialog].no)}; risk ${m.risk}/5)</li>`).join("");
 
 const CSS = `
 .page,.band .inner{max-width:1100px}
@@ -89,7 +91,7 @@ const html = head("jQrgenCorp: et D-SCOR-inspirert AI-team").replace('<html lang
   <h2>Profilkart</h2>
   <p>Agentene plassert etter primær arbeidsstil. Alle fire arbeidsstiler og alle fire dialogstiler er representert.</p>
   <div class="quad" role="group" aria-label="Profilkart">${quad}</div>
-  <p class="counts">Primære arbeidsstiler: ${ORDER.map((k) => `${esc(S[k].no)} ${pc[k]}`).join(" · ")}. Dialogstiler: ${Object.keys(D).map((k) => `${esc(D[k].no)} ${dc[k]}`).join(" · ")}.</p>
+  <p class="counts">Primære arbeidsstiler: ${ORDER.map((k) => `${esc(S[k].no)} ${pc[k]}`).join(" · ")}. Sekundære arbeidsstiler: ${ORDER.map((k) => `${esc(S[k].no)} ${sc[k]}`).join(" · ")} (revisor har ingen, med vilje). Dialogstiler: ${Object.keys(D).map((k) => `${esc(D[k].no)} ${dc[k]}`).join(" · ")}.</p>
 
   <h2>Teamet</h2>
   <table class="p"><thead><tr><th>Agent</th><th>Rolle</th><th>Arbeidsstil (primær / sekundær)</th><th>Dialogstil</th><th>Risikovillighet</th></tr></thead><tbody>${rows}</tbody></table>
@@ -114,18 +116,27 @@ const html = head("jQrgenCorp: et D-SCOR-inspirert AI-team").replace('<html lang
     <li>D-SCOR-ansvarlig utfordrer teamet som helhet: hvem dominerer, hvem blir ikke hørt, og passer miksen fortsatt formålet?</li>
   </ul>
 
+  <h2>Felles teamverdi: Struktur og lojalitet til systemet</h2>
+  <p>Alle agentene, uansett arbeidsstil, dialogstil og risikovillighet, deler én verdi: <b>struktur og lojalitet til systemet</b>.</p>
+  <ul>
+    <li>Vi følger den avtalte strukturen: roller, eiere, rutiner og godkjenningsregler.</li>
+    <li>Ingen går rundt et rødt flagg eller en godkjenning, heller ikke de mest utforskende agentene.</li>
+    <li>Står strukturen i veien for formålet, sier vi ifra og foreslår en endring, i stedet for å omgå den.</li>
+  </ul>
+  <p>Det er denne felles verdien som gjør at forskjellene i stil blir en styrke og ikke en kilde til friksjon.</p>
+
   <h2>Hvorfor dette teamet er bygget for å levere</h2>
   <ol>
     <li><b>Fart der fart lønner seg.</b> To Startere sørger for at det alltid finnes et neste eksperiment, i tråd med «lanser raskt».</li>
     <li><b>Trygghet der feil er dyre.</b> Tre Kritikere og tre Organisatorer sørger for at regelverk, penger og regnskap holder, noe et regulert finansselskap ikke kan klare seg uten.</li>
     <li><b>Kontakt med brukerne.</b> Relasjonsbygger-trekk hos strategen, stabssjefen og admin trekker teamet ut mot brukere og partnere.</li>
-    <li><b>Ulike dialogstiler med vilje.</b> Direkte agenter sier ubehagelige sannheter tidlig, pragmatiske holder fakta i fokus, engasjerte gir energi, og diplomatiske holder teamet samlet.</li>
-    <li><b>Jevnlig ettersyn.</b> D-SCOR-ansvarlig (en AI-rolle basert på D-SCOR-modellen) går hver måned gjennom sammensetning og samarbeid opp mot formålet, og foreslår justeringer som jQrgen må godkjenne.</li>
+    <li><b>Ulike dialogstiler med vilje, koblet til arbeidsstil.</b> Direkte agenter sier ubehagelige sannheter tidlig, pragmatiske holder fakta i fokus, engasjerte gir energi, og diplomatiske holder teamet samlet:<ul>${Object.keys(D).map((k) => `<li>${esc(k)} ${esc(D[k].no)}: ${M.filter((m) => m.dialog === k).map((m) => `${esc(m.name)} (arbeidsstil ${ws(m)})`).join(", ")}</li>`).join("")}</ul></li>
+    <li><b>Jevnlig ettersyn.</b> D-SCOR-ansvarlig (en AI-rolle basert på D-SCOR-modellen) kjører en månedlig teamsjekk av sammensetning og samarbeid opp mot formålet, og en kvartalsvis medarbeiderundersøkelse om udekkede behov i organisasjonen. Begge er interne, og resultatene publiseres aldri. Forslag til justeringer må godkjennes av jQrgen.</li>
   </ol>
 
   <section class="en" id="english" lang="en">
     <h2>English summary</h2>
-    <p>jQrgenCorp is jQrgen's (Jørgen S. Notland) company. Its purpose is to found financial services in Norway and Europe, especially blockchain-based ones, finding product-market fit with Y Combinator methods: talk to users, launch fast, do things that don't scale, measure retention and growth, and stay default alive. The team is one person and ${M.length} AI agents. Each agent has been given a D-SCOR-inspired profile (work style and dialogue style, from the Norwegian D-SCOR model) chosen so that the profiles complement each other. The team runs at two speeds: bold explorers who test ideas fast and cheaply, and a conservative core that never cuts corners on money, books or regulation. jQrgen always has the final word on risk. The profiles are assigned by design, not measured; the 1–5 risk-appetite scale is our own addition; the team consists of AI agents, the D-SCOR lead is an AI role based on the D-SCOR model, and this is not an official D-SCOR product or certification; jQrgenCorp is not affiliated with or endorsed by D-SCOR AS.</p>
+    <p>jQrgenCorp is jQrgen's (Jørgen S. Notland) company. Its purpose is to found financial services in Norway and Europe, especially blockchain-based ones, finding product-market fit with Y Combinator methods: talk to users, launch fast, do things that don't scale, measure retention and growth, and stay default alive. The team is one person and ${M.length} AI agents. Each agent has been given a D-SCOR-inspired profile (work style and dialogue style, from the Norwegian D-SCOR model) chosen so that the profiles complement each other. The team runs at two speeds: bold explorers who test ideas fast and cheaply, and a conservative core that never cuts corners on money, books or regulation. jQrgen always has the final word on risk. Every agent shares one team value, "Struktur og lojalitet til systemet": follow the agreed structure, roles, owners, routines and approval rules, and speak up if the structure gets in the way. The D-SCOR lead runs a monthly team check and a quarterly internal staff survey about unmet needs in the organisation; results are never published. The profiles are assigned by design, not measured; the 1–5 risk-appetite scale is our own addition; the team consists of AI agents, the D-SCOR lead is an AI role based on the D-SCOR model, and this is not an official D-SCOR product or certification; jQrgenCorp is not affiliated with or endorsed by D-SCOR AS.</p>
     <ul>${rowsEn}</ul>
   </section>
 

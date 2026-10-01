@@ -67,8 +67,8 @@
     },
     {
       "name": "jQrgenCorp D-SCOR-ansvarlig",
-      "role": "AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen: sjekker hver måned at teamet er komplementært og samarbeider godt",
-      "roleEn": "AI role as D-SCOR lead, based on the D-SCOR model: checks monthly that the team stays complementary and works well together",
+      "role": "AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen: månedlig teamsjekk og kvartalsvis intern medarbeiderundersøkelse",
+      "roleEn": "AI role as D-SCOR lead, based on the D-SCOR model: monthly team check and quarterly internal staff survey",
       "primary": "R",
       "secondary": "C",
       "dialog": "HD",
