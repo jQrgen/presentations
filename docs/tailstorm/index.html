@@ -175,12 +175,12 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 </dl></details>
 <div class="stale" id="stale">Data is stale.</div>
 <div class="cards">
-  <div class="card"><div class="k">Summary height</div><div class="v gold" id="c-h">–</div></div>
-  <div class="card"><div class="k">Subblocks this round</div><div class="v" id="c-dag">–</div><div class="bar"><i id="c-bar"></i></div></div>
+  <div class="card"><div class="k">Summary</div><div class="v gold" id="c-h">–</div></div>
+  <div class="card"><div class="k">Subblocks</div><div class="v" id="c-dag">–</div><div class="bar"><i id="c-bar"></i></div></div>
   <div class="card"><div class="k">Last update</div><div class="v" id="c-age">–</div></div>
-  <div class="card"><div class="k">Tailstorm active</div><div class="v" id="c-act">–</div></div>
+  <div class="card"><div class="k">Tailstorm</div><div class="v" id="c-act">–</div></div>
   <div class="card"><div class="k">Miner rate</div><div class="v" id="c-rate">–</div></div>
-  <div class="card"><div class="k">Branching (current DAG)</div><div class="v" id="c-br">–</div></div>
+  <div class="card"><div class="k">Branching</div><div class="v" id="c-br">–</div></div>
   <div class="card"><div class="k">DAG tip</div><div class="v" id="c-tipv" style="font-size:15px;margin-top:8px"><code id="c-tip">–</code></div></div>
 </div>
 <section id="sec-cur">
@@ -196,12 +196,12 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 </section>
 <details class="note" id="faq"><summary><b>Questions visitors ask</b></summary>
 <dl>
-<dt>What is a summary block?</dt><dd data-k="About 1/k of the round's reward, a bit more when the round branches.">The regular block of the chain, about every 2 minutes. It closes a round by committing to the subblocks found since the previous one, and its height is the chain height. It receives about 1/k of the round&#39;s reward, a bit more when the round branches. In Nexa it is the last piece of work of the round, found at the same difficulty as a subblock.</dd>
-<dt>What is an uncle?</dt><dd data-k="Late block; its score is 4 points below a perfectly linked subblock.">A valid subblock that arrived after its round was already full. Instead of being thrown away, the next summary block includes it; its score is 4 points below a perfectly linked subblock. &ldquo;Uncle&rdquo; is Nexa&#39;s word, not the paper&#39;s.</dd>
-<dt>Does Tailstorm increase TPS?</dt><dd data-k="Fast confirmations and fair mining, not mainly TPS.">That is not its main goal. The goal is fast, reliable confirmations and fair mining: a payment shows up in a subblock within seconds, and full settlement still comes with the next summary blocks. Capacity is still set by the block size limit.</dd>
-<dt>Can subblocks be reorganised?</dt><dd data-k="Parallel blocks merge; late ones become uncles.">Rarely, and cheaply. Parallel subblocks are merged, not discarded. Until the summary block arrives, which subblocks it includes can still change (a late one becomes an uncle), so wait for a summary block for large payments. After that, undoing them means a normal blockchain reorg.</dd>
-<dt>Does one miner mine the summary block on top of the subblocks?</dt><dd data-k="No extra job; the next piece becomes summary.">No extra big job. Whoever finds the next piece of work once the round is full (119 subblocks in this demo) turns it into the summary block. In the paper the summary needs no proof of work at all: anyone holding k subblocks assembles it.</dd>
-<dt>Why mine subblocks?</dt><dd data-k="Subblocks share reward; smaller miners earn steadily.">That is how miners get paid: each summary block splits the reward and fees among the miners of the subblocks it includes. Smaller miners earn steadily, and well-linked subblocks earn more, so hiding blocks to cheat costs the cheater.</dd>
+<dt>What is a summary block?</dt><dd data-k="Closes round; ties subblocks; miner gets about 1/k of reward, a bit more when branching.">The regular block of the chain, about every 2 minutes. It closes a round by committing to the subblocks found since the previous one, and its height is the chain height. It receives about 1/k of the round&#39;s reward, a bit more when the round branches. In Nexa it is the last piece of work of the round, found at the same difficulty as a subblock.</dd>
+<dt>What is an uncle?</dt><dd data-k="A late subblock included by the next summary; its score is 4 points below a perfectly linked subblock.">A valid subblock that arrived after its round was already full. Instead of being thrown away, the next summary block includes it; its score is 4 points below a perfectly linked subblock. &ldquo;Uncle&rdquo; is Nexa&#39;s word, not the paper&#39;s.</dd>
+<dt>Does Tailstorm increase TPS?</dt><dd data-k="Not mainly TPS: Tailstorm targets fast, reliable confirmations and fair mining.">That is not its main goal. The goal is fast, reliable confirmations and fair mining: a payment shows up in a subblock within seconds, and full settlement still comes with the next summary blocks. Capacity is still set by the block size limit.</dd>
+<dt>Can subblocks be reorganised?</dt><dd data-k="Parallel blocks merge; late blocks become uncles. Before a summary, inclusion can still change.">Rarely, and cheaply. Parallel subblocks are merged, not discarded. Until the summary block arrives, which subblocks it includes can still change (a late one becomes an uncle), so wait for a summary block for large payments. After that, undoing them means a normal blockchain reorg.</dd>
+<dt>Does one miner mine the summary block on top of the subblocks?</dt><dd data-k="No extra puzzle: in Nexa, the next piece becomes the summary block; the paper lets nodes assemble it.">No extra big job. Whoever finds the next piece of work once the round is full (119 subblocks in this demo) turns it into the summary block. In the paper the summary needs no proof of work at all: anyone holding k subblocks assembles it.</dd>
+<dt>Why mine subblocks?</dt><dd data-k="Subblocks share the reward; smaller miners earn steadily, and branching makes withholding less profitable.">That is how miners get paid: each summary block splits the reward and fees among the miners of the subblocks it includes. Smaller miners earn steadily, and well-linked subblocks earn more, so hiding blocks to cheat costs the cheater.</dd>
 </dl></details>
 <section class="note" id="changelog"><b>Changelog</b> <span style="color:#8a93a6;font-size:13px">(newest first, Oslo time)</span>
 <ol>
