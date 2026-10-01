@@ -53,7 +53,18 @@
         "Nexa lead devs",
         "Nexa research"
       ],
-      "contributions": []
+      "contributions": [
+        {
+          "title": "Tailstorm explainer article on Medium (technical review and edits)",
+          "url": "https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9",
+          "date": "2026-10-01"
+        },
+        {
+          "title": "Tailstorm explainer thread on X (technical review)",
+          "url": "https://x.com/jQrgensn/status/2105689136757604437",
+          "date": "2026-10-01"
+        }
+      ]
     },
     {
       "name": "Nexa community manager",
@@ -76,7 +87,18 @@
         "Nexa security",
         "Nexa research"
       ],
-      "contributions": []
+      "contributions": [
+        {
+          "title": "Tailstorm explainer article on Medium (k-value fact check)",
+          "url": "https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9",
+          "date": "2026-10-01"
+        },
+        {
+          "title": "Tailstorm explainer thread on X (k-value fact check)",
+          "url": "https://x.com/jQrgensn/status/2105689136757604437",
+          "date": "2026-10-01"
+        }
+      ]
     },
     {
       "name": "Nexa designer",
