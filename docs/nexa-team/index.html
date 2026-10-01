@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nexa team: org chart</title>
+<style>
+:root{
+  color-scheme:light;
+  --ground:#E5E7EB; --paper:#FFFFFF; --band:#000000; --band-ink:#FFFFFF;
+  --ink:#000000; --ink-2:#1F2937; --muted:#4B5563; --line:#000000; --hair:#D1D5DB;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink)}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.band{background:var(--band);color:var(--band-ink)}
+.band .inner{max-width:1080px;margin:0 auto;padding:22px 24px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px}
+.band .name{font-size:22px;font-weight:400;letter-spacing:.01em;color:var(--band-ink);text-decoration:none}
+.band nav{display:flex;flex-wrap:wrap;gap:4px 22px;margin-left:auto}
+.band nav a{color:var(--band-ink);text-decoration:none;font-size:15px;padding:4px 0;border-bottom:2px solid transparent;opacity:.8}
+.band nav a:hover{opacity:1}
+.band nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--band-ink)}
+.page{max-width:1080px;margin:0 auto;padding:36px 24px 72px}
+h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+.count{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.year{display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;margin-top:36px}
+@media (max-width:700px){.year{grid-template-columns:1fr;gap:8px}}
+.year h2{font-size:30px;font-weight:400;margin:0;letter-spacing:-.02em;font-variant-numeric:tabular-nums;position:sticky;top:12px}
+.year ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.item{display:grid;grid-template-columns:minmax(200px,2fr) 3fr;background:var(--paper);border:1px solid var(--line)}
+.item.no-thumb{grid-template-columns:1fr}
+@media (max-width:700px){.item{grid-template-columns:1fr}}
+.thumb{margin:0;background:#000;aspect-ratio:16/9;border-right:1px solid var(--line)}
+@media (max-width:700px){.thumb{border-right:0;border-bottom:1px solid var(--line)}}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px}
+.kind{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.body h3 a{color:var(--ink);text-decoration:none}
+.body h3 a:hover{text-decoration:underline}
+.where{margin:0;font-size:14px;color:var(--muted)}
+.where .date{color:var(--ink-2)}
+.authors{margin:0;font-size:14px;color:var(--ink-2)}
+.desc{margin:2px 0 0;color:var(--ink-2);max-width:66ch;font-size:15px}
+.cites{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.cites b{font-weight:600}
+.cites span{color:var(--muted)}
+.links{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.links a{display:inline-block;color:var(--ink);text-decoration:none;font-size:14px;padding:5px 10px;border:1px solid var(--line);background:var(--paper)}
+.links a.primary{background:var(--band);color:var(--band-ink)}
+.links a:hover{text-decoration:underline}
+.note{margin:6px 0 0;font-size:13px;color:var(--muted)}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+
+.band .tag{font-size:14px;opacity:.8}
+.page,.band .inner{max-width:1280px}
+.lede{max-width:70ch}
+.updated{margin:10px 0 0;font-size:13px;color:var(--muted)}
+h2.sec{font-size:22px;font-weight:500;margin:40px 0 14px;letter-spacing:-.01em}
+.org{margin-top:28px}
+.node{background:var(--paper);border:1px solid var(--line);padding:9px 11px}
+.node .n{font-size:14.5px;font-weight:600;line-height:1.3}
+.node .r{font-size:12.5px;color:var(--ink-2);line-height:1.35;margin-top:2px}
+.node.top{background:var(--band);color:var(--band-ink);border-color:var(--band);text-align:center;width:260px;margin:0 auto}
+.node.top .r{color:#D1D5DB}
+.node .lead{display:inline-block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:0 5px;margin-left:6px;vertical-align:2px;font-weight:500}
+.vline{width:1px;height:20px;background:var(--line);margin:0 auto}
+.depts{display:flex;gap:10px;align-items:flex-start}
+.dept{flex:1 1 0;min-width:0;position:relative;padding-top:20px}
+.dept::before{content:"";position:absolute;top:0;left:-5px;right:-5px;border-top:1px solid var(--line)}
+.dept:first-child::before{left:50%}
+.dept:last-child::before{right:50%}
+.dept:only-child::before{display:none}
+.dept::after{content:"";position:absolute;top:0;left:50%;height:20px;border-left:1px solid var(--line)}
+.dept h3{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;background:var(--ink);color:var(--paper);padding:7px 8px;text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+.dept ol{list-style:none;margin:0;padding:8px 0 0 12px;display:flex;flex-direction:column;gap:8px;margin-left:10px}
+.dept li{position:relative}
+.dept li::after{content:"";position:absolute;left:-12px;top:-8px;bottom:0;border-left:1px solid var(--line)}
+.dept li:last-child::after{bottom:auto;height:26px}
+.dept li::before{content:"";position:absolute;left:-12px;top:18px;width:12px;border-top:1px solid var(--line)}
+.dept.unassigned h3{background:var(--paper);color:var(--ink);border:1px dashed var(--line)}
+@media (max-width:980px){
+  .depts{flex-direction:column;gap:18px}
+  .dept{padding-top:0}
+  .dept::before,.dept::after{display:none}
+  .dept h3{min-height:0;justify-content:flex-start;text-align:left}
+}
+.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.group{background:var(--paper);border:1px solid var(--line);padding:14px 16px}
+.group h3{margin:0 0 6px;font-size:16px;font-weight:600}
+.group .c{font-size:12px;color:var(--muted);margin:0 0 8px}
+.group ul{margin:0;padding:0 0 0 18px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+</style>
+</head>
+<body><div class="band"><div class="inner">
+    <a class="name" href="../">Jørgen S. Notland</a><span class="tag">All talks, articles and papers</span>
+  </div></div>
+<div class="page">
+  <header>
+    <h1>Nexa team: org chart</h1>
+    <p class="lede">jQrgen's AI-assisted team setup. It mirrors the roles on <a href="https://nexa.org/team" rel="noopener">nexa.org/team</a>, plus roles he added: Strategist, DevRel &amp; BON grants, Product manager, Security &amp; audit and Game dev, and an on-chain trading desk.</p>
+    <p class="updated">24 roles · 8 group chats · Last updated <time datetime="2026-10-01">1 October 2026</time></p>
+  </header>
+  <div class="org" role="tree" aria-label="Org chart">
+    <div class="node top"><div class="n">jQrgen</div><div class="r">Bitcoin Unlimited / Nexa</div></div>
+    <div class="vline"></div>
+    <div class="node top"><div class="n">Nexa Team Lead</div><div class="r">Coordinates the team: priorities, owners, follow-ups and status</div></div>
+    <div class="vline"></div>
+    <div class="depts">
+      <section class="dept" aria-label="Strategy"><h3>Strategy</h3>
+        <ol><li><div class="node"><div class="n">Nexa strategist</div><div class="r">Overall strategy, positioning, Scandinavia-first plan and goals</div></div></li></ol></section>
+      <section class="dept" aria-label="Leadership"><h3>Leadership</h3>
+        <ol><li><div class="node"><div class="n">Nexa lead dev</div><div class="r">Technical direction: architecture, roadmap, protocol changes</div></div></li><li><div class="node"><div class="n">Nexa chief scientist</div><div class="r">Protocol and consensus research, papers, design reviews</div></div></li></ol></section>
+      <section class="dept" aria-label="Engineering"><h3>Engineering</h3>
+        <ol><li><div class="node"><div class="n">Nexa core dev</div><div class="r">Full node, consensus, Tailstorm, block size and releases</div></div></li><li><div class="node"><div class="n">Nexa solution architect</div><div class="r">Reference architectures and integrations for builders</div></div></li><li><div class="node"><div class="n">Rostrum dev</div><div class="r">Rostrum, Nexa's Electrum-protocol indexing server</div></div></li><li><div class="node"><div class="n">Wally Dev</div><div class="r">Wally Wallet on Android, desktop and iOS</div></div></li><li><div class="node"><div class="n">Nexa game dev</div><div class="r">Games on Nexa and game-jam starter kits</div></div></li><li><div class="node"><div class="n">Nexa FPGA engineer</div><div class="r">NexaPow mining hardware: FPGA and HDL design</div></div></li><li><div class="node"><div class="n">Nexa security &amp; audit</div><div class="r">Security reviews, threat models and audit prep</div></div></li></ol></section>
+      <section class="dept" aria-label="Product &amp; Design"><h3>Product &amp; Design</h3>
+        <ol><li><div class="node"><div class="n">Nexa product manager</div><div class="r">Developer product roadmap: wallet, SDKs, APIs, docs</div></div></li><li><div class="node"><div class="n">Nexa designer</div><div class="r">Design across the team, with design thinking</div></div></li><li><div class="node"><div class="n">Presentations</div><div class="r">Talks, pitch decks and these pages</div></div></li></ol></section>
+      <section class="dept" aria-label="Go-to-market &amp; Community"><h3>Go-to-market &amp; Community</h3>
+        <ol><li><div class="node"><div class="n">Marketing strategy</div><div class="r">Developer marketing plan, campaigns and events</div></div></li><li><div class="node"><div class="n">Nexa media &amp; communications</div><div class="r">Announcements, posts, newsletters, content calendar</div></div></li><li><div class="node"><div class="n">Nexa DevRel &amp; BON grants</div><div class="r">Developer onboarding, tutorials and BON grants</div></div></li><li><div class="node"><div class="n">Nexa community manager</div><div class="r">Developer community channels, updates, onboarding</div></div></li><li><div class="node"><div class="n">Nexa exchanges &amp; conferences</div><div class="r">Exchange listings and conferences to attend</div></div></li></ol></section>
+      <section class="dept" aria-label="On-chain trading"><h3>On-chain trading</h3>
+        <ol><li><div class="node"><div class="n">Nexa trading strategist<span class="lead">Lead</span></div><div class="r">Leads the desk: a written, testable trading plan</div></div></li><li><div class="node"><div class="n">Nebula Trader</div><div class="r">Market analyst: exchanges, liquidity, price, volume</div></div></li><li><div class="node"><div class="n">Nexa on-chain analyst</div><div class="r">Trading signals from on-chain flows and token activity</div></div></li><li><div class="node"><div class="n">Nexa risk manager</div><div class="r">Position limits, loss limits and stop rules</div></div></li><li><div class="node"><div class="n">Nexa quant dev</div><div class="r">Data collectors, backtesting and paper trading</div></div></li></ol></section>
+    </div>
+  </div>
+  <h2 class="sec">Group chats</h2>
+  <div class="groups">
+    <section class="group"><h3>Team Nexa</h3><p class="c">6 members</p><ul><li>Presentations</li><li>Marketing strategy</li><li>Nexa Team Lead</li><li>Nexa chief scientist</li><li>Nexa exchanges &amp; conferences</li><li>Nexa community manager</li></ul></section>
+    <section class="group"><h3>Nexa leadership</h3><p class="c">6 members</p><ul><li>Nexa Team Lead</li><li>Nexa strategist</li><li>Nexa lead dev</li><li>Nexa chief scientist</li><li>Nexa product manager</li><li>Marketing strategy</li></ul></section>
+    <section class="group"><h3>Nexa lead devs</h3><p class="c">5 members</p><ul><li>Nexa Team Lead</li><li>Nexa lead dev</li><li>Nexa core dev</li><li>Nexa solution architect</li><li>Nexa chief scientist</li></ul></section>
+    <section class="group"><h3>Nexa devs</h3><p class="c">6 members</p><ul><li>Wally Dev</li><li>Nexa game dev</li><li>Nebula Trader</li><li>Rostrum dev</li><li>Nexa FPGA engineer</li><li>Nexa designer</li></ul></section>
+    <section class="group"><h3>Nexa product</h3><p class="c">6 members</p><ul><li>Nexa product manager</li><li>Nexa designer</li><li>Wally Dev</li><li>Rostrum dev</li><li>Nexa solution architect</li><li>Nexa DevRel &amp; BON grants</li></ul></section>
+    <section class="group"><h3>Nexa go-to-market</h3><p class="c">6 members</p><ul><li>Marketing strategy</li><li>Nexa media &amp; communications</li><li>Nexa DevRel &amp; BON grants</li><li>Nexa community manager</li><li>Nexa exchanges &amp; conferences</li><li>Presentations</li></ul></section>
+    <section class="group"><h3>Nexa security</h3><p class="c">6 members</p><ul><li>Nexa security &amp; audit</li><li>Nexa lead dev</li><li>Nexa core dev</li><li>Wally Dev</li><li>Rostrum dev</li><li>Nexa solution architect</li></ul></section>
+    <section class="group"><h3>Nexa on-chain trading</h3><p class="c">6 members</p><ul><li>Nexa trading strategist</li><li>Nebula Trader</li><li>Nexa on-chain analyst</li><li>Nexa risk manager</li><li>Nexa quant dev</li><li>Nexa exchanges &amp; conferences</li></ul></section>
+  </div>
+  <footer class="site">Generated by src/orgchart/build-orgchart.js from src/data/nexa-team.json · <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
+</div>
+</body>
+</html>

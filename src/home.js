@@ -57,6 +57,7 @@ const card = (t) => {
 const html = head("Jørgen S. Notland").replace("</style>", EXTRA + "</style>") + `<div class="band"><div class="inner">
     <a class="name" href="./">Jørgen S. Notland</a>
     <span class="tag">Talks, articles and papers</span>
+    <nav aria-label="Pages"><a href="nexa-team/">Nexa team</a></nav>
   </div></div>
 <div class="page">
   <header>
