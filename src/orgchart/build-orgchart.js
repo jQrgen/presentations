@@ -21,8 +21,14 @@ const CONTRIB = path.join(SRC, "data", "nexa-contributions.json"); // hand-maint
 
 // ---- who is not part of the Nexa team (private / generic bots and their group)
 const EXCLUDE_IDS = new Set(["680befcc-f236-40de-a77d-7f0930ecb7d0", "207cf11b-c754-45d8-b61a-404d9cb352f2"]);
-const EXCLUDE_NAMES = new Set(["Grok Bot", "Personal trainer", "Nutritionist", "Padel coach", "Kenyan run coach", "Personal health team"]);
-const isNexa = (p) => /\bnexa\b/i.test(`${p.name} ${p.description || ""}`);
+// Privacy: an ALLOWLIST decides who is published; this denylist is a second safety net on top of it.
+const EXCLUDE_NAMES = new Set(["Grok Bot", "Personal trainer", "Nutritionist", "Padel coach", "Kenyan run coach",
+  "Fastlege", "Gastrolege", "Lege", "Personal health team"].map((n) => n.toLowerCase()));
+const EXCLUDE_PREFIXES = ["jqrgencorp"]; // jQrgen's personal company team (agents and group)
+const denied = (name) => { const n = String(name || "").trim().toLowerCase(); return EXCLUDE_NAMES.has(n) || EXCLUDE_PREFIXES.some((x) => n.startsWith(x)); };
+// Allowlist: a group is a Nexa group if its name contains "Nexa"; an agent is published only if it is a named
+// org-chart role, or its NAME contains "Nexa", or it is a member of a Nexa group. Descriptions are never used.
+const nexaName = (name) => /nexa/i.test(String(name || ""));
 
 // ---- departments (report to jQrgen via Nexa Team Lead). Unknown Nexa agents land in Unassigned.
 const TOP = ["jQrgen", "Nexa Team Lead"];
@@ -90,14 +96,18 @@ const contributions = (name) => [...(CONTRIBS[name] || [])].sort((a, b) => b.dat
 function snapshot() {
   const dirs = fs.readdirSync(AGENTS).filter((d) => fs.existsSync(path.join(AGENTS, d, "profile.json")));
   const agents = {}, groups = [];
+  const all = {};
   for (const d of dirs) {
     if (EXCLUDE_IDS.has(d)) continue;
     const p = JSON.parse(fs.readFileSync(path.join(AGENTS, d, "profile.json"), "utf8"));
-    if (EXCLUDE_NAMES.has(p.name)) continue;
+    if (denied(p.name)) continue;
     const g = path.join(AGENTS, d, "group.json");
-    if (fs.existsSync(g)) groups.push({ name: p.name, ids: JSON.parse(fs.readFileSync(g, "utf8")).memberIds || [] });
-    else if (isNexa(p)) agents[d] = p;
+    if (fs.existsSync(g)) { if (nexaName(p.name)) groups.push({ name: p.name, ids: JSON.parse(fs.readFileSync(g, "utf8")).memberIds || [] }); }
+    else all[d] = p;
   }
+  const inNexaGroup = new Set(groups.flatMap((g) => g.ids));
+  const named = new Set(["Nexa Team Lead", ...DEPARTMENTS.flatMap(([, n]) => n)]);
+  for (const [d, p] of Object.entries(all)) if (named.has(p.name) || nexaName(p.name) || inNexaGroup.has(d)) agents[d] = p;
   const deptOf = {}; DEPARTMENTS.forEach(([dep, names]) => names.forEach((n) => (deptOf[n] = dep)));
   const gl = groups.map((g) => ({ name: g.name, members: g.ids.filter((id) => agents[id]).map((id) => agents[id].name) }))
     .filter((g) => g.members.length)
