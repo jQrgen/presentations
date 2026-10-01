@@ -87,7 +87,7 @@
       "members": [
         {
           "id": "c63239ab-d6f9-41e1-b7f9-145c6e8722c9",
-          "name": "Nexa trading strategist"
+          "name": "Trading strategist"
         },
         {
           "id": "cdebf3c8-a41e-44ad-885c-9a927bb8fa22",
@@ -95,15 +95,15 @@
         },
         {
           "id": "392bcfe4-ea15-4f84-ab39-4d76a8cadd93",
-          "name": "Nexa on-chain analyst"
+          "name": "On-chain analyst"
         },
         {
           "id": "7178889a-2ed9-482b-8d16-4f4a939325c5",
-          "name": "Nexa risk manager"
+          "name": "Risk manager"
         },
         {
           "id": "7208d9c1-eb70-4b34-806a-89ba02ad8e3f",
-          "name": "Nexa quant dev"
+          "name": "Quant dev"
         }
       ]
     },
