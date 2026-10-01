@@ -15,7 +15,7 @@ a{color:var(--gold2)}
 header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 h1{margin:0;font-size:26px;font-weight:700;letter-spacing:.2px}
 h1 .g{color:var(--gold)}
-.tag{font-size:12px;color:var(--gold);border:1px solid var(--golddim);padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.08em}
+.tag{font-size:12px;color:var(--gold);border:0;background:#e0b3411a;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.08em}
 .note{margin:14px 0 16px;padding:10px 14px;border-left:3px solid var(--gold);background:var(--panel);color:#cfcabd;border-radius:0 8px 8px 0;font-size:14px}
 .note a{color:var(--gold)}
 .terms{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:10px 0 2px}.terms dt{color:var(--gold);font-weight:600}.terms dd{margin:0}#terms summary{cursor:pointer}
@@ -42,13 +42,14 @@ svg{display:block;width:100%;height:auto}
 .grp .hd b{color:var(--gold);font-size:14px}
 footer{color:var(--muted);font-size:12.5px;margin-top:18px}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:#cfd6e0}
-@keyframes pop{0%{transform:scale(.2);opacity:0}70%{transform:scale(1.25);opacity:1}100%{transform:scale(1)}}
-.new{animation:pop .7s ease-out;transform-box:fill-box;transform-origin:center}
+@keyframes pop{0%{transform:scale(.2);opacity:0}70%{transform:scale(1.6);opacity:1}100%{transform:scale(1)}}
+@keyframes strokeFlash{0%,70%{stroke:#fff3cf}100%{stroke:inherit}}
+.new{animation:pop 1.2s ease-out;transform-box:fill-box;transform-origin:center}.new circle{animation:strokeFlash .6s ease-out}
 @keyframes pulse{0%,100%{opacity:.35}50%{opacity:.9}}
 .pulse{animation:pulse 1.6s infinite}
 #sbinfo{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(560px,calc(100% - 24px));background:#151a24;border:1px solid #b8952f;border-radius:12px;padding:14px 16px;color:#dfe6ee;font-size:14px;line-height:1.5;z-index:50;box-shadow:0 8px 30px #0009;display:none}
 #sbinfo b{color:#f0c75e}#sbinfo code{font-size:12.5px;word-break:break-all}#sbinfo .x{position:absolute;right:10px;top:6px;background:none;border:0;color:#aab;font-size:20px;cursor:pointer}
-svg g.sb{cursor:pointer}svg g.sel circle{stroke:#fff3cf!important;stroke-width:3!important}
+svg g.sb{cursor:pointer}svg g.sb:hover circle{stroke:#fff!important;stroke-width:2.5!important}svg g.sel circle{stroke:#fff!important;stroke-width:3!important;stroke-dasharray:2 2}svg g.summary{cursor:help}
 #changelog ol{list-style:none;margin:10px 0 0;padding:0 0 0 18px;border-left:2px solid #b8952f55}
 #changelog li{position:relative;margin:0 0 12px}#changelog li:before{content:"";position:absolute;left:-25px;top:6px;width:10px;height:10px;border-radius:50%;background:#b8952f}
 #changelog li:first-child:before{background:#fff3cf;box-shadow:0 0 8px #f0c75e}#changelog time{display:block;color:#8a93a6;font-size:12.5px}
@@ -62,7 +63,7 @@ html.kiosk{scrollbar-width:none;--muted:#b4bac6}
 html.kiosk::-webkit-scrollbar,html.kiosk body::-webkit-scrollbar{display:none}
 html.kiosk,html.kiosk body{height:100%;overflow:hidden;font-size:clamp(14px,calc(1.25vh + .4vw),46px)}
 html.kiosk .wrap{max-width:none;height:100vh;height:100dvh;margin:0;padding:1.6vh 1.4vw;display:grid;grid-template-rows:auto auto minmax(0,1.3fr) minmax(0,1fr);gap:1.3vh}
-html.kiosk .note,html.kiosk .whatsnew,html.kiosk footer,html.kiosk .hint,html.kiosk #sbinfo,html.kiosk header .fsbtn,html.kiosk .lx,html.kiosk .rd{display:none!important}
+html.kiosk .note,html.kiosk .whatsnew,html.kiosk footer,html.kiosk .hint,html.kiosk header .fsbtn,html.kiosk .lx,html.kiosk .rd,html.kiosk .hintLegend{display:none!important}
 html.kiosk header{align-items:center;gap:1vw}
 html.kiosk h1{font-size:2em}
 html.kiosk .tag{font-size:.75em}
@@ -102,14 +103,14 @@ html.kiosk.idle #kbar{opacity:0;pointer-events:none}
 #explain .lg dt{font-weight:700;color:var(--text);display:flex;align-items:center;gap:.5em}
 #explain .lg dd{margin:0 0 0 1.95em;color:#cfcabd;font-size:14px}
 #explain .ico{flex:none;width:1.3em;height:1.3em;display:inline-block;border-radius:50%;font-style:normal;text-align:center;box-sizing:border-box}
-#explain .ico.sum{background:#1d2430;border:.15em solid #cfd6e0;border-radius:.2em}
-#explain .ico.sub{background:#1d2430;border:.15em solid #cfd6e0}
+#explain .ico.sum{background:#e0b341;border:0;border-radius:.2em;box-shadow:0 0 .4em #e0b34199}
+#explain .ico.sub{background:conic-gradient(#4fd1b5 0 25%,#a78bfa 0 50%,#f2896b 0 75%,#62b3f5 0);border:0}
 #explain .ico.unc{border:.13em dashed #ff6b8a;color:#ff6b8a;font-size:.95em;line-height:1.15em;font-weight:800}
 #explain .ico.mrg{background:#1d2430;border:.13em solid #9fb3c8;color:#dfe6ee;font-size:.95em;line-height:1.1em}
 #explain .headline{display:none}
-.minerkey{display:flex;align-items:center;gap:.45em;margin-top:2px;color:var(--muted);font-size:12.5px;flex-wrap:wrap}.minerkey .minerlabel{color:var(--text);font-weight:650}.minerkey .mdot{width:.9em;height:.9em;border-radius:50%;display:inline-block;border:2px solid currentColor}.minerkey .m1{color:#4fd1b5;background:#133a33}.minerkey .m2{color:#a78bfa;background:#2a2346}.minerkey .m3{color:#f2896b;background:#43241c}.minerkey .m4{color:#62b3f5;background:#152e45}.minerkey .tipkey{display:inline-flex;align-items:center;gap:.35em;margin-left:.5em}.minerkey .tipdot{width:.9em;height:.9em;border-radius:50%;background:#fff3cf;box-shadow:0 0 .45em #f5d27a;display:inline-block}
-.faqhead{display:flex;justify-content:space-between;color:var(--gold2);font-size:.86em;font-weight:700;letter-spacing:.02em}.faqprogress{height:2px;background:#303744;margin:.45em 0 .6em;overflow:hidden}.faqprogress i{display:block;height:100%;width:0;background:var(--gold);transition:width .6s}
-html.kiosk #explain .headline{display:block;color:var(--gold2);font-size:clamp(32px,2.9vw,56px);font-weight:800;line-height:1.05;letter-spacing:-.02em}
+.minerkey{display:flex;align-items:center;gap:.45em;margin-top:2px;color:var(--muted);font-size:12.5px;flex-wrap:wrap}.minerkey .minerlabel{color:var(--text);font-weight:650}.minerkey .mdot{width:1.1em;height:1.1em;border-radius:50%;display:inline-block;border:2px solid currentColor}.minerkey .m1{color:#4fd1b5;background:#133a33}.minerkey .m2{color:#a78bfa;background:#2a2346}.minerkey .m3{color:#f2896b;background:#43241c}.minerkey .m4{color:#62b3f5;background:#152e45}.minerkey .tipkey{display:inline-flex;align-items:center;gap:.35em;margin-left:.5em}.minerkey .tipdot{width:.9em;height:.9em;border-radius:50%;background:#fff3cf;box-shadow:0 0 .45em #f5d27a;display:inline-block}
+.faqhead{display:flex;justify-content:space-between;color:var(--gold2);font-size:.86em;font-weight:700;letter-spacing:.02em}.faqprogress{height:4px;background:#303744;margin:.45em 0 .6em;overflow:hidden}.faqprogress i{display:block;height:100%;width:100%;background:#e0b341;transition:width 16s linear}.hintLegend{font-size:13.5px;color:#cfcabd}.mergeSw{border:2px solid #9fb3c8!important;background:#1d2430!important;color:#dfe6ee;font-size:11px;line-height:1;text-align:center;font-style:normal}.uncSw{border:2px dashed #ff6b8a!important;background:transparent!important;color:#ff6b8a;font-size:10px;line-height:1;text-align:center;font-style:normal;font-weight:800}.nextSw{border:2px dashed #e0b341!important;background:transparent!important;border-radius:3px!important}.progressTrack{position:relative;flex:1 1 260px;min-width:220px;height:1.35em;border:1px solid #303744;border-radius:99px;overflow:hidden;color:var(--text);padding:0 .6em;line-height:1.25em}.progressTrack i{position:absolute;inset:0 auto 0 0;background:#e0b34133;width:0}.progressTrack b{position:relative;font-weight:500}#summaryBanner{display:none;position:fixed;top:1.2vh;left:50%;transform:translateX(-50%);z-index:65;background:#f5d27a;color:#1a1405;padding:.5em 1em;border-radius:8px;font-size:1.4em;font-weight:800;box-shadow:0 6px 25px #000b}.summaryFlash{box-shadow:0 0 0 4px #e0b341!important;transition:box-shadow .8s}.summaryPop{animation:summaryPop 1.5s ease-out}@keyframes summaryPop{0%{transform:scale(.96);box-shadow:0 0 0 4px #e0b341}100%{transform:scale(1);box-shadow:none}}.newChip{display:none;color:#5fbf7f;font-size:1.2em;margin-left:.5em;font-weight:700}.newChip.show{display:inline-block;animation:chipFade 2.5s ease-out}@keyframes chipFade{0%,70%{opacity:1}100%{opacity:0}}
+html.kiosk #explain .headline{display:block;color:var(--gold2);font-size:clamp(28px,2.4vw,56px);font-weight:800;line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
 html.kiosk #explain .minerkey{font-size:clamp(16px,1vw,28px);gap:.45em}
 html.kiosk #explain .faqhead{font-size:clamp(16px,1.1vw,30px)}
 html.kiosk #sec-cur h2 .m{display:block;margin-left:0;font-size:.7em;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -122,20 +123,22 @@ html.kiosk header{grid-column:1/-1;grid-row:1}
 html.kiosk .cards{grid-column:1/-1;grid-row:2}
 html.kiosk #sec-cur{grid-column:1;grid-row:3}
 html.kiosk #sec-prev{grid-column:1;grid-row:4}
-html.kiosk #explain{grid-column:2;grid-row:3/5;margin:0;padding:1.4vh 1vw;border-radius:.7em;display:flex;flex-direction:column;gap:.9vh;min-height:0;overflow:hidden}
+html.kiosk #explain{grid-column:2;grid-row:3/5;margin:0;padding:1.4vh 1vw;border-radius:.7em;display:flex;flex-direction:column;gap:.4vh;min-height:0;overflow:hidden}
 html.kiosk #explain h2{font-size:clamp(26px,2.2vw,64px);margin:0}
 html.kiosk #explain .purpose{font-size:clamp(20px,1.72vw,52px);line-height:1.2;margin:0}
-html.kiosk #explain .lg{grid-template-columns:1fr;gap:1vh}
+html.kiosk #explain .lg{grid-template-columns:1fr;gap:.55vh}
 html.kiosk #explain .lg div{display:flex;align-items:baseline;gap:.5em;min-width:0}
 html.kiosk #explain .lg dt{white-space:nowrap}
 html.kiosk #explain .lg dt{font-size:clamp(19px,1.56vw,46px)}
-html.kiosk #explain .lg dd{font-size:clamp(16px,1.25vw,36px);line-height:1.15;white-space:nowrap;margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis}
+html.kiosk #explain .lg dd{font-size:clamp(14px,1.05vw,30px);line-height:1.1;white-space:normal;margin:0;min-width:0;overflow:visible;text-overflow:clip}
 html.kiosk #explain .testnet{display:none;font-size:.88em;margin:0;line-height:1.3}
-html.kiosk #explain .faqrot{display:block;margin-top:1vh;background:#1b202b;border-left:.25em solid var(--gold);border-radius:.4em;padding:1vh 1vw;transition:opacity .6s;min-height:0}
+html.kiosk #sbinfo{bottom:2vh;font-size:1.05em}
+html.kiosk #explain .faqrot{display:block;flex:none;margin-top:1vh;background:#1b202b;border-left:.25em solid var(--gold);border-radius:.4em;padding:1vh 1vw;transition:opacity .6s;min-height:0}
 html.kiosk #explain .faqrot.fade{opacity:0}
 html.kiosk #explain .faqrot .q{color:var(--gold2);font-weight:700;font-size:clamp(19px,1.56vw,46px);line-height:1.15}
-html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);line-height:1.15;margin-top:.3em}
+html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);line-height:1.15;margin-top:.3em;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
 .kclock{display:none;margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:1.1em}
+@media (max-width:1700px){html.kiosk .card .k{font-size:clamp(16px,1.05vw,22px);white-space:normal;overflow:visible;text-overflow:clip;line-height:1.1}html.kiosk #explain{gap:.25vh}html.kiosk #explain .lg dd{font-size:clamp(14px,1vw,18px)}html.kiosk #explain .faqrot{padding:.6vh .8vw}html.kiosk #explain .faqrot .q{font-size:clamp(19px,1.45vw,25px)}html.kiosk #explain .faqrot .a{font-size:clamp(16px,1.15vw,20px)}}
 </style>
 </head>
 <body>
@@ -152,14 +155,14 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 <h2>What you&#39;re watching</h2>
 <p class="purpose"><b>Fast, fair confirmations.</b> One summary closes each round.</p>
 <dl class="lg">
-<div><dt><i class="ico sum"></i>Summary block</dt><dd>Closes rounds.</dd></div>
-<div><dt><i class="ico sub"></i>Subblock</dt><dd>Fast transactions.</dd></div>
-<div><dt><i class="ico mrg">⋈</i>Branch and merge</dt><dd>Merge.</dd></div>
-<div><dt><i class="ico unc">U</i>Uncle (late subblock)</dt><dd>Late.</dd></div>
+<div><dt><i class="ico sum"></i>Summary block</dt><dd>Gold square. Every ~2 min it seals the round.</dd></div>
+<div><dt><i class="ico sub"></i>Subblock</dt><dd>Circle, coloured by miner. ~1 per second.</dd></div>
+<div><dt><i class="ico mrg">⋈</i>Branch and merge</dt><dd>Two found at once, so the next block joins both (⋈).</dd></div>
+<div><dt><i class="ico unc">U</i>Uncle (late subblock)</dt><dd>Arrived late, so paid in the next round (U).</dd></div>
 </dl>
 <div class="minerkey" aria-label="Colour equals miner"><span class="minerlabel">Colour = miner 1–4</span><i class="mdot m1" title="Miner 1"></i><i class="mdot m2" title="Miner 2"></i><i class="mdot m3" title="Miner 3"></i><i class="mdot m4" title="Miner 4"></i><span class="tipkey"><i class="tipdot"></i>DAG tip</span></div>
 <p class="testnet"><b>Private test network, not mainnet:</b> 4 test miners · ~1.2 s simulated delay.</p>
-<div class="faqrot" id="faqrot" aria-live="off"><div class="faqhead">Visitors ask · <span id="faqcount">1/6</span></div><div class="faqprogress"><i id="faqprogress"></i></div><div class="q"></div><div class="a"></div></div>
+<div class="faqrot" id="faqrot" aria-live="off"><div class="faqhead">Visitors ask <span id="faqcount">… 1 / 6</span></div><div class="faqprogress"><i id="faqprogress"></i></div><div class="q"></div><div class="a"></div></div>
 </aside>
 <p class="whatsnew" style="margin:-4px 0 10px;font-size:13px"><a href="#changelog">What&#39;s new on this page</a></p>
 <div class="note" id="paper"><b>The paper:</b> <a href="https://doi.org/10.4230/LIPIcs.AFT.2023.6" target="_blank" rel="noopener">Tailstorm: A Secure and Fair Blockchain for Cash Transactions</a> by Keller, Glickenhaus, Bissias and Griffith, peer-reviewed at AFT 2023 (<a href="https://arxiv.org/abs/2306.12206" target="_blank" rel="noopener">arXiv</a>).</div>
@@ -176,9 +179,10 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 <dt>Stormtest</dt><dd>A private Nexa test network with Tailstorm switched on. It is used only for this demo and isn't mainnet. On mainnet, Tailstorm is implemented but its activation is still pending.</dd>
 </dl></details>
 <div class="stale" id="stale">Data is stale.</div>
+<div id="summaryBanner" role="status" aria-live="polite"></div>
 <div class="cards">
   <div class="card"><div class="k">Summary</div><div class="v gold" id="c-h">–</div></div>
-  <div class="card"><div class="k">Subblocks</div><div class="v" id="c-dag">–</div><div class="bar"><i id="c-bar"></i></div></div>
+  <div class="card"><div class="k">Subblocks <span id="newChip" class="newChip"></span></div><div class="v" id="c-dag">–</div><div class="bar"><i id="c-bar"></i></div></div>
   <div class="card"><div class="k">Last update</div><div class="v" id="c-age">–</div></div>
   <div class="card"><div class="k">Tailstorm</div><div class="v" id="c-act">–</div></div>
   <div class="card"><div class="k">Miner rate</div><div class="v" id="c-rate">–</div></div>
@@ -189,10 +193,9 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
   <h2>This round: subblocks since the last summary block <span class="m" id="cur-m"></span></h2>
   <div class="legend" id="legend"></div>
   <svg id="cur" viewBox="0 0 1200 200"></svg>
-  <p class="hint" style="color:#8a93a6;font-size:13px;margin:4px 0 0">Tap or click any subblock to see its details.</p>
 </section>
 <section id="sec-prev">
-  <h2>Recent summary blocks <span class="m">each closes a completed DAG of subblocks</span></h2>
+  <h2>Recent summary blocks <span class="m">Each row is one finished round: summary #N−1, its subblocks, then summary #N (outlined in its miner's colour)</span></h2>
   <div class="legend" id="legend2"></div>
   <div id="prev"></div>
 </section>
@@ -202,7 +205,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 <dt>What is an uncle?</dt><dd data-k="A late subblock included by the next summary; its score is 4 points below a perfectly linked subblock.">A valid subblock that arrived after its round was already full. Instead of being thrown away, the next summary block includes it; its score is 4 points below a perfectly linked subblock. &ldquo;Uncle&rdquo; is Nexa&#39;s word, not the paper&#39;s.</dd>
 <dt>Does Tailstorm increase TPS?</dt><dd data-k="Not mainly TPS: Tailstorm targets fast, reliable confirmations and fair mining.">That is not its main goal. The goal is fast, reliable confirmations and fair mining: a payment shows up in a subblock within seconds, and full settlement still comes with the next summary blocks. Capacity is still set by the block size limit.</dd>
 <dt>Can subblocks be reorganised?</dt><dd data-k="Parallel blocks merge; late blocks become uncles. Before a summary, inclusion can still change.">Rarely, and cheaply. Parallel subblocks are merged, not discarded. Until the summary block arrives, which subblocks it includes can still change (a late one becomes an uncle), so wait for a summary block for large payments. After that, undoing them means a normal blockchain reorg.</dd>
-<dt>Does one miner mine the summary block on top of the subblocks?</dt><dd data-k="No extra puzzle: in Nexa, the next piece becomes the summary block; the paper lets nodes assemble it.">No extra big job. Whoever finds the next piece of work once the round is full (119 subblocks in this demo) turns it into the summary block. In the paper the summary needs no proof of work at all: anyone holding k subblocks assembles it.</dd>
+<dt>Who mines the summary block?</dt><dd data-k="No extra puzzle: in Nexa, the next piece becomes the summary block; the paper lets nodes assemble it.">No extra big job. Whoever finds the next piece of work once the round is full (119 subblocks in this demo) turns it into the summary block. In the paper the summary needs no proof of work at all: anyone holding k subblocks assembles it.</dd>
 <dt>Why mine subblocks?</dt><dd data-k="Subblocks share the reward; smaller miners earn steadily, and branching makes withholding less profitable.">That is how miners get paid: each summary block splits the reward and fees among the miners of the subblocks it includes. Smaller miners earn steadily, and well-linked subblocks earn more, so hiding blocks to cheat costs the cheater.</dd>
 </dl></details>
 <section class="note" id="changelog"><b>Changelog</b> <span style="color:#8a93a6;font-size:13px">(newest first, Oslo time)</span>
@@ -236,7 +239,7 @@ let K = 120;   // updated from the feed's k
 const $ = id => document.getElementById(id);
 const NS = "http://www.w3.org/2000/svg";
 let dataUrl = new URLSearchParams(location.search).get("src");
-let data = null, lastOkAt = 0, fails = 0, lastPointerAt = 0, lastSeq = -1;
+let data = null, lastOkAt = 0, fails = 0, lastPointerAt = 0, lastSeq = -1, lastHeight = null;
 const known = new Set(); let firstRender = true;
 
 function el(tag, attrs, parent, text) {
@@ -304,9 +307,10 @@ const MC = {1: "#4fd1b5", 2: "#a78bfa", 3: "#f2896b", 4: "#62b3f5", 0: "#9fb3c8"
 const MF = {1: "#133a33", 2: "#2a2346", 3: "#43241c", 4: "#152e45", 0: "#1d2430"};
 const UNC = "#ff6b8a";
 function legendHtml(pm) {
-  let h = `<span><i class="sw" style="background:#1d2430;border:2px solid #cfd6e0;border-radius:3px"></i>summary block</span>`;
+  let h = `<span><i class="sw" style="background:#e0b341;border:0;border-radius:3px;box-shadow:0 0 6px #e0b34199"></i>summary block</span>`;
+  h += `<span><i class="sw nextSw"></i>next summary (when the round fills)</span>`;
   for (const m of [1, 2, 3, 4]) h += `<span><i class="sw" style="background:${MF[m]};border:2px solid ${MC[m]}"></i>miner ${m}${pm ? ` <small>(${pm[m] || 0} blocks / 5 min)</small>` : ""}</span>`;
-  h += `<span><i class="sw" style="border:2px dashed ${UNC}"></i>uncle (late subblock)</span><span><i class="sw" style="background:#fff3cf;box-shadow:0 0 6px #f5d27a"></i>DAG tip</span>`;
+  h += `<span><i class="sw uncSw">U</i>uncle (late subblock)</span><span><i class="sw mergeSw">⋈</i>⋈ merge (2+ parents)</span><span><i class="sw" style="background:#fff3cf;box-shadow:0 0 6px #f5d27a"></i>DAG tip</span>`;
   return h;
 }
 
@@ -346,11 +350,14 @@ function defs(svg) {
   const mg = el("feMerge", {}, f); el("feMergeNode", {in: "b"}, mg); el("feMergeNode", {in: "SourceGraphic"}, mg);
 }
 function summaryNode(g, x, y, sq, label, title, opts) {
-  const gg = el("g", opts.ghost ? {class: "pulse"} : {}, g);
+  const gg = el("g", {class: (opts.ghost ? "pulse " : "") + ((opts.summary || opts.ghost) ? "summary" : "")}, g);
   if (opts.ghost) el("rect", {x: x - sq, y: y - sq, width: 2 * sq, height: 2 * sq, rx: 3, fill: "none", stroke: "#e0b341", "stroke-dasharray": "4 3", "stroke-width": 1.5}, gg);
   else el("rect", {x: x - sq, y: y - sq, width: 2 * sq, height: 2 * sq, rx: 3, fill: "#e0b341", stroke: opts.m ? MC[opts.m] : "none", "stroke-width": opts.m ? 2 : 0, filter: "url(#glow)"}, gg);
   if (sq >= 10) el("text", {x, y: y + 4, "text-anchor": "middle", "font-size": Math.min(12, sq), "font-weight": 700, fill: opts.ghost ? "#e0b341" : "#1a1405"}, gg, label);
-  else el("text", {x, y: y - sq - 4, "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: "#f5d27a"}, gg, "#" + label);
+  else {
+    el("text", {x, y: y - sq - 4, "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: "#f5d27a"}, gg, "#" + label);
+    if (opts.start || opts.sealed) el("text", {x, y: y + sq + 13, "text-anchor": "middle", "font-size": 11, fill: "#f5d27a"}, gg, opts.start ? "start" : "sealed by");
+  }
   el("title", {}, gg, title);
 }
 
@@ -364,14 +371,9 @@ function drawDag(svg, subs, o) {
   const put = (c, k) => { if (!colItems.has(c)) colItems.set(c, []); colItems.get(c).push(k); };
   put(0, "BASE"); uncles.forEach(u => put(0, "U:" + u.h));
   for (const s of subs) put(depth.get(s.h), s.h);
-  let last = maxD;
-  if (o.ghost) {
-    const left = Math.max(0, K - 1 - inc.length - uncles.length);
-    for (let i = 1; i <= left; i++) put(maxD + i, "G" + i);
-    last = maxD + left;
-  }
+  const last = maxD;
   put(last + 1, "CLOSE");
-  const totalCols = last + 2, cols = Math.min(o.cols, totalCols), rows = Math.ceil(totalCols / cols);
+  const totalCols = last + 2, cols = o.oneRow ? totalCols : Math.min(o.cols, totalCols), rows = Math.ceil(totalCols / cols);
   let maxLane = 1; for (let r = 0; r < rows; r++) for (let c = r * cols; c < (r + 1) * cols; c++) maxLane = Math.max(maxLane, (colItems.get(c) || []).length);
   const padX = o.r * 2.4, stepX = (o.W - 2 * padX) / Math.max(1, cols - 1);
   const laneH = o.r * 2.5, rowH = maxLane * laneH + o.r * 1.4, padY = Math.max(o.r * 1.4, 24);
@@ -381,12 +383,19 @@ function drawDag(svg, subs, o) {
   svg.setAttribute("viewBox", `0 0 ${o.W} ${H}`);
   const xy = new Map();
   for (const [c, items] of colItems) {
-    const row = Math.floor(c / cols); let cc = c % cols; if (row % 2) cc = cols - 1 - cc;
+    const row = Math.floor(c / cols); const cc = c % cols;
     const x = padX + cc * stepX, yc = padY + row * rowH + (maxLane - 1) * laneH / 2;
     items.forEach((k, i) => xy.set(k, [x, yc + (i - (items.length - 1) / 2) * laneH]));
   }
   const gE = el("g", {}, svg), gN = el("g", {}, svg);
   const sq = o.r * 1.15, B = xy.get("BASE"), C = xy.get("CLOSE");
+  // return arrows keep multi-row DAGs readable left-to-right
+  for (let row = 0; row < rows - 1; row++) {
+    const fromKey = (colItems.get((row + 1) * cols - 1) || [])[0];
+    const toKey = (colItems.get((row + 1) * cols) || [])[0];
+    const from = fromKey && xy.get(fromKey), to = toKey && xy.get(toKey);
+    if (from && to) arrow(gE, from[0], from[1], to[0], to[1], o.r, o.r, "ahg", "#b8952f");
+  }
   // edges: subblock -> its parent(s); roots -> base summary
   for (const s of subs) {
     const [x, y] = xy.get(s.h), ps = s.p.filter(p => byH.has(p));
@@ -399,31 +408,32 @@ function drawDag(svg, subs, o) {
     for (const t of inc.filter(s => !ref.has(s.h))) { const [x, y] = xy.get(t.h); arrow(gE, C[0], C[1], x, y, sq, o.r, "ahg", "#b8952f"); }
   }
   for (const [i, u] of uncles.entries()) { const [x, y] = xy.get("U:" + u.h); if (o.closing) arrow(gE, C[0], C[1], x, y, sq, o.r, "ahg", UNC, "4 3"); }
-  // ghosts
-  for (const [k, [x, y]] of xy) if (k[0] === "G") el("circle", {cx: x, cy: y, r: o.r * .75, fill: "none", stroke: "#3b4150", "stroke-dasharray": "3 3"}, gN);
-  summaryNode(gN, B[0], B[1], sq, o.base.height, `summary block #${o.base.height}\n${o.base.hash}…`, {});
-  if (o.closing) summaryNode(gN, C[0], C[1], sq, o.closing.height, `summary block #${o.closing.height}\n${o.closing.hash}…\nmined by miner ${o.closing.m || "?"}\nincludes ${inc.length} subblocks + ${uncles.length} uncles`, {m: o.closing.m});
+  // placeholders are represented by the progress track in the legend
+  summaryNode(gN, B[0], B[1], sq, o.base.height, `summary block #${o.base.height}\n${o.base.hash}…`, {summary: true, start: !!o.mini});
+  if (o.closing) summaryNode(gN, C[0], C[1], sq, o.closing.height, `summary block #${o.closing.height}\n${o.closing.hash}…\nmined by miner ${o.closing.m || "?"}\nincludes ${inc.length} subblocks + ${uncles.length} uncles`, {m: o.closing.m, summary: true, sealed: !!o.mini});
   else if (o.ghost) summaryNode(gN, C[0], C[1], sq, o.base.height + 1, `next summary block #${o.base.height + 1} (the ${K}th block, after ${K - 1} subblocks/uncles)`, {ghost: true});
   const node = (s, x, y, kind) => {
     const isTip = o.tip && s.h === o.tip, m = s.m || 0;
-    const g = el("g", {class: "sb" + (selHash === s.h ? " sel" : "")}, gN);
-    if (o.animate && !firstRender && !known.has(s.h)) g.setAttribute("class", "new");
-    const a = {cx: x, cy: y, r: o.r, fill: isTip ? "#fff3cf" : MF[m], stroke: kind ? UNC : MC[m], "stroke-width": kind ? 2 : 1.8};
+    const g = el("g", {class: "sb" + (selHash === s.h ? " sel" : ""), tabindex: "0", role: "button", "aria-label": `Subblock ${s.h.slice(0, 4)}…, miner ${m || "?"}`}, gN);
+    if (o.animate && !firstRender && !known.has(s.h)) g.classList.add("new");
+    const a = {cx: x, cy: y, r: o.r, fill: kind === "in" ? "#ff6b8a33" : (isTip ? "#fff3cf" : MF[m]), stroke: kind ? UNC : MC[m], "stroke-width": kind ? 2 : 1.8};
     if (kind) a["stroke-dasharray"] = "3 2";
     if (isTip) a.filter = "url(#glow)";
     el("circle", a, g);
-    if (kind && o.r >= 7) el("text", {x, y: y + 3.5, "text-anchor": "middle", "font-size": Math.min(10, o.r), "font-weight": 700, fill: UNC}, g, "U");
-    else if (o.r >= 11) el("text", {x, y: y + 3.5, "text-anchor": "middle", "font-size": 9.5, fill: isTip ? "#1a1405" : "#dfe6ee"}, g, s.p.length > 1 ? "⋈" : "");
+    if (kind && o.r >= 7) el("text", {x, y: y + 3.5, "text-anchor": "middle", "font-size": Math.min(10, o.r), "font-weight": 700, fill: UNC}, g, kind === "in" ? "U←" : "U");
+    else if (o.r >= 6) el("text", {x, y: y + o.r * .3, "text-anchor": "middle", "font-size": o.r * (o.mini ? .95 : .8), fill: isTip ? "#1a1405" : "#dfe6ee"}, g, s.p.length > 1 ? "⋈" : "");
     const what = kind === "in" ? `UNCLE from the previous DAG, carried into this one (the next summary includes it)` :
                  kind === "out" ? `not included in summary #${o.closing ? o.closing.height : "?"}: becomes an uncle in summary #${s.u}` : `subblock at depth ${depth.get(s.h)}`;
-    g.addEventListener("click", ev => { ev.stopPropagation(); selHash = s.h; showInfo(s, kind, what, depth.get(s.h), subs, o); document.querySelectorAll("g.sel").forEach(e => e.classList.remove("sel")); g.classList.add("sel"); });
+    const activate = ev => { ev.stopPropagation(); selHash = s.h; showInfo(s, kind, what, depth.get(s.h), subs, o); document.querySelectorAll("g.sel").forEach(e => e.classList.remove("sel")); g.classList.add("sel"); };
+    g.addEventListener("click", activate);
+    g.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); activate(ev); } });
     el("title", {}, g, `${what}\n${s.h}…  mined by miner ${m || "?"} at ${hhmmss(s.t)}\nparents: ${s.p.length ? s.p.join(", ") : "summary #" + o.base.height}${s.p.length > 1 ? "  (merge: joins " + s.p.length + " parallel branches back into one)" : ""}`);
   };
   for (const s of subs) { const [x, y] = xy.get(s.h); node(s, x, y, s.u && o.closing ? "out" : null); }
   for (const u of uncles) { const [x, y] = xy.get("U:" + u.h); node(u, x, y, "in"); }
 }
 
-let selHash = null;
+let selHash = null, infoTimer = 0;
 function showInfo(s, kind, what, dep, subs, o) {
   const box = document.getElementById("sbinfo"), kids = subs.filter(x => x.p.includes(s.h));
   const role = kind === "in" ? "Uncle carried in from the previous DAG. It missed the last summary block, so the next summary block includes it and its miner is still rewarded."
@@ -437,7 +447,9 @@ function showInfo(s, kind, what, dep, subs, o) {
     `Built on by: ${kids.length ? kids.map(k => `<code>${k.h}…</code>`).join(", ") : "nothing yet" + (o.tip === s.h ? " (it is the current DAG tip)" : "")}` +
     (kids.length > 1 ? `<br>${kids.length} subblocks build on this one, so the DAG branches here.` : "");
   box.style.display = "block";
-  box.querySelector(".x").onclick = () => { box.style.display = "none"; selHash = null; document.querySelectorAll("g.sel").forEach(e => e.classList.remove("sel")); };
+  clearTimeout(infoTimer);
+  if (isKiosk()) infoTimer = setTimeout(() => { box.style.display = "none"; selHash = null; document.querySelectorAll("g.sel").forEach(e => e.classList.remove("sel")); }, 8000);
+  box.querySelector(".x").onclick = () => { clearTimeout(infoTimer); box.style.display = "none"; selHash = null; document.querySelectorAll("g.sel").forEach(e => e.classList.remove("sel")); };
 }
 // ---- full screen and display (kiosk) layout
 const qs0 = new URLSearchParams(location.search);
@@ -513,8 +525,8 @@ function faqShow() {
   const box = $("faqrot"); if (!box || !faqItems.length) return;
   box.querySelector(".q").textContent = faqItems[faqI][0]; box.querySelector(".a").textContent = faqItems[faqI][1];
   const count = $("faqcount"), progress = $("faqprogress");
-  if (count) count.textContent = `${faqI + 1}/${faqItems.length}`;
-  if (progress) progress.style.width = `${(faqI + 1) / faqItems.length * 100}%`;
+  if (count) count.textContent = `… ${faqI + 1} / ${faqItems.length}`;
+  if (progress) { progress.style.transition = "none"; progress.style.width = "100%"; requestAnimationFrame(() => { progress.style.transition = "width 16s linear"; progress.style.width = "0%"; }); }
 }
 faqShow();
 setInterval(() => {
@@ -527,6 +539,7 @@ setInterval(() => {
 function fitDag(svg, subs, o, step) {
   const cw = svg.clientWidth, ch = svg.clientHeight;
   if (!cw || !ch) return drawDag(svg, subs, o);
+  if (o.oneRow) return drawDag(svg, subs, {...o, W: cw, cols: 999});
   let best = null;
   for (let cols = 6; cols <= 70; cols++) {
     const W = o.r * 4.8 + (cols - 1) * o.r * step, {H} = drawDag(svg, subs, {...o, W, cols, dry: true});
@@ -536,24 +549,37 @@ function fitDag(svg, subs, o, step) {
   drawDag(svg, subs, {...o, W: best.W, cols: best.cols});
 }
 
+function summaryArrived(d, oldHeight) {
+  const closed = (d.prev && d.prev[0]) ? ((d.prev[0].nsub || d.prev[0].subs?.length || 0) + (d.prev[0].nunc || 0)) : (K - 1);
+  const panel = $("sec-cur"), banner = $("summaryBanner"), recent = $("prev");
+  panel.classList.remove("summaryFlash"); void panel.offsetWidth; panel.classList.add("summaryFlash");
+  setTimeout(() => panel.classList.remove("summaryFlash"), 800);
+  banner.textContent = `Summary #${d.height} found: round closed (${closed} blocks)`; banner.style.display = "block";
+  clearTimeout(summaryArrived.bannerTimer); summaryArrived.bannerTimer = setTimeout(() => { banner.style.display = "none"; }, 2000);
+  const head = recent.firstElementChild; if (head) { head.classList.remove("summaryPop"); void head.offsetWidth; head.classList.add("summaryPop"); }
+}
+
 function render() {
   const d = data; if (!d || !d.ok) return;
   const KI = isKiosk();
   const subs = d.cur.subs, uncles = d.cur.uncles || [], n = subs.length + uncles.length;
   $("c-h").textContent = d.height;
+  const fresh = firstRender ? 0 : [...subs, ...uncles].filter(s => !known.has(s.h)).length;
   $("c-dag").innerHTML = `${n}<small> / ${K - 1}${uncles.length ? ` (${uncles.length} uncle${uncles.length > 1 ? "s" : ""})` : ""}</small>`;
+  const chip = $("newChip"); if (chip) { chip.textContent = fresh ? `+${fresh} new` : ""; chip.classList.toggle("show", !!fresh); }
   $("c-bar").style.width = Math.min(100, n / (K - 1) * 100) + "%";
   $("c-act").textContent = d.active ? "YES" : "NO"; $("c-act").className = "v " + (d.active ? "ok" : "bad");
   $("c-rate").innerHTML = KI ? `${d.rate_per_min}<small> /min · ${d.miners || 1} miners</small>` : `${d.rate_per_min}<small> blocks/min · ${d.miners || 1} miners</small>`;
   const bs = branchStats(subs);
   $("c-br").innerHTML = `${bs.width}<small> wide · ${bs.multi} merges</small>`;
   $("c-tip").textContent = d.dagtip;
-  $("legend").innerHTML = legendHtml(d.per_miner_5min) + `<span class="lx">arrows point from a subblock to its parent(s); ⋈ = a merge: a subblock with two or more parents, which joins side-by-side branches back into one</span>`;
+  const left = Math.max(0, K - 1 - n);
+  $("legend").innerHTML = legendHtml(d.per_miner_5min) + `<span class="progressTrack"><i style="width:${Math.min(100, n / (K - 1) * 100)}%"></i><b>${left} more subblocks, then summary #${d.height + 1}</b></span>` + (!KI ? `<span class="hintLegend">Tap or click any subblock to see its details.</span>` : "");
   $("legend2").innerHTML = legendHtml(null) + `<span class="lx">dashed red = left out of this summary, included later as an uncle</span>`;
   $("cur-m").textContent = KI ? `on top of summary #${d.height} · ${n}/${K - 1} · depth ${bs.depth}` : `on top of summary #${d.height} (${d.tip}…) · ${n}/${K - 1} · depth ${bs.depth} · next summary #${d.height + 1} when full`;
   const w = $("cur").parentNode.clientWidth, W = Math.max(300, w);
   const cols = w < 520 ? 8 : w < 800 ? 13 : 21;
-  const curO = {W, cols, r: w < 520 ? 12 : 14, ghost: true, base: d.cur.base, uncles, animate: true, tip: d.dagtip};
+  const curO = {W, cols, r: w < 520 ? 12 : 14, ghost: true, oneRow: true, base: d.cur.base, uncles, animate: true, tip: d.dagtip, mini: false};
   if (KI) fitDag($("cur"), subs, curO, 3.3); else drawDag($("cur"), subs, curO);
   const box = $("prev"); box.innerHTML = "";
   const pv = (d.prev || []).slice(0, KI ? 2 : undefined);
@@ -569,17 +595,20 @@ function render() {
     div.innerHTML = `<div class="hd"><b>Summary #${b.height}</b><span><code>${b.hash}…</code></span><span>mined ${hhmmss(b.time)}${b.m ? ` by <span style="color:${MC[b.m]}">miner ${b.m}</span>` : ""}</span>` +
       (b.mdv === 2 ? `<span>${b.nsub} subblocks + ${b.nunc} uncle${b.nunc === 1 ? "" : "s"}</span>` : `<span>minerData v${b.mdv} (pre-Tailstorm)</span>`) +
       (inc.length ? `<span>width ${st.width} · ${st.multi} merges · depth ${st.depth}</span>` : "") +
-      (span != null ? `<span>built in ${span} s</span>` : "") + `</div>`;
+      (span != null ? `<span>round took ${span} s</span>` : "") + `</div>`;
     if (all.length) {
       const svg = document.createElementNS(NS, "svg"); div.appendChild(svg);
       const wide = w >= 800;
-      const pO = {W, cols: wide ? 42 : 14, r: 8, ghost: false, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash, m: b.m}, uncles: unc};
+      const pO = {W, cols: wide ? 42 : 14, r: 8, ghost: false, oneRow: true, mini: true, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash, m: b.m}, uncles: unc};
       if (KI) fitDag(svg, all, pO, 3.1); else drawDag(svg, all, pO);
     } else if (b.mdv === 2) {
       div.insertAdjacentHTML("beforeend", `<div style="color:var(--muted);font-size:13px;padding:4px 0">The node's recent-DAG view no longer holds subblock details for this group.</div>`);
     }
   }
   for (const s of subs) known.add(s.h);
+  for (const u of uncles) known.add(u.h);
+  if (lastHeight != null && d.height > lastHeight) summaryArrived(d, lastHeight);
+  lastHeight = d.height;
   firstRender = false;
 }
 
