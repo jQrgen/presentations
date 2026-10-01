@@ -2,26 +2,122 @@
   "_note": "Public, hand-curated data for docs/jqrgencorp-team/ (D-SCOR thesis page). Per agent ONLY: public name, a generic role line and the D-SCOR-inspired profile. Never copy text from agent profiles; no ids, no figures, no private details.",
   "updated": "2026-10-01",
   "styles": {
-    "S": { "no": "Starter", "desc": "Igangsetter, motiveres av variasjon og nye prosjekter" },
-    "C": { "no": "Kritiker", "desc": "Kvalitetssikrer, motiveres av å avdekke svakheter og ferdigstillelse" },
-    "O": { "no": "Organisator", "desc": "Implementerer, motiveres av å følge planer og gjennomføre som avtalt" },
-    "R": { "no": "Relasjonsbygger", "desc": "Nettverksorientert, motiveres av samhold og lagånd" }
+    "S": {
+      "no": "Starter",
+      "desc": "Igangsetter, motiveres av variasjon og nye prosjekter"
+    },
+    "C": {
+      "no": "Kritiker",
+      "desc": "Kvalitetssikrer, motiveres av å avdekke svakheter og ferdigstillelse"
+    },
+    "O": {
+      "no": "Organisator",
+      "desc": "Implementerer, motiveres av å følge planer og gjennomføre som avtalt"
+    },
+    "R": {
+      "no": "Relasjonsbygger",
+      "desc": "Nettverksorientert, motiveres av samhold og lagånd"
+    }
   },
   "dialog": {
-    "DD": { "no": "Direkte", "desc": "Rett på sak" },
-    "PD": { "no": "Pragmatisk", "desc": "Kontroll på egne følelser" },
-    "ED": { "no": "Engasjert", "desc": "Følelsesorientert" },
-    "HD": { "no": "Hybrid", "desc": "Diplomatisk" }
+    "DD": {
+      "no": "Direkte",
+      "desc": "Rett på sak"
+    },
+    "PD": {
+      "no": "Pragmatisk",
+      "desc": "Kontroll på egne følelser"
+    },
+    "ED": {
+      "no": "Engasjert",
+      "desc": "Følelsesorientert"
+    },
+    "HD": {
+      "no": "Hybrid",
+      "desc": "Diplomatisk"
+    }
   },
   "members": [
-    { "name": "jQrgenCorp strategist", "role": "Velger retning: hvilke markeder og hvilke veddemål vi tester", "roleEn": "Chooses direction: which markets and bets to test", "primary": "S", "secondary": "R", "dialog": "ED", "risk": 4 },
-    { "name": "jQrgenCorp forretningsutvikler", "role": "Gjør idéer om til raske, billige eksperimenter med tydelige stoppkriterier", "roleEn": "Turns ideas into fast, cheap experiments with clear kill criteria", "primary": "S", "secondary": "C", "dialog": "DD", "risk": 4 },
-    { "name": "jQrgenCorp stabssjef", "role": "Koordinerer teamet: eiere, frister og beslutninger", "roleEn": "Coordinates the team: owners, deadlines and decisions", "primary": "O", "secondary": "R", "dialog": "HD", "risk": 3 },
-    { "name": "jQrgenCorp D-SCOR-ansvarlig", "role": "Sjekker hver måned at teamet er komplementært og samarbeider godt", "roleEn": "Checks monthly that the team stays complementary and works well together", "primary": "R", "secondary": "C", "dialog": "HD", "risk": 3 },
-    { "name": "jQrgenCorp CFO", "role": "Vokter økonomien og at selskapet holder seg «default alive»", "roleEn": "Guards the finances and keeps the company default alive", "primary": "C", "secondary": "O", "dialog": "DD", "risk": 2 },
-    { "name": "jQrgenCorp admin", "role": "Praktisk drift: møter, avtaler, arkiv og påminnelser", "roleEn": "Practical operations: meetings, agreements, archive and reminders", "primary": "O", "secondary": "R", "dialog": "ED", "risk": 2 },
-    { "name": "jQrgenCorp accountant", "role": "Automatisert, ryddig regnskapsføring", "roleEn": "Automated, tidy bookkeeping", "primary": "O", "secondary": "C", "dialog": "PD", "risk": 1 },
-    { "name": "jQrgenCorp tax & compliance", "role": "Regulatorisk forhåndssjekk og frister før noe lanseres", "roleEn": "Regulatory pre-checks and deadlines before anything launches", "primary": "C", "secondary": "O", "dialog": "PD", "risk": 1 },
-    { "name": "jQrgenCorp revisor", "role": "Uavhengig gjennomgang av regnskapet (ikke statsautorisert revisor)", "roleEn": "Independent review of the books (not an authorised auditor)", "primary": "C", "secondary": null, "dialog": "DD", "risk": 1 }
+    {
+      "name": "jQrgenCorp strategist",
+      "role": "Velger retning: hvilke markeder og hvilke veddemål vi tester",
+      "roleEn": "Chooses direction: which markets and bets to test",
+      "primary": "S",
+      "secondary": "R",
+      "dialog": "ED",
+      "risk": 4
+    },
+    {
+      "name": "jQrgenCorp forretningsutvikler",
+      "role": "Gjør idéer om til raske, billige eksperimenter med tydelige stoppkriterier",
+      "roleEn": "Turns ideas into fast, cheap experiments with clear kill criteria",
+      "primary": "S",
+      "secondary": "C",
+      "dialog": "DD",
+      "risk": 4
+    },
+    {
+      "name": "jQrgenCorp stabssjef",
+      "role": "Koordinerer teamet: eiere, frister og beslutninger",
+      "roleEn": "Coordinates the team: owners, deadlines and decisions",
+      "primary": "O",
+      "secondary": "R",
+      "dialog": "HD",
+      "risk": 3
+    },
+    {
+      "name": "jQrgenCorp D-SCOR-ansvarlig",
+      "role": "AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen: sjekker hver måned at teamet er komplementært og samarbeider godt",
+      "roleEn": "AI role as D-SCOR lead, based on the D-SCOR model: checks monthly that the team stays complementary and works well together",
+      "primary": "R",
+      "secondary": "C",
+      "dialog": "HD",
+      "risk": 3
+    },
+    {
+      "name": "jQrgenCorp CFO",
+      "role": "Vokter økonomien og at selskapet holder seg «default alive»",
+      "roleEn": "Guards the finances and keeps the company default alive",
+      "primary": "C",
+      "secondary": "O",
+      "dialog": "DD",
+      "risk": 2
+    },
+    {
+      "name": "jQrgenCorp admin",
+      "role": "Praktisk drift: møter, avtaler, arkiv og påminnelser",
+      "roleEn": "Practical operations: meetings, agreements, archive and reminders",
+      "primary": "O",
+      "secondary": "R",
+      "dialog": "ED",
+      "risk": 2
+    },
+    {
+      "name": "jQrgenCorp accountant",
+      "role": "Automatisert, ryddig regnskapsføring",
+      "roleEn": "Automated, tidy bookkeeping",
+      "primary": "O",
+      "secondary": "C",
+      "dialog": "PD",
+      "risk": 1
+    },
+    {
+      "name": "jQrgenCorp tax & compliance",
+      "role": "Regulatorisk forhåndssjekk og frister før noe lanseres",
+      "roleEn": "Regulatory pre-checks and deadlines before anything launches",
+      "primary": "C",
+      "secondary": "O",
+      "dialog": "PD",
+      "risk": 1
+    },
+    {
+      "name": "jQrgenCorp revisor",
+      "role": "Uavhengig gjennomgang av regnskapet (ikke statsautorisert revisor)",
+      "roleEn": "Independent review of the books (not an authorised auditor)",
+      "primary": "C",
+      "secondary": null,
+      "dialog": "DD",
+      "risk": 1
+    }
   ]
 }
