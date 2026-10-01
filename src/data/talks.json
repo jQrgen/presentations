@@ -1,6 +1,26 @@
 [
   {
     "year": 2026,
+    "sort": "2026-10-01",
+    "date": "October 2026",
+    "title": "Nexa Tailstorm: live DAG",
+    "meta": "Live demo page (stormtest chain, not mainnet)",
+    "description": "Watch Tailstorm, Nexa's consensus upgrade, build a block DAG in real time: 4 miners with a simulated 1 s delay mine parallel subblocks that merge into a DAG, and a summary block closes it. Private stormtest demo, not mainnet; Tailstorm is implemented in Nexa with activation pending. Links the peer-reviewed Tailstorm paper (AFT 2023).",
+    "thumb": "../tailstorm/thumb.png",
+    "links": [
+      {
+        "label": "Open the live page",
+        "href": "../tailstorm/",
+        "primary": true
+      },
+      {
+        "label": "Tailstorm paper (AFT 2023)",
+        "href": "https://doi.org/10.4230/LIPIcs.AFT.2023.6"
+      }
+    ]
+  },
+  {
+    "year": 2026,
     "sort": "2026-09-30",
     "date": "September 2026",
     "title": "Blockchain Game Jam: break it out of the game",
