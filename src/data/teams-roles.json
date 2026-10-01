@@ -115,6 +115,10 @@
       "name": "jQrgenCorp admin",
       "role": "Company admin and paperwork assistant"
     },
+    "80394431-abca-40f3-94aa-fb98045004dc": {
+      "name": "jQrgenCorp D-SCOR-ansvarlig",
+      "role": "AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen: teambalanse, månedlig sjekk og kvartalsvis medarbeiderundersøkelse"
+    },
     "b2b9975e-3419-4263-b6c5-9cd916d63a54": {
       "name": "jQrgenCorp accountant",
       "role": "Bookkeeping assistant"
