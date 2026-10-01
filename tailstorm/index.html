@@ -18,6 +18,7 @@ h1 .g{color:var(--gold)}
 .tag{font-size:12px;color:var(--gold);border:1px solid var(--golddim);padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.08em}
 .note{margin:14px 0 16px;padding:10px 14px;border-left:3px solid var(--gold);background:var(--panel);color:#cfcabd;border-radius:0 8px 8px 0;font-size:14px}
 .note a{color:var(--gold)}
+.terms{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:10px 0 2px}.terms dt{color:var(--gold);font-weight:600}.terms dd{margin:0}#terms summary{cursor:pointer}
 .stale{display:none;margin:0 0 14px;padding:10px 14px;background:#3a1a12;border:1px solid var(--warn);color:#ffd2c4;border-radius:8px;font-weight:600}
 .stale.on{display:block}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
@@ -58,6 +59,18 @@ The nodes are connected through an artificial ~1 s network delay, so miners ofte
 When the DAG holds k−1 = 39 subblocks, the next summary block (the 40th) closes it. Subblocks left out become <i>uncles</i> that the following summary block includes.
 None of this is live Nexa mainnet data.</div>
 <div class="note" id="paper"><b>The paper:</b> <a href="https://doi.org/10.4230/LIPIcs.AFT.2023.6" target="_blank" rel="noopener">Tailstorm: A Secure and Fair Blockchain for Cash Transactions</a> by Keller, Glickenhaus, Bissias and Griffith, peer-reviewed at AFT 2023 (<a href="https://arxiv.org/abs/2306.12206" target="_blank" rel="noopener">arXiv</a>).</div>
+<details class="note" id="terms" open><summary><b>Tailstorm terms, explained</b></summary>
+<dl class="terms">
+<dt>Subblock</dt><dd>A small block that a miner finds with a share of the proof of work. Subblocks carry transactions and arrive every few seconds here. They are the circles on this page, coloured by the miner that found them.</dd>
+<dt>Summary block</dt><dd>The block that closes a round. When the DAG holds k−1 subblocks, the next block found is a summary block, which commits to all of them and starts a fresh DAG. Summary blocks are the gold squares, and their height is the chain height.</dd>
+<dt>DAG</dt><dd>Short for directed acyclic graph. Instead of one straight chain, a subblock may point back to several parents, so the blocks form a graph that branches and rejoins but never loops back.</dd>
+<dt>k</dt><dd>How many blocks make up one round: k−1 subblocks plus the summary block. This demo uses k = 40. Nexa mainnet is configured with k = 120.</dd>
+<dt>Tip</dt><dd>A subblock that no other subblock builds on yet, i.e. the current end of a branch. The newest one glows as the <i>DAG tip</i>.</dd>
+<dt>Branch and merge</dt><dd>When two miners find a subblock on the same parent at nearly the same moment, the DAG branches. The next subblock lists every tip as a parent, which merges the branches (marked ⋈). In a normal single-chain blockchain one of those blocks would be thrown away.</dd>
+<dt>Uncle</dt><dd>A valid subblock that missed the summary block it was meant for, usually because the round was already full when it arrived. Instead of being thrown away, it is carried into the next round, and the following summary block includes it. Uncles count towards that round's k−1. They are drawn with a dashed red outline and a <b>U</b>.</dd>
+<dt>Width and depth</dt><dd>Width is the largest number of subblocks found side by side (in parallel) in one DAG, and depth is the length of its longest path. A wider DAG means more parallel mining. A DAG with width 1 is a plain chain.</dd>
+<dt>Stormtest</dt><dd>A private Nexa test network with Tailstorm switched on. It is used only for this demo and isn't mainnet. On mainnet, Tailstorm is implemented but its activation is still pending.</dd>
+</dl></details>
 <div class="stale" id="stale">Data is stale.</div>
 <div class="cards">
   <div class="card"><div class="k">Summary height</div><div class="v gold" id="c-h">–</div></div>
