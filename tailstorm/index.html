@@ -46,6 +46,12 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;co
 .new{animation:pop .7s ease-out;transform-box:fill-box;transform-origin:center}
 @keyframes pulse{0%,100%{opacity:.35}50%{opacity:.9}}
 .pulse{animation:pulse 1.6s infinite}
+#sbinfo{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(560px,calc(100% - 24px));background:#151a24;border:1px solid #b8952f;border-radius:12px;padding:14px 16px;color:#dfe6ee;font-size:14px;line-height:1.5;z-index:50;box-shadow:0 8px 30px #0009;display:none}
+#sbinfo b{color:#f0c75e}#sbinfo code{font-size:12.5px;word-break:break-all}#sbinfo .x{position:absolute;right:10px;top:6px;background:none;border:0;color:#aab;font-size:20px;cursor:pointer}
+svg g.sb{cursor:pointer}svg g.sel circle{stroke:#fff3cf!important;stroke-width:3!important}
+#changelog ol{list-style:none;margin:10px 0 0;padding:0 0 0 18px;border-left:2px solid #b8952f55}
+#changelog li{position:relative;margin:0 0 12px}#changelog li:before{content:"";position:absolute;left:-25px;top:6px;width:10px;height:10px;border-radius:50%;background:#b8952f}
+#changelog li:first-child:before{background:#fff3cf;box-shadow:0 0 8px #f0c75e}#changelog time{display:block;color:#8a93a6;font-size:12.5px}
 </style>
 </head>
 <body>
@@ -58,6 +64,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;co
 The nodes are connected through an artificial ~1.2 s network delay. That is longer than the ~1 s gap between subblocks, so miners often find subblocks in parallel on the same parent, and the branching here is heavier than you would expect on mainnet. Two subblocks built on the same parent sit side by side as separate branches. The next subblock joins them back together by naming the end of each branch as its parent, so both are kept.
 It uses the same k and block timing as Nexa's mainnet code (k = 120, a summary block about every 2 minutes): when the DAG holds 119 subblocks, the next block, the 120th, is the summary block that closes it. Subblocks left out become <i>uncles</i> that the following summary block includes.
 None of this is live Nexa mainnet data.</div>
+<p style="margin:-4px 0 10px;font-size:13px"><a href="#changelog">What&#39;s new on this page</a></p>
 <div class="note" id="paper"><b>The paper:</b> <a href="https://doi.org/10.4230/LIPIcs.AFT.2023.6" target="_blank" rel="noopener">Tailstorm: A Secure and Fair Blockchain for Cash Transactions</a> by Keller, Glickenhaus, Bissias and Griffith, peer-reviewed at AFT 2023 (<a href="https://arxiv.org/abs/2306.12206" target="_blank" rel="noopener">arXiv</a>).</div>
 <details class="note" id="terms" open><summary><b>Tailstorm terms, explained</b></summary>
 <dl class="terms">
@@ -85,12 +92,23 @@ None of this is live Nexa mainnet data.</div>
   <h2>Current DAG (in progress) <span class="m" id="cur-m"></span></h2>
   <div class="legend" id="legend"></div>
   <svg id="cur" viewBox="0 0 1200 200"></svg>
+  <p class="hint" style="color:#8a93a6;font-size:13px;margin:4px 0 0">Tap or click any subblock to see its details.</p>
 </section>
 <section>
   <h2>Recent summary blocks <span class="m">each closes a completed DAG of subblocks</span></h2>
   <div class="legend" id="legend2"></div>
   <div id="prev"></div>
 </section>
+<section class="note" id="changelog"><b>Changelog</b> <span style="color:#8a93a6;font-size:13px">(newest first, Oslo time)</span>
+<ol>
+<li><time>1 Oct 2026, 12:10</time>Click or tap any subblock to see its hash, miner, time, parents and the subblocks built on it. Branch and merge are now explained in plain words. Added this changelog.</li>
+<li><time>1 Oct 2026, 09:30</time>The live feed now recovers by itself within about a minute if its public tunnel drops, with no reload needed.</li>
+<li><time>1 Oct 2026, 02:40</time>Switched to the same k (120) and block timing as Nexa's mainnet code, and explained where Nexa's terms differ from the paper's.</li>
+<li><time>1 Oct 2026, 02:06</time>Added the "Tailstorm terms, explained" box.</li>
+<li><time>1 Oct 2026, 02:02</time>Linked the peer-reviewed Tailstorm paper (AFT 2023).</li>
+<li><time>1 Oct 2026, 01:37</time>Four competing miners, so the DAG visibly branches and merges.</li>
+<li><time>1 Oct 2026, 01:18</time>First version: a live view of the Tailstorm DAG on a private stormtest chain.</li>
+</ol></section>
 <footer>
   Source: a Nexa node (<code>-stormtest</code>, k = 120) running Tailstorm, read via <code>gettailstorminfo</code>, <code>getbestdagtiphash</code>, <code>getsubblock</code> and <code>getblock</code>.
   Four miner loops each mine on their own node; the nodes relay to each other through a ~1.2 s delay proxy. A publisher reading node 1 builds a snapshot every ~3 s and serves it through an outbound Cloudflare quick tunnel; this page polls it every 3 s.
@@ -270,7 +288,7 @@ function drawDag(svg, subs, o) {
   else if (o.ghost) summaryNode(gN, C[0], C[1], sq, o.base.height + 1, `next summary block #${o.base.height + 1} (the ${K}th block, after ${K - 1} subblocks/uncles)`, {ghost: true});
   const node = (s, x, y, kind) => {
     const isTip = o.tip && s.h === o.tip, m = s.m || 0;
-    const g = el("g", {}, gN);
+    const g = el("g", {class: "sb" + (selHash === s.h ? " sel" : "")}, gN);
     if (o.animate && !firstRender && !known.has(s.h)) g.setAttribute("class", "new");
     const a = {cx: x, cy: y, r: o.r, fill: isTip ? "#fff3cf" : MF[m], stroke: kind ? UNC : MC[m], "stroke-width": kind ? 2 : 1.8};
     if (kind) a["stroke-dasharray"] = "3 2";
@@ -280,11 +298,30 @@ function drawDag(svg, subs, o) {
     else if (o.r >= 11) el("text", {x, y: y + 3.5, "text-anchor": "middle", "font-size": 9.5, fill: isTip ? "#1a1405" : "#dfe6ee"}, g, s.p.length > 1 ? "⋈" : "");
     const what = kind === "in" ? `UNCLE from the previous DAG, carried into this one (the next summary includes it)` :
                  kind === "out" ? `not included in summary #${o.closing ? o.closing.height : "?"}: becomes an uncle in summary #${s.u}` : `subblock at depth ${depth.get(s.h)}`;
+    g.addEventListener("click", ev => { ev.stopPropagation(); selHash = s.h; showInfo(s, kind, what, depth.get(s.h), subs, o); document.querySelectorAll("g.sel").forEach(e => e.classList.remove("sel")); g.classList.add("sel"); });
     el("title", {}, g, `${what}\n${s.h}…  mined by miner ${m || "?"} at ${hhmmss(s.t)}\nparents: ${s.p.length ? s.p.join(", ") : "summary #" + o.base.height}${s.p.length > 1 ? "  (merge: joins " + s.p.length + " parallel branches back into one)" : ""}`);
   };
   for (const s of subs) { const [x, y] = xy.get(s.h); node(s, x, y, s.u && o.closing ? "out" : null); }
   for (const u of uncles) { const [x, y] = xy.get("U:" + u.h); node(u, x, y, "in"); }
 }
+
+let selHash = null;
+function showInfo(s, kind, what, dep, subs, o) {
+  const box = document.getElementById("sbinfo"), kids = subs.filter(x => x.p.includes(s.h));
+  const role = kind === "in" ? "Uncle carried in from the previous DAG. It missed the last summary block, so the next summary block includes it and its miner is still rewarded."
+    : kind === "out" ? `Left out of summary block #${o.closing ? o.closing.height : "?"}. It becomes an uncle that summary block #${s.u} includes, so its work is not wasted.`
+    : s.p.length > 1 ? `A merge: it names ${s.p.length} parents, so it joins ${s.p.length} side-by-side branches back into one line.`
+    : s.p.length === 0 ? `Builds directly on summary block #${o.base.height}.` : "Extends a single branch (one parent).";
+  const par = s.p.length ? s.p.map(h => `<code>${h}…</code>`).join(", ") : `summary block #${o.base.height}`;
+  box.innerHTML = `<button class="x" aria-label="Close">×</button><b>${kind === "in" ? "Uncle" : "Subblock"} <code>${s.h}…</code></b><br>${role}<br>` +
+    `Mined by miner ${s.m || "?"} at ${hhmmss(s.t)}${dep !== undefined && kind !== "in" ? ` · depth ${dep} in this DAG` : ""}<br>` +
+    `Parent${s.p.length === 1 ? "" : "s"}: ${par}<br>` +
+    `Built on by: ${kids.length ? kids.map(k => `<code>${k.h}…</code>`).join(", ") : "nothing yet" + (o.tip === s.h ? " (it is the current DAG tip)" : "")}` +
+    (kids.length > 1 ? `<br>${kids.length} subblocks build on this one, so the DAG branches here.` : "");
+  box.style.display = "block";
+  box.querySelector(".x").onclick = () => { box.style.display = "none"; selHash = null; document.querySelectorAll("g.sel").forEach(e => e.classList.remove("sel")); };
+}
+document.addEventListener("keydown", e => { if (e.key === "Escape") { const b = document.getElementById("sbinfo"); if (b) b.style.display = "none"; selHash = null; } });
 
 function render() {
   const d = data; if (!d || !d.ok) return;
@@ -333,5 +370,6 @@ function render() {
 window.addEventListener("resize", () => { clearTimeout(window._rz); window._rz = setTimeout(render, 200); });
 poll(); setInterval(poll, POLL_MS); setInterval(tick, 1000);
 </script>
+<div id="sbinfo" role="dialog" aria-live="polite"></div>
 </body>
 </html>
