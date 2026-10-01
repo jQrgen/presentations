@@ -15,7 +15,7 @@
     "Research",
     "Go-to-market & Community",
     "Security (independent)",
-    "Staff & advisor"
+    "Advisor"
   ],
   "members": [
     {
@@ -33,8 +33,8 @@
     {
       "name": "Nexa chief of staff",
       "type": "ai",
-      "role": "Briefs jQrgen, tracks decisions, follows up and surfaces blockers",
-      "department": "Staff & advisor",
+      "role": "Coordinates the AI agents: priorities, owners, follow-ups and briefings",
+      "department": "Chief of staff",
       "groups": [
         "Nexa leadership team"
       ],
@@ -89,9 +89,9 @@
       "role": "Full node, consensus, Tailstorm, block size and releases",
       "department": "Engineering",
       "groups": [
+        "Nexa core engineering team",
         "Nexa research team",
-        "Nexa security team",
-        "Nexa core engineering team"
+        "Nexa security team"
       ],
       "contributions": [
         {
@@ -134,8 +134,8 @@
       "role": "NexaPow mining hardware: FPGA and HDL design",
       "department": "Engineering",
       "groups": [
-        "Nexa research team",
-        "Nexa core engineering team"
+        "Nexa core engineering team",
+        "Nexa research team"
       ],
       "contributions": []
     },
@@ -145,8 +145,8 @@
       "role": "Games on Nexa and game-jam starter kits",
       "department": "Engineering",
       "groups": [
-        "Nexa design review",
-        "Nexa app engineering team"
+        "Nexa app engineering team",
+        "Nexa design review"
       ],
       "contributions": []
     },
@@ -158,9 +158,9 @@
       "lead": true,
       "groups": [
         "Nexa leadership team",
-        "Nexa security team",
         "Nexa app engineering team",
-        "Nexa core engineering team"
+        "Nexa core engineering team",
+        "Nexa security team"
       ],
       "contributions": []
     },
@@ -257,10 +257,10 @@
       "role": "Reference architectures and integrations for builders",
       "department": "Engineering",
       "groups": [
-        "Nexa product & design team",
-        "Nexa security team",
         "Nexa app engineering team",
-        "Nexa core engineering team"
+        "Nexa core engineering team",
+        "Nexa product & design team",
+        "Nexa security team"
       ],
       "contributions": []
     },
@@ -268,15 +268,7 @@
       "name": "Nexa strategist",
       "type": "ai",
       "role": "Advisor: overall strategy, positioning, Scandinavia-first plan and goals",
-      "department": "Staff & advisor",
-      "groups": [],
-      "contributions": []
-    },
-    {
-      "name": "Nexa Team Lead",
-      "type": "ai",
-      "role": "Assigns work to the AI agents: owners, priorities and handoffs",
-      "department": "Team lead",
+      "department": "Advisor",
       "groups": [
         "Nexa leadership team"
       ],
@@ -288,10 +280,10 @@
       "role": "Rostrum, Nexa's Electrum-protocol indexing server",
       "department": "Engineering",
       "groups": [
-        "Nexa product & design team",
-        "Nexa security team",
         "Nexa app engineering team",
-        "Nexa core engineering team"
+        "Nexa core engineering team",
+        "Nexa product & design team",
+        "Nexa security team"
       ],
       "contributions": []
     },
@@ -301,10 +293,10 @@
       "role": "Wally Wallet on Android, desktop and iOS",
       "department": "Engineering",
       "groups": [
+        "Nexa app engineering team",
         "Nexa product & design team",
         "Nexa security team",
-        "Nexa design review",
-        "Nexa app engineering team"
+        "Nexa design review"
       ],
       "contributions": []
     }
@@ -313,12 +305,34 @@
     {
       "name": "Nexa leadership team",
       "members": [
-        "Nexa Team Lead",
-        "Nexa chief of staff",
         "Nexa lead dev",
         "Nexa product manager",
         "Nexa chief scientist",
-        "Marketing strategy"
+        "Marketing strategy",
+        "Nexa chief of staff",
+        "Nexa strategist"
+      ]
+    },
+    {
+      "name": "Nexa app engineering team",
+      "members": [
+        "Nexa lead dev",
+        "Wally Dev",
+        "Nexa game dev",
+        "Rostrum dev",
+        "Nexa solution architect",
+        "Nexa QA & infra"
+      ]
+    },
+    {
+      "name": "Nexa core engineering team",
+      "members": [
+        "Nexa lead dev",
+        "Nexa core dev",
+        "Nexa solution architect",
+        "Nexa FPGA engineer",
+        "Rostrum dev",
+        "Nexa QA & infra"
       ]
     },
     {
@@ -372,28 +386,6 @@
         "Nexa game dev",
         "Nexa media & communications",
         "Nexa product manager"
-      ]
-    },
-    {
-      "name": "Nexa app engineering team",
-      "members": [
-        "Nexa lead dev",
-        "Wally Dev",
-        "Nexa game dev",
-        "Rostrum dev",
-        "Nexa solution architect",
-        "Nexa QA & infra"
-      ]
-    },
-    {
-      "name": "Nexa core engineering team",
-      "members": [
-        "Nexa lead dev",
-        "Nexa core dev",
-        "Nexa solution architect",
-        "Nexa FPGA engineer",
-        "Rostrum dev",
-        "Nexa QA & infra"
       ]
     }
   ]
