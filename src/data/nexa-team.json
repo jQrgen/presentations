@@ -12,6 +12,7 @@
   "departments": [
     "Strategy",
     "Leadership",
+    "Research",
     "Engineering",
     "Product & Design",
     "Go-to-market & Community",
@@ -49,7 +50,8 @@
       "groups": [
         "Team Nexa",
         "Nexa leadership",
-        "Nexa lead devs"
+        "Nexa lead devs",
+        "Nexa research"
       ],
       "contributions": []
     },
@@ -71,7 +73,8 @@
       "department": "Engineering",
       "groups": [
         "Nexa lead devs",
-        "Nexa security"
+        "Nexa security",
+        "Nexa research"
       ],
       "contributions": []
     },
@@ -115,7 +118,8 @@
       "role": "NexaPow mining hardware: FPGA and HDL design",
       "department": "Engineering",
       "groups": [
-        "Nexa devs"
+        "Nexa devs",
+        "Nexa research"
       ],
       "contributions": []
     },
@@ -179,6 +183,16 @@
       "department": "On-chain trading",
       "groups": [
         "Nexa on-chain trading"
+      ],
+      "contributions": []
+    },
+    {
+      "name": "Nexa research liaison",
+      "type": "ai",
+      "role": "Research partnerships with universities",
+      "department": "Research",
+      "groups": [
+        "Nexa research"
       ],
       "contributions": []
     },
@@ -369,6 +383,15 @@
         "Wally Dev",
         "Rostrum dev",
         "Nexa solution architect"
+      ]
+    },
+    {
+      "name": "Nexa research",
+      "members": [
+        "Nexa chief scientist",
+        "Nexa research liaison",
+        "Nexa core dev",
+        "Nexa FPGA engineer"
       ]
     },
     {
