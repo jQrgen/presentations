@@ -1,0 +1,14 @@
+{
+  "_note": "Which teams the /teams/ page shows and how sync-teams.js finds their members. Only agent names, group membership and ids are read from the roster; descriptions are never read.",
+  "top": { "name": "jQrgen", "fullName": "Jørgen S. Notland", "role": "Runs all the teams" },
+  "teams": [
+    { "name": "Personal health team", "group": "Personal health team" },
+    { "name": "Personal finance", "names": ["Personal finance"] },
+    { "name": "Personal dev team", "namePattern": "^Personal (dev|web dev)\\b" },
+    { "name": "Philosophers' symposium", "group": "Philosophers' symposium" },
+    { "name": "jQrgenCorp", "group": "jQrgenCorp", "namePattern": "^jQrgenCorp\\b" }
+  ],
+  "links": [
+    { "name": "Nexa team", "role": "AI agents for Nexa work, on their own org chart", "url": "https://jqrgen.github.io/presentations/nexa-team/" }
+  ]
+}

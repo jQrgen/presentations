@@ -1,0 +1,97 @@
+{
+  "_note": "Hand-curated, generic role lines for the /teams/ page: team -> agent id -> entry. Write these by hand; never copy or derive them from agent profiles. Only a name, the team and a short generic role may be published: no health or money details, no company numbers, addresses, banks, accounts or figures. Entry fields: role (required); name = the agent's current name, for reference (sync-teams.js warns if it changes); displayName = the name to publish INSTEAD of the real one (the real name is then never written to the repo or the page). An agent with no entry is left off the page and sync-teams.js warns.",
+  "Personal health team": {
+    "d77b0e24-721f-43f1-b1df-895871971563": {
+      "name": "Fastlege",
+      "role": "Health advisor"
+    },
+    "aef0a6e5-5dda-4769-a594-eb6c540d1164": {
+      "displayName": "Lege 2",
+      "role": "Health advisor"
+    },
+    "61d77712-38b4-4333-832f-423f7ece4983": {
+      "name": "Nutritionist",
+      "role": "Nutrition and meal-planning advisor"
+    },
+    "fd5c438a-a008-4d84-8db7-42a335ff16a1": {
+      "name": "Personal trainer",
+      "role": "Strength and fitness coach"
+    },
+    "1a0fab0a-7eb5-4e42-a543-f0e28e728c53": {
+      "name": "Kenyan run coach",
+      "role": "Running coach"
+    },
+    "9f4094f5-2dbf-4013-8468-88a097458e5d": {
+      "name": "Padel coach",
+      "role": "Padel coach"
+    }
+  },
+  "Personal finance": {
+    "5939c31a-84ad-4943-b00f-fa915cbba5a9": {
+      "name": "Personal finance",
+      "role": "Personal budgeting assistant"
+    }
+  },
+  "Personal dev team": {
+    "d9a6916f-ec35-4ec2-9f6d-56b29734b030": {
+      "name": "Personal dev lead",
+      "role": "Leads jQrgen's personal software projects"
+    },
+    "2b029cde-09c9-4ca8-ace1-74421d1113ab": {
+      "name": "Personal web dev",
+      "role": "Web developer for personal sites and pages"
+    }
+  },
+  "Philosophers' symposium": {
+    "409f7345-b4b5-45dc-8fe5-2180cc377e4c": {
+      "name": "Sokrates",
+      "role": "Asks questions in the Socratic style"
+    },
+    "1431fde6-c59d-4097-9917-79ac29f06f61": {
+      "name": "Marcus Aurelius",
+      "role": "Stoic perspective"
+    },
+    "83b8dd9a-b582-4890-9f9c-53eb4d6f5678": {
+      "name": "Nietzsche",
+      "role": "Nietzschean perspective"
+    },
+    "6dccc79e-1637-4735-b6af-804bfe28c156": {
+      "name": "Hannah Arendt",
+      "role": "Political-philosophy perspective"
+    },
+    "1bf6b464-698e-40be-ac3f-5978ffcab7e5": {
+      "name": "Arne Næss",
+      "role": "Deep-ecology perspective"
+    },
+    "680befcc-f236-40de-a77d-7f0930ecb7d0": {
+      "name": "Grok Bot",
+      "role": "General-purpose assistant"
+    }
+  },
+  "jQrgenCorp": {
+    "ad1d3ecd-77fe-4d7a-8138-1cea4def9d71": {
+      "name": "jQrgenCorp strategist",
+      "role": "Business strategy advisor for jQrgen's company"
+    },
+    "0a932575-0225-4f92-abf8-7216fc5d62e6": {
+      "name": "jQrgenCorp CFO",
+      "role": "Company finance advisor"
+    },
+    "b2b9975e-3419-4263-b6c5-9cd916d63a54": {
+      "name": "jQrgenCorp accountant",
+      "role": "Bookkeeping assistant"
+    },
+    "ed2061ee-5d2c-4cf9-a610-fc2b8da9ceab": {
+      "name": "jQrgenCorp tax & compliance",
+      "role": "Tax and compliance assistant"
+    },
+    "747093be-e915-4aef-a2e9-47804a4db1a5": {
+      "name": "jQrgenCorp admin",
+      "role": "Company admin and paperwork assistant"
+    },
+    "680befcc-f236-40de-a77d-7f0930ecb7d0": {
+      "name": "Grok Bot",
+      "role": "General-purpose assistant"
+    }
+  }
+}

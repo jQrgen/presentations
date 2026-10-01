@@ -1,0 +1,5 @@
+{
+  "_note": "Grep gate for the all-teams page (src/orgchart/grep-gate.js). Case-insensitive substring match on every scanned file; any hit fails the build/publish. Extend freely; never weaken a term to dodge a false positive, change the markup instead.",
+  "terms": ["pouch", "colectomy", "colitis", "Nordea", "DNB", "Folio", "NOK", "org. no.", "919057343",
+    "gastro", "ulcerative", "ileal", "IBD", "Crohn", "stoma", "diagnos", "balance", "salary", "MVA"]
+}
