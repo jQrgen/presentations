@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>jQrgenCorp: et D-SCOR-inspirert AI-team</title>
+<style>
+:root{
+  color-scheme:light;
+  --ground:#E5E7EB; --paper:#FFFFFF; --band:#000000; --band-ink:#FFFFFF;
+  --ink:#000000; --ink-2:#1F2937; --muted:#4B5563; --line:#000000; --hair:#D1D5DB;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink)}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.band{background:var(--band);color:var(--band-ink)}
+.band .inner{max-width:1080px;margin:0 auto;padding:22px 24px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px}
+.band .name{font-size:22px;font-weight:400;letter-spacing:.01em;color:var(--band-ink);text-decoration:none}
+.band nav{display:flex;flex-wrap:wrap;gap:4px 22px;margin-left:auto}
+.band nav a{color:var(--band-ink);text-decoration:none;font-size:15px;padding:4px 0;border-bottom:2px solid transparent;opacity:.8}
+.band nav a:hover{opacity:1}
+.band nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--band-ink)}
+.page{max-width:1080px;margin:0 auto;padding:36px 24px 72px}
+h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:pretty}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+.count{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.year{display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;margin-top:36px}
+@media (max-width:700px){.year{grid-template-columns:1fr;gap:8px}}
+.year h2{font-size:30px;font-weight:400;margin:0;letter-spacing:-.02em;font-variant-numeric:tabular-nums;position:sticky;top:12px}
+.year ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.item{display:grid;grid-template-columns:minmax(200px,2fr) 3fr;background:var(--paper);border:1px solid var(--line)}
+.item.no-thumb{grid-template-columns:1fr}
+@media (max-width:700px){.item{grid-template-columns:1fr}}
+.thumb{margin:0;background:#000;aspect-ratio:16/9;border-right:1px solid var(--line)}
+@media (max-width:700px){.thumb{border-right:0;border-bottom:1px solid var(--line)}}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px}
+.kind{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:pretty}
+.body h3 a{color:var(--ink);text-decoration:none}
+.body h3 a:hover{text-decoration:underline}
+.where{margin:0;font-size:14px;color:var(--muted)}
+.where .date{color:var(--ink-2)}
+.authors{margin:0;font-size:14px;color:var(--ink-2)}
+.desc{margin:2px 0 0;color:var(--ink-2);max-width:66ch;font-size:15px}
+.cites{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.cites b{font-weight:600}
+.cites span{color:var(--muted)}
+.links{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.links a{display:inline-block;color:var(--ink);text-decoration:none;font-size:14px;padding:5px 10px;border:1px solid var(--line);background:var(--paper)}
+.links a.primary{background:var(--band);color:var(--band-ink)}
+.links a:hover{text-decoration:underline}
+.note{margin:6px 0 0;font-size:13px;color:var(--muted)}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+
+.page,.band .inner{max-width:1100px}
+.lede{max-width:72ch}
+.updated{margin:10px 0 0;font-size:13px;color:var(--muted)}
+h2{margin-top:40px}
+.note{border-left:4px solid var(--ink);background:#F9FAFB;padding:10px 14px;font-size:14.5px;max-width:80ch}
+.quad{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.q{border:1px solid var(--line);border-top:6px solid var(--c);padding:10px 12px;background:var(--paper)}
+.q h3{margin:0;font-size:15px}
+.q .qd{margin:4px 0 8px;font-size:13px;color:var(--muted)}
+.q ul{margin:0;padding-left:18px;font-size:14px}
+.q li{margin:3px 0}
+.q small{color:var(--ink-2)}
+table.p{border-collapse:collapse;width:100%;font-size:14px;margin-top:14px}
+table.p th,table.p td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+table.p thead th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--paper)}
+.st{display:inline-block;font-size:12px;font-weight:600;padding:0 6px;border-left:5px solid var(--c);background:#F3F4F6;white-space:nowrap}
+.risk{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.risk i{display:inline-block;width:10px;height:10px;border:1px solid var(--ink)}
+.risk i.on{background:var(--ink)}
+.risk b{font-weight:400;font-size:12.5px;margin-left:6px}
+.counts{font-size:14px;color:var(--ink-2)}
+.en{border-top:2px solid var(--ink);margin-top:44px;padding-top:6px}
+@media (max-width:760px){.quad{grid-template-columns:1fr}table.p{font-size:13px}}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+</style>
+</head>
+<body><div class="band"><div class="inner">
+    <a class="name" href="../">Jørgen S. Notland</a><span class="tag">Alle foredrag, artikler og papers</span>
+  </div></div>
+<div class="page">
+  <header>
+    <h1>jQrgenCorp: et D-SCOR-inspirert AI-team</h1>
+    <p class="lede">jQrgenCorp er jQrgens (Jørgen S. Notland) selskap. Teamet består av én person, jQrgen, og 9 AI-agenter. Denne siden forklarer hvorfor agentene har fått ulike, utfyllende arbeids- og dialogstiler, og hvordan det skal hjelpe teamet å levere på formålet.</p>
+    <p class="updated">1 person · 9 AI-agenter · Sist oppdatert <time datetime="2026-10-01">1. oktober 2026</time> · <a href="#english">English summary</a></p>
+  </header>
+
+  <h2>Formål</h2>
+  <p>jQrgenCorp skal grunnlegge finansielle tjenester i Norge og Europa, særlig blokkjedebaserte. Vi leter etter produkt–marked-match med metodene Y Combinator står for:</p>
+  <ul>
+    <li><b>Snakk med brukerne</b> før og mens vi bygger.</li>
+    <li><b>Lanser raskt</b> og lær av ekte bruk, ikke av planer.</li>
+    <li><b>Gjør ting som ikke skalerer</b> i starten, for å forstå behovet.</li>
+    <li><b>Mål retensjon og vekst</b>, ikke bare aktivitet.</li>
+    <li><b>Hold selskapet «default alive»</b>: utgiftene skal tåle at det tar tid å finne match.</li>
+  </ul>
+  <p>Finansielle tjenester er regulerte. Derfor må et lite team kunne to ting samtidig: eksperimentere dristig og raskt, og samtidig aldri ta snarveier på regelverk, penger og regnskap.</p>
+
+  <h2>Hvorfor D-SCOR</h2>
+  <p><a href="https://www.dscor.no/profilen">D-SCOR</a> er et norsk verktøy fra D-SCOR AS for bedre samarbeid. Modellen beskriver fire «likestilte» <b>arbeidsstiler</b> (hvordan man foretrekker å løse oppgaver) og fire <b>dialogstiler</b> (hvordan man tolker omgivelsene). Kjernen er at «Det er i mangfoldet vi finner potensialet», og at et team bør settes sammen slik at profilene utfyller hverandre.</p>
+  <table class="p"><thead><tr><th>Arbeidsstil</th><th>D-SCORs beskrivelse</th><th>Dialogstil</th><th>D-SCORs beskrivelse</th></tr></thead><tbody>
+    <tr><td><span class="st" style="--c:#B45309">S Starter</span></td><td>«Igangsetter, motiveres av variasjon og nye prosjekter»</td><td>DD Direkte</td><td>«Rett på sak»</td></tr><tr><td><span class="st" style="--c:#1D4ED8">C Kritiker</span></td><td>«Kvalitetssikrer, motiveres av å avdekke svakheter og ferdigstillelse»</td><td>PD Pragmatisk</td><td>«Kontroll på egne følelser»</td></tr><tr><td><span class="st" style="--c:#047857">O Organisator</span></td><td>«Implementerer, motiveres av å følge planer og gjennomføre som avtalt»</td><td>ED Engasjert</td><td>«Følelsesorientert»</td></tr><tr><td><span class="st" style="--c:#BE185D">R Relasjonsbygger</span></td><td>«Nettverksorientert, motiveres av samhold og lagånd»</td><td>HD Hybrid</td><td>«Diplomatisk»</td></tr>
+  </tbody></table>
+  <p class="note"><b>Ærlig merking.</b> Profilene her er <b>D-SCOR-inspirerte</b>: de er tildelt AI-agentene som et bevisst designvalg, ikke målt med D-SCORs spørreundersøkelse. Teamet består av AI-agenter, ikke mennesker, og en AI-agent kan ikke kartlegges eller sertifiseres. D-SCOR-ansvarlig er en AI-rolle basert på D-SCOR-modellen, ikke en sertifisert D-SCOR-rådgiver. Dette er ikke et offisielt D-SCOR-produkt eller en D-SCOR-sertifisering. Fordelingen i primær og sekundær stil, og skalaen for <b>risikovillighet (1–5)</b>, er jQrgenCorps egne tillegg og ikke en del av D-SCOR-modellen. jQrgenCorp er ikke tilknyttet, sertifisert av eller anbefalt av D-SCOR AS.</p>
+
+  <h2>Profilkart</h2>
+  <p>Agentene plassert etter primær arbeidsstil. Alle fire arbeidsstiler og alle fire dialogstiler er representert.</p>
+  <div class="quad" role="group" aria-label="Profilkart"><section class="q" style="--c:#B45309"><h3>S · Starter</h3><p class="qd">«Igangsetter, motiveres av variasjon og nye prosjekter»</p>
+      <ul><li><b>jQrgenCorp strategist</b> <small>sekundær Relasjonsbygger · Engasjert · risiko 4/5</small></li><li><b>jQrgenCorp forretningsutvikler</b> <small>sekundær Kritiker · Direkte · risiko 4/5</small></li></ul></section><section class="q" style="--c:#1D4ED8"><h3>C · Kritiker</h3><p class="qd">«Kvalitetssikrer, motiveres av å avdekke svakheter og ferdigstillelse»</p>
+      <ul><li><b>jQrgenCorp CFO</b> <small>sekundær Organisator · Direkte · risiko 2/5</small></li><li><b>jQrgenCorp tax &amp; compliance</b> <small>sekundær Organisator · Pragmatisk · risiko 1/5</small></li><li><b>jQrgenCorp revisor</b> <small>Direkte · risiko 1/5</small></li></ul></section><section class="q" style="--c:#047857"><h3>O · Organisator</h3><p class="qd">«Implementerer, motiveres av å følge planer og gjennomføre som avtalt»</p>
+      <ul><li><b>jQrgenCorp stabssjef</b> <small>sekundær Relasjonsbygger · Hybrid · risiko 3/5</small></li><li><b>jQrgenCorp admin</b> <small>sekundær Relasjonsbygger · Engasjert · risiko 2/5</small></li><li><b>jQrgenCorp accountant</b> <small>sekundær Kritiker · Pragmatisk · risiko 1/5</small></li></ul></section><section class="q" style="--c:#BE185D"><h3>R · Relasjonsbygger</h3><p class="qd">«Nettverksorientert, motiveres av samhold og lagånd»</p>
+      <ul><li><b>jQrgenCorp D-SCOR-ansvarlig</b> <small>sekundær Kritiker · Hybrid · risiko 3/5</small></li></ul></section></div>
+  <p class="counts">Primære arbeidsstiler: Starter 2 · Kritiker 3 · Organisator 3 · Relasjonsbygger 1. Dialogstiler: Direkte 3 · Pragmatisk 2 · Engasjert 2 · Hybrid 2.</p>
+
+  <h2>Teamet</h2>
+  <table class="p"><thead><tr><th>Agent</th><th>Rolle</th><th>Arbeidsstil (primær / sekundær)</th><th>Dialogstil</th><th>Risikovillighet</th></tr></thead><tbody><tr><th scope="row">jQrgenCorp strategist</th><td>Velger retning: hvilke markeder og hvilke veddemål vi tester</td><td><span class="st" style="--c:#B45309">S Starter</span> / <span class="st" style="--c:#BE185D">R Relasjonsbygger</span></td><td>ED Engasjert</td><td><span class="risk" aria-label="Risikovillighet 4 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><b>4/5 · Utforskende</b></span></td></tr><tr><th scope="row">jQrgenCorp forretningsutvikler</th><td>Gjør idéer om til raske, billige eksperimenter med tydelige stoppkriterier</td><td><span class="st" style="--c:#B45309">S Starter</span> / <span class="st" style="--c:#1D4ED8">C Kritiker</span></td><td>DD Direkte</td><td><span class="risk" aria-label="Risikovillighet 4 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><b>4/5 · Utforskende</b></span></td></tr><tr><th scope="row">jQrgenCorp stabssjef</th><td>Koordinerer teamet: eiere, frister og beslutninger</td><td><span class="st" style="--c:#047857">O Organisator</span> / <span class="st" style="--c:#BE185D">R Relasjonsbygger</span></td><td>HD Hybrid</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">jQrgenCorp D-SCOR-ansvarlig</th><td>AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen: sjekker hver måned at teamet er komplementært og samarbeider godt</td><td><span class="st" style="--c:#BE185D">R Relasjonsbygger</span> / <span class="st" style="--c:#1D4ED8">C Kritiker</span></td><td>HD Hybrid</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">jQrgenCorp CFO</th><td>Vokter økonomien og at selskapet holder seg «default alive»</td><td><span class="st" style="--c:#1D4ED8">C Kritiker</span> / <span class="st" style="--c:#047857">O Organisator</span></td><td>DD Direkte</td><td><span class="risk" aria-label="Risikovillighet 2 av 5"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><b>2/5 · Forsiktig</b></span></td></tr><tr><th scope="row">jQrgenCorp admin</th><td>Praktisk drift: møter, avtaler, arkiv og påminnelser</td><td><span class="st" style="--c:#047857">O Organisator</span> / <span class="st" style="--c:#BE185D">R Relasjonsbygger</span></td><td>ED Engasjert</td><td><span class="risk" aria-label="Risikovillighet 2 av 5"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><b>2/5 · Forsiktig</b></span></td></tr><tr><th scope="row">jQrgenCorp accountant</th><td>Automatisert, ryddig regnskapsføring</td><td><span class="st" style="--c:#047857">O Organisator</span> / <span class="st" style="--c:#1D4ED8">C Kritiker</span></td><td>PD Pragmatisk</td><td><span class="risk" aria-label="Risikovillighet 1 av 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><b>1/5 · Bevis først</b></span></td></tr><tr><th scope="row">jQrgenCorp tax &amp; compliance</th><td>Regulatorisk forhåndssjekk og frister før noe lanseres</td><td><span class="st" style="--c:#1D4ED8">C Kritiker</span> / <span class="st" style="--c:#047857">O Organisator</span></td><td>PD Pragmatisk</td><td><span class="risk" aria-label="Risikovillighet 1 av 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><b>1/5 · Bevis først</b></span></td></tr><tr><th scope="row">jQrgenCorp revisor</th><td>Uavhengig gjennomgang av regnskapet (ikke statsautorisert revisor)</td><td><span class="st" style="--c:#1D4ED8">C Kritiker</span> <small>(ren)</small></td><td>DD Direkte</td><td><span class="risk" aria-label="Risikovillighet 1 av 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><b>1/5 · Bevis først</b></span></td></tr></tbody></table>
+
+  <h2>Risikovillighet: et team i to hastigheter</h2>
+  <p>Risikovillighet er ikke en egen dimensjon i D-SCOR, men den henger sammen med arbeidsstil-aksen mellom å trives i «ukjente situasjoner» og å foretrekke det som er «forutsigbare og godt planlagt». Vi har bevisst gitt teamet to hastigheter:</p>
+  <ul>
+    <li><b>Utforskerne</b> (strategist og forretningsutvikler, Starter, risiko 4) foreslår dristige veddemål og tester dem raskt og billig, med tydelige stoppkriterier.</li>
+    <li><b>Kjernen</b> som berører penger, regnskap og regelverk (CFO, tax &amp; compliance, accountant og revisor, risiko 1–2) er konservativ og tar ingen snarveier.</li>
+    <li><b>Limet</b> (stabssjef og D-SCOR-ansvarlig, risiko 3) holder samtalen i gang, gjør uenighet om til tydelige beslutninger og passer på at ingen side dominerer.</li>
+  </ul>
+  <p><b>Hvem har siste ord?</b> jQrgen, alltid. Under ham kan tax &amp; compliance (regulatorisk risiko) og CFO (økonomisk risiko) heise et rødt flagg som stopper en sak til jQrgen har bestemt seg. Revisoren rapporterer uavhengig direkte til jQrgen. Utforskernes høye risikovillighet gjelder idéer og eksperimenter, aldri penger eller regelverk.</p>
+
+  <h2>Hvem utfordrer hvem</h2>
+  <ul>
+    <li>Forretningsutvikleren utfordrer strategen: «Hva er bevisene, og hva er den billigste testen som kan drepe idéen?»</li>
+    <li>Strategen utfordrer forretningsutvikleren og CFO: «Tester vi for smått til å lære noe? Hva er oppsiden?»</li>
+    <li>CFO utfordrer utforskerne på kostnad og tid per eksperiment, og på om vi fortsatt er «default alive».</li>
+    <li>Tax &amp; compliance gjør regulatorisk forhåndssjekk før noe møter brukere, og foreslår lovlige måter å teste på.</li>
+    <li>Utforskerne utfordrer bremsene tilbake: «Er dette et reelt hinder med kilde, eller bare forsiktighet?»</li>
+    <li>Revisoren utfordrer regnskapet og kontrollene, uavhengig av resten av teamet.</li>
+    <li>D-SCOR-ansvarlig utfordrer teamet som helhet: hvem dominerer, hvem blir ikke hørt, og passer miksen fortsatt formålet?</li>
+  </ul>
+
+  <h2>Hvorfor dette teamet er bygget for å levere</h2>
+  <ol>
+    <li><b>Fart der fart lønner seg.</b> To Startere sørger for at det alltid finnes et neste eksperiment, i tråd med «lanser raskt».</li>
+    <li><b>Trygghet der feil er dyre.</b> Tre Kritikere og tre Organisatorer sørger for at regelverk, penger og regnskap holder, noe et regulert finansselskap ikke kan klare seg uten.</li>
+    <li><b>Kontakt med brukerne.</b> Relasjonsbygger-trekk hos strategen, stabssjefen og admin trekker teamet ut mot brukere og partnere.</li>
+    <li><b>Ulike dialogstiler med vilje.</b> Direkte agenter sier ubehagelige sannheter tidlig, pragmatiske holder fakta i fokus, engasjerte gir energi, og diplomatiske holder teamet samlet.</li>
+    <li><b>Jevnlig ettersyn.</b> D-SCOR-ansvarlig (en AI-rolle basert på D-SCOR-modellen) går hver måned gjennom sammensetning og samarbeid opp mot formålet, og foreslår justeringer som jQrgen må godkjenne.</li>
+  </ol>
+
+  <section class="en" id="english" lang="en">
+    <h2>English summary</h2>
+    <p>jQrgenCorp is jQrgen's (Jørgen S. Notland) company. Its purpose is to found financial services in Norway and Europe, especially blockchain-based ones, finding product-market fit with Y Combinator methods: talk to users, launch fast, do things that don't scale, measure retention and growth, and stay default alive. The team is one person and 9 AI agents. Each agent has been given a D-SCOR-inspired profile (work style and dialogue style, from the Norwegian D-SCOR model) chosen so that the profiles complement each other. The team runs at two speeds: bold explorers who test ideas fast and cheaply, and a conservative core that never cuts corners on money, books or regulation. jQrgen always has the final word on risk. The profiles are assigned by design, not measured; the 1–5 risk-appetite scale is our own addition; the team consists of AI agents, the D-SCOR lead is an AI role based on the D-SCOR model, and this is not an official D-SCOR product or certification; jQrgenCorp is not affiliated with or endorsed by D-SCOR AS.</p>
+    <ul><li><b>jQrgenCorp strategist</b>: Chooses direction: which markets and bets to test (Starter/Relasjonsbygger, Engasjert, risk 4/5)</li><li><b>jQrgenCorp forretningsutvikler</b>: Turns ideas into fast, cheap experiments with clear kill criteria (Starter/Kritiker, Direkte, risk 4/5)</li><li><b>jQrgenCorp stabssjef</b>: Coordinates the team: owners, deadlines and decisions (Organisator/Relasjonsbygger, Hybrid, risk 3/5)</li><li><b>jQrgenCorp D-SCOR-ansvarlig</b>: AI role as D-SCOR lead, based on the D-SCOR model: checks monthly that the team stays complementary and works well together (Relasjonsbygger/Kritiker, Hybrid, risk 3/5)</li><li><b>jQrgenCorp CFO</b>: Guards the finances and keeps the company default alive (Kritiker/Organisator, Direkte, risk 2/5)</li><li><b>jQrgenCorp admin</b>: Practical operations: meetings, agreements, archive and reminders (Organisator/Relasjonsbygger, Engasjert, risk 2/5)</li><li><b>jQrgenCorp accountant</b>: Automated, tidy bookkeeping (Organisator/Kritiker, Pragmatisk, risk 1/5)</li><li><b>jQrgenCorp tax &amp; compliance</b>: Regulatory pre-checks and deadlines before anything launches (Kritiker/Organisator, Pragmatisk, risk 1/5)</li><li><b>jQrgenCorp revisor</b>: Independent review of the books (not an authorised auditor) (Kritiker, Direkte, risk 1/5)</li></ul>
+  </section>
+
+  <footer class="site">Kilde for D-SCOR-begrepene: <a href="https://www.dscor.no/profilen">dscor.no/profilen</a> · Generert av src/orgchart/build-jqrgencorp-team.js fra src/data/jqrgencorp-dscor.json · <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
+</div>
+</body>
+</html>
