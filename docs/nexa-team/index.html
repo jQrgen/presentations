@@ -23,7 +23,7 @@ a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .band nav a:hover{opacity:1}
 .band nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--band-ink)}
 .page{max-width:1080px;margin:0 auto;padding:36px 24px 72px}
-h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance}
+h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:pretty}
 .lede{margin:0;color:var(--ink-2);max-width:62ch}
 .count{margin:10px 0 0;font-size:13px;color:var(--muted)}
 .year{display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;margin-top:36px}
@@ -38,7 +38,7 @@ h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap
 .thumb img{display:block;width:100%;height:100%;object-fit:cover}
 .body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px}
 .kind{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:pretty}
 .body h3 a{color:var(--ink);text-decoration:none}
 .body h3 a:hover{text-decoration:underline}
 .where{margin:0;font-size:14px;color:var(--muted)}
@@ -77,6 +77,9 @@ h2.sec{font-size:22px;font-weight:500;margin:40px 0 14px;letter-spacing:-.01em}
 .legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:14px 0 0;font-size:14px;color:var(--ink-2)}
 .legend span.k{display:inline-flex;align-items:center;gap:8px}
 .legend .badge{margin:0}
+.dscor{margin:14px 0 0;max-width:80ch;border-left:4px solid var(--ink);background:#F9FAFB;padding:9px 13px;font-size:14px;color:var(--ink-2)}
+.node a.go{display:inline-block;margin-top:7px;font-size:12.5px;font-weight:600;padding:3px 8px;background:var(--band);color:var(--band-ink);text-decoration:none}
+.node a.go:hover{text-decoration:underline}
 .node .n{font-size:14.5px;font-weight:600;line-height:1.3}
 .node .r{font-size:12.5px;color:var(--ink-2);line-height:1.35;margin-top:2px}
 .node.top{text-align:center;width:280px;margin:0 auto}
@@ -138,8 +141,9 @@ footer.site a{color:inherit}
   <header>
     <h1>Nexa team: org chart</h1>
     <p class="lede">This team is AI agents run by jQrgen (Jørgen S. Notland), the only human on the chart. The agents mirror the human roles on <a href="https://nexa.org/team" rel="noopener">nexa.org/team</a>, plus roles he added: Strategist, DevRel &amp; BON grants, Product manager, Security &amp; audit and Game dev. It is not the real Nexa staff list; for the people behind Nexa, see nexa.org/team.</p>
+    <p class="dscor"><b>D-SCOR.</b> The team's D-SCOR-inspired work and dialogue styles are on the <a href="../nexa-team-dscor/">Nexa team D-SCOR page</a>. The Nexa D-SCOR-ansvarlig is an AI role based on the D-SCOR model, not a certified D-SCOR adviser. This is not an official D-SCOR product or D-SCOR certification, and the team is not affiliated with or endorsed by D-SCOR AS.</p>
     <p class="legend"><span class="k"><span class="badge human">👤 Human</span> a person</span><span class="k"><span class="badge ai">🤖 AI agent</span> an AI agent, not a person</span></p>
-    <p class="updated">1 human · 21 AI agents · <a href="#teams">8 teams</a> (AI agent group chats) · Last updated <time datetime="2026-10-01">1 October 2026</time></p>
+    <p class="updated">1 human · 22 AI agents · <a href="#teams">8 teams</a> (AI agent group chats) · Last updated <time datetime="2026-10-01">1 October 2026</time></p>
   </header>
   <div class="org" role="group" aria-label="Org chart">
     <div class="node top human"><span class="badge human">👤 Human</span><div class="n">jQrgen (Jørgen S. Notland)</div><div class="r">Runs the team · Bitcoin Unlimited / Nexa</div></div>
@@ -159,6 +163,8 @@ footer.site a{color:inherit}
         <ol><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Nexa security &amp; audit</div><div class="r">Independent security reviews, threat models and audit prep</div><div class="ttags" aria-label="Teams"><span class="ttag" style="--tc:#BE185D">Nexa security team</span></div></div></li></ol></section>
       <section class="dept" aria-label="Advisor"><h3>Advisor</h3>
         <ol><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Nexa strategist</div><div class="r">Advisor: overall strategy, positioning, Scandinavia-first plan and goals</div><div class="ttags" aria-label="Teams"><span class="ttag" style="--tc:#B91C1C">Nexa leadership team</span></div></div></li></ol></section>
+      <section class="dept" aria-label="D-SCOR"><h3>D-SCOR</h3>
+        <ol><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Nexa D-SCOR-ansvarlig</div><div class="r">AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen</div><a class="go" href="../nexa-team-dscor/">D-SCOR page →</a></div></li></ol></section>
     </div>
   </div>
   <h2 class="sec" id="teams">Teams</h2>

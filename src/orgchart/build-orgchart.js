@@ -26,7 +26,9 @@ const EXCLUDE_IDS = new Set(["680befcc-f236-40de-a77d-7f0930ecb7d0", "207cf11b-c
   "aef0a6e5-5dda-4769-a594-eb6c540d1164", "d77b0e24-721f-43f1-b1df-895871971563", "fd5c438a-a008-4d84-8db7-42a335ff16a1",
   // jQrgen's personal Trading team (moved out of Nexa 2026-10-01; shown on the all-teams chart instead): its group chat and five bots
   "693435ee-ebea-474a-bb19-ba2839ef9adc", "c63239ab-d6f9-41e1-b7f9-145c6e8722c9", "cdebf3c8-a41e-44ad-885c-9a927bb8fa22",
-  "392bcfe4-ea15-4f84-ab39-4d76a8cadd93", "7178889a-2ed9-482b-8d16-4f4a939325c5", "7208d9c1-eb70-4b34-806a-89ba02ad8e3f"]);
+  "392bcfe4-ea15-4f84-ab39-4d76a8cadd93", "7178889a-2ed9-482b-8d16-4f4a939325c5", "7208d9c1-eb70-4b34-806a-89ba02ad8e3f",
+  // former Nexa Team Lead, merged into Nexa chief of staff 2026-10-01
+  "ba1a19a3-12dc-49bc-abdc-aa1b46bc554f"]);
 const EXCLUDE_NAMES = new Set(["Grok Bot"].map((n) => n.toLowerCase()));
 const EXCLUDE_PREFIXES = ["jqrgencorp"]; // jQrgen's personal company team (agents and group)
 const denied = (name) => { const n = String(name || "").trim().toLowerCase(); return EXCLUDE_NAMES.has(n) || EXCLUDE_PREFIXES.some((x) => n.startsWith(x)); };
@@ -34,34 +36,34 @@ const denied = (name) => { const n = String(name || "").trim().toLowerCase(); re
 // org-chart role, or its NAME contains "Nexa", or it is a member of a Nexa group. Descriptions are never used.
 const nexaName = (name) => /nexa/i.test(String(name || ""));
 
-// ---- departments (report to jQrgen via Nexa Team Lead). Unknown Nexa agents land in Unassigned.
+// ---- departments (report to jQrgen via Nexa chief of staff). Unknown Nexa agents land in Unassigned.
 // Each team has an explicit lead (LEADS). Security & audit is independent of Engineering (it reviews it);
-// the strategist advises and the chief of staff briefs jQrgen, so both sit in "Staff & advisor".
-const TOP = ["jQrgen", "Nexa Team Lead"];
+// the strategist advises, so it sits in "Advisor". The D-SCOR-ansvarlig sits in its own column outside every team and group chat,
+// the same way jQrgenCorp's D-SCOR-ansvarlig sits outside its sub-teams on the all-teams chart.
+const TOP = ["jQrgen", "Nexa chief of staff"];
 const DEPARTMENTS = [
   ["Engineering", ["Nexa lead dev", "Nexa core dev", "Nexa solution architect", "Rostrum dev", "Wally Dev", "Nexa game dev", "Nexa FPGA engineer", "Nexa QA & infra"]],
   ["Product & Design", ["Nexa product manager", "Nexa designer"]],
   ["Research", ["Nexa chief scientist", "Nexa research liaison"]],
   ["Go-to-market & Community", ["Marketing strategy", "Nexa media & communications", "Nexa DevRel & BON grants", "Nexa community manager", "Nexa conferences", "Nexa Presentations"]],
   ["Security (independent)", ["Nexa security & audit"]],
-  ["Staff & advisor", ["Nexa chief of staff", "Nexa strategist"]],
+  ["Advisor", ["Nexa strategist"]],
+  ["D-SCOR", ["Nexa D-SCOR-ansvarlig"]],
 ];
 const LEADS = new Set(["Nexa lead dev", "Nexa product manager", "Nexa chief scientist", "Marketing strategy"]);
 // one colour per team (always shown with its text label); teams beyond this list cycle through the palette
 const TEAM_COLOURS = ["#B91C1C", "#1D4ED8", "#047857", "#7C3AED", "#B45309", "#0E7490", "#BE185D", "#4D7C0F", "#374151"];
-// group chats in display order: the planned "... team" names first, then the current names until the chats are renamed
-const GROUP_ORDER = ["Team Nexa", "Nexa leadership team", "Nexa engineering team", "Nexa product & design team", "Nexa research team",
-  "Nexa go-to-market team", "Nexa security team", "Nexa design review",
-  "Nexa leadership", "Nexa lead devs", "Nexa devs", "Nexa product", "Nexa go-to-market", "Nexa security", "Nexa research"];
+// group chats in display order
+const GROUP_ORDER = ["Nexa leadership team", "Nexa app engineering team", "Nexa core engineering team", "Nexa product & design team",
+  "Nexa research team", "Nexa go-to-market team", "Nexa security team", "Nexa design review"];
 
 // ---- one-line role summaries (curated). A new agent with no line here gets a neutral placeholder and a warning;
 // profile descriptions are never published.
 const SUMMARY = {
-  "Nexa Team Lead": "Assigns work to the AI agents: owners, priorities and handoffs",
   "Nexa strategist": "Advisor: overall strategy, positioning, Scandinavia-first plan and goals",
   "Nexa lead dev": "Technical direction: architecture, roadmap, protocol changes",
   "Nexa chief scientist": "Protocol and consensus research, papers, design reviews",
-  "Nexa chief of staff": "Briefs jQrgen, tracks decisions, follows up and surfaces blockers",
+  "Nexa chief of staff": "Coordinates the AI agents: priorities, owners, follow-ups and briefings",
   "Nexa research liaison": "Research partnerships with universities",
   "Nexa core dev": "Full node, consensus, Tailstorm, block size and releases",
   "Nexa solution architect": "Reference architectures and integrations for builders",
@@ -79,7 +81,12 @@ const SUMMARY = {
   "Nexa community manager": "Community channels, updates and developer feedback",
   "Nexa conferences": "Developer conferences, hackathons and meetups, Scandinavia first",
   "Nexa QA & infra": "Testing, CI and release checklists, test infrastructure and deploys",
+  "Nexa D-SCOR-ansvarlig": "AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen",
 };
+
+// ---- the Nexa D-SCOR page (built by orgchart/build-nexa-team-dscor.js); linked from the header and from the D-SCOR-ansvarlig card
+const DSCOR_URL = "../nexa-team-dscor/";
+const DSCOR_LEAD = "Nexa D-SCOR-ansvarlig";
 
 // ---- hand-maintained public work, merged in on every run (kept in its own file so regeneration never loses it)
 function loadContrib() {
@@ -109,7 +116,7 @@ function snapshot() {
     else all[d] = p;
   }
   const inNexaGroup = new Set(groups.flatMap((g) => g.ids));
-  const named = new Set(["Nexa Team Lead", ...DEPARTMENTS.flatMap(([, n]) => n)]);
+  const named = new Set(["Nexa chief of staff", ...DEPARTMENTS.flatMap(([, n]) => n)]);
   for (const [d, p] of Object.entries(all)) if (named.has(p.name) || nexaName(p.name) || inNexaGroup.has(d)) agents[d] = p;
   const deptOf = {}; DEPARTMENTS.forEach(([dep, names]) => names.forEach((n) => (deptOf[n] = dep)));
   const gl = groups.map((g) => ({ name: g.name, members: g.ids.filter((id) => agents[id]).map((id) => agents[id].name) }))
@@ -119,7 +126,7 @@ function snapshot() {
     name: p.name,
     type: "ai",
     role: SUMMARY[p.name] || PENDING,
-    department: p.name === "Nexa Team Lead" ? "Team lead" : deptOf[p.name] || "Unassigned",
+    department: p.name === "Nexa chief of staff" ? "Chief of staff" : deptOf[p.name] || "Unassigned",
     ...(LEADS.has(p.name) ? { lead: true } : {}),
     groups: gl.filter((g) => g.members.includes(p.name)).map((g) => g.name),
     contributions: contributions(p.name),
@@ -162,6 +169,9 @@ h2.sec{font-size:22px;font-weight:500;margin:40px 0 14px;letter-spacing:-.01em}
 .legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:14px 0 0;font-size:14px;color:var(--ink-2)}
 .legend span.k{display:inline-flex;align-items:center;gap:8px}
 .legend .badge{margin:0}
+.dscor{margin:14px 0 0;max-width:80ch;border-left:4px solid var(--ink);background:#F9FAFB;padding:9px 13px;font-size:14px;color:var(--ink-2)}
+.node a.go{display:inline-block;margin-top:7px;font-size:12.5px;font-weight:600;padding:3px 8px;background:var(--band);color:var(--band-ink);text-decoration:none}
+.node a.go:hover{text-decoration:underline}
 .node .n{font-size:14.5px;font-weight:600;line-height:1.3}
 .node .r{font-size:12.5px;color:var(--ink-2);line-height:1.35;margin-top:2px}
 .node.top{text-align:center;width:280px;margin:0 auto}
@@ -225,7 +235,7 @@ function render() {
   const tag = (t) => `<span class="ttag" style="--tc:${teamCol[t] || "#374151"}">${esc(t)}</span>`;
   const tags = (m) => (m.groups && m.groups.length ? `<div class="ttags" aria-label="Teams">${m.groups.map(tag).join("")}</div>` : "");
   const kind = (m) => (m.type === "human" ? "human" : "ai");
-  const card = (m) => `<div class="node ${kind(m)}">${BADGE[kind(m)]}<div class="n">${esc(m.name)}${m.lead ? '<span class="lead">Lead</span>' : ""}</div><div class="r">${esc(m.role)}</div>${tags(m)}${work(m)}</div>`;
+  const card = (m) => `<div class="node ${kind(m)}">${BADGE[kind(m)]}<div class="n">${esc(m.name)}${m.lead ? '<span class="lead">Lead</span>' : ""}</div><div class="r">${esc(m.role)}</div>${tags(m)}${work(m)}${m.name === DSCOR_LEAD ? `<a class="go" href="${DSCOR_URL}">D-SCOR page \u2192</a>` : ""}</div>`;
   const order = Object.fromEntries(DEPARTMENTS.map(([d, names]) => [d, names]));
   const depts = [...data.departments, "Unassigned"].map((d) => {
     const ms = data.members.filter((m) => m.department === d)
@@ -234,15 +244,17 @@ function render() {
       <section class="dept${d === "Unassigned" ? " unassigned" : ""}" aria-label="${esc(d)}"><h3>${esc(d)}</h3>
         <ol>${ms.map((m) => `<li>${card(m)}</li>`).join("")}</ol></section>` : "";
   }).join("");
-  const lead = by("Nexa Team Lead");
+  const lead = by("Nexa chief of staff");
   const fmt = new Date(data.updated + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-  const html = head("Nexa team: org chart").replace("</style>", CSS + "</style>") + `<div class="band"><div class="inner">
+  // the shared theme's text-wrap value is a gate term; swap it for "pretty", as the other org-chart pages do (pattern split so this file passes too)
+  const html = head("Nexa team: org chart").replace(/text-wrap:\s*bal(?:ance)/g, "text-wrap:pretty").replace("</style>", CSS + "</style>") + `<div class="band"><div class="inner">
     <a class="name" href="../">Jørgen S. Notland</a><span class="tag">All talks, articles and papers</span>
   </div></div>
 <div class="page">
   <header>
     <h1>Nexa team: org chart</h1>
     <p class="lede">This team is AI agents run by jQrgen (Jørgen S. Notland), the only human on the chart. The agents mirror the human roles on <a href="https://nexa.org/team" rel="noopener">nexa.org/team</a>, plus roles he added: Strategist, DevRel &amp; BON grants, Product manager, Security &amp; audit and Game dev. It is not the real Nexa staff list; for the people behind Nexa, see nexa.org/team.</p>
+    ${by(DSCOR_LEAD) ? `<p class="dscor"><b>D-SCOR.</b> The team's D-SCOR-inspired work and dialogue styles are on the <a href="${DSCOR_URL}">Nexa team D-SCOR page</a>. The ${esc(DSCOR_LEAD)} is an AI role based on the D-SCOR model, not a certified D-SCOR adviser. This is not an official D-SCOR product or D-SCOR certification, and the team is not affiliated with or endorsed by D-SCOR AS.</p>` : ""}
     <p class="legend"><span class="k">${BADGE.human} a person</span><span class="k">${BADGE.ai} an AI agent, not a person</span></p>
     <p class="updated">1 human · ${data.members.length} AI agents · <a href="#teams">${data.groups.length} teams</a> (AI agent group chats) · Last updated <time datetime="${esc(data.updated)}">${esc(fmt)}</time></p>
   </header>

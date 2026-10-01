@@ -12,6 +12,10 @@ WT=""; cleanup() { [ -n "$WT" ] && git worktree remove --force "$WT" 2>/dev/null
 git worktree prune
 git pull -q --ff-only origin main
 (cd src && node orgchart/build-orgchart.js && node home.js data ../docs https://github.com/jQrgen/presentations >/dev/null)
+# grep gate: the shared term list on the page, its data and scripts; the Nexa D-SCOR page's extra list on the page and data
+# (the builder itself names the roster path, which that list forbids on public pages). Any hit stops before anything is committed.
+(cd src && node orgchart/grep-gate.js ../docs/nexa-team data/nexa-team.json data/nexa-contributions.json orgchart/build-orgchart.js orgchart/publish.sh \
+  && node orgchart/grep-gate.js ../docs/nexa-team data/nexa-team.json data/nexa-contributions.json --terms orgchart/nexa-team-dscor-terms.json)
 git add docs/nexa-team src/data/nexa-team.json src/data/nexa-contributions.json docs/index.html
 git diff --cached --quiet || git commit -q -m "Nexa team org chart: refresh from the team roster"
 git fetch -q origin gh-pages

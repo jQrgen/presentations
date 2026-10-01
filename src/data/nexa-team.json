@@ -15,7 +15,8 @@
     "Research",
     "Go-to-market & Community",
     "Security (independent)",
-    "Advisor"
+    "Advisor",
+    "D-SCOR"
   ],
   "members": [
     {
@@ -105,6 +106,14 @@
           "date": "2026-10-01"
         }
       ]
+    },
+    {
+      "name": "Nexa D-SCOR-ansvarlig",
+      "type": "ai",
+      "role": "AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen",
+      "department": "D-SCOR",
+      "groups": [],
+      "contributions": []
     },
     {
       "name": "Nexa designer",
