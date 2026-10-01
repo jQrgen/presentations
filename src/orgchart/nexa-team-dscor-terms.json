@@ -1,0 +1,31 @@
+{
+  "_note": "Extra grep-gate terms for the Nexa D-SCOR page only (on top of forbidden-terms.json). Extend freely; never weaken a term to dodge a false positive, change the text instead.",
+  "terms": [
+    "org.nr",
+    "919 057",
+    "Fiken",
+    "Tripletex",
+    "Sbanken",
+    "SpareBank",
+    "Nordea",
+    "faktura",
+    "invoice",
+    "saldo",
+    "privat uttak",
+    "forskuddsskatt",
+    "restskatt",
+    "skattemelding",
+    "helse",
+    "health",
+    "sykdom",
+    "kunde:",
+    "client:",
+    "kr ",
+    "EUR ",
+    "nip.io",
+    "13-51-169",
+    "eu-north-1",
+    "agent-data",
+    "profile.json"
+  ]
+}

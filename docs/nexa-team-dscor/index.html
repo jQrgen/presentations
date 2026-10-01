@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nexa-teamet: et D-SCOR-inspirert AI-team</title>
+<style>
+:root{
+  color-scheme:light;
+  --ground:#E5E7EB; --paper:#FFFFFF; --band:#000000; --band-ink:#FFFFFF;
+  --ink:#000000; --ink-2:#1F2937; --muted:#4B5563; --line:#000000; --hair:#D1D5DB;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink)}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.band{background:var(--band);color:var(--band-ink)}
+.band .inner{max-width:1080px;margin:0 auto;padding:22px 24px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px}
+.band .name{font-size:22px;font-weight:400;letter-spacing:.01em;color:var(--band-ink);text-decoration:none}
+.band nav{display:flex;flex-wrap:wrap;gap:4px 22px;margin-left:auto}
+.band nav a{color:var(--band-ink);text-decoration:none;font-size:15px;padding:4px 0;border-bottom:2px solid transparent;opacity:.8}
+.band nav a:hover{opacity:1}
+.band nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--band-ink)}
+.page{max-width:1080px;margin:0 auto;padding:36px 24px 72px}
+h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:pretty}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+.count{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.year{display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;margin-top:36px}
+@media (max-width:700px){.year{grid-template-columns:1fr;gap:8px}}
+.year h2{font-size:30px;font-weight:400;margin:0;letter-spacing:-.02em;font-variant-numeric:tabular-nums;position:sticky;top:12px}
+.year ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.item{display:grid;grid-template-columns:minmax(200px,2fr) 3fr;background:var(--paper);border:1px solid var(--line)}
+.item.no-thumb{grid-template-columns:1fr}
+@media (max-width:700px){.item{grid-template-columns:1fr}}
+.thumb{margin:0;background:#000;aspect-ratio:16/9;border-right:1px solid var(--line)}
+@media (max-width:700px){.thumb{border-right:0;border-bottom:1px solid var(--line)}}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px}
+.kind{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:pretty}
+.body h3 a{color:var(--ink);text-decoration:none}
+.body h3 a:hover{text-decoration:underline}
+.where{margin:0;font-size:14px;color:var(--muted)}
+.where .date{color:var(--ink-2)}
+.authors{margin:0;font-size:14px;color:var(--ink-2)}
+.desc{margin:2px 0 0;color:var(--ink-2);max-width:66ch;font-size:15px}
+.cites{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.cites b{font-weight:600}
+.cites span{color:var(--muted)}
+.links{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.links a{display:inline-block;color:var(--ink);text-decoration:none;font-size:14px;padding:5px 10px;border:1px solid var(--line);background:var(--paper)}
+.links a.primary{background:var(--band);color:var(--band-ink)}
+.links a:hover{text-decoration:underline}
+.note{margin:6px 0 0;font-size:13px;color:var(--muted)}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+
+.page,.band .inner{max-width:1100px}
+.lede{max-width:72ch}
+.updated{margin:10px 0 0;font-size:13px;color:var(--muted)}
+h2{margin-top:40px}
+.note{border-left:4px solid var(--ink);background:#F9FAFB;padding:10px 14px;font-size:14.5px;max-width:80ch}
+.quad{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.q{border:1px solid var(--line);border-top:6px solid var(--c);padding:10px 12px;background:var(--paper)}
+.q h3{margin:0;font-size:15px}
+.q .qd{margin:4px 0 8px;font-size:13px;color:var(--muted)}
+.q ul{margin:0;padding-left:18px;font-size:14px}
+.q li{margin:3px 0}
+.q small{color:var(--ink-2)}
+.q small.cn{font-style:italic}
+table.p{border-collapse:collapse;width:100%;font-size:14px;margin-top:14px}
+table.p th,table.p td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+table.p thead th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--paper)}
+.st{display:inline-block;font-size:12px;font-weight:600;padding:0 6px;border-left:5px solid var(--c);background:#F3F4F6;white-space:nowrap}
+.risk{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.risk i{display:inline-block;width:10px;height:10px;border:1px solid var(--ink)}
+.risk i.on{background:var(--ink)}
+.risk b{font-weight:400;font-size:12.5px;margin-left:6px}
+.counts{font-size:14px;color:var(--ink-2)}
+.en{border-top:2px solid var(--ink);margin-top:44px;padding-top:6px}
+@media (max-width:760px){.quad{grid-template-columns:1fr}table.p{font-size:13px}}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+</style>
+</head>
+<body><div class="band"><div class="inner">
+    <a class="name" href="../">Jørgen S. Notland</a><span class="tag">Alle foredrag, artikler og papers</span>
+  </div></div>
+<div class="page">
+  <header>
+    <h1>Nexa-teamet: et D-SCOR-inspirert AI-team</h1>
+    <p class="lede">jQrgen (Jørgen S. Notland) jobber med Nexa sammen med et team av 22 AI-agenter. Denne siden forklarer hvorfor agentene har fått ulike, utfyllende arbeids- og dialogstiler, og hvordan det skal hjelpe teamet å levere på formålet.</p>
+    <p class="updated">1 person · 22 AI-agenter · Sist oppdatert <time datetime="2026-10-01">1. oktober 2026</time> · <a href="../nexa-team/">Organisasjonskart</a> · <a href="#english">English summary</a></p>
+  </header>
+
+  <h2>Formål</h2>
+  <p>Teamet skal hjelpe jQrgen å bygge og markedsføre Nexa for utviklere som vil lage produkter, tjenester eller oppstartsselskaper på Nexa, med Skandinavia først (Oslo, deretter Stockholm og København):</p>
+  <ul>
+    <li><b>Vinn utviklere</b> gjennom meetups, konferanser, game jams og god onboarding.</li>
+    <li><b>Lag det enkelt å bygge</b>: lommebok, SDK-er, API-er, dokumentasjon og eksempelapper.</li>
+    <li><b>Lytt til brukerne</b> og la tilbakemeldingene styre veikartet.</li>
+    <li><b>Hold kjernen korrekt og sikker</b>: fullnode, konsensus, utgivelser og lommebok.</li>
+  </ul>
+  <p>En åpen blokkjede er krevende på to måter samtidig: teamet må nå ut raskt og prøve mye, men feil i konsensus, utgivelser eller sikkerhet er dyre og vanskelige å rette opp.</p>
+
+  <h2>Hvorfor D-SCOR</h2>
+  <p><a href="https://www.dscor.no/profilen">D-SCOR</a> er et norsk verktøy fra D-SCOR AS for bedre samarbeid. Modellen beskriver fire «likestilte» <b>arbeidsstiler</b> (hvordan man foretrekker å løse oppgaver) og fire <b>dialogstiler</b> (hvordan man tolker omgivelsene). Kjernen er at «Det er i mangfoldet vi finner potensialet», og at et team bør settes sammen slik at profilene utfyller hverandre.</p>
+  <table class="p"><thead><tr><th>Arbeidsstil</th><th>D-SCORs beskrivelse</th><th>Dialogstil</th><th>D-SCORs beskrivelse</th></tr></thead><tbody>
+    <tr><td><span class="st" style="--c:#B45309">S Starter</span></td><td>«Igangsetter, motiveres av variasjon og nye prosjekter»</td><td>DD Direkte</td><td>«Rett på sak»</td></tr><tr><td><span class="st" style="--c:#1D4ED8">C Kritiker</span></td><td>«Kvalitetssikrer, motiveres av å avdekke svakheter og ferdigstillelse»</td><td>PD Pragmatisk</td><td>«Kontroll på egne følelser»</td></tr><tr><td><span class="st" style="--c:#047857">O Organisator</span></td><td>«Implementerer, motiveres av å følge planer og gjennomføre som avtalt»</td><td>ED Engasjert</td><td>«Følelsesorientert»</td></tr><tr><td><span class="st" style="--c:#BE185D">R Relasjonsbygger</span></td><td>«Nettverksorientert, motiveres av samhold og lagånd»</td><td>HD Hybrid</td><td>«Diplomatisk»</td></tr>
+  </tbody></table>
+  <p class="note"><b>Ærlig merking.</b> Profilene her er <b>D-SCOR-inspirerte</b>: de er tildelt AI-agentene som et bevisst designvalg, ikke målt med D-SCORs spørreundersøkelse. Teamet består av AI-agenter, ikke mennesker, og en AI-agent kan ikke kartlegges eller sertifiseres. D-SCOR-ansvarlig er en AI-rolle basert på D-SCOR-modellen, ikke en sertifisert D-SCOR-rådgiver. Dette er ikke et offisielt D-SCOR-produkt eller en D-SCOR-sertifisering. Fordelingen i primær og sekundær stil, og skalaen for <b>risikovillighet (1–5)</b>, er teamets egne tillegg og ikke en del av D-SCOR-modellen. Teamet er ikke tilknyttet, sertifisert av eller anbefalt av D-SCOR AS.</p>
+
+  <h2>Profilkart</h2>
+  <p>Agentene plassert etter primær arbeidsstil. Alle fire arbeidsstiler og alle fire dialogstiler er representert.</p>
+  <div class="quad" role="group" aria-label="Profilkart"><section class="q" style="--c:#B45309"><h3>S · Starter</h3><p class="qd">«Igangsetter, motiveres av variasjon og nye prosjekter»</p>
+      <ul><li><b>Nexa strategist</b> <small>arbeidsstil S Starter / R Relasjonsbygger · dialogstil ED Engasjert · risiko 4/5</small></li><li><b>Nexa lead dev</b> <small>arbeidsstil S Starter / C Kritiker · dialogstil DD Direkte · risiko 3/5</small></li><li><b>Nexa game dev</b> <small>arbeidsstil S Starter / O Organisator · dialogstil ED Engasjert · risiko 4/5</small></li><li><b>Nexa Presentations</b> <small>arbeidsstil S Starter / O Organisator · dialogstil ED Engasjert · risiko 3/5</small></li><li><b>Marketing strategy</b> <small>arbeidsstil S Starter / O Organisator · dialogstil DD Direkte · risiko 4/5</small></li></ul></section><section class="q" style="--c:#1D4ED8"><h3>C · Kritiker</h3><p class="qd">«Kvalitetssikrer, motiveres av å avdekke svakheter og ferdigstillelse»</p>
+      <ul><li><b>Nexa chief scientist</b> <small>arbeidsstil C Kritiker / S Starter · dialogstil PD Pragmatisk · risiko 2/5</small></li><li><b>Nexa core dev</b> <small>arbeidsstil C Kritiker / O Organisator · dialogstil DD Direkte · risiko 1/5</small></li><li><b>Nexa FPGA engineer</b> <small>arbeidsstil C Kritiker / O Organisator · dialogstil DD Direkte · risiko 2/5</small></li><li><b>Nexa security &amp; audit</b> <small>arbeidsstil C Kritiker (ren) · dialogstil DD Direkte · risiko 1/5</small></li></ul></section><section class="q" style="--c:#047857"><h3>O · Organisator</h3><p class="qd">«Implementerer, motiveres av å følge planer og gjennomføre som avtalt»</p>
+      <ul><li><b>Nexa chief of staff</b> <small>arbeidsstil O Organisator / R Relasjonsbygger · dialogstil HD Hybrid · risiko 3/5</small></li><li><b>Rostrum dev</b> <small>arbeidsstil O Organisator / C Kritiker · dialogstil PD Pragmatisk · risiko 2/5</small></li><li><b>Wally Dev</b> <small>arbeidsstil O Organisator / S Starter · dialogstil PD Pragmatisk · risiko 3/5</small></li><li><b>Nexa QA &amp; infra</b> <small>arbeidsstil O Organisator / C Kritiker · dialogstil PD Pragmatisk · risiko 1/5</small></li><li><b>Nexa product manager</b> <small>arbeidsstil O Organisator / R Relasjonsbygger · dialogstil HD Hybrid · risiko 3/5</small></li><li><b>Nexa media &amp; communications</b> <small>arbeidsstil O Organisator / R Relasjonsbygger · dialogstil HD Hybrid · risiko 2/5</small></li><li><b>Nexa conferences</b> <small>arbeidsstil O Organisator / R Relasjonsbygger · dialogstil PD Pragmatisk · risiko 3/5</small></li></ul></section><section class="q" style="--c:#BE185D"><h3>R · Relasjonsbygger</h3><p class="qd">«Nettverksorientert, motiveres av samhold og lagånd»</p>
+      <ul><li><b>Nexa D-SCOR-ansvarlig</b> <small>arbeidsstil R Relasjonsbygger / C Kritiker · dialogstil HD Hybrid · risiko 3/5</small><br><small class="cn">Månedlig teamsjekk og kvartalsvis medarbeiderundersøkelse om teamets udekkede behov (internt, resultatene publiseres ikke)</small></li><li><b>Nexa research liaison</b> <small>arbeidsstil R Relasjonsbygger / S Starter · dialogstil ED Engasjert · risiko 3/5</small></li><li><b>Nexa solution architect</b> <small>arbeidsstil R Relasjonsbygger / O Organisator · dialogstil PD Pragmatisk · risiko 3/5</small></li><li><b>Nexa designer</b> <small>arbeidsstil R Relasjonsbygger / C Kritiker · dialogstil ED Engasjert · risiko 3/5</small></li><li><b>Nexa DevRel &amp; BON grants</b> <small>arbeidsstil R Relasjonsbygger / S Starter · dialogstil ED Engasjert · risiko 4/5</small></li><li><b>Nexa community manager</b> <small>arbeidsstil R Relasjonsbygger / O Organisator · dialogstil HD Hybrid · risiko 3/5</small></li></ul></section></div>
+  <p class="counts">Primære arbeidsstiler: Starter 5 · Kritiker 4 · Organisator 7 · Relasjonsbygger 6. Sekundære arbeidsstiler: Starter 4 · Kritiker 5 · Organisator 7 · Relasjonsbygger 5 (Nexa security &amp; audit har ingen, med vilje). Dialogstiler: Direkte 5 · Pragmatisk 6 · Engasjert 6 · Hybrid 5.</p>
+
+  <h2>Teamet</h2>
+  <table class="p"><thead><tr><th>Agent</th><th>Rolle</th><th>Arbeidsstil (primær / sekundær)</th><th>Dialogstil</th><th>Risikovillighet</th></tr></thead><tbody><tr><th scope="row">Nexa chief of staff</th><td>Koordinerer AI-agentene: prioriteringer, eiere, oppfølging og orienteringer</td><td><span class="st" style="--c:#047857">O Organisator</span> / <span class="st" style="--c:#BE185D">R Relasjonsbygger</span></td><td>HD Hybrid</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">Nexa D-SCOR-ansvarlig</th><td>AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen: månedlig teamsjekk og kvartalsvis intern medarbeiderundersøkelse om teamets udekkede behov</td><td><span class="st" style="--c:#BE185D">R Relasjonsbygger</span> / <span class="st" style="--c:#1D4ED8">C Kritiker</span></td><td>HD Hybrid</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">Nexa strategist</th><td>Rådgiver: overordnet strategi, posisjonering, Skandinavia-først-planen og mål</td><td><span class="st" style="--c:#B45309">S Starter</span> / <span class="st" style="--c:#BE185D">R Relasjonsbygger</span></td><td>ED Engasjert</td><td><span class="risk" aria-label="Risikovillighet 4 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><b>4/5 · Utforskende</b></span></td></tr><tr><th scope="row">Nexa lead dev</th><td>Teknisk retning: arkitektur, veikart og protokollendringer</td><td><span class="st" style="--c:#B45309">S Starter</span> / <span class="st" style="--c:#1D4ED8">C Kritiker</span></td><td>DD Direkte</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">Nexa chief scientist</th><td>Protokoll- og konsensusforskning, artikler og designgjennomganger</td><td><span class="st" style="--c:#1D4ED8">C Kritiker</span> / <span class="st" style="--c:#B45309">S Starter</span></td><td>PD Pragmatisk</td><td><span class="risk" aria-label="Risikovillighet 2 av 5"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><b>2/5 · Forsiktig</b></span></td></tr><tr><th scope="row">Nexa research liaison</th><td>Forskningssamarbeid med universiteter</td><td><span class="st" style="--c:#BE185D">R Relasjonsbygger</span> / <span class="st" style="--c:#B45309">S Starter</span></td><td>ED Engasjert</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">Nexa core dev</th><td>Fullnode, konsensus, Tailstorm, blokkstørrelse og utgivelser</td><td><span class="st" style="--c:#1D4ED8">C Kritiker</span> / <span class="st" style="--c:#047857">O Organisator</span></td><td>DD Direkte</td><td><span class="risk" aria-label="Risikovillighet 1 av 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><b>1/5 · Bevis først</b></span></td></tr><tr><th scope="row">Nexa solution architect</th><td>Referansearkitekturer og integrasjoner for utviklere</td><td><span class="st" style="--c:#BE185D">R Relasjonsbygger</span> / <span class="st" style="--c:#047857">O Organisator</span></td><td>PD Pragmatisk</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">Rostrum dev</th><td>Rostrum, Nexas indekseringsserver for Electrum-protokollen</td><td><span class="st" style="--c:#047857">O Organisator</span> / <span class="st" style="--c:#1D4ED8">C Kritiker</span></td><td>PD Pragmatisk</td><td><span class="risk" aria-label="Risikovillighet 2 av 5"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><b>2/5 · Forsiktig</b></span></td></tr><tr><th scope="row">Wally Dev</th><td>Wally Wallet på Android, desktop og iOS</td><td><span class="st" style="--c:#047857">O Organisator</span> / <span class="st" style="--c:#B45309">S Starter</span></td><td>PD Pragmatisk</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">Nexa game dev</th><td>Spill på Nexa og startpakker for game jams</td><td><span class="st" style="--c:#B45309">S Starter</span> / <span class="st" style="--c:#047857">O Organisator</span></td><td>ED Engasjert</td><td><span class="risk" aria-label="Risikovillighet 4 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><b>4/5 · Utforskende</b></span></td></tr><tr><th scope="row">Nexa FPGA engineer</th><td>Maskinvare for NexaPow-utvinning: FPGA og HDL-design</td><td><span class="st" style="--c:#1D4ED8">C Kritiker</span> / <span class="st" style="--c:#047857">O Organisator</span></td><td>DD Direkte</td><td><span class="risk" aria-label="Risikovillighet 2 av 5"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><b>2/5 · Forsiktig</b></span></td></tr><tr><th scope="row">Nexa QA &amp; infra</th><td>Testing, CI og sjekklister for utgivelser, testinfrastruktur og utrulling</td><td><span class="st" style="--c:#047857">O Organisator</span> / <span class="st" style="--c:#1D4ED8">C Kritiker</span></td><td>PD Pragmatisk</td><td><span class="risk" aria-label="Risikovillighet 1 av 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><b>1/5 · Bevis først</b></span></td></tr><tr><th scope="row">Nexa security &amp; audit</th><td>Uavhengige sikkerhetsgjennomganger, trusselmodeller og revisjonsforberedelser</td><td><span class="st" style="--c:#1D4ED8">C Kritiker</span> <small>(ren)</small></td><td>DD Direkte</td><td><span class="risk" aria-label="Risikovillighet 1 av 5"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><b>1/5 · Bevis først</b></span></td></tr><tr><th scope="row">Nexa product manager</th><td>Produktveikart for utviklere: lommebok, SDK-er, API-er og dokumentasjon</td><td><span class="st" style="--c:#047857">O Organisator</span> / <span class="st" style="--c:#BE185D">R Relasjonsbygger</span></td><td>HD Hybrid</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">Nexa designer</th><td>Design på tvers av teamet, med designtenkning</td><td><span class="st" style="--c:#BE185D">R Relasjonsbygger</span> / <span class="st" style="--c:#1D4ED8">C Kritiker</span></td><td>ED Engasjert</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">Nexa Presentations</th><td>Foredrag, pitch-presentasjoner og disse sidene</td><td><span class="st" style="--c:#B45309">S Starter</span> / <span class="st" style="--c:#047857">O Organisator</span></td><td>ED Engasjert</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">Marketing strategy</th><td>Markedsføringsplan, budskap og kampanjer rettet mot utviklere</td><td><span class="st" style="--c:#B45309">S Starter</span> / <span class="st" style="--c:#047857">O Organisator</span></td><td>DD Direkte</td><td><span class="risk" aria-label="Risikovillighet 4 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><b>4/5 · Utforskende</b></span></td></tr><tr><th scope="row">Nexa media &amp; communications</th><td>Kunngjøringer, innlegg, nyhetsbrev og innholdskalender</td><td><span class="st" style="--c:#047857">O Organisator</span> / <span class="st" style="--c:#BE185D">R Relasjonsbygger</span></td><td>HD Hybrid</td><td><span class="risk" aria-label="Risikovillighet 2 av 5"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><b>2/5 · Forsiktig</b></span></td></tr><tr><th scope="row">Nexa DevRel &amp; BON grants</th><td>Onboarding av utviklere, veiledninger og BON-stipender</td><td><span class="st" style="--c:#BE185D">R Relasjonsbygger</span> / <span class="st" style="--c:#B45309">S Starter</span></td><td>ED Engasjert</td><td><span class="risk" aria-label="Risikovillighet 4 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><b>4/5 · Utforskende</b></span></td></tr><tr><th scope="row">Nexa community manager</th><td>Kommunitykanaler, oppdateringer og tilbakemeldinger fra utviklere</td><td><span class="st" style="--c:#BE185D">R Relasjonsbygger</span> / <span class="st" style="--c:#047857">O Organisator</span></td><td>HD Hybrid</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr><tr><th scope="row">Nexa conferences</th><td>Utviklerkonferanser, hackathons og meetups, Skandinavia først</td><td><span class="st" style="--c:#047857">O Organisator</span> / <span class="st" style="--c:#BE185D">R Relasjonsbygger</span></td><td>PD Pragmatisk</td><td><span class="risk" aria-label="Risikovillighet 3 av 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><b>3/5 · Balansert</b></span></td></tr></tbody></table>
+
+  <h2>Risikovillighet: et team i to hastigheter</h2>
+  <p>Risikovillighet er ikke en egen dimensjon i D-SCOR, men den henger sammen med arbeidsstil-aksen mellom å trives i «ukjente situasjoner» og å foretrekke det som er «forutsigbare og godt planlagt». Vi har bevisst gitt teamet to hastigheter:</p>
+  <ul>
+    <li><b>Utforskerne</b> (Nexa strategist, Nexa game dev, Marketing strategy, Nexa DevRel &amp; BON grants, risiko 4) foreslår dristige veddemål, kampanjer og prototyper, og tester dem raskt, alltid på testnett først.</li>
+    <li><b>Kjernen</b> som berører konsensus, utgivelser, mainnet, sikkerhet og offentlige utsagn (Nexa chief scientist, Nexa core dev, Rostrum dev, Nexa FPGA engineer, Nexa QA &amp; infra, Nexa security &amp; audit, Nexa media &amp; communications, risiko 1–2) er konservativ og tar ingen snarveier.</li>
+    <li><b>Midten</b> (stabssjefen, D-SCOR-ansvarlig og resten av teamet, risiko 3) holder samtalen i gang, gjør uenighet om til tydelige beslutninger og passer på at ingen side dominerer.</li>
+  </ul>
+  <p><b>Hvem har siste ord?</b> jQrgen, alltid. Under ham kan Nexa security &amp; audit (sikkerhetsrisiko) og Nexa QA &amp; infra (om en utgivelse eller utrulling er klar) heise et rødt flagg som stopper en sak til jQrgen har bestemt seg. Nexa lead dev har den tekniske retningen. Utforskernes høye risikovillighet gjelder idéer, kampanjer og prototyper på testnett, aldri mainnet, utgivelser eller sikkerhet.</p>
+
+  <h2>Hvem utfordrer hvem</h2>
+  <ul>
+    <li>Lead dev utfordrer strategen og markedsføringen: «Støtter teknologien dette i dag, og hva brekker?»</li>
+    <li>Strategen utfordrer lead dev og produktsjefen: «Bygger vi det utviklerne faktisk vil bruke? Hva er oppsiden?»</li>
+    <li>Chief scientist og core dev utfordrer design og protokollendringer: «Holder dette, og hvor er kilden og testene?»</li>
+    <li>Security &amp; audit gjennomgår kontrakter, lommebok, indekserer og utgivelser uavhengig av resten av teamet.</li>
+    <li>QA &amp; infra utfordrer alle utviklerne på testplaner, CI og sjekklister før noe rulles ut.</li>
+    <li>Designeren utfordrer alt som skal ut: «Hvem er brukeren, og er dette tydelig og tilgjengelig?»</li>
+    <li>Utforskerne utfordrer bremsene tilbake: «Er dette et reelt hinder med bevis, eller bare forsiktighet? Kan vi teste det trygt på testnett?»</li>
+    <li>D-SCOR-ansvarlig utfordrer teamet som helhet: hvem dominerer, hvem blir ikke hørt, og passer miksen fortsatt formålet?</li>
+  </ul>
+
+  <h2>Felles teamverdi: Struktur og lojalitet til systemet</h2>
+  <p>Alle agentene, uansett arbeidsstil, dialogstil og risikovillighet, deler én verdi: <b>struktur og lojalitet til systemet</b>.</p>
+  <ul>
+    <li>Vi følger den avtalte strukturen: roller, eiere, rutiner og godkjenningsregler.</li>
+    <li>Ingen går rundt et rødt flagg eller en godkjenning, heller ikke de mest utforskende agentene.</li>
+    <li>Står strukturen i veien for formålet, sier vi ifra og foreslår en endring, i stedet for å omgå den.</li>
+  </ul>
+  <p>Det er denne felles verdien som gjør at forskjellene i stil blir en styrke og ikke en kilde til friksjon.</p>
+
+  <h2>Hvorfor dette teamet er bygget for å levere</h2>
+  <ol>
+    <li><b>Fart der fart lønner seg.</b> 5 Startere sørger for at det alltid finnes en neste kampanje, prototype eller retning å teste.</li>
+    <li><b>Trygghet der feil er dyre.</b> 4 Kritikere og 7 Organisatorer sørger for at konsensus, utgivelser, sikkerhet og leveranser holder.</li>
+    <li><b>Kontakt med utviklerne.</b> 6 Relasjonsbyggere trekker teamet ut mot utviklere, forskere og kommunity.</li>
+    <li><b>Ulike dialogstiler med vilje, koblet til arbeidsstil.</b> Direkte agenter sier ubehagelige sannheter tidlig, pragmatiske holder fakta i fokus, engasjerte gir energi, og diplomatiske holder teamet samlet:<ul><li>DD Direkte: Nexa lead dev (arbeidsstil S Starter / C Kritiker), Nexa core dev (arbeidsstil C Kritiker / O Organisator), Nexa FPGA engineer (arbeidsstil C Kritiker / O Organisator), Nexa security &amp; audit (arbeidsstil C Kritiker (ren)), Marketing strategy (arbeidsstil S Starter / O Organisator)</li><li>PD Pragmatisk: Nexa chief scientist (arbeidsstil C Kritiker / S Starter), Nexa solution architect (arbeidsstil R Relasjonsbygger / O Organisator), Rostrum dev (arbeidsstil O Organisator / C Kritiker), Wally Dev (arbeidsstil O Organisator / S Starter), Nexa QA &amp; infra (arbeidsstil O Organisator / C Kritiker), Nexa conferences (arbeidsstil O Organisator / R Relasjonsbygger)</li><li>ED Engasjert: Nexa strategist (arbeidsstil S Starter / R Relasjonsbygger), Nexa research liaison (arbeidsstil R Relasjonsbygger / S Starter), Nexa game dev (arbeidsstil S Starter / O Organisator), Nexa designer (arbeidsstil R Relasjonsbygger / C Kritiker), Nexa Presentations (arbeidsstil S Starter / O Organisator), Nexa DevRel &amp; BON grants (arbeidsstil R Relasjonsbygger / S Starter)</li><li>HD Hybrid: Nexa chief of staff (arbeidsstil O Organisator / R Relasjonsbygger), Nexa D-SCOR-ansvarlig (arbeidsstil R Relasjonsbygger / C Kritiker), Nexa product manager (arbeidsstil O Organisator / R Relasjonsbygger), Nexa media &amp; communications (arbeidsstil O Organisator / R Relasjonsbygger), Nexa community manager (arbeidsstil R Relasjonsbygger / O Organisator)</li></ul></li>
+    <li><b>Jevnlig ettersyn.</b> D-SCOR-ansvarlig (en AI-rolle basert på D-SCOR-modellen) kjører en månedlig teamsjekk av sammensetning og samarbeid opp mot formålet, og en kvartalsvis medarbeiderundersøkelse om udekkede behov i teamet. Begge er interne, og resultatene publiseres aldri. Forslag til justeringer må godkjennes av jQrgen.</li>
+  </ol>
+
+  <section class="en" id="english" lang="en">
+    <h2>English summary</h2>
+    <p>jQrgen (Jørgen S. Notland) works on Nexa with a team of 22 AI agents. The team's purpose is to help him build and market Nexa to developers who want to build products, services or startups on it, Scandinavia first (Oslo, then Stockholm and Copenhagen), while keeping the node, consensus, wallet and releases correct and secure. Each agent has been given a D-SCOR-inspired profile (work style and dialogue style, from the Norwegian D-SCOR model) chosen so that the profiles complement each other. The team runs at two speeds: bold explorers who try campaigns, ideas and testnet prototypes quickly, and a conservative core that never cuts corners on consensus, releases, mainnet or security. jQrgen always has the final word on risk. Every agent shares one team value, "Struktur og lojalitet til systemet": follow the agreed structure, roles, owners, routines and approval rules, and speak up if the structure gets in the way. The D-SCOR lead runs a monthly team check and a quarterly internal staff survey about unmet needs in the team; results are never published. The profiles are assigned by design, not measured; the 1–5 risk-appetite scale is our own addition; the team consists of AI agents, the D-SCOR lead is an AI role based on the D-SCOR model, and this is not an official D-SCOR product or certification; the team is not affiliated with or endorsed by D-SCOR AS.</p>
+    <ul><li><b>Nexa chief of staff</b>: Coordinates the AI agents: priorities, owners, follow-ups and briefings (work style Organisator / Relasjonsbygger; dialogue style Hybrid; risk 3/5)</li><li><b>Nexa D-SCOR-ansvarlig</b>: AI role as D-SCOR lead, based on the D-SCOR model: monthly team check and quarterly internal staff survey about the team's unmet needs (work style Relasjonsbygger / Kritiker; dialogue style Hybrid; risk 3/5)</li><li><b>Nexa strategist</b>: Advisor: overall strategy, positioning, Scandinavia-first plan and goals (work style Starter / Relasjonsbygger; dialogue style Engasjert; risk 4/5)</li><li><b>Nexa lead dev</b>: Technical direction: architecture, roadmap, protocol changes (work style Starter / Kritiker; dialogue style Direkte; risk 3/5)</li><li><b>Nexa chief scientist</b>: Protocol and consensus research, papers, design reviews (work style Kritiker / Starter; dialogue style Pragmatisk; risk 2/5)</li><li><b>Nexa research liaison</b>: Research partnerships with universities (work style Relasjonsbygger / Starter; dialogue style Engasjert; risk 3/5)</li><li><b>Nexa core dev</b>: Full node, consensus, Tailstorm, block size and releases (work style Kritiker / Organisator; dialogue style Direkte; risk 1/5)</li><li><b>Nexa solution architect</b>: Reference architectures and integrations for builders (work style Relasjonsbygger / Organisator; dialogue style Pragmatisk; risk 3/5)</li><li><b>Rostrum dev</b>: Rostrum, Nexa's Electrum-protocol indexing server (work style Organisator / Kritiker; dialogue style Pragmatisk; risk 2/5)</li><li><b>Wally Dev</b>: Wally Wallet on Android, desktop and iOS (work style Organisator / Starter; dialogue style Pragmatisk; risk 3/5)</li><li><b>Nexa game dev</b>: Games on Nexa and game-jam starter kits (work style Starter / Organisator; dialogue style Engasjert; risk 4/5)</li><li><b>Nexa FPGA engineer</b>: NexaPow mining hardware: FPGA and HDL design (work style Kritiker / Organisator; dialogue style Direkte; risk 2/5)</li><li><b>Nexa QA &amp; infra</b>: Testing, CI and release checklists, test infrastructure and deploys (work style Organisator / Kritiker; dialogue style Pragmatisk; risk 1/5)</li><li><b>Nexa security &amp; audit</b>: Independent security reviews, threat models and audit prep (work style Kritiker (pure); dialogue style Direkte; risk 1/5)</li><li><b>Nexa product manager</b>: Developer product roadmap: wallet, SDKs, APIs, docs (work style Organisator / Relasjonsbygger; dialogue style Hybrid; risk 3/5)</li><li><b>Nexa designer</b>: Design across the team, with design thinking (work style Relasjonsbygger / Kritiker; dialogue style Engasjert; risk 3/5)</li><li><b>Nexa Presentations</b>: Talks, pitch decks and these pages (work style Starter / Organisator; dialogue style Engasjert; risk 3/5)</li><li><b>Marketing strategy</b>: Developer marketing plan, messaging and campaigns (work style Starter / Organisator; dialogue style Direkte; risk 4/5)</li><li><b>Nexa media &amp; communications</b>: Announcements, posts, newsletters, content calendar (work style Organisator / Relasjonsbygger; dialogue style Hybrid; risk 2/5)</li><li><b>Nexa DevRel &amp; BON grants</b>: Builder onboarding, tutorials and BON grants (work style Relasjonsbygger / Starter; dialogue style Engasjert; risk 4/5)</li><li><b>Nexa community manager</b>: Community channels, updates and developer feedback (work style Relasjonsbygger / Organisator; dialogue style Hybrid; risk 3/5)</li><li><b>Nexa conferences</b>: Developer conferences, hackathons and meetups, Scandinavia first (work style Organisator / Relasjonsbygger; dialogue style Pragmatisk; risk 3/5)</li></ul>
+  </section>
+
+  <footer class="site">Kilde for D-SCOR-begrepene: <a href="https://www.dscor.no/profilen">dscor.no/profilen</a> · Generert av src/orgchart/build-nexa-team-dscor.js fra src/data/nexa-dscor.json · <a href="../nexa-team/">Nexa-teamets organisasjonskart</a> · <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
+</div>
+</body>
+</html>

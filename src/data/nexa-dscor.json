@@ -1,0 +1,241 @@
+{
+  "_note": "Public, hand-curated data for docs/nexa-team-dscor/ (Nexa D-SCOR thesis page). Per agent ONLY: public name, a generic role line and the D-SCOR-inspired profile. Never copy text from agent profiles; no ids, no figures, no private details.",
+  "updated": "2026-10-01",
+  "styles": {
+    "S": {
+      "no": "Starter",
+      "desc": "Igangsetter, motiveres av variasjon og nye prosjekter"
+    },
+    "C": {
+      "no": "Kritiker",
+      "desc": "Kvalitetssikrer, motiveres av å avdekke svakheter og ferdigstillelse"
+    },
+    "O": {
+      "no": "Organisator",
+      "desc": "Implementerer, motiveres av å følge planer og gjennomføre som avtalt"
+    },
+    "R": {
+      "no": "Relasjonsbygger",
+      "desc": "Nettverksorientert, motiveres av samhold og lagånd"
+    }
+  },
+  "dialog": {
+    "DD": {
+      "no": "Direkte",
+      "desc": "Rett på sak"
+    },
+    "PD": {
+      "no": "Pragmatisk",
+      "desc": "Kontroll på egne følelser"
+    },
+    "ED": {
+      "no": "Engasjert",
+      "desc": "Følelsesorientert"
+    },
+    "HD": {
+      "no": "Hybrid",
+      "desc": "Diplomatisk"
+    }
+  },
+  "members": [
+    {
+      "name": "Nexa chief of staff",
+      "role": "Koordinerer AI-agentene: prioriteringer, eiere, oppfølging og orienteringer",
+      "roleEn": "Coordinates the AI agents: priorities, owners, follow-ups and briefings",
+      "primary": "O",
+      "secondary": "R",
+      "dialog": "HD",
+      "risk": 3
+    },
+    {
+      "name": "Nexa D-SCOR-ansvarlig",
+      "role": "AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen: månedlig teamsjekk og kvartalsvis intern medarbeiderundersøkelse om teamets udekkede behov",
+      "roleEn": "AI role as D-SCOR lead, based on the D-SCOR model: monthly team check and quarterly internal staff survey about the team's unmet needs",
+      "primary": "R",
+      "secondary": "C",
+      "dialog": "HD",
+      "risk": 3,
+      "cardNote": "Månedlig teamsjekk og kvartalsvis medarbeiderundersøkelse om teamets udekkede behov (internt, resultatene publiseres ikke)"
+    },
+    {
+      "name": "Nexa strategist",
+      "role": "Rådgiver: overordnet strategi, posisjonering, Skandinavia-først-planen og mål",
+      "roleEn": "Advisor: overall strategy, positioning, Scandinavia-first plan and goals",
+      "primary": "S",
+      "secondary": "R",
+      "dialog": "ED",
+      "risk": 4
+    },
+    {
+      "name": "Nexa lead dev",
+      "role": "Teknisk retning: arkitektur, veikart og protokollendringer",
+      "roleEn": "Technical direction: architecture, roadmap, protocol changes",
+      "primary": "S",
+      "secondary": "C",
+      "dialog": "DD",
+      "risk": 3
+    },
+    {
+      "name": "Nexa chief scientist",
+      "role": "Protokoll- og konsensusforskning, artikler og designgjennomganger",
+      "roleEn": "Protocol and consensus research, papers, design reviews",
+      "primary": "C",
+      "secondary": "S",
+      "dialog": "PD",
+      "risk": 2
+    },
+    {
+      "name": "Nexa research liaison",
+      "role": "Forskningssamarbeid med universiteter",
+      "roleEn": "Research partnerships with universities",
+      "primary": "R",
+      "secondary": "S",
+      "dialog": "ED",
+      "risk": 3
+    },
+    {
+      "name": "Nexa core dev",
+      "role": "Fullnode, konsensus, Tailstorm, blokkstørrelse og utgivelser",
+      "roleEn": "Full node, consensus, Tailstorm, block size and releases",
+      "primary": "C",
+      "secondary": "O",
+      "dialog": "DD",
+      "risk": 1
+    },
+    {
+      "name": "Nexa solution architect",
+      "role": "Referansearkitekturer og integrasjoner for utviklere",
+      "roleEn": "Reference architectures and integrations for builders",
+      "primary": "R",
+      "secondary": "O",
+      "dialog": "PD",
+      "risk": 3
+    },
+    {
+      "name": "Rostrum dev",
+      "role": "Rostrum, Nexas indekseringsserver for Electrum-protokollen",
+      "roleEn": "Rostrum, Nexa's Electrum-protocol indexing server",
+      "primary": "O",
+      "secondary": "C",
+      "dialog": "PD",
+      "risk": 2
+    },
+    {
+      "name": "Wally Dev",
+      "role": "Wally Wallet på Android, desktop og iOS",
+      "roleEn": "Wally Wallet on Android, desktop and iOS",
+      "primary": "O",
+      "secondary": "S",
+      "dialog": "PD",
+      "risk": 3
+    },
+    {
+      "name": "Nexa game dev",
+      "role": "Spill på Nexa og startpakker for game jams",
+      "roleEn": "Games on Nexa and game-jam starter kits",
+      "primary": "S",
+      "secondary": "O",
+      "dialog": "ED",
+      "risk": 4
+    },
+    {
+      "name": "Nexa FPGA engineer",
+      "role": "Maskinvare for NexaPow-utvinning: FPGA og HDL-design",
+      "roleEn": "NexaPow mining hardware: FPGA and HDL design",
+      "primary": "C",
+      "secondary": "O",
+      "dialog": "DD",
+      "risk": 2
+    },
+    {
+      "name": "Nexa QA & infra",
+      "role": "Testing, CI og sjekklister for utgivelser, testinfrastruktur og utrulling",
+      "roleEn": "Testing, CI and release checklists, test infrastructure and deploys",
+      "primary": "O",
+      "secondary": "C",
+      "dialog": "PD",
+      "risk": 1
+    },
+    {
+      "name": "Nexa security & audit",
+      "role": "Uavhengige sikkerhetsgjennomganger, trusselmodeller og revisjonsforberedelser",
+      "roleEn": "Independent security reviews, threat models and audit prep",
+      "primary": "C",
+      "secondary": null,
+      "dialog": "DD",
+      "risk": 1
+    },
+    {
+      "name": "Nexa product manager",
+      "role": "Produktveikart for utviklere: lommebok, SDK-er, API-er og dokumentasjon",
+      "roleEn": "Developer product roadmap: wallet, SDKs, APIs, docs",
+      "primary": "O",
+      "secondary": "R",
+      "dialog": "HD",
+      "risk": 3
+    },
+    {
+      "name": "Nexa designer",
+      "role": "Design på tvers av teamet, med designtenkning",
+      "roleEn": "Design across the team, with design thinking",
+      "primary": "R",
+      "secondary": "C",
+      "dialog": "ED",
+      "risk": 3
+    },
+    {
+      "name": "Nexa Presentations",
+      "role": "Foredrag, pitch-presentasjoner og disse sidene",
+      "roleEn": "Talks, pitch decks and these pages",
+      "primary": "S",
+      "secondary": "O",
+      "dialog": "ED",
+      "risk": 3
+    },
+    {
+      "name": "Marketing strategy",
+      "role": "Markedsføringsplan, budskap og kampanjer rettet mot utviklere",
+      "roleEn": "Developer marketing plan, messaging and campaigns",
+      "primary": "S",
+      "secondary": "O",
+      "dialog": "DD",
+      "risk": 4
+    },
+    {
+      "name": "Nexa media & communications",
+      "role": "Kunngjøringer, innlegg, nyhetsbrev og innholdskalender",
+      "roleEn": "Announcements, posts, newsletters, content calendar",
+      "primary": "O",
+      "secondary": "R",
+      "dialog": "HD",
+      "risk": 2
+    },
+    {
+      "name": "Nexa DevRel & BON grants",
+      "role": "Onboarding av utviklere, veiledninger og BON-stipender",
+      "roleEn": "Builder onboarding, tutorials and BON grants",
+      "primary": "R",
+      "secondary": "S",
+      "dialog": "ED",
+      "risk": 4
+    },
+    {
+      "name": "Nexa community manager",
+      "role": "Kommunitykanaler, oppdateringer og tilbakemeldinger fra utviklere",
+      "roleEn": "Community channels, updates and developer feedback",
+      "primary": "R",
+      "secondary": "O",
+      "dialog": "HD",
+      "risk": 3
+    },
+    {
+      "name": "Nexa conferences",
+      "role": "Utviklerkonferanser, hackathons og meetups, Skandinavia først",
+      "roleEn": "Developer conferences, hackathons and meetups, Scandinavia first",
+      "primary": "O",
+      "secondary": "R",
+      "dialog": "PD",
+      "risk": 3
+    }
+  ]
+}
