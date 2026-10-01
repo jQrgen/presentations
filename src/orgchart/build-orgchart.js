@@ -36,10 +36,12 @@ const denied = (name) => { const n = String(name || "").trim().toLowerCase(); re
 // org-chart role, or its NAME contains "Nexa", or it is a member of a Nexa group. Descriptions are never used.
 const nexaName = (name) => /nexa/i.test(String(name || ""));
 
-// ---- departments (report to jQrgen via Nexa chief of staff). Unknown Nexa agents land in Unassigned.
-// Each team has an explicit lead (LEADS). Security & audit is independent of Engineering (it reviews it);
-// the strategist advises, so it sits in "Advisor". The D-SCOR-ansvarlig sits in its own column outside every team and group chat,
-// the same way jQrgenCorp's D-SCOR-ansvarlig sits outside its sub-teams on the all-teams chart.
+// ---- departments and reporting lines. Engineering, Product & Design, Research and Go-to-market & Community (CHIEF_DEPTS) report to
+// jQrgen via Nexa chief of staff; unknown Nexa agents land in Unassigned, also under the chief of staff. Security (independent) and
+// D-SCOR (DIRECT_DEPTS) report directly to jQrgen: security & audit reviews Engineering and stays independent of the chief of staff,
+// and the D-SCOR-ansvarlig sits outside every team and group chat, the same way jQrgenCorp's D-SCOR-ansvarlig sits outside its
+// sub-teams on the all-teams chart. Advisor (ADVISOR_DEPTS): the strategist advises jQrgen and the leadership team, drawn as a dashed
+// line to jQrgen, not as a report. Each chief-of-staff team has an explicit lead (LEADS).
 const TOP = ["jQrgen", "Nexa chief of staff"];
 const DEPARTMENTS = [
   ["Engineering", ["Nexa lead dev", "Nexa core dev", "Nexa solution architect", "Rostrum dev", "Wally Dev", "Nexa game dev", "Nexa FPGA engineer", "Nexa QA & infra"]],
@@ -50,6 +52,9 @@ const DEPARTMENTS = [
   ["Advisor", ["Nexa strategist"]],
   ["D-SCOR", ["Nexa D-SCOR-ansvarlig"]],
 ];
+const CHIEF_DEPTS = ["Engineering", "Product & Design", "Research", "Go-to-market & Community"];
+const DIRECT_DEPTS = ["Security (independent)", "D-SCOR"];
+const ADVISOR_DEPTS = ["Advisor"];
 const LEADS = new Set(["Nexa lead dev", "Nexa product manager", "Nexa chief scientist", "Marketing strategy"]);
 // one colour per team (always shown with its text label); teams beyond this list cycle through the palette
 const TEAM_COLOURS = ["#B91C1C", "#1D4ED8", "#047857", "#7C3AED", "#B45309", "#0E7490", "#BE185D", "#4D7C0F", "#374151"];
@@ -191,11 +196,34 @@ h2.sec{font-size:22px;font-weight:500;margin:40px 0 14px;letter-spacing:-.01em}
 .dept>ol>li:last-child::after{bottom:auto;height:26px}
 .dept>ol>li::before{content:"";position:absolute;left:-12px;top:18px;width:12px;border-top:1px solid var(--line)}
 .dept.unassigned h3{background:var(--paper);color:var(--ink);border:1px dashed var(--line)}
+/* reporting lines. Row 1 under jQrgen, four equal columns: advisor (dashed), chief of staff, security & audit, D-SCOR (solid).
+   The chief of staff's line runs on down to row 2, its four teams across the full width. */
+.tier{align-items:stretch}
+.tier>.dept.cos{display:flex;flex-direction:column}
+.cos .down{flex:1 1 auto;min-height:20px;width:1px;background:var(--line);margin:0 auto}
+.tier>.dept.adv::before{border-top:2px dashed var(--ink-2)}
+.tier>.dept.adv::after{border-left:2px dashed var(--ink-2)}
+.rel{position:absolute;top:3px;left:calc(50% + 6px);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);line-height:1;white-space:nowrap}
+.tier>.dept:not(.adv) .rel,.rel .rl{display:none}
+.cos>.node.top{width:auto;max-width:300px;margin:0 auto}
+.chief-teams>.rel{display:none}
+.legend i.ln{display:inline-block;width:30px;height:0;border-top:2px solid var(--ink-2)}
+.legend i.ln.dash{border-top-style:dashed}
 @media (max-width:980px){
   .depts{flex-direction:column;gap:18px}
   .dept{padding-top:0}
   .dept::before,.dept::after{display:none}
   .dept h3{min-height:0;justify-content:flex-start;text-align:left}
+  /* stacked: no connector lines, so each top-tier column says how it relates to jQrgen; the chief of staff's teams are indented under it */
+  .tier>.dept .rel,.tier>.dept:not(.adv) .rel{display:block;position:static;margin:0 0 5px;white-space:normal}
+  .rel .rs{display:none}.rel .rl{display:inline}
+  .tier>.dept.dir{order:1}.tier>.dept.adv{order:2}.tier>.dept.cos{order:3}
+  .cos>.node.top{margin:0;max-width:none;text-align:left}
+  .cos>.node.top .ttags{justify-content:flex-start}
+  .cos .down{display:none}
+  .chief-teams{margin:10px 0 0 10px;padding-left:12px;border-left:2px solid var(--line)}
+  .chief-teams>.rel{display:block;position:static;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  .tier>.dept.adv{padding-left:12px;border-left:2px dashed var(--ink-2)}
 }
 .sub{margin:-6px 0 14px;color:var(--ink-2);max-width:72ch;font-size:15px}
 .ttags{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
@@ -237,13 +265,20 @@ function render() {
   const kind = (m) => (m.type === "human" ? "human" : "ai");
   const card = (m) => `<div class="node ${kind(m)}">${BADGE[kind(m)]}<div class="n">${esc(m.name)}${m.lead ? '<span class="lead">Lead</span>' : ""}</div><div class="r">${esc(m.role)}</div>${tags(m)}${work(m)}${m.name === DSCOR_LEAD ? `<a class="go" href="${DSCOR_URL}">D-SCOR page \u2192</a>` : ""}</div>`;
   const order = Object.fromEntries(DEPARTMENTS.map(([d, names]) => [d, names]));
-  const depts = [...data.departments, "Unassigned"].map((d) => {
+  const deptCol = (d) => {
     const ms = data.members.filter((m) => m.department === d)
       .sort((a, b) => (b.lead ? 1 : 0) - (a.lead ? 1 : 0) || ((order[d] || []).indexOf(a.name) - (order[d] || []).indexOf(b.name)) || a.name.localeCompare(b.name));
     return ms.length ? `
       <section class="dept${d === "Unassigned" ? " unassigned" : ""}" aria-label="${esc(d)}"><h3>${esc(d)}</h3>
         <ol>${ms.map((m) => `<li>${card(m)}</li>`).join("")}</ol></section>` : "";
-  }).join("");
+  };
+  // any department not named in a reporting group (e.g. Unassigned or a new one) sits under the chief of staff
+  const other = [...data.departments, "Unassigned"].filter((d) => ![...CHIEF_DEPTS, ...DIRECT_DEPTS, ...ADVISOR_DEPTS].includes(d));
+  const chiefTeams = [...CHIEF_DEPTS, ...other].map(deptCol).join("");
+  // a top-tier column under jQrgen: rel = how it relates to jQrgen (shown on the dashed advisor line, and on every column when stacked)
+  // short = the label on the desktop connector, long = the text shown when stacked
+  const rel = (short, long) => `<span class="rel">${short ? `<span class="rs">${esc(short)}</span>` : ""}<span class="rl">${esc(long)}</span></span>`;
+  const tierCol = (d, cls, r) => { const html = deptCol(d); return html ? html.replace('<section class="dept', `<section class="dept ${cls}`).replace("><h3>", `>${r}<h3>`) : ""; };
   const lead = by("Nexa chief of staff");
   const fmt = new Date(data.updated + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
   // the shared theme's text-wrap value is a gate term; swap it for "pretty", as the other org-chart pages do (pattern split so this file passes too)
@@ -255,15 +290,21 @@ function render() {
     <h1>Nexa team: org chart</h1>
     <p class="lede">This team is AI agents run by jQrgen (Jørgen S. Notland), the only human on the chart. The agents mirror the human roles on <a href="https://nexa.org/team" rel="noopener">nexa.org/team</a>, plus roles he added: Strategist, DevRel &amp; BON grants, Product manager, Security &amp; audit and Game dev. It is not the real Nexa staff list; for the people behind Nexa, see nexa.org/team.</p>
     ${by(DSCOR_LEAD) ? `<p class="dscor"><b>D-SCOR.</b> The team's D-SCOR-inspired work and dialogue styles are on the <a href="${DSCOR_URL}">Nexa team D-SCOR page</a>. The ${esc(DSCOR_LEAD)} is an AI role based on the D-SCOR model, not a certified D-SCOR adviser. This is not an official D-SCOR product or D-SCOR certification, and the team is not affiliated with or endorsed by D-SCOR AS.</p>` : ""}
-    <p class="legend"><span class="k">${BADGE.human} a person</span><span class="k">${BADGE.ai} an AI agent, not a person</span></p>
+    <p class="legend"><span class="k">${BADGE.human} a person</span><span class="k">${BADGE.ai} an AI agent, not a person</span><span class="k"><i class="ln" aria-hidden="true"></i> solid line: reports to</span><span class="k"><i class="ln dash" aria-hidden="true"></i> dashed line: advises</span></p>
     <p class="updated">1 human · ${data.members.length} AI agents · <a href="#teams">${data.groups.length} teams</a> (AI agent group chats) · Last updated <time datetime="${esc(data.updated)}">${esc(fmt)}</time></p>
   </header>
   <div class="org" role="group" aria-label="Org chart">
     ${(data.people || []).map((h) => `<div class="node top human">${BADGE.human}<div class="n">${esc(h.name)}${h.fullName ? ` (${esc(h.fullName)})` : ""}</div><div class="r">${esc(h.role)}</div></div>`).join("")}
     <div class="vline"></div>
-    ${lead ? `<div class="node top ai">${BADGE.ai}<div class="n">${esc(lead.name)}</div><div class="r">${esc(lead.role)}</div>${tags(lead)}</div>
-    <div class="vline"></div>` : ""}
-    <div class="depts">${depts}
+    <div class="depts tier">${ADVISOR_DEPTS.map((d) => tierCol(d, "adv", rel("advisor", "Advisor: advises jQrgen and the leadership team (dashed line, not a report)"))).join("")}
+      <section class="dept cos" aria-label="Nexa chief of staff">${rel("", "Reports to jQrgen")}
+        ${lead ? `<div class="node top ai">${BADGE.ai}<div class="n">${esc(lead.name)}</div><div class="r">${esc(lead.role)}</div>${tags(lead)}</div>` : ""}
+        <div class="down" aria-hidden="true"></div>
+      </section>${DIRECT_DEPTS.map((d) => tierCol(d, "dir", rel("", "Reports directly to jQrgen"))).join("")}
+    </div>
+    <div class="chief-teams" role="group" aria-label="Teams that report to Nexa chief of staff"><p class="rel">These teams report to Nexa chief of staff</p>
+      <div class="depts">${chiefTeams}
+      </div>
     </div>
   </div>
   <h2 class="sec" id="teams">Teams</h2>
