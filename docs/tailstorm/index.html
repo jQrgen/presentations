@@ -168,6 +168,16 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
   html:not(.kiosk) .swipeHint{display:block;color:var(--muted);font-size:12px;margin:2px 0 3px;text-align:right}
   html:not(.kiosk) .fsbtn,#sbinfo .x{min-width:44px;min-height:44px}
 }
+/* Mobile (normal page, not kiosk): show the live DAG first, right under the title, above the explainer text */
+@media (max-width:768px){
+  html:not(.kiosk) .wrap{display:flex;flex-direction:column}
+  html:not(.kiosk) .wrap>*{min-width:0}
+  html:not(.kiosk) .wrap>header{order:-4}
+  html:not(.kiosk) .wrap>.stale{order:-3}
+  html:not(.kiosk) #sec-cur{order:-2}
+  html:not(.kiosk) .wrap>.cards{order:-1}
+  html:not(.kiosk) .wrap>header{margin-bottom:12px}
+}
 </style>
 </head>
 <body>
@@ -241,6 +251,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 </dl></details>
 <section class="note" id="changelog"><b>Changelog</b> <span style="color:#8a93a6;font-size:13px">(newest first, Oslo time)</span>
 <ol>
+<li><time>1 Oct 2026, 18:50</time>On phones, the live DAG now comes first, right under the title, with the stats and the explainer below it.</li>
 <li><time>1 Oct 2026, 18:30</time>Links to the explainer article on Medium and the thread on X, in the header and the footer.</li>
 <li><time>1 Oct 2026, 18:00</time>A &ldquo;What you&#39;re watching&rdquo; explainer with Tailstorm&#39;s purpose and a legend (also a side panel on the office display, with rotating answers to common questions), a &ldquo;Questions visitors ask&rdquo; section, and clearer labels.</li>
 <li><time>1 Oct 2026, 16:16</time>Office display mode: a Full screen button (or press F, Esc to leave), and <a href="?kiosk=1"><code>?kiosk=1</code></a> for a one-screen layout sized for a wall or desk monitor, with a hidden cursor, the screen kept awake and automatic recovery.</li>
