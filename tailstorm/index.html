@@ -57,7 +57,7 @@ svg g.sb{cursor:pointer}svg g.sel circle{stroke:#fff3cf!important;stroke-width:3
 .fsbtn kbd{font:inherit;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 4px;margin-left:6px}
 #kbar{display:none}
 /* Display (kiosk) layout: ?kiosk=1, #kiosk, or while in full screen. One screen, no scrolling, sized from the viewport. */
-html.kiosk{scrollbar-width:none}
+html.kiosk{scrollbar-width:none;--muted:#b4bac6}
 html.kiosk::-webkit-scrollbar,html.kiosk body::-webkit-scrollbar{display:none}
 html.kiosk,html.kiosk body{height:100%;overflow:hidden;font-size:clamp(14px,calc(1.25vh + .4vw),46px)}
 html.kiosk .wrap{max-width:none;height:100vh;height:100dvh;margin:0;padding:1.6vh 1.4vw;display:grid;grid-template-rows:auto auto minmax(0,1.3fr) minmax(0,1fr);gap:1.3vh}
@@ -68,8 +68,8 @@ html.kiosk .tag{font-size:.75em}
 html.kiosk .kclock{display:block}
 html.kiosk .cards{grid-template-columns:.85fr 1fr .9fr .9fr 1.15fr 1.3fr 1.15fr;gap:.9vw;margin:0}
 html.kiosk .card{padding:1vh .9vw;border-radius:.6em;min-width:0}
-html.kiosk .card .k{font-size:.72em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-html.kiosk .card .v{font-size:2.15em;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.kiosk .card .k{font-size:clamp(18px,1.25vw,24px);color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.kiosk .card .v{font-size:1.6em;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 html.kiosk .card .v small{font-size:.38em}
 html.kiosk #c-tipv{font-size:1.05em!important;margin-top:.7em!important}
 html.kiosk #c-tipv code{font-size:1em}
@@ -77,9 +77,10 @@ html.kiosk .bar{height:.45em}
 html.kiosk section{margin:0;padding:1vh 1vw;display:flex;flex-direction:column;min-height:0;border-radius:.7em}
 html.kiosk section h2{font-size:1.15em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 html.kiosk section h2 .m{font-size:.75em}
-html.kiosk .legend{font-size:.78em;gap:1.4em;margin:.3em 0}
-html.kiosk .sw{width:.9em;height:.9em}
+html.kiosk .legend{font-size:1em;color:var(--text);gap:1.4em;margin:.3em 0}
+html.kiosk .sw{width:1.1em;height:1.1em}
 html.kiosk .legend small{display:none}
+html.kiosk #legend2{display:none}
 html.kiosk #cur{flex:1 1 0;min-height:0;height:100%}
 html.kiosk #prev{flex:1 1 0;min-height:0;display:flex;flex-direction:column}
 html.kiosk .grp{flex:1 1 0;min-height:0;display:flex;flex-direction:column;padding:.5vh 0 0}
@@ -100,68 +101,74 @@ html.kiosk.idle #kbar{opacity:0;pointer-events:none}
 #explain .lg dt{font-weight:700;color:var(--text);display:flex;align-items:center;gap:.5em}
 #explain .lg dd{margin:0 0 0 1.95em;color:#cfcabd;font-size:14px}
 #explain .ico{flex:none;width:1.3em;height:1.3em;display:inline-block;border-radius:50%;font-style:normal;text-align:center;box-sizing:border-box}
-#explain .ico.sum{background:var(--gold);border-radius:.2em;box-shadow:0 0 .4em #e0b34199}
-#explain .ico.sub{background:#133a33;border:.15em solid #4fd1b5}
+#explain .ico.sum{background:#1d2430;border:.15em solid #cfd6e0;border-radius:.2em}
+#explain .ico.sub{background:#1d2430;border:.15em solid #cfd6e0}
 #explain .ico.unc{border:.13em dashed #ff6b8a;color:#ff6b8a;font-size:.95em;line-height:1.15em;font-weight:800}
-#explain .ico.mrg{background:#2a2346;border:.13em solid #a78bfa;color:#dfe6ee;font-size:.95em;line-height:1.1em}
+#explain .ico.mrg{background:#1d2430;border:.13em solid #9fb3c8;color:#dfe6ee;font-size:.95em;line-height:1.1em}
+#explain .headline{display:none}
+.minerkey{display:flex;align-items:center;gap:.45em;margin-top:2px;color:var(--muted);font-size:12.5px;flex-wrap:wrap}.minerkey .minerlabel{color:var(--text);font-weight:650}.minerkey .mdot{width:.9em;height:.9em;border-radius:50%;display:inline-block;border:2px solid currentColor}.minerkey .m1{color:#4fd1b5;background:#133a33}.minerkey .m2{color:#a78bfa;background:#2a2346}.minerkey .m3{color:#f2896b;background:#43241c}.minerkey .m4{color:#62b3f5;background:#152e45}.minerkey .tipkey{display:inline-flex;align-items:center;gap:.35em;margin-left:.5em}.minerkey .tipdot{width:.9em;height:.9em;border-radius:50%;background:#fff3cf;box-shadow:0 0 .45em #f5d27a;display:inline-block}
+.faqhead{display:flex;justify-content:space-between;color:var(--gold2);font-size:.86em;font-weight:700;letter-spacing:.02em}.faqprogress{height:2px;background:#303744;margin:.45em 0 .6em;overflow:hidden}.faqprogress i{display:block;height:100%;width:0;background:var(--gold);transition:width .6s}
+html.kiosk #explain .headline{display:block;color:var(--gold2);font-size:clamp(32px,2.9vw,56px);font-weight:800;line-height:1.05;letter-spacing:-.02em}
+html.kiosk #explain .minerkey{font-size:clamp(16px,1vw,28px);gap:.45em}
+html.kiosk #explain .faqhead{font-size:clamp(16px,1.1vw,30px)}
+html.kiosk #sec-cur h2 .m{display:block;margin-left:0;font-size:.7em;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #explain .testnet{margin:10px 0 0;font-size:13.5px;color:var(--muted)}
 #explain .testnet b{color:#ffcf9e}
 #explain .faqrot{display:none}
 #faq dt{color:var(--gold);font-weight:650;margin-top:8px}#faq dd{margin:2px 0 0}#faq summary{cursor:pointer}
-html.kiosk .wrap{grid-template-columns:minmax(0,1fr) clamp(320px,25vw,1000px);column-gap:1.1vw}
+html.kiosk .wrap{grid-template-columns:minmax(0,1fr) clamp(320px,30vw,1000px);column-gap:1.1vw}
 html.kiosk header{grid-column:1/-1;grid-row:1}
 html.kiosk .cards{grid-column:1/-1;grid-row:2}
 html.kiosk #sec-cur{grid-column:1;grid-row:3}
 html.kiosk #sec-prev{grid-column:1;grid-row:4}
 html.kiosk #explain{grid-column:2;grid-row:3/5;margin:0;padding:1.4vh 1vw;border-radius:.7em;display:flex;flex-direction:column;gap:.9vh;min-height:0;overflow:hidden}
-html.kiosk #explain h2{font-size:1.25em;margin:0}
-html.kiosk #explain .purpose{font-size:1.02em;line-height:1.35;margin:0}
+html.kiosk #explain h2{font-size:clamp(26px,2.2vw,64px);margin:0}
+html.kiosk #explain .purpose{font-size:clamp(20px,1.72vw,52px);line-height:1.2;margin:0}
 html.kiosk #explain .lg{grid-template-columns:1fr;gap:1vh}
-html.kiosk #explain .lg dt{font-size:1em}
-html.kiosk #explain .lg dd{font-size:.92em;line-height:1.3}
+html.kiosk #explain .lg div{display:flex;align-items:baseline;gap:.5em;min-width:0}
+html.kiosk #explain .lg dt{white-space:nowrap}
+html.kiosk #explain .lg dt{font-size:clamp(19px,1.56vw,46px)}
+html.kiosk #explain .lg dd{font-size:clamp(16px,1.25vw,36px);line-height:1.15;white-space:nowrap;margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis}
 html.kiosk #explain .testnet{font-size:.88em;margin:0;line-height:1.3}
-html.kiosk #explain .faqrot{display:block;margin-top:auto;border-top:1px solid var(--line);padding-top:1vh;transition:opacity .6s;min-height:0}
+html.kiosk #explain .faqrot{display:block;margin-top:1vh;background:#1b202b;border-left:.25em solid var(--gold);border-radius:.4em;padding:1vh 1vw;transition:opacity .6s;min-height:0}
 html.kiosk #explain .faqrot.fade{opacity:0}
-html.kiosk #explain .faqrot .q{color:var(--gold2);font-weight:700;font-size:.95em;line-height:1.3}
-html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:.9em;line-height:1.32;margin-top:.3em}
+html.kiosk #explain .faqrot .q{color:var(--gold2);font-weight:700;font-size:clamp(19px,1.56vw,46px);line-height:1.15}
+html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);line-height:1.15;margin-top:.3em}
 .kclock{display:none;margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:1.1em}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
-  <h1><span class="g">Nexa Tailstorm</span> · live DAG</h1>
-  <span class="tag">stormtest demo</span>
+  <h1><span class="g">Nexa Tailstorm</span> · live blocks</h1>
+  <span class="tag">STORMTEST DEMO · 4 TEST MINERS</span>
   <button type="button" class="fsbtn" id="fsbtn" title="Show this page full screen as an office display (shortcut: F, exit: Esc)">⛶ Full screen<kbd>F</kbd></button>
   <span class="kclock" id="kclock"></span>
 </header>
 <aside id="explain" aria-label="What you're watching">
+<div class="headline">Live: ~1 s blocks. Merged, not wasted.</div>
 <h2>What you&#39;re watching</h2>
-<p class="purpose"><b>Tailstorm&#39;s goal: fast, reliable confirmations and fair mining</b>, not mainly more transactions per second. Miners find many small <b>subblocks</b> (about one a second here), and a <b>summary block</b> bundles them every ~2 minutes. Almost no work is wasted.</p>
+<p class="purpose"><b>Fast, fair confirmations.</b> One summary closes each round.</p>
 <dl class="lg">
-<div><dt><i class="ico sum"></i>Summary block</dt><dd>The regular chain block, every ~2 min. Closes a round of subblocks.</dd></div>
-<div><dt><i class="ico sub"></i>Subblock</dt><dd>A small, fast block with transactions. Colour = which test miner found it.</dd></div>
-<div><dt><i class="ico mrg">⋈</i>Branch and merge</dt><dd>Subblocks found at the same time, then joined by the next one. None are wasted.</dd></div>
-<div><dt><i class="ico unc">U</i>Uncle (late subblock)</dt><dd>Missed its round; the next summary block includes it. Its miner is still paid.</dd></div>
+<div><dt><i class="ico sum"></i>Summary block</dt><dd>Closes rounds.</dd></div>
+<div><dt><i class="ico sub"></i>Subblock</dt><dd>Fast transactions.</dd></div>
+<div><dt><i class="ico mrg">⋈</i>Branch and merge</dt><dd>Merge.</dd></div>
+<div><dt><i class="ico unc">U</i>Uncle (late subblock)</dt><dd>Late.</dd></div>
 </dl>
-<p class="testnet"><b>Test network, not Nexa mainnet:</b> 4 miners on one machine, ~1.2 s simulated network delay.</p>
-<div class="faqrot" id="faqrot" aria-live="off"><div class="q"></div><div class="a"></div></div>
+<div class="minerkey" aria-label="Colour equals miner"><span class="minerlabel">Colour = miner 1–4</span><i class="mdot m1" title="Miner 1"></i><i class="mdot m2" title="Miner 2"></i><i class="mdot m3" title="Miner 3"></i><i class="mdot m4" title="Miner 4"></i><span class="tipkey"><i class="tipdot"></i>DAG tip</span></div>
+<div class="faqrot" id="faqrot" aria-live="off"><div class="faqhead">Visitors ask · <span id="faqcount">1/6</span></div><div class="faqprogress"><i id="faqprogress"></i></div><div class="q"></div><div class="a"></div></div>
 </aside>
-<div class="note"><b>Demo, not mainnet.</b> This is a <b>private stormtest chain</b> mined by <b>4 local miners</b>, each on its own node, on one machine.
-The nodes are connected through an artificial ~1.2 s network delay. That is longer than the ~1 s gap between subblocks, so miners often find subblocks in parallel on the same parent, and the branching here is heavier than you would expect on mainnet. Two subblocks built on the same parent sit side by side as separate branches. The next subblock joins them back together by naming the end of each branch as its parent, so both are kept.
-It uses the same k and block timing as Nexa's mainnet code (k = 120, a summary block about every 2 minutes): when the DAG holds 119 subblocks, the next block, the 120th, is the summary block that closes it. Subblocks left out become <i>uncles</i> that the following summary block includes.
-None of this is live Nexa mainnet data.</div>
 <p class="whatsnew" style="margin:-4px 0 10px;font-size:13px"><a href="#changelog">What&#39;s new on this page</a></p>
 <div class="note" id="paper"><b>The paper:</b> <a href="https://doi.org/10.4230/LIPIcs.AFT.2023.6" target="_blank" rel="noopener">Tailstorm: A Secure and Fair Blockchain for Cash Transactions</a> by Keller, Glickenhaus, Bissias and Griffith, peer-reviewed at AFT 2023 (<a href="https://arxiv.org/abs/2306.12206" target="_blank" rel="noopener">arXiv</a>).</div>
-<details class="note" id="terms" open><summary><b>Tailstorm terms, explained</b></summary>
+<details class="note" id="terms"><summary><b>Tailstorm terms, explained</b></summary>
 <dl class="terms">
 <dt>Subblock</dt><dd>A small block that a miner finds with a share of the block's proof of work. Subblocks carry transactions and arrive about once a second here. They are the circles on this page, coloured by the miner that found them.</dd>
-<dt>Summary block</dt><dd>The block that closes a round. When the DAG holds k−1 subblocks, the next block found is a summary block, which commits to all of them and starts a fresh DAG. Summary blocks are the gold squares, and their height is the chain height.</dd>
+<dt>Summary block</dt><dd>The block that closes a round. When the DAG holds k−1 subblocks, the next block found is a summary block, which commits to all of them and starts a fresh DAG. It receives about 1/k of the round&#39;s reward, a bit more when the round branches. Summary blocks are the gold squares, and their height is the chain height.</dd>
 <dt>DAG</dt><dd>Short for directed acyclic graph. Instead of one straight chain, a subblock may point back to several parents, so the blocks form a graph that branches and rejoins but never loops back.</dd>
-<dt>k</dt><dd>How many pieces of work make up one block. Nexa counts the summary block itself: it is mined at the same target as the subblocks, as the k-th piece of work, so a round is k−1 subblocks plus the summary block. This demo uses k = 120, the value in Nexa's mainnet code. The paper counts differently: there, a summary block confirms k subblocks and needs no proof of work of its own.</dd>
+<dt>k</dt><dd>How many pieces of work make up one block. Nexa counts the summary block itself: it is mined at the same target as the subblocks, as the k-th piece of work, so a round is k−1 subblocks plus the summary block. k = 120 is the value in the current code for mainnet, and the demo uses the same value; it isn&#39;t a final activation setting. The paper counts differently: there, a summary block confirms k subblocks and needs no proof of work of its own.</dd>
 <dt>Tip</dt><dd>A subblock that no other subblock builds on yet, i.e. the current end of a branch. The newest one glows as the <i>DAG tip</i>.</dd>
 <dt>Branch and merge</dt><dd>When two miners find a subblock on the same parent at nearly the same moment, the DAG <i>branches</i>: two subblocks now sit side by side, each the end of its own branch. The next subblock a miner finds points back to <i>both</i> of them as parents. That is a <i>merge</i> (marked ⋈): the branches join back into one line and neither subblock is discarded. In a normal single-chain blockchain one of the two would be thrown away (orphaned) and its miner's work wasted.</dd>
-<dt>Uncle</dt><dd>A valid subblock that missed the summary block it was meant for, usually because the round was already full when it arrived. Instead of being thrown away, it is carried into the next round, and the following summary block includes it. Uncles count towards that round's k−1. They are drawn with a dashed red outline and a <b>U</b>. The word and this behaviour come from Nexa's implementation, not from the paper.</dd>
+<dt>Uncle</dt><dd>A valid subblock that missed the summary block it was meant for, usually because the round was already full when it arrived. Instead of being thrown away, it is carried into the next round, and the following summary block includes it. Its score is 4 points below a perfectly linked subblock. They are drawn with a dashed red outline and a <b>U</b>. The word and this behaviour come from Nexa&#39;s implementation, not from the paper.</dd>
 <dt>Width and depth</dt><dd>Width is the largest number of subblocks found side by side (in parallel) in one DAG, and depth is the length of its longest path. A wider DAG means more parallel mining. A DAG with width 1 is a plain chain.</dd>
 <dt>Stormtest</dt><dd>A private Nexa test network with Tailstorm switched on. It is used only for this demo and isn't mainnet. On mainnet, Tailstorm is implemented but its activation is still pending.</dd>
 </dl></details>
@@ -186,14 +193,14 @@ None of this is live Nexa mainnet data.</div>
   <div class="legend" id="legend2"></div>
   <div id="prev"></div>
 </section>
-<details class="note" id="faq" open><summary><b>Questions visitors ask</b></summary>
+<details class="note" id="faq"><summary><b>Questions visitors ask</b></summary>
 <dl>
-<dt>What is a summary block?</dt><dd data-k="The regular chain block, every ~2 min. It closes a round of subblocks. In Nexa it is just the last piece of work: no extra puzzle.">The regular block of the chain, about every 2 minutes. It closes a round by committing to the subblocks found since the previous one, and its height is the chain height. In Nexa the summary block is simply the last piece of work of the round (the 120th in this demo), found at the same easy difficulty as a subblock.</dd>
-<dt>What is an uncle?</dt><dd data-k="A subblock that arrived after its round was full. The next summary block includes it, so its miner is still paid.">A valid subblock that arrived after its round was already full. Instead of being thrown away, the next summary block includes it and its miner is still paid, a little less. &ldquo;Uncle&rdquo; is Nexa&#39;s word, not the paper&#39;s.</dd>
-<dt>Does Tailstorm increase TPS?</dt><dd data-k="Not its main goal. Tailstorm is about fast, reliable confirmations and fair mining: payments show up within seconds.">That is not its main goal. The goal is fast, reliable confirmations and fair mining: a payment shows up in a subblock within seconds, and full settlement still comes with the next summary blocks. Capacity is still set by the block size limit.</dd>
-<dt>Can subblocks be reorganised?</dt><dd data-k="Rarely. Parallel ones are merged and late ones become uncles. For big payments, wait for a summary block.">Rarely, and cheaply. Parallel subblocks are merged, not discarded. Until the summary block arrives, which subblocks it includes can still change (a late one becomes an uncle), so wait for a summary block for large payments. After that, undoing them means a normal blockchain reorg.</dd>
-<dt>Does one miner mine the summary block on top of the subblocks?</dt><dd data-k="No extra job: whoever finds the next piece once the round is full turns it into the summary block.">No extra big job. Whoever finds the next piece of work once the round is full (119 subblocks in this demo) turns it into the summary block. In the paper the summary needs no proof of work at all: anyone holding k subblocks assembles it.</dd>
-<dt>Why mine subblocks?</dt><dd data-k="That is how miners get paid: each summary block shares the reward among the miners of its subblocks.">That is how miners get paid: each summary block splits the reward and fees among the miners of the subblocks it includes. Smaller miners earn steadily, and well-linked subblocks earn more, so hiding blocks to cheat costs the cheater.</dd>
+<dt>What is a summary block?</dt><dd data-k="Closes each round; about 1/k of its reward.">The regular block of the chain, about every 2 minutes. It closes a round by committing to the subblocks found since the previous one, and its height is the chain height. It receives about 1/k of the round&#39;s reward, a bit more when the round branches. In Nexa it is the last piece of work of the round, found at the same difficulty as a subblock.</dd>
+<dt>What is an uncle?</dt><dd data-k="Late block; score 4 points below a perfectly linked subblock.">A valid subblock that arrived after its round was already full. Instead of being thrown away, the next summary block includes it; its score is 4 points below a perfectly linked subblock. &ldquo;Uncle&rdquo; is Nexa&#39;s word, not the paper&#39;s.</dd>
+<dt>Does Tailstorm increase TPS?</dt><dd data-k="Fast confirmations and fair mining, not mainly TPS.">That is not its main goal. The goal is fast, reliable confirmations and fair mining: a payment shows up in a subblock within seconds, and full settlement still comes with the next summary blocks. Capacity is still set by the block size limit.</dd>
+<dt>Can subblocks be reorganised?</dt><dd data-k="Parallel blocks merge; late ones become uncles.">Rarely, and cheaply. Parallel subblocks are merged, not discarded. Until the summary block arrives, which subblocks it includes can still change (a late one becomes an uncle), so wait for a summary block for large payments. After that, undoing them means a normal blockchain reorg.</dd>
+<dt>Does one miner mine the summary block on top of the subblocks?</dt><dd data-k="No extra job; the next piece becomes summary.">No extra big job. Whoever finds the next piece of work once the round is full (119 subblocks in this demo) turns it into the summary block. In the paper the summary needs no proof of work at all: anyone holding k subblocks assembles it.</dd>
+<dt>Why mine subblocks?</dt><dd data-k="Subblocks share reward; smaller miners earn steadily.">That is how miners get paid: each summary block splits the reward and fees among the miners of the subblocks it includes. Smaller miners earn steadily, and well-linked subblocks earn more, so hiding blocks to cheat costs the cheater.</dd>
 </dl></details>
 <section class="note" id="changelog"><b>Changelog</b> <span style="color:#8a93a6;font-size:13px">(newest first, Oslo time)</span>
 <ol>
@@ -201,15 +208,15 @@ None of this is live Nexa mainnet data.</div>
 <li><time>1 Oct 2026, 16:16</time>Office display mode: a Full screen button (or press F, Esc to leave), and <a href="?kiosk=1"><code>?kiosk=1</code></a> for a one-screen layout sized for a wall or desk monitor, with a hidden cursor, the screen kept awake and automatic recovery.</li>
 <li><time>1 Oct 2026, 12:10</time>Click or tap any subblock to see its hash, miner, time, parents and the subblocks built on it. Branch and merge are now explained in plain words. Added this changelog.</li>
 <li><time>1 Oct 2026, 09:30</time>The live feed now recovers by itself within about a minute if its public tunnel drops, with no reload needed.</li>
-<li><time>1 Oct 2026, 02:40</time>Switched to the same k (120) and block timing as Nexa's mainnet code, and explained where Nexa's terms differ from the paper's.</li>
+<li><time>1 Oct 2026, 02:40</time>Recorded that k = 120 is the value in the current code for mainnet, and the demo uses the same value; it isn't a final activation setting.</li>
 <li><time>1 Oct 2026, 02:06</time>Added the "Tailstorm terms, explained" box.</li>
 <li><time>1 Oct 2026, 02:02</time>Linked the peer-reviewed Tailstorm paper (AFT 2023).</li>
 <li><time>1 Oct 2026, 01:37</time>Four competing miners, so the DAG visibly branches and merges.</li>
 <li><time>1 Oct 2026, 01:18</time>First version: a live view of the Tailstorm DAG on a private stormtest chain.</li>
 </ol></section>
 <footer>
-  Source: a Nexa node (<code>-stormtest</code>, k = 120) running Tailstorm, read via <code>gettailstorminfo</code>, <code>getbestdagtiphash</code>, <code>getsubblock</code> and <code>getblock</code>.
-  Four miner loops each mine on their own node; the nodes relay to each other through a ~1.2 s delay proxy. A publisher reading node 1 builds a snapshot every ~3 s and serves it through an outbound Cloudflare quick tunnel; this page polls it every 3 s.
+  Source: a Nexa node (<code>-stormtest</code>) running Tailstorm, read via <code>gettailstorminfo</code>, <code>getbestdagtiphash</code>, <code>getsubblock</code> and <code>getblock</code>.
+  k = 120 is the value in the current code for mainnet, and the demo uses the same value; it isn't a final activation setting. Four miner loops each mine on their own node; the nodes relay to each other through a ~1.2 s delay proxy. A publisher reading node 1 builds a snapshot every ~3 s and serves it through an outbound Cloudflare quick tunnel; this page polls it every 3 s.
   <span id="src"></span><br>
   Office display: open <a href="?kiosk=1"><code>?kiosk=1</code></a> for a full-screen layout without scrolling (or press <b>F</b> / the Full screen button; <b>Esc</b> leaves it).
 </footer>
@@ -292,7 +299,7 @@ const MC = {1: "#4fd1b5", 2: "#a78bfa", 3: "#f2896b", 4: "#62b3f5", 0: "#9fb3c8"
 const MF = {1: "#133a33", 2: "#2a2346", 3: "#43241c", 4: "#152e45", 0: "#1d2430"};
 const UNC = "#ff6b8a";
 function legendHtml(pm) {
-  let h = `<span><i class="sw" style="background:var(--gold);border-radius:3px"></i>summary block</span>`;
+  let h = `<span><i class="sw" style="background:#1d2430;border:2px solid #cfd6e0;border-radius:3px"></i>summary block</span>`;
   for (const m of [1, 2, 3, 4]) h += `<span><i class="sw" style="background:${MF[m]};border:2px solid ${MC[m]}"></i>miner ${m}${pm ? ` <small>(${pm[m] || 0} blocks / 5 min)</small>` : ""}</span>`;
   h += `<span><i class="sw" style="border:2px dashed ${UNC}"></i>uncle (late subblock)</span><span><i class="sw" style="background:#fff3cf;box-shadow:0 0 6px #f5d27a"></i>DAG tip</span>`;
   return h;
@@ -500,13 +507,16 @@ let faqI = 0;
 function faqShow() {
   const box = $("faqrot"); if (!box || !faqItems.length) return;
   box.querySelector(".q").textContent = faqItems[faqI][0]; box.querySelector(".a").textContent = faqItems[faqI][1];
+  const count = $("faqcount"), progress = $("faqprogress");
+  if (count) count.textContent = `${faqI + 1}/${faqItems.length}`;
+  if (progress) progress.style.width = `${(faqI + 1) / faqItems.length * 100}%`;
 }
 faqShow();
 setInterval(() => {
   if (!isKiosk() || !faqItems.length) return;
   const box = $("faqrot"); box.classList.add("fade");
   setTimeout(() => { faqI = (faqI + 1) % faqItems.length; faqShow(); box.classList.remove("fade"); }, 650);
-}, 14000);
+}, 16000);
 
 // Display layout: pick the column count that makes the nodes as large as possible inside the svg's box.
 function fitDag(svg, subs, o, step) {
@@ -535,7 +545,7 @@ function render() {
   $("c-tip").textContent = d.dagtip;
   $("legend").innerHTML = legendHtml(d.per_miner_5min) + `<span class="lx">arrows point from a subblock to its parent(s); ⋈ = a merge: a subblock with two or more parents, which joins side-by-side branches back into one</span>`;
   $("legend2").innerHTML = legendHtml(null) + `<span class="lx">dashed red = left out of this summary, included later as an uncle</span>`;
-  $("cur-m").textContent = `on top of summary #${d.height} (${d.tip}…) · ${n}/${K - 1} · depth ${bs.depth} · next summary #${d.height + 1} when full`;
+  $("cur-m").textContent = KI ? `on top of summary #${d.height} · ${n}/${K - 1} · depth ${bs.depth}` : `on top of summary #${d.height} (${d.tip}…) · ${n}/${K - 1} · depth ${bs.depth} · next summary #${d.height + 1} when full`;
   const w = $("cur").parentNode.clientWidth, W = Math.max(300, w);
   const cols = w < 520 ? 8 : w < 800 ? 13 : 21;
   const curO = {W, cols, r: w < 520 ? 12 : 14, ghost: true, base: d.cur.base, uncles, animate: true, tip: d.dagtip};
