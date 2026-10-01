@@ -74,8 +74,8 @@
       "role": "Leads the Trading team: a written, testable trading plan"
     },
     "cdebf3c8-a41e-44ad-885c-9a927bb8fa22": {
-      "displayName": "Nebula Trader",
-      "role": "Market analyst: exchanges, liquidity and volume"
+      "displayName": "DEX trader",
+      "role": "DEX trading research, starting with Cauldron on Bitcoin Cash (simulated)"
     },
     "392bcfe4-ea15-4f84-ab39-4d76a8cadd93": {
       "displayName": "On-chain analyst",

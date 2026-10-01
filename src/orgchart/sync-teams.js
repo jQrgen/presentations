@@ -51,6 +51,7 @@ function sync() {
       if (!groups[t.group]) console.warn(`WARNING: group "${t.group}" not found in ${AGENTS}`);
       (groups[t.group] || []).filter((id) => agents[id]).forEach((id) => ids.add(id));
     }
+    (t.ids || []).map(String).filter((id) => agents[id]).forEach((id) => ids.add(id)); // by agent id: survives renames
     (t.names || []).forEach((n) => byName(n).forEach((id) => ids.add(id)));
     if (t.namePattern) { const re = new RegExp(t.namePattern, "i"); Object.keys(agents).filter((id) => re.test(agents[id])).forEach((id) => ids.add(id)); }
     const curated = Object.keys(roles[t.name] || {});

@@ -42,7 +42,7 @@ const DEPARTMENTS = [
   ["Research", ["Nexa research liaison"]],
   ["Engineering", ["Nexa core dev", "Nexa solution architect", "Rostrum dev", "Wally Dev", "Nexa game dev", "Nexa FPGA engineer", "Nexa security & audit"]],
   ["Product & Design", ["Nexa product manager", "Nexa designer", "Presentations"]],
-  ["Go-to-market & Community", ["Marketing strategy", "Nexa media & communications", "Nexa DevRel & BON grants", "Nexa community manager", "Nexa exchanges & conferences"]],
+  ["Go-to-market & Community", ["Marketing strategy", "Nexa media & communications", "Nexa DevRel & BON grants", "Nexa community manager", "Nexa conferences"]],
 ];
 const LEADS = new Set([]);
 // one colour per team (always shown with its text label); teams beyond this list cycle through the palette
@@ -70,7 +70,7 @@ const SUMMARY = {
   "Nexa media & communications": "Announcements, posts, newsletters, content calendar",
   "Nexa DevRel & BON grants": "Developer onboarding, tutorials and BON grants",
   "Nexa community manager": "Developer community channels, updates, onboarding",
-  "Nexa exchanges & conferences": "Exchange listings and conferences to attend",
+  "Nexa conferences": "Developer conferences, hackathons and meetups, Scandinavia first",
 };
 function derive(desc) {
   let d = String(desc || "").replace(/\s*\([^)]*\)/g, "").replace(/\s+/g, " ").trim();

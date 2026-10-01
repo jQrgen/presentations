@@ -1,12 +1,12 @@
 {
-  "_note": "Which teams the /teams/ page shows and how sync-teams.js finds their members. Only agent names, group membership and ids are read from the roster; descriptions are never read.",
+  "_note": "Which teams the /teams/ page shows and how sync-teams.js finds their members (group, ids = agent ids, names = exact names, namePattern = regex). Only agent names, group membership and ids are read from the roster; descriptions are never read.",
   "top": { "name": "jQrgen", "fullName": "Jørgen S. Notland", "role": "Runs all the teams" },
   "teams": [
     { "name": "Personal health team", "group": "Personal health team" },
     { "name": "Personal finance", "names": ["Personal finance"] },
     { "name": "Personal dev team", "namePattern": "^Personal (dev|web dev)\\b" },
     { "name": "Philosophers' symposium", "group": "Philosophers' symposium" },
-    { "name": "Trading", "names": ["Trading strategist", "Nebula Trader", "On-chain analyst", "Risk manager", "Quant dev", "Nexa trading strategist", "Nexa on-chain analyst", "Nexa risk manager", "Nexa quant dev"] },
+    { "name": "Trading", "ids": ["c63239ab-d6f9-41e1-b7f9-145c6e8722c9", "cdebf3c8-a41e-44ad-885c-9a927bb8fa22", "392bcfe4-ea15-4f84-ab39-4d76a8cadd93", "7178889a-2ed9-482b-8d16-4f4a939325c5", "7208d9c1-eb70-4b34-806a-89ba02ad8e3f"], "names": ["Trading strategist", "DEX trader", "Nebula Trader", "On-chain analyst", "Risk manager", "Quant dev", "Nexa trading strategist", "Nexa on-chain analyst", "Nexa risk manager", "Nexa quant dev"] },
     { "name": "jQrgenCorp", "group": "jQrgenCorp", "namePattern": "^jQrgenCorp\\b" }
   ],
   "links": [

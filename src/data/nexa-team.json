@@ -66,6 +66,17 @@
       "contributions": []
     },
     {
+      "name": "Nexa conferences",
+      "type": "ai",
+      "role": "Developer conferences, hackathons and meetups, Scandinavia first",
+      "department": "Go-to-market & Community",
+      "groups": [
+        "Team Nexa",
+        "Nexa go-to-market"
+      ],
+      "contributions": []
+    },
+    {
       "name": "Nexa core dev",
       "type": "ai",
       "role": "Full node, consensus, Tailstorm, block size and releases",
@@ -106,17 +117,6 @@
       "department": "Go-to-market & Community",
       "groups": [
         "Nexa product",
-        "Nexa go-to-market"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Nexa exchanges & conferences",
-      "type": "ai",
-      "role": "Exchange listings and conferences to attend",
-      "department": "Go-to-market & Community",
-      "groups": [
-        "Team Nexa",
         "Nexa go-to-market"
       ],
       "contributions": []
@@ -289,7 +289,7 @@
         "Marketing strategy",
         "Nexa Team Lead",
         "Nexa chief scientist",
-        "Nexa exchanges & conferences",
+        "Nexa conferences",
         "Nexa community manager"
       ]
     },
@@ -342,7 +342,7 @@
         "Nexa media & communications",
         "Nexa DevRel & BON grants",
         "Nexa community manager",
-        "Nexa exchanges & conferences",
+        "Nexa conferences",
         "Presentations"
       ]
     },
