@@ -17,6 +17,7 @@ h1{margin:0;font-size:26px;font-weight:700;letter-spacing:.2px}
 h1 .g{color:var(--gold)}
 .tag{font-size:12px;color:var(--gold);border:1px solid var(--golddim);padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.08em}
 .note{margin:14px 0 16px;padding:10px 14px;border-left:3px solid var(--gold);background:var(--panel);color:#cfcabd;border-radius:0 8px 8px 0;font-size:14px}
+.note a{color:var(--gold)}
 .stale{display:none;margin:0 0 14px;padding:10px 14px;background:#3a1a12;border:1px solid var(--warn);color:#ffd2c4;border-radius:8px;font-weight:600}
 .stale.on{display:block}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
@@ -56,6 +57,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;co
 The nodes are connected through an artificial ~1 s network delay, so miners often find subblocks in parallel on the same parent. That makes the DAG branch, and the next subblock merges the branches by listing every tip as a parent.
 When the DAG holds k−1 = 39 subblocks, the next summary block (the 40th) closes it. Subblocks left out become <i>uncles</i> that the following summary block includes.
 None of this is live Nexa mainnet data.</div>
+<div class="note" id="paper"><b>The paper:</b> <a href="https://doi.org/10.4230/LIPIcs.AFT.2023.6" target="_blank" rel="noopener">Tailstorm: A Secure and Fair Blockchain for Cash Transactions</a> by Keller, Glickenhaus, Bissias and Griffith, peer-reviewed at AFT 2023 (<a href="https://arxiv.org/abs/2306.12206" target="_blank" rel="noopener">arXiv</a>).</div>
 <div class="stale" id="stale">Data is stale.</div>
 <div class="cards">
   <div class="card"><div class="k">Summary height</div><div class="v gold" id="c-h">–</div></div>
