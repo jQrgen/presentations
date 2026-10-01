@@ -5,7 +5,7 @@
     "date": "October 2026",
     "title": "Nexa Tailstorm: live DAG",
     "meta": "Live demo page (stormtest chain, not mainnet)",
-    "description": "Watch Tailstorm, Nexa's consensus upgrade, build a block DAG in real time: 4 miners with a simulated 1 s delay mine parallel subblocks that merge into a DAG, and a summary block closes it. Private stormtest demo, not mainnet; Tailstorm is implemented in Nexa with activation pending. Links the peer-reviewed Tailstorm paper (AFT 2023).",
+    "description": "Watch Tailstorm, Nexa's consensus upgrade, build a block DAG in real time: 4 miners with a simulated 1.2 s delay mine parallel subblocks that merge into a DAG, and a summary block closes it. Private stormtest demo, not mainnet; Tailstorm is implemented in Nexa with activation pending. Links the peer-reviewed Tailstorm paper (AFT 2023).",
     "thumb": "../tailstorm/thumb.png",
     "links": [
       {

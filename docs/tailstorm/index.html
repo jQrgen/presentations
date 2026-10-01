@@ -55,7 +55,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;co
   <span class="tag">stormtest demo</span>
 </header>
 <div class="note"><b>Demo, not mainnet.</b> This is a <b>private stormtest chain</b> mined by <b>4 local miners</b>, each on its own node, on one machine.
-The nodes are connected through an artificial ~1.2 s network delay. That is longer than the ~1 s gap between subblocks, so miners often find subblocks in parallel on the same parent, and the branching here is heavier than you would expect on mainnet. That makes the DAG branch, and the next subblock merges the branches by listing every tip as a parent.
+The nodes are connected through an artificial ~1.2 s network delay. That is longer than the ~1 s gap between subblocks, so miners often find subblocks in parallel on the same parent, and the branching here is heavier than you would expect on mainnet. Two subblocks built on the same parent sit side by side as separate branches. The next subblock joins them back together by naming the end of each branch as its parent, so both are kept.
 It uses the same k and block timing as Nexa's mainnet code (k = 120, a summary block about every 2 minutes): when the DAG holds 119 subblocks, the next block, the 120th, is the summary block that closes it. Subblocks left out become <i>uncles</i> that the following summary block includes.
 None of this is live Nexa mainnet data.</div>
 <div class="note" id="paper"><b>The paper:</b> <a href="https://doi.org/10.4230/LIPIcs.AFT.2023.6" target="_blank" rel="noopener">Tailstorm: A Secure and Fair Blockchain for Cash Transactions</a> by Keller, Glickenhaus, Bissias and Griffith, peer-reviewed at AFT 2023 (<a href="https://arxiv.org/abs/2306.12206" target="_blank" rel="noopener">arXiv</a>).</div>
@@ -66,7 +66,7 @@ None of this is live Nexa mainnet data.</div>
 <dt>DAG</dt><dd>Short for directed acyclic graph. Instead of one straight chain, a subblock may point back to several parents, so the blocks form a graph that branches and rejoins but never loops back.</dd>
 <dt>k</dt><dd>How many pieces of work make up one block. Nexa counts the summary block itself: it is mined at the same target as the subblocks, as the k-th piece of work, so a round is k−1 subblocks plus the summary block. This demo uses k = 120, the value in Nexa's mainnet code. The paper counts differently: there, a summary block confirms k subblocks and needs no proof of work of its own.</dd>
 <dt>Tip</dt><dd>A subblock that no other subblock builds on yet, i.e. the current end of a branch. The newest one glows as the <i>DAG tip</i>.</dd>
-<dt>Branch and merge</dt><dd>When two miners find a subblock on the same parent at nearly the same moment, the DAG branches. The next subblock lists every tip as a parent, which merges the branches (marked ⋈). In a normal single-chain blockchain one of those blocks would be thrown away.</dd>
+<dt>Branch and merge</dt><dd>When two miners find a subblock on the same parent at nearly the same moment, the DAG <i>branches</i>: two subblocks now sit side by side, each the end of its own branch. The next subblock a miner finds points back to <i>both</i> of them as parents. That is a <i>merge</i> (marked ⋈): the branches join back into one line and neither subblock is discarded. In a normal single-chain blockchain one of the two would be thrown away (orphaned) and its miner's work wasted.</dd>
 <dt>Uncle</dt><dd>A valid subblock that missed the summary block it was meant for, usually because the round was already full when it arrived. Instead of being thrown away, it is carried into the next round, and the following summary block includes it. Uncles count towards that round's k−1. They are drawn with a dashed red outline and a <b>U</b>. The word and this behaviour come from Nexa's implementation, not from the paper.</dd>
 <dt>Width and depth</dt><dd>Width is the largest number of subblocks found side by side (in parallel) in one DAG, and depth is the length of its longest path. A wider DAG means more parallel mining. A DAG with width 1 is a plain chain.</dd>
 <dt>Stormtest</dt><dd>A private Nexa test network with Tailstorm switched on. It is used only for this demo and isn't mainnet. On mainnet, Tailstorm is implemented but its activation is still pending.</dd>
@@ -280,7 +280,7 @@ function drawDag(svg, subs, o) {
     else if (o.r >= 11) el("text", {x, y: y + 3.5, "text-anchor": "middle", "font-size": 9.5, fill: isTip ? "#1a1405" : "#dfe6ee"}, g, s.p.length > 1 ? "⋈" : "");
     const what = kind === "in" ? `UNCLE from the previous DAG, carried into this one (the next summary includes it)` :
                  kind === "out" ? `not included in summary #${o.closing ? o.closing.height : "?"}: becomes an uncle in summary #${s.u}` : `subblock at depth ${depth.get(s.h)}`;
-    el("title", {}, g, `${what}\n${s.h}…  mined by miner ${m || "?"} at ${hhmmss(s.t)}\nparents: ${s.p.length ? s.p.join(", ") : "summary #" + o.base.height}${s.p.length > 1 ? "  (merges " + s.p.length + " branches)" : ""}`);
+    el("title", {}, g, `${what}\n${s.h}…  mined by miner ${m || "?"} at ${hhmmss(s.t)}\nparents: ${s.p.length ? s.p.join(", ") : "summary #" + o.base.height}${s.p.length > 1 ? "  (merge: joins " + s.p.length + " parallel branches back into one)" : ""}`);
   };
   for (const s of subs) { const [x, y] = xy.get(s.h); node(s, x, y, s.u && o.closing ? "out" : null); }
   for (const u of uncles) { const [x, y] = xy.get("U:" + u.h); node(u, x, y, "in"); }
@@ -297,7 +297,7 @@ function render() {
   const bs = branchStats(subs);
   $("c-br").innerHTML = `${bs.width}<small> wide · ${bs.multi} merges</small>`;
   $("c-tip").textContent = d.dagtip;
-  $("legend").innerHTML = legendHtml(d.per_miner_5min) + `<span>arrows point from a subblock to its parent(s); ⋈ = merges several branches</span>`;
+  $("legend").innerHTML = legendHtml(d.per_miner_5min) + `<span>arrows point from a subblock to its parent(s); ⋈ = a merge: a subblock with two or more parents, which joins side-by-side branches back into one</span>`;
   $("legend2").innerHTML = legendHtml(null) + `<span>dashed red = left out of this summary, included later as an uncle</span>`;
   $("cur-m").textContent = `on top of summary #${d.height} (${d.tip}…) · ${n}/${K - 1} · depth ${bs.depth} · next summary #${d.height + 1} when full`;
   const w = $("cur").parentNode.clientWidth, W = Math.max(300, w);
