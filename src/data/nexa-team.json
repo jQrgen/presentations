@@ -10,19 +10,20 @@
     }
   ],
   "departments": [
-    "Strategy",
-    "Leadership",
-    "Research",
     "Engineering",
     "Product & Design",
-    "Go-to-market & Community"
+    "Research",
+    "Go-to-market & Community",
+    "Security (independent)",
+    "Staff & advisor"
   ],
   "members": [
     {
       "name": "Marketing strategy",
       "type": "ai",
-      "role": "Developer marketing plan, campaigns and events",
+      "role": "Developer marketing plan, messaging and campaigns",
       "department": "Go-to-market & Community",
+      "lead": true,
       "groups": [
         "Team Nexa",
         "Nexa leadership",
@@ -33,8 +34,8 @@
     {
       "name": "Nexa chief of staff",
       "type": "ai",
-      "role": "Chief of staff: plans, follow-ups and coordination across the team",
-      "department": "Leadership",
+      "role": "Briefs jQrgen, tracks decisions, follows up and surfaces blockers",
+      "department": "Staff & advisor",
       "groups": [],
       "contributions": []
     },
@@ -42,7 +43,8 @@
       "name": "Nexa chief scientist",
       "type": "ai",
       "role": "Protocol and consensus research, papers, design reviews",
-      "department": "Leadership",
+      "department": "Research",
+      "lead": true,
       "groups": [
         "Team Nexa",
         "Nexa leadership",
@@ -65,7 +67,7 @@
     {
       "name": "Nexa community manager",
       "type": "ai",
-      "role": "Developer community channels, updates, onboarding",
+      "role": "Community channels, updates and developer feedback",
       "department": "Go-to-market & Community",
       "groups": [
         "Team Nexa",
@@ -121,7 +123,7 @@
     {
       "name": "Nexa DevRel & BON grants",
       "type": "ai",
-      "role": "Developer onboarding, tutorials and BON grants",
+      "role": "Builder onboarding, tutorials and BON grants",
       "department": "Go-to-market & Community",
       "groups": [
         "Nexa product",
@@ -154,7 +156,8 @@
       "name": "Nexa lead dev",
       "type": "ai",
       "role": "Technical direction: architecture, roadmap, protocol changes",
-      "department": "Leadership",
+      "department": "Engineering",
+      "lead": true,
       "groups": [
         "Nexa leadership",
         "Nexa lead devs",
@@ -173,75 +176,10 @@
       "contributions": []
     },
     {
-      "name": "Nexa product manager",
-      "type": "ai",
-      "role": "Developer product roadmap: wallet, SDKs, APIs, docs",
-      "department": "Product & Design",
-      "groups": [
-        "Nexa leadership",
-        "Nexa product"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Nexa research liaison",
-      "type": "ai",
-      "role": "Research partnerships with universities",
-      "department": "Research",
-      "groups": [
-        "Nexa research"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Nexa security & audit",
-      "type": "ai",
-      "role": "Security reviews, threat models and audit prep",
-      "department": "Engineering",
-      "groups": [
-        "Nexa security"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Nexa solution architect",
-      "type": "ai",
-      "role": "Reference architectures and integrations for builders",
-      "department": "Engineering",
-      "groups": [
-        "Nexa lead devs",
-        "Nexa product",
-        "Nexa security"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Nexa strategist",
-      "type": "ai",
-      "role": "Overall strategy, positioning, Scandinavia-first plan and goals",
-      "department": "Strategy",
-      "groups": [
-        "Nexa leadership"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Nexa Team Lead",
-      "type": "ai",
-      "role": "Coordinates the team: priorities, owners, follow-ups and status",
-      "department": "Team lead",
-      "groups": [
-        "Team Nexa",
-        "Nexa leadership",
-        "Nexa lead devs"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Presentations",
+      "name": "Nexa Presentations",
       "type": "ai",
       "role": "Talks, pitch decks and these pages",
-      "department": "Product & Design",
+      "department": "Go-to-market & Community",
       "groups": [
         "Team Nexa",
         "Nexa go-to-market"
@@ -268,6 +206,72 @@
           "date": "2026-09-30"
         }
       ]
+    },
+    {
+      "name": "Nexa product manager",
+      "type": "ai",
+      "role": "Developer product roadmap: wallet, SDKs, APIs, docs",
+      "department": "Product & Design",
+      "lead": true,
+      "groups": [
+        "Nexa leadership",
+        "Nexa product"
+      ],
+      "contributions": []
+    },
+    {
+      "name": "Nexa research liaison",
+      "type": "ai",
+      "role": "Research partnerships with universities",
+      "department": "Research",
+      "groups": [
+        "Nexa research"
+      ],
+      "contributions": []
+    },
+    {
+      "name": "Nexa security & audit",
+      "type": "ai",
+      "role": "Independent security reviews, threat models and audit prep",
+      "department": "Security (independent)",
+      "groups": [
+        "Nexa security"
+      ],
+      "contributions": []
+    },
+    {
+      "name": "Nexa solution architect",
+      "type": "ai",
+      "role": "Reference architectures and integrations for builders",
+      "department": "Engineering",
+      "groups": [
+        "Nexa lead devs",
+        "Nexa product",
+        "Nexa security"
+      ],
+      "contributions": []
+    },
+    {
+      "name": "Nexa strategist",
+      "type": "ai",
+      "role": "Advisor: overall strategy, positioning, Scandinavia-first plan and goals",
+      "department": "Staff & advisor",
+      "groups": [
+        "Nexa leadership"
+      ],
+      "contributions": []
+    },
+    {
+      "name": "Nexa Team Lead",
+      "type": "ai",
+      "role": "Assigns work to the AI agents: owners, priorities and handoffs",
+      "department": "Team lead",
+      "groups": [
+        "Team Nexa",
+        "Nexa leadership",
+        "Nexa lead devs"
+      ],
+      "contributions": []
     },
     {
       "name": "Rostrum dev",
@@ -298,7 +302,7 @@
     {
       "name": "Team Nexa",
       "members": [
-        "Presentations",
+        "Nexa Presentations",
         "Marketing strategy",
         "Nexa Team Lead",
         "Nexa chief scientist",
@@ -356,7 +360,7 @@
         "Nexa DevRel & BON grants",
         "Nexa community manager",
         "Nexa conferences",
-        "Presentations"
+        "Nexa Presentations"
       ]
     },
     {
