@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>jQrgen's AI teams: org chart</title>
+<style>
+:root{
+  color-scheme:light;
+  --ground:#E5E7EB; --paper:#FFFFFF; --band:#000000; --band-ink:#FFFFFF;
+  --ink:#000000; --ink-2:#1F2937; --muted:#4B5563; --line:#000000; --hair:#D1D5DB;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink)}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.band{background:var(--band);color:var(--band-ink)}
+.band .inner{max-width:1080px;margin:0 auto;padding:22px 24px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px}
+.band .name{font-size:22px;font-weight:400;letter-spacing:.01em;color:var(--band-ink);text-decoration:none}
+.band nav{display:flex;flex-wrap:wrap;gap:4px 22px;margin-left:auto}
+.band nav a{color:var(--band-ink);text-decoration:none;font-size:15px;padding:4px 0;border-bottom:2px solid transparent;opacity:.8}
+.band nav a:hover{opacity:1}
+.band nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--band-ink)}
+.page{max-width:1080px;margin:0 auto;padding:36px 24px 72px}
+h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:pretty}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+.count{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.year{display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;margin-top:36px}
+@media (max-width:700px){.year{grid-template-columns:1fr;gap:8px}}
+.year h2{font-size:30px;font-weight:400;margin:0;letter-spacing:-.02em;font-variant-numeric:tabular-nums;position:sticky;top:12px}
+.year ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.item{display:grid;grid-template-columns:minmax(200px,2fr) 3fr;background:var(--paper);border:1px solid var(--line)}
+.item.no-thumb{grid-template-columns:1fr}
+@media (max-width:700px){.item{grid-template-columns:1fr}}
+.thumb{margin:0;background:#000;aspect-ratio:16/9;border-right:1px solid var(--line)}
+@media (max-width:700px){.thumb{border-right:0;border-bottom:1px solid var(--line)}}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px}
+.kind{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:pretty}
+.body h3 a{color:var(--ink);text-decoration:none}
+.body h3 a:hover{text-decoration:underline}
+.where{margin:0;font-size:14px;color:var(--muted)}
+.where .date{color:var(--ink-2)}
+.authors{margin:0;font-size:14px;color:var(--ink-2)}
+.desc{margin:2px 0 0;color:var(--ink-2);max-width:66ch;font-size:15px}
+.cites{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.cites b{font-weight:600}
+.cites span{color:var(--muted)}
+.links{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.links a{display:inline-block;color:var(--ink);text-decoration:none;font-size:14px;padding:5px 10px;border:1px solid var(--line);background:var(--paper)}
+.links a.primary{background:var(--band);color:var(--band-ink)}
+.links a:hover{text-decoration:underline}
+.note{margin:6px 0 0;font-size:13px;color:var(--muted)}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+
+.band .tag{font-size:14px;opacity:.8}
+.page,.band .inner{max-width:1280px}
+.lede{max-width:70ch}
+.updated{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.org{margin-top:28px}
+.node{background:var(--paper);border:1px solid var(--line);padding:9px 11px}
+.node.ai{border:1px dashed #6B7280;background:#F9FAFB}
+.node.ai .n{color:var(--ink-2)}
+.node.human{border:3px solid var(--ink);background:#FEF3C7}
+.node.link{border:2px solid var(--ink);background:var(--paper)}
+.node.link a.go{display:inline-block;margin-top:8px;font-size:13.5px;font-weight:600;padding:4px 9px;background:var(--band);color:var(--band-ink);text-decoration:none}
+.node.link a.go:hover{text-decoration:underline}
+.badge{display:inline-block;font-size:11px;font-weight:600;line-height:1.5;padding:0 6px;margin:0 0 4px;white-space:nowrap;border:1px solid var(--line)}
+.badge.ai{border-style:dashed;border-color:#6B7280;color:var(--muted);background:var(--paper)}
+.badge.human{background:var(--ink);color:#FEF3C7;border-color:var(--ink)}
+.badge.link{color:var(--ink);background:var(--paper)}
+.legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.legend span.k{display:inline-flex;align-items:center;gap:8px}
+.legend .badge{margin:0}
+.node .n{font-size:14.5px;font-weight:600;line-height:1.3}
+.node .r{font-size:12.5px;color:var(--ink-2);line-height:1.35;margin-top:2px}
+.node.top{text-align:center;width:280px;margin:0 auto}
+.vline{width:1px;height:20px;background:var(--line);margin:0 auto}
+.depts{display:flex;gap:10px;align-items:flex-start}
+.dept{flex:1 1 0;min-width:0;position:relative;padding-top:20px}
+.dept::before{content:"";position:absolute;top:0;left:-5px;right:-5px;border-top:1px solid var(--line)}
+.dept:first-child::before{left:50%}
+.dept:last-child::before{right:50%}
+.dept:only-child::before{display:none}
+.dept::after{content:"";position:absolute;top:0;left:50%;height:20px;border-left:1px solid var(--line)}
+.dept h3{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;background:var(--ink);color:var(--paper);padding:7px 8px;text-align:center;line-height:1.3;min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-bottom:6px solid var(--tc)}
+.dept h3 small{font-size:10.5px;font-weight:400;letter-spacing:.04em;text-transform:none;opacity:.8}
+.dept.linked h3{background:var(--paper);color:var(--ink);border:1px dashed var(--line);border-bottom:6px solid var(--tc)}
+.dept ol{list-style:none;margin:0;padding:8px 0 0 12px;display:flex;flex-direction:column;gap:8px;margin-left:10px}
+.dept>ol>li{position:relative}
+.dept>ol>li::after{content:"";position:absolute;left:-12px;top:-8px;bottom:0;border-left:1px solid var(--line)}
+.dept>ol>li:last-child::after{bottom:auto;height:26px}
+.dept>ol>li::before{content:"";position:absolute;left:-12px;top:18px;width:12px;border-top:1px solid var(--line)}
+@media (max-width:980px){
+  .depts{flex-direction:column;gap:18px}
+  .dept{padding-top:0}
+  .dept::before,.dept::after{display:none}
+  .dept h3{min-height:0;align-items:flex-start;text-align:left}
+}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+</style>
+</head>
+<body><div class="band"><div class="inner">
+    <a class="name" href="../">Jørgen S. Notland</a><span class="tag">All talks, articles and papers</span>
+  </div></div>
+<div class="page">
+  <header>
+    <h1>jQrgen's AI teams: org chart</h1>
+    <p class="lede">All of jQrgen's AI agent teams on one page. jQrgen (Jørgen S. Notland) is the only human; everyone else is an AI agent, not a person. Each card shows only the agent's name, its team and a short generic role. The Nexa agents have their own, more detailed chart.</p>
+    <p class="legend"><span class="k"><span class="badge human">👤 Human</span> a person</span><span class="k"><span class="badge ai">🤖 AI agent</span> an AI agent, not a person</span><span class="k"><span class="badge link">🔗 Separate chart</span> a link to another chart</span></p>
+    <p class="updated">1 human · 20 AI agents · 5 teams + <a href="https://jqrgen.github.io/presentations/nexa-team/">Nexa team</a> · Last updated <time datetime="2026-10-01">1 October 2026</time></p>
+  </header>
+  <div class="org" role="group" aria-label="Org chart">
+    <div class="node top human"><span class="badge human">👤 Human</span><div class="n">jQrgen (Jørgen S. Notland)</div><div class="r">Runs all the teams</div></div>
+    <div class="vline"></div>
+    <div class="depts">
+      <section class="dept" style="--tc:#B91C1C" aria-label="Personal health team"><h3>Personal health team<small>6 AI agents</small></h3>
+        <ol><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Fastlege</div><div class="r">Health advisor</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Lege 2</div><div class="r">Health advisor</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Nutritionist</div><div class="r">Nutrition and meal-planning advisor</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Personal trainer</div><div class="r">Strength and fitness coach</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Kenyan run coach</div><div class="r">Running coach</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Padel coach</div><div class="r">Padel coach</div></div></li></ol></section>
+      <section class="dept" style="--tc:#1D4ED8" aria-label="Personal finance"><h3>Personal finance<small>1 AI agent</small></h3>
+        <ol><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Personal finance</div><div class="r">Personal budgeting assistant</div></div></li></ol></section>
+      <section class="dept" style="--tc:#047857" aria-label="Personal dev team"><h3>Personal dev team<small>2 AI agents</small></h3>
+        <ol><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Personal dev lead</div><div class="r">Leads jQrgen's personal software projects</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Personal web dev</div><div class="r">Web developer for personal sites and pages</div></div></li></ol></section>
+      <section class="dept" style="--tc:#7C3AED" aria-label="Philosophers' symposium"><h3>Philosophers' symposium<small>6 AI agents</small></h3>
+        <ol><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Sokrates</div><div class="r">Asks questions in the Socratic style</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Marcus Aurelius</div><div class="r">Stoic perspective</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Nietzsche</div><div class="r">Nietzschean perspective</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Hannah Arendt</div><div class="r">Political-philosophy perspective</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Arne Næss</div><div class="r">Deep-ecology perspective</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Grok Bot</div><div class="r">General-purpose assistant</div></div></li></ol></section>
+      <section class="dept" style="--tc:#B45309" aria-label="jQrgenCorp"><h3>jQrgenCorp<small>6 AI agents</small></h3>
+        <ol><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">jQrgenCorp strategist</div><div class="r">Business strategy advisor for jQrgen's company</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">jQrgenCorp CFO</div><div class="r">Company finance advisor</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">jQrgenCorp accountant</div><div class="r">Bookkeeping assistant</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">jQrgenCorp tax &amp; compliance</div><div class="r">Tax and compliance assistant</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">jQrgenCorp admin</div><div class="r">Company admin and paperwork assistant</div></div></li><li><div class="node ai"><span class="badge ai">🤖 AI agent</span><div class="n">Grok Bot</div><div class="r">General-purpose assistant</div></div></li></ol></section>
+      <section class="dept linked" style="--tc:#0E7490" aria-label="Nexa team"><h3>Nexa team<small>own org chart</small></h3>
+        <ol><li><div class="node link"><span class="badge link">🔗 Separate chart</span><div class="n">Nexa team</div><div class="r">AI agents for Nexa work, on their own org chart</div><a class="go" href="https://jqrgen.github.io/presentations/nexa-team/">Open the Nexa team org chart →</a></div></li></ol></section>
+    </div>
+  </div>
+  <footer class="site">Generated by src/orgchart/build-teams.js from src/data/teams-roster.json and src/data/teams-roles.json · <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
+</div>
+</body>
+</html>
