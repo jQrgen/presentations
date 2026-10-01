@@ -6,6 +6,7 @@
     { "name": "Personal finance", "names": ["Personal finance"] },
     { "name": "Personal dev team", "namePattern": "^Personal (dev|web dev)\\b" },
     { "name": "Philosophers' symposium", "group": "Philosophers' symposium" },
+    { "name": "Trading", "names": ["Nexa trading strategist", "Nebula Trader", "Nexa on-chain analyst", "Nexa risk manager", "Nexa quant dev"] },
     { "name": "jQrgenCorp", "group": "jQrgenCorp", "namePattern": "^jQrgenCorp\\b" }
   ],
   "links": [

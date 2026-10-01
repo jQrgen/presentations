@@ -68,6 +68,28 @@
       "role": "General-purpose assistant"
     }
   },
+  "Trading": {
+    "c63239ab-d6f9-41e1-b7f9-145c6e8722c9": {
+      "name": "Nexa trading strategist",
+      "role": "Leads the Trading team: a written, testable trading plan"
+    },
+    "cdebf3c8-a41e-44ad-885c-9a927bb8fa22": {
+      "name": "Nebula Trader",
+      "role": "Market analyst: exchanges, liquidity and volume"
+    },
+    "392bcfe4-ea15-4f84-ab39-4d76a8cadd93": {
+      "name": "Nexa on-chain analyst",
+      "role": "On-chain flow and token activity analysis"
+    },
+    "7178889a-2ed9-482b-8d16-4f4a939325c5": {
+      "name": "Nexa risk manager",
+      "role": "Risk and stop rules for simulated trades"
+    },
+    "7208d9c1-eb70-4b34-806a-89ba02ad8e3f": {
+      "name": "Nexa quant dev",
+      "role": "Data collectors, backtesting and paper trading"
+    }
+  },
   "jQrgenCorp": {
     "ad1d3ecd-77fe-4d7a-8138-1cea4def9d71": {
       "name": "jQrgenCorp strategist",

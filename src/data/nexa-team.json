@@ -15,8 +15,7 @@
     "Research",
     "Engineering",
     "Product & Design",
-    "Go-to-market & Community",
-    "On-chain trading"
+    "Go-to-market & Community"
   ],
   "members": [
     {
@@ -28,17 +27,6 @@
         "Team Nexa",
         "Nexa leadership",
         "Nexa go-to-market"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Nebula Trader",
-      "type": "ai",
-      "role": "Market analyst: exchanges, liquidity, price, volume",
-      "department": "On-chain trading",
-      "groups": [
-        "Nexa devs",
-        "Nexa on-chain trading"
       ],
       "contributions": []
     },
@@ -129,8 +117,7 @@
       "department": "Go-to-market & Community",
       "groups": [
         "Team Nexa",
-        "Nexa go-to-market",
-        "Nexa on-chain trading"
+        "Nexa go-to-market"
       ],
       "contributions": []
     },
@@ -178,16 +165,6 @@
       "contributions": []
     },
     {
-      "name": "Nexa on-chain analyst",
-      "type": "ai",
-      "role": "Trading signals from on-chain flows and token activity",
-      "department": "On-chain trading",
-      "groups": [
-        "Nexa on-chain trading"
-      ],
-      "contributions": []
-    },
-    {
       "name": "Nexa product manager",
       "type": "ai",
       "role": "Developer product roadmap: wallet, SDKs, APIs, docs",
@@ -199,32 +176,12 @@
       "contributions": []
     },
     {
-      "name": "Nexa quant dev",
-      "type": "ai",
-      "role": "Data collectors, backtesting and paper trading",
-      "department": "On-chain trading",
-      "groups": [
-        "Nexa on-chain trading"
-      ],
-      "contributions": []
-    },
-    {
       "name": "Nexa research liaison",
       "type": "ai",
       "role": "Research partnerships with universities",
       "department": "Research",
       "groups": [
         "Nexa research"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Nexa risk manager",
-      "type": "ai",
-      "role": "Position limits, loss limits and stop rules",
-      "department": "On-chain trading",
-      "groups": [
-        "Nexa on-chain trading"
       ],
       "contributions": []
     },
@@ -269,17 +226,6 @@
         "Team Nexa",
         "Nexa leadership",
         "Nexa lead devs"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Nexa trading strategist",
-      "type": "ai",
-      "role": "Leads the desk: a written, testable trading plan",
-      "department": "On-chain trading",
-      "lead": true,
-      "groups": [
-        "Nexa on-chain trading"
       ],
       "contributions": []
     },
@@ -373,7 +319,6 @@
       "members": [
         "Wally Dev",
         "Nexa game dev",
-        "Nebula Trader",
         "Rostrum dev",
         "Nexa FPGA engineer",
         "Nexa designer"
@@ -419,17 +364,6 @@
         "Nexa research liaison",
         "Nexa core dev",
         "Nexa FPGA engineer"
-      ]
-    },
-    {
-      "name": "Nexa on-chain trading",
-      "members": [
-        "Nexa trading strategist",
-        "Nebula Trader",
-        "Nexa on-chain analyst",
-        "Nexa risk manager",
-        "Nexa quant dev",
-        "Nexa exchanges & conferences"
       ]
     }
   ]

@@ -23,7 +23,10 @@ const CONTRIB = path.join(SRC, "data", "nexa-contributions.json"); // hand-maint
 // Privacy: an ALLOWLIST decides who is published; these ids are a second safety net (ids only, so no private names live in this public file).
 const EXCLUDE_IDS = new Set(["680befcc-f236-40de-a77d-7f0930ecb7d0", "207cf11b-c754-45d8-b61a-404d9cb352f2",
   "1a0fab0a-7eb5-4e42-a543-f0e28e728c53", "61d77712-38b4-4333-832f-423f7ece4983", "9f4094f5-2dbf-4013-8468-88a097458e5d",
-  "aef0a6e5-5dda-4769-a594-eb6c540d1164", "d77b0e24-721f-43f1-b1df-895871971563", "fd5c438a-a008-4d84-8db7-42a335ff16a1"]);
+  "aef0a6e5-5dda-4769-a594-eb6c540d1164", "d77b0e24-721f-43f1-b1df-895871971563", "fd5c438a-a008-4d84-8db7-42a335ff16a1",
+  // jQrgen's personal Trading team (moved out of Nexa 2026-10-01; shown on the all-teams chart instead): its group chat and five bots
+  "693435ee-ebea-474a-bb19-ba2839ef9adc", "c63239ab-d6f9-41e1-b7f9-145c6e8722c9", "cdebf3c8-a41e-44ad-885c-9a927bb8fa22",
+  "392bcfe4-ea15-4f84-ab39-4d76a8cadd93", "7178889a-2ed9-482b-8d16-4f4a939325c5", "7208d9c1-eb70-4b34-806a-89ba02ad8e3f"]);
 const EXCLUDE_NAMES = new Set(["Grok Bot"].map((n) => n.toLowerCase()));
 const EXCLUDE_PREFIXES = ["jqrgencorp"]; // jQrgen's personal company team (agents and group)
 const denied = (name) => { const n = String(name || "").trim().toLowerCase(); return EXCLUDE_NAMES.has(n) || EXCLUDE_PREFIXES.some((x) => n.startsWith(x)); };
@@ -40,12 +43,11 @@ const DEPARTMENTS = [
   ["Engineering", ["Nexa core dev", "Nexa solution architect", "Rostrum dev", "Wally Dev", "Nexa game dev", "Nexa FPGA engineer", "Nexa security & audit"]],
   ["Product & Design", ["Nexa product manager", "Nexa designer", "Presentations"]],
   ["Go-to-market & Community", ["Marketing strategy", "Nexa media & communications", "Nexa DevRel & BON grants", "Nexa community manager", "Nexa exchanges & conferences"]],
-  ["On-chain trading", ["Nexa trading strategist", "Nebula Trader", "Nexa on-chain analyst", "Nexa risk manager", "Nexa quant dev"]],
 ];
-const LEADS = new Set(["Nexa trading strategist"]);
+const LEADS = new Set([]);
 // one colour per team (always shown with its text label); teams beyond this list cycle through the palette
 const TEAM_COLOURS = ["#B91C1C", "#1D4ED8", "#047857", "#7C3AED", "#B45309", "#0E7490", "#BE185D", "#4D7C0F", "#374151"];
-const GROUP_ORDER = ["Team Nexa", "Nexa leadership", "Nexa lead devs", "Nexa devs", "Nexa product", "Nexa go-to-market", "Nexa security", "Nexa research", "Nexa on-chain trading"];
+const GROUP_ORDER = ["Team Nexa", "Nexa leadership", "Nexa lead devs", "Nexa devs", "Nexa product", "Nexa go-to-market", "Nexa security", "Nexa research"];
 
 // ---- one-line role summaries (curated; new agents fall back to a line derived from their description)
 const SUMMARY = {
@@ -69,11 +71,6 @@ const SUMMARY = {
   "Nexa DevRel & BON grants": "Developer onboarding, tutorials and BON grants",
   "Nexa community manager": "Developer community channels, updates, onboarding",
   "Nexa exchanges & conferences": "Exchange listings and conferences to attend",
-  "Nexa trading strategist": "Leads the desk: a written, testable trading plan",
-  "Nebula Trader": "Market analyst: exchanges, liquidity, price, volume",
-  "Nexa on-chain analyst": "Trading signals from on-chain flows and token activity",
-  "Nexa risk manager": "Position limits, loss limits and stop rules",
-  "Nexa quant dev": "Data collectors, backtesting and paper trading",
 };
 function derive(desc) {
   let d = String(desc || "").replace(/\s*\([^)]*\)/g, "").replace(/\s+/g, " ").trim();
@@ -240,7 +237,7 @@ function render() {
 <div class="page">
   <header>
     <h1>Nexa team: org chart</h1>
-    <p class="lede">This team is AI agents run by jQrgen (Jørgen S. Notland), the only human on the chart. The agents mirror the human roles on <a href="https://nexa.org/team" rel="noopener">nexa.org/team</a>, plus roles he added: Strategist, DevRel &amp; BON grants, Product manager, Security &amp; audit, Game dev and an on-chain trading desk. It is not the real Nexa staff list; for the people behind Nexa, see nexa.org/team.</p>
+    <p class="lede">This team is AI agents run by jQrgen (Jørgen S. Notland), the only human on the chart. The agents mirror the human roles on <a href="https://nexa.org/team" rel="noopener">nexa.org/team</a>, plus roles he added: Strategist, DevRel &amp; BON grants, Product manager, Security &amp; audit and Game dev. It is not the real Nexa staff list; for the people behind Nexa, see nexa.org/team.</p>
     <p class="legend"><span class="k">${BADGE.human} a person</span><span class="k">${BADGE.ai} an AI agent, not a person</span></p>
     <p class="updated">1 human · ${data.members.length} AI agents · <a href="#teams">${data.groups.length} teams</a> (AI agent group chats) · Last updated <time datetime="${esc(data.updated)}">${esc(fmt)}</time></p>
   </header>
