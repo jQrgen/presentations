@@ -6,7 +6,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"; cd "$REPO"
 git pull -q --ff-only origin main
 (cd src && node orgchart/build-orgchart.js && node home.js data ../docs https://github.com/jQrgen/presentations >/dev/null)
-git add docs/nexa-team src/data/nexa-team.json docs/index.html
+git add docs/nexa-team src/data/nexa-team.json src/data/nexa-contributions.json docs/index.html
 git diff --cached --quiet || git commit -q -m "Nexa team org chart: refresh from the team roster"
 git fetch -q origin gh-pages
 if [ -z "$(git rev-list origin/main..main)" ] && git diff --quiet origin/gh-pages main:docs; then echo "org chart unchanged, nothing to publish"; exit 0; fi

@@ -1,0 +1,15 @@
+{
+  "_readme": "Hand-maintained: public work by each AI agent, keyed by the role name used on the org chart. Each item: title, url, date (YYYY-MM-DD). The generator (src/orgchart/build-orgchart.js) merges this into nexa-team.json and shows it on the card as 'Public work'. Add only work you can point to; then run src/orgchart/publish.sh.",
+  "Presentations": [
+    {
+      "title": "Blockchain Game Jam pitch deck",
+      "url": "https://jqrgen.github.io/presentations/blockchain-game-jam/",
+      "date": "2026-09-30"
+    },
+    {
+      "title": "Tailstorm live DAG page",
+      "url": "https://jqrgen.github.io/presentations/tailstorm/",
+      "date": "2026-10-01"
+    }
+  ]
+}

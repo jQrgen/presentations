@@ -17,6 +17,7 @@ const AGENTS = arg("--agents", "/home/box/agent-data/agents");
 const SRC = path.join(__dirname, "..");
 const DOCS = path.resolve(arg("--out", path.join(SRC, "..", "docs")));
 const SNAP = path.join(SRC, "data", "nexa-team.json");
+const CONTRIB = path.join(SRC, "data", "nexa-contributions.json"); // hand-maintained, keyed by role name
 
 // ---- who is not part of the Nexa team (private / generic bots and their group)
 const EXCLUDE_IDS = new Set(["680befcc-f236-40de-a77d-7f0930ecb7d0", "207cf11b-c754-45d8-b61a-404d9cb352f2"]);
@@ -34,6 +35,8 @@ const DEPARTMENTS = [
   ["On-chain trading", ["Nexa trading strategist", "Nebula Trader", "Nexa on-chain analyst", "Nexa risk manager", "Nexa quant dev"]],
 ];
 const LEADS = new Set(["Nexa trading strategist"]);
+// one colour per team (always shown with its text label); teams beyond this list cycle through the palette
+const TEAM_COLOURS = ["#B91C1C", "#1D4ED8", "#047857", "#7C3AED", "#B45309", "#0E7490", "#BE185D", "#4D7C0F", "#374151"];
 const GROUP_ORDER = ["Team Nexa", "Nexa leadership", "Nexa lead devs", "Nexa devs", "Nexa product", "Nexa go-to-market", "Nexa security", "Nexa on-chain trading"];
 
 // ---- one-line role summaries (curated; new agents fall back to a line derived from their description)
@@ -70,6 +73,19 @@ function derive(desc) {
   return s.length > 70 ? s.slice(0, 67).replace(/\s+\S*$/, "") + "…" : s;
 }
 
+// ---- hand-maintained public work, merged in on every run (kept in its own file so regeneration never loses it)
+function loadContrib() {
+  if (!fs.existsSync(CONTRIB)) return {};
+  const c = JSON.parse(fs.readFileSync(CONTRIB, "utf8"));
+  for (const [k, list] of Object.entries(c)) {
+    if (k.startsWith("_")) continue;
+    for (const it of list) if (!it.title || !/^https?:\/\//.test(it.url || "") || !/^\d{4}-\d{2}-\d{2}$/.test(it.date || "")) throw new Error(`bad contribution for ${k}: ${JSON.stringify(it)}`);
+  }
+  return c;
+}
+const CONTRIBS = loadContrib();
+const contributions = (name) => [...(CONTRIBS[name] || [])].sort((a, b) => b.date.localeCompare(a.date)).map(({ title, url, date }) => ({ title, url, date }));
+
 // ---- snapshot
 function snapshot() {
   const dirs = fs.readdirSync(AGENTS).filter((d) => fs.existsSync(path.join(AGENTS, d, "profile.json")));
@@ -88,12 +104,16 @@ function snapshot() {
     .sort((a, b) => ((GROUP_ORDER.indexOf(a.name) + 1) || 99) - ((GROUP_ORDER.indexOf(b.name) + 1) || 99) || a.name.localeCompare(b.name));
   const members = Object.values(agents).map((p) => ({
     name: p.name,
+    type: "ai",
     role: SUMMARY[p.name] || derive(p.description),
     department: p.name === "Nexa Team Lead" ? "Team lead" : deptOf[p.name] || "Unassigned",
     ...(LEADS.has(p.name) ? { lead: true } : {}),
     groups: gl.filter((g) => g.members.includes(p.name)).map((g) => g.name),
+    contributions: contributions(p.name),
   })).sort((a, b) => a.name.localeCompare(b.name));
-  const data = { source: "jQrgen's AI team roster", departments: DEPARTMENTS.map(([d]) => d), members, groups: gl };
+  // jQrgen is the only human; every roster entry is an AI agent
+  const people = [{ name: "jQrgen", fullName: "Jørgen S. Notland", type: "human", role: "Runs the team · Bitcoin Unlimited / Nexa" }];
+  const data = { source: "jQrgen's AI team roster", people, departments: DEPARTMENTS.map(([d]) => d), members, groups: gl };
   let updated = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Oslo" });
   if (fs.existsSync(SNAP)) {
     const old = JSON.parse(fs.readFileSync(SNAP, "utf8"));
@@ -113,10 +133,23 @@ const CSS = `
 h2.sec{font-size:22px;font-weight:500;margin:40px 0 14px;letter-spacing:-.01em}
 .org{margin-top:28px}
 .node{background:var(--paper);border:1px solid var(--line);padding:9px 11px}
+.node.ai{border:1px dashed #6B7280;background:#F9FAFB}
+.node.ai .n{color:var(--ink-2)}
+.node.human{border:3px solid var(--ink);background:#FEF3C7}
+.badge{display:inline-block;font-size:11px;font-weight:600;line-height:1.5;padding:0 6px;margin:0 0 4px;white-space:nowrap;border:1px solid var(--line)}
+.badge.ai{border-style:dashed;border-color:#6B7280;color:var(--muted);background:var(--paper)}
+.badge.human{background:var(--ink);color:#FEF3C7;border-color:var(--ink)}
+.work{margin-top:7px;padding-top:6px;border-top:1px solid var(--hair)}
+.work .wh{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.work ul{list-style:none;margin:2px 0 0;padding:0;font-size:12.5px;line-height:1.4}
+.work li{margin-top:3px}
+.work time{display:block;font-size:11px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.legend span.k{display:inline-flex;align-items:center;gap:8px}
+.legend .badge{margin:0}
 .node .n{font-size:14.5px;font-weight:600;line-height:1.3}
 .node .r{font-size:12.5px;color:var(--ink-2);line-height:1.35;margin-top:2px}
-.node.top{background:var(--band);color:var(--band-ink);border-color:var(--band);text-align:center;width:260px;margin:0 auto}
-.node.top .r{color:#D1D5DB}
+.node.top{text-align:center;width:280px;margin:0 auto}
 .node .lead{display:inline-block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:0 5px;margin-left:6px;vertical-align:2px;font-weight:500}
 .vline{width:1px;height:20px;background:var(--line);margin:0 auto}
 .depts{display:flex;gap:10px;align-items:flex-start}
@@ -128,10 +161,10 @@ h2.sec{font-size:22px;font-weight:500;margin:40px 0 14px;letter-spacing:-.01em}
 .dept::after{content:"";position:absolute;top:0;left:50%;height:20px;border-left:1px solid var(--line)}
 .dept h3{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;background:var(--ink);color:var(--paper);padding:7px 8px;text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
 .dept ol{list-style:none;margin:0;padding:8px 0 0 12px;display:flex;flex-direction:column;gap:8px;margin-left:10px}
-.dept li{position:relative}
-.dept li::after{content:"";position:absolute;left:-12px;top:-8px;bottom:0;border-left:1px solid var(--line)}
-.dept li:last-child::after{bottom:auto;height:26px}
-.dept li::before{content:"";position:absolute;left:-12px;top:18px;width:12px;border-top:1px solid var(--line)}
+.dept>ol>li{position:relative}
+.dept>ol>li::after{content:"";position:absolute;left:-12px;top:-8px;bottom:0;border-left:1px solid var(--line)}
+.dept>ol>li:last-child::after{bottom:auto;height:26px}
+.dept>ol>li::before{content:"";position:absolute;left:-12px;top:18px;width:12px;border-top:1px solid var(--line)}
 .dept.unassigned h3{background:var(--paper);color:var(--ink);border:1px dashed var(--line)}
 @media (max-width:980px){
   .depts{flex-direction:column;gap:18px}
@@ -139,6 +172,26 @@ h2.sec{font-size:22px;font-weight:500;margin:40px 0 14px;letter-spacing:-.01em}
   .dept::before,.dept::after{display:none}
   .dept h3{min-height:0;justify-content:flex-start;text-align:left}
 }
+.sub{margin:-6px 0 14px;color:var(--ink-2);max-width:72ch;font-size:15px}
+.ttags{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
+.ttag{display:inline-block;font-size:10.5px;line-height:1.45;padding:0 5px;border:1px solid var(--tc);border-left-width:4px;color:var(--ink);background:var(--paper);white-space:nowrap}
+.node.top .ttags{justify-content:center}
+.group{border-top:6px solid var(--tc)!important}
+.chips{list-style:none!important;padding:0!important;display:flex;flex-direction:column;gap:5px}
+.chip{border:1px solid var(--hair);padding:3px 8px;background:#F9FAFB}
+.chip .cn{font-size:14px;color:var(--ink)}
+.chip.multi{border-color:#6B7280}
+.chip .also{display:block;font-size:11.5px;color:var(--muted);line-height:1.35}
+.matrix-wrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line)}
+.matrix{border-collapse:collapse;font-size:13px;min-width:820px;width:100%}
+.matrix th,.matrix td{border-bottom:1px solid var(--hair);padding:5px 8px;text-align:center}
+.matrix thead th{vertical-align:bottom;font-weight:600;font-size:12px}
+.matrix .mh{display:inline-block;border-bottom:4px solid var(--tc);padding-bottom:2px}
+.matrix tbody th{text-align:left;font-weight:500;white-space:nowrap;position:sticky;left:0;background:var(--paper)}
+.matrix thead th:first-child{text-align:left;position:sticky;left:0;background:var(--paper)}
+.matrix td.y{color:var(--tc);font-weight:700;font-size:15px}
+.matrix td.cnt{font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
 .group{background:var(--paper);border:1px solid var(--line);padding:14px 16px}
 .group h3{margin:0 0 6px;font-size:16px;font-weight:600}
@@ -149,8 +202,15 @@ footer.site a{color:inherit}
 `;
 function render() {
   const data = JSON.parse(fs.readFileSync(SNAP, "utf8"));
+  data.members.forEach((m) => (m.contributions = contributions(m.name)));
   const by = (n) => data.members.find((m) => m.name === n);
-  const card = (m) => `<div class="node"><div class="n">${esc(m.name)}${m.lead ? '<span class="lead">Lead</span>' : ""}</div><div class="r">${esc(m.role)}</div></div>`;
+  const BADGE = { human: '<span class="badge human">\u{1F464} Human</span>', ai: '<span class="badge ai">\u{1F916} AI agent</span>' };
+  const work = (m) => (m.contributions && m.contributions.length ? `<div class="work"><div class="wh">Public work</div><ul>${m.contributions.map((c) => `<li><a href="${esc(c.url)}">${esc(c.title)}</a> <time datetime="${esc(c.date)}">${esc(c.date)}</time></li>`).join("")}</ul></div>` : "");
+  const teamCol = Object.fromEntries(data.groups.map((g, i) => [g.name, TEAM_COLOURS[i % TEAM_COLOURS.length]]));
+  const tag = (t) => `<span class="ttag" style="--tc:${teamCol[t] || "#374151"}">${esc(t)}</span>`;
+  const tags = (m) => (m.groups && m.groups.length ? `<div class="ttags" aria-label="Teams">${m.groups.map(tag).join("")}</div>` : "");
+  const kind = (m) => (m.type === "human" ? "human" : "ai");
+  const card = (m) => `<div class="node ${kind(m)}">${BADGE[kind(m)]}<div class="n">${esc(m.name)}${m.lead ? '<span class="lead">Lead</span>' : ""}</div><div class="r">${esc(m.role)}</div>${tags(m)}${work(m)}</div>`;
   const order = Object.fromEntries(DEPARTMENTS.map(([d, names]) => [d, names]));
   const depts = [...data.departments, "Unassigned"].map((d) => {
     const ms = data.members.filter((m) => m.department === d)
@@ -167,20 +227,34 @@ function render() {
 <div class="page">
   <header>
     <h1>Nexa team: org chart</h1>
-    <p class="lede">jQrgen's AI-assisted team setup. It mirrors the roles on <a href="https://nexa.org/team" rel="noopener">nexa.org/team</a>, plus roles he added: Strategist, DevRel &amp; BON grants, Product manager, Security &amp; audit and Game dev, and an on-chain trading desk.</p>
-    <p class="updated">${data.members.length} roles · ${data.groups.length} group chats · Last updated <time datetime="${esc(data.updated)}">${esc(fmt)}</time></p>
+    <p class="lede">This team is AI agents run by jQrgen (Jørgen S. Notland), the only human on the chart. The agents mirror the human roles on <a href="https://nexa.org/team" rel="noopener">nexa.org/team</a>, plus roles he added: Strategist, DevRel &amp; BON grants, Product manager, Security &amp; audit, Game dev and an on-chain trading desk. It is not the real Nexa staff list; for the people behind Nexa, see nexa.org/team.</p>
+    <p class="legend"><span class="k">${BADGE.human} a person</span><span class="k">${BADGE.ai} an AI agent, not a person</span></p>
+    <p class="updated">1 human · ${data.members.length} AI agents · <a href="#teams">${data.groups.length} teams</a> (AI agent group chats) · Last updated <time datetime="${esc(data.updated)}">${esc(fmt)}</time></p>
   </header>
-  <div class="org" role="tree" aria-label="Org chart">
-    <div class="node top"><div class="n">jQrgen</div><div class="r">Bitcoin Unlimited / Nexa</div></div>
+  <div class="org" role="group" aria-label="Org chart">
+    ${(data.people || []).map((h) => `<div class="node top human">${BADGE.human}<div class="n">${esc(h.name)}${h.fullName ? ` (${esc(h.fullName)})` : ""}</div><div class="r">${esc(h.role)}</div></div>`).join("")}
     <div class="vline"></div>
-    ${lead ? `<div class="node top"><div class="n">${esc(lead.name)}</div><div class="r">${esc(lead.role)}</div></div>
+    ${lead ? `<div class="node top ai">${BADGE.ai}<div class="n">${esc(lead.name)}</div><div class="r">${esc(lead.role)}</div>${tags(lead)}</div>
     <div class="vline"></div>` : ""}
     <div class="depts">${depts}
     </div>
   </div>
-  <h2 class="sec">Group chats</h2>
+  <h2 class="sec" id="teams">Teams</h2>
+  <p class="sub">Each team is an AI agent group chat; memberships are read from the group chats when the page is built. Many agents sit on several teams: the chips show where else each one is.</p>
   <div class="groups">${data.groups.map((g) => `
-    <section class="group"><h3>${esc(g.name)}</h3><p class="c">${g.members.length} members</p><ul>${g.members.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></section>`).join("")}
+    <section class="group" style="--tc:${teamCol[g.name]}"><h3>${esc(g.name)}</h3><p class="c">${g.members.length} members</p><ul class="chips">${g.members.map((n) => {
+      const others = ((by(n) || {}).groups || []).filter((t) => t !== g.name);
+      return `<li class="chip${others.length ? " multi" : ""}"><span class="cn">${esc(n)}</span>${others.length ? `<span class="also">also in ${others.length}: ${others.map(esc).join(", ")}</span>` : ""}</li>`;
+    }).join("")}</ul></section>`).join("")}
+  </div>
+  <h2 class="sec">Team membership matrix</h2>
+  <div class="matrix-wrap" tabindex="0" role="region" aria-label="Team membership matrix, scrolls sideways">
+    <table class="matrix">
+      <thead><tr><th scope="col">Role</th>${data.groups.map((g) => `<th scope="col"><span class="mh" style="--tc:${teamCol[g.name]}">${esc(g.name)}</span></th>`).join("")}<th scope="col">Teams</th></tr></thead>
+      <tbody>${data.members.filter((m) => m.groups.length).sort((a, b) => b.groups.length - a.groups.length || a.name.localeCompare(b.name)).map((m) => `
+        <tr><th scope="row">${esc(m.name)}</th>${data.groups.map((g) => m.groups.includes(g.name) ? `<td class="y" style="--tc:${teamCol[g.name]}"><span aria-hidden="true">\u2713</span><span class="sr">yes</span></td>` : '<td><span class="sr">no</span></td>').join("")}<td class="cnt">${m.groups.length}</td></tr>`).join("")}
+      </tbody>
+    </table>
   </div>
   <footer class="site">Generated by src/orgchart/build-orgchart.js from src/data/nexa-team.json · <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
 </div>

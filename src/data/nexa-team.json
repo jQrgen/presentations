@@ -1,6 +1,14 @@
 {
   "updated": "2026-10-01",
   "source": "jQrgen's AI team roster",
+  "people": [
+    {
+      "name": "jQrgen",
+      "fullName": "Jørgen S. Notland",
+      "type": "human",
+      "role": "Runs the team · Bitcoin Unlimited / Nexa"
+    }
+  ],
   "departments": [
     "Strategy",
     "Leadership",
@@ -12,219 +20,278 @@
   "members": [
     {
       "name": "Marketing strategy",
+      "type": "ai",
       "role": "Developer marketing plan, campaigns and events",
       "department": "Go-to-market & Community",
       "groups": [
         "Team Nexa",
         "Nexa leadership",
         "Nexa go-to-market"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nebula Trader",
+      "type": "ai",
       "role": "Market analyst: exchanges, liquidity, price, volume",
       "department": "On-chain trading",
       "groups": [
         "Nexa devs",
         "Nexa on-chain trading"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa chief scientist",
+      "type": "ai",
       "role": "Protocol and consensus research, papers, design reviews",
       "department": "Leadership",
       "groups": [
         "Team Nexa",
         "Nexa leadership",
         "Nexa lead devs"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa community manager",
+      "type": "ai",
       "role": "Developer community channels, updates, onboarding",
       "department": "Go-to-market & Community",
       "groups": [
         "Team Nexa",
         "Nexa go-to-market"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa core dev",
+      "type": "ai",
       "role": "Full node, consensus, Tailstorm, block size and releases",
       "department": "Engineering",
       "groups": [
         "Nexa lead devs",
         "Nexa security"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa designer",
+      "type": "ai",
       "role": "Design across the team, with design thinking",
       "department": "Product & Design",
       "groups": [
         "Nexa devs",
         "Nexa product"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa DevRel & BON grants",
+      "type": "ai",
       "role": "Developer onboarding, tutorials and BON grants",
       "department": "Go-to-market & Community",
       "groups": [
         "Nexa product",
         "Nexa go-to-market"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa exchanges & conferences",
+      "type": "ai",
       "role": "Exchange listings and conferences to attend",
       "department": "Go-to-market & Community",
       "groups": [
         "Team Nexa",
         "Nexa go-to-market",
         "Nexa on-chain trading"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa FPGA engineer",
+      "type": "ai",
       "role": "NexaPow mining hardware: FPGA and HDL design",
       "department": "Engineering",
       "groups": [
         "Nexa devs"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa game dev",
+      "type": "ai",
       "role": "Games on Nexa and game-jam starter kits",
       "department": "Engineering",
       "groups": [
         "Nexa devs"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa lead dev",
+      "type": "ai",
       "role": "Technical direction: architecture, roadmap, protocol changes",
       "department": "Leadership",
       "groups": [
         "Nexa leadership",
         "Nexa lead devs",
         "Nexa security"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa media & communications",
+      "type": "ai",
       "role": "Announcements, posts, newsletters, content calendar",
       "department": "Go-to-market & Community",
       "groups": [
         "Nexa go-to-market"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa on-chain analyst",
+      "type": "ai",
       "role": "Trading signals from on-chain flows and token activity",
       "department": "On-chain trading",
       "groups": [
         "Nexa on-chain trading"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa product manager",
+      "type": "ai",
       "role": "Developer product roadmap: wallet, SDKs, APIs, docs",
       "department": "Product & Design",
       "groups": [
         "Nexa leadership",
         "Nexa product"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa quant dev",
+      "type": "ai",
       "role": "Data collectors, backtesting and paper trading",
       "department": "On-chain trading",
       "groups": [
         "Nexa on-chain trading"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa risk manager",
+      "type": "ai",
       "role": "Position limits, loss limits and stop rules",
       "department": "On-chain trading",
       "groups": [
         "Nexa on-chain trading"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa security & audit",
+      "type": "ai",
       "role": "Security reviews, threat models and audit prep",
       "department": "Engineering",
       "groups": [
         "Nexa security"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa solution architect",
+      "type": "ai",
       "role": "Reference architectures and integrations for builders",
       "department": "Engineering",
       "groups": [
         "Nexa lead devs",
         "Nexa product",
         "Nexa security"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa strategist",
+      "type": "ai",
       "role": "Overall strategy, positioning, Scandinavia-first plan and goals",
       "department": "Strategy",
       "groups": [
         "Nexa leadership"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa Team Lead",
+      "type": "ai",
       "role": "Coordinates the team: priorities, owners, follow-ups and status",
       "department": "Team lead",
       "groups": [
         "Team Nexa",
         "Nexa leadership",
         "Nexa lead devs"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa trading strategist",
+      "type": "ai",
       "role": "Leads the desk: a written, testable trading plan",
       "department": "On-chain trading",
       "lead": true,
       "groups": [
         "Nexa on-chain trading"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Presentations",
+      "type": "ai",
       "role": "Talks, pitch decks and these pages",
       "department": "Product & Design",
       "groups": [
         "Team Nexa",
         "Nexa go-to-market"
+      ],
+      "contributions": [
+        {
+          "title": "Tailstorm live DAG page",
+          "url": "https://jqrgen.github.io/presentations/tailstorm/",
+          "date": "2026-10-01"
+        },
+        {
+          "title": "Blockchain Game Jam pitch deck",
+          "url": "https://jqrgen.github.io/presentations/blockchain-game-jam/",
+          "date": "2026-09-30"
+        }
       ]
     },
     {
       "name": "Rostrum dev",
+      "type": "ai",
       "role": "Rostrum, Nexa's Electrum-protocol indexing server",
       "department": "Engineering",
       "groups": [
         "Nexa devs",
         "Nexa product",
         "Nexa security"
-      ]
+      ],
+      "contributions": []
     },
     {
       "name": "Wally Dev",
+      "type": "ai",
       "role": "Wally Wallet on Android, desktop and iOS",
       "department": "Engineering",
       "groups": [
         "Nexa devs",
         "Nexa product",
         "Nexa security"
-      ]
+      ],
+      "contributions": []
     }
   ],
   "groups": [
