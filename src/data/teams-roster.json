@@ -123,6 +123,10 @@
           "name": "jQrgenCorp strategist"
         },
         {
+          "id": "336aff5a-0e5b-4fa1-a6ae-aa7cc7443e57",
+          "name": "jQrgenCorp forretningsutvikler"
+        },
+        {
           "id": "0a932575-0225-4f92-abf8-7216fc5d62e6",
           "name": "jQrgenCorp CFO"
         },
@@ -152,6 +156,7 @@
           "name": "Regnskap",
           "label": "accounting",
           "memberIds": [
+            "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2",
             "0a932575-0225-4f92-abf8-7216fc5d62e6",
             "b2b9975e-3419-4263-b6c5-9cd916d63a54",
             "6abac111-1e2b-4f36-bbe4-3b0e3296d10b",
