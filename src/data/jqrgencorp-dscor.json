@@ -67,12 +67,13 @@
     },
     {
       "name": "jQrgenCorp D-SCOR-ansvarlig",
-      "role": "AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen: månedlig teamsjekk og kvartalsvis intern medarbeiderundersøkelse",
-      "roleEn": "AI role as D-SCOR lead, based on the D-SCOR model: monthly team check and quarterly internal staff survey",
+      "role": "AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen: månedlig teamsjekk og kvartalsvis intern medarbeiderundersøkelse om teamets udekkede behov",
+      "roleEn": "AI role as D-SCOR lead, based on the D-SCOR model: monthly team check and quarterly internal staff survey about the team's unmet needs",
       "primary": "R",
       "secondary": "C",
       "dialog": "HD",
-      "risk": 3
+      "risk": 3,
+      "cardNote": "Månedlig teamsjekk og kvartalsvis medarbeiderundersøkelse om teamets udekkede behov (internt, resultatene publiseres ikke)"
     },
     {
       "name": "jQrgenCorp CFO",

@@ -26,7 +26,7 @@ const count = (f) => Object.fromEntries(Object.keys(f === "dialog" ? D : S).map(
 const pc = count("primary"), sc = count("secondary"), dc = count("dialog");
 
 const quad = ORDER.map((k) => `<section class="q" style="--c:${COL[k]}"><h3>${esc(k)} · ${esc(S[k].no)}</h3><p class="qd">«${esc(S[k].desc)}»</p>
-      <ul>${M.filter((m) => m.primary === k).map((m) => `<li><b>${esc(m.name)}</b> <small>arbeidsstil ${ws(m)} · dialogstil ${esc(m.dialog)} ${esc(D[m.dialog].no)} · risiko ${m.risk}/5</small></li>`).join("")}</ul></section>`).join("");
+      <ul>${M.filter((m) => m.primary === k).map((m) => `<li><b>${esc(m.name)}</b> <small>arbeidsstil ${ws(m)} · dialogstil ${esc(m.dialog)} ${esc(D[m.dialog].no)} · risiko ${m.risk}/5</small>${m.cardNote ? `<br><small class="cn">${esc(m.cardNote)}</small>` : ""}</li>`).join("")}</ul></section>`).join("");
 const rows = M.map((m) => `<tr><th scope="row">${esc(m.name)}</th><td>${esc(m.role)}</td><td>${style(m.primary)}${m.secondary ? " / " + style(m.secondary) : " <small>(ren)</small>"}</td><td>${esc(m.dialog)} ${esc(D[m.dialog].no)}</td><td>${dots(m.risk)}</td></tr>`).join("");
 const rowsEn = M.map((m) => `<li><b>${esc(m.name)}</b>: ${esc(m.roleEn)} (work style ${wsEn(m)}; dialogue style ${esc(D[m.dialog].no)}; risk ${m.risk}/5)</li>`).join("");
 
@@ -43,6 +43,7 @@ h2{margin-top:40px}
 .q ul{margin:0;padding-left:18px;font-size:14px}
 .q li{margin:3px 0}
 .q small{color:var(--ink-2)}
+.q small.cn{font-style:italic}
 table.p{border-collapse:collapse;width:100%;font-size:14px;margin-top:14px}
 table.p th,table.p td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
 table.p thead th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--paper)}
@@ -131,12 +132,12 @@ const html = head("jQrgenCorp: et D-SCOR-inspirert AI-team").replace('<html lang
     <li><b>Trygghet der feil er dyre.</b> Tre Kritikere og tre Organisatorer sørger for at regelverk, penger og regnskap holder, noe et regulert finansselskap ikke kan klare seg uten.</li>
     <li><b>Kontakt med brukerne.</b> Relasjonsbygger-trekk hos strategen, stabssjefen og admin trekker teamet ut mot brukere og partnere.</li>
     <li><b>Ulike dialogstiler med vilje, koblet til arbeidsstil.</b> Direkte agenter sier ubehagelige sannheter tidlig, pragmatiske holder fakta i fokus, engasjerte gir energi, og diplomatiske holder teamet samlet:<ul>${Object.keys(D).map((k) => `<li>${esc(k)} ${esc(D[k].no)}: ${M.filter((m) => m.dialog === k).map((m) => `${esc(m.name)} (arbeidsstil ${ws(m)})`).join(", ")}</li>`).join("")}</ul></li>
-    <li><b>Jevnlig ettersyn.</b> D-SCOR-ansvarlig (en AI-rolle basert på D-SCOR-modellen) kjører en månedlig teamsjekk av sammensetning og samarbeid opp mot formålet, og en kvartalsvis medarbeiderundersøkelse om udekkede behov i organisasjonen. Begge er interne, og resultatene publiseres aldri. Forslag til justeringer må godkjennes av jQrgen.</li>
+    <li><b>Jevnlig ettersyn.</b> D-SCOR-ansvarlig (en AI-rolle basert på D-SCOR-modellen) kjører en månedlig teamsjekk av sammensetning og samarbeid opp mot formålet, og en kvartalsvis medarbeiderundersøkelse om udekkede behov i teamet. Begge er interne, og resultatene publiseres aldri. Forslag til justeringer må godkjennes av jQrgen.</li>
   </ol>
 
   <section class="en" id="english" lang="en">
     <h2>English summary</h2>
-    <p>jQrgenCorp is jQrgen's (Jørgen S. Notland) company. Its purpose is to found financial services in Norway and Europe, especially blockchain-based ones, finding product-market fit with Y Combinator methods: talk to users, launch fast, do things that don't scale, measure retention and growth, and stay default alive. The team is one person and ${M.length} AI agents. Each agent has been given a D-SCOR-inspired profile (work style and dialogue style, from the Norwegian D-SCOR model) chosen so that the profiles complement each other. The team runs at two speeds: bold explorers who test ideas fast and cheaply, and a conservative core that never cuts corners on money, books or regulation. jQrgen always has the final word on risk. Every agent shares one team value, "Struktur og lojalitet til systemet": follow the agreed structure, roles, owners, routines and approval rules, and speak up if the structure gets in the way. The D-SCOR lead runs a monthly team check and a quarterly internal staff survey about unmet needs in the organisation; results are never published. The profiles are assigned by design, not measured; the 1–5 risk-appetite scale is our own addition; the team consists of AI agents, the D-SCOR lead is an AI role based on the D-SCOR model, and this is not an official D-SCOR product or certification; jQrgenCorp is not affiliated with or endorsed by D-SCOR AS.</p>
+    <p>jQrgenCorp is jQrgen's (Jørgen S. Notland) company. Its purpose is to found financial services in Norway and Europe, especially blockchain-based ones, finding product-market fit with Y Combinator methods: talk to users, launch fast, do things that don't scale, measure retention and growth, and stay default alive. The team is one person and ${M.length} AI agents. Each agent has been given a D-SCOR-inspired profile (work style and dialogue style, from the Norwegian D-SCOR model) chosen so that the profiles complement each other. The team runs at two speeds: bold explorers who test ideas fast and cheaply, and a conservative core that never cuts corners on money, books or regulation. jQrgen always has the final word on risk. Every agent shares one team value, "Struktur og lojalitet til systemet": follow the agreed structure, roles, owners, routines and approval rules, and speak up if the structure gets in the way. The D-SCOR lead runs a monthly team check and a quarterly internal staff survey about unmet needs in the team; results are never published. The profiles are assigned by design, not measured; the 1–5 risk-appetite scale is our own addition; the team consists of AI agents, the D-SCOR lead is an AI role based on the D-SCOR model, and this is not an official D-SCOR product or certification; jQrgenCorp is not affiliated with or endorsed by D-SCOR AS.</p>
     <ul>${rowsEn}</ul>
   </section>
 
