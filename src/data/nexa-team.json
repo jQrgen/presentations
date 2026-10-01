@@ -31,6 +31,14 @@
       "contributions": []
     },
     {
+      "name": "Nexa chief of staff",
+      "type": "ai",
+      "role": "Works directly with jQrgen and Nexa Team Lead to keep the whole…",
+      "department": "Unassigned",
+      "groups": [],
+      "contributions": []
+    },
+    {
       "name": "Nexa chief scientist",
       "type": "ai",
       "role": "Protocol and consensus research, papers, design reviews",
@@ -247,6 +255,11 @@
         {
           "title": "Tailstorm live DAG: \"What you're watching\" explainer and visitor FAQ",
           "url": "https://jqrgen.github.io/presentations/tailstorm/#faq",
+          "date": "2026-10-01"
+        },
+        {
+          "title": "\"Nexa: Scaling Bitcoin\" talk deck and spoken manuscript (Oslo Blockchain Meetup)",
+          "url": "https://jqrgen.github.io/presentations/oslo-meetup-2026/",
           "date": "2026-10-01"
         },
         {
