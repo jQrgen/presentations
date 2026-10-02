@@ -78,6 +78,68 @@ const TERMS = [["januar–februar", "January–February", "10. april", "10 April
 const stepRows = (L) => STEPS.map((s) => `<tr><th scope="row">${esc(s[0])}</th><td>${esc(L === "no" ? s[1] : s[2])}</td><td>${esc(L === "no" ? s[3] : s[4])}</td></tr>`).join("");
 const termRows = (L) => TERMS.map((t) => `<tr><td>${esc(L === "no" ? t[0] : t[1])}</td><td>${esc(L === "no" ? t[2] : t[3])}</td></tr>`).join("");
 
+// --- more automation ideas (NO/EN): [title, how, owner, where the human approves] per language ---------------
+const IDEAS = [
+  { no: ["Purring på forfalte fakturaer (bare utkast)", "Regnskapsføreren henter ubetalte fakturaer fra Fiken (filteret <code>settled=false</code> på <code>/invoices</code>) og ser på forfallsdatoen. Den skriver et vennlig purreutkast per kunde. API-et har ikke noe eget endepunkt for å sende purringer.", "Regnskapsfører, Myrt varsler", "Eieren leser utkastet og sender purringen selv, fra Fiken eller på e-post."],
+    en: ["Reminders for overdue invoices (draft only)", "The accountant fetches unpaid invoices from Fiken (the <code>settled=false</code> filter on <code>/invoices</code>) and checks the due date. It writes a friendly reminder draft per customer. The API has no endpoint of its own for sending reminders.", "Accountant, Myrt notifies", "The owner reads the draft and sends the reminder himself, from Fiken or by email."] },
+  { no: ["Kvitteringer koblet til banktransaksjoner i Folio", "Kvitteringer som kommer inn på e-post eller som bilder, matches mot hendelser i Folio på dato, motpart og sum. Med Folio-koblingen kan boten laste opp vedlegget på hendelsen og fylle inn formål og notat.", "Regnskapsfører", "Usikre treff legges i en liste som eieren bekrefter. Boten markerer aldri noe som komplett uten et sikkert treff."],
+    en: ["Matching receipts to bank transactions in Folio", "Receipts that arrive by email or as photos are matched to Folio events by date, counterparty and sum. With the Folio connector the bot can upload the attachment to the event and fill in purpose and note.", "Accountant", "Uncertain matches go on a list the owner confirms. The bot never marks anything complete without a certain match."] },
+  { no: ["Ukentlig sjekk av manglende kvitteringer", "Hver uke henter boten hendelsene i Folio som ikke er komplette (<code>list_events</code>, der <code>complete=false</code>), og sender eieren en kort liste over hva som mangler: kvittering, formål eller deltakere.", "Regnskapsfører, Myrt sender listen", "Eieren laster opp eller svarer. Ingenting godkjennes, det er bare en påminnelse."],
+    en: ["Weekly check for missing receipts", "Every week the bot fetches Folio events that are not complete (<code>list_events</code>, where <code>complete=false</code>), and sends the owner a short list of what is missing: receipt, purpose or participants.", "Accountant, Myrt sends the list", "The owner uploads or answers. Nothing needs approval; it is only a reminder."] },
+  { no: ["Krypto- og valutabetalinger med kurs", "Når en betaling kommer i krypto eller utenlandsk valuta, finner boten oppgjøret fra plattformen og registrerer betalingen på salget i Fiken med beløpet i norske kroner som faktisk kom inn. Sender man ikke det beløpet, regner Fiken det ut fra kursen på datoen. Kursgevinst eller kurstap kommer som en egen post.", "Regnskapsfører, skatt og compliance kontrollerer", "Eieren godkjenner kurs og beløp før de bokføres."],
+    en: ["Crypto and foreign-currency payments with the exchange rate", "When a payment arrives in crypto or a foreign currency, the bot finds the settlement from the platform and registers the payment on the sale in Fiken with the amount in Norwegian kroner that actually arrived. If you leave that amount out, Fiken calculates it from the exchange rate on the date. An exchange gain or loss becomes its own entry.", "Accountant, tax &amp; compliance checks", "The owner approves the rate and the amount before they are booked."] },
+  { no: ["Månedlig avstemming av banken mot Fiken", "Den samme kontrollen som revisoren gjør før MVA, men hver måned: transaksjonene i Folio mot bankkontoen i Fiken, post for post. Avvik blir en kort liste med forslag til rettelser.", "Revisor (kun lesing)", "Eieren godkjenner rettelsene, og regnskapsføreren bokfører dem."],
+    en: ["Monthly bank reconciliation against Fiken", "The same check the revisor does before VAT, but every month: the Folio transactions against the bank account in Fiken, line by line. Differences become a short list of proposed corrections.", "Revisor (read-only)", "The owner approves the corrections, and the accountant books them."] },
+  { no: ["Påminnelser om forskuddsskatt og MVA-frister", "MVA-fristene ligger allerede i rutinen. Forskuddsskatten for et ENK er eierens private skatt (normalt fire terminer: 15. mars, 15. mai, 15. september og 15. november), så boten minner bare om datoen og regner ingenting.", "Skatt og compliance, Myrt", "Eieren betaler forskuddsskatten selv, privat. Ingen bot betaler noe."],
+    en: ["Reminders for advance tax and VAT deadlines", "The VAT deadlines are already in the routine. Advance tax (forskuddsskatt) for an ENK is the owner's private tax (normally four instalments: 15 March, 15 May, 15 September and 15 November), so the bot only reminds about the date and calculates nothing.", "Tax &amp; compliance, Myrt", "The owner pays the advance tax himself, privately. No bot pays anything."] },
+  { no: ["Øyeblikksbilde av kontanter og likviditet", "En gang i uken leser CFO saldoene i Folio (kontoene har typer som drift, skatt og sparing) og det som er utestående i Fiken, og skriver et kort bilde av situasjonen: hva som kommer inn, hva som forfaller og om det er satt av tilstrekkelig til MVA.", "CFO", "Bildet går bare til eieren, i en privat chat. Beslutninger tar eieren."],
+    en: ["A cash and liquidity snapshot", "Once a week the CFO reads the balances in Folio (the accounts have types such as operational, tax and savings) and what is outstanding in Fiken, and writes a short picture: what is coming in, what is due, and whether enough is set aside for VAT.", "CFO", "The snapshot goes only to the owner, in a private chat. The owner makes the decisions."] },
+  { no: ["Sjekkliste for årsoppgjør og skattemelding", "For et ENK leveres næringsspesifikasjonen sammen med eierens skattemelding (fristen er normalt 31. mai). Boten lager en sjekkliste fra januar: alt bokført, banken avstemt, privat uttak og innskudd riktig ført, eiendeler og avskrivninger, og spørsmål til eieren.", "Skatt og compliance, regnskapsfører", "Eieren går gjennom og leverer selv."],
+    en: ["An annual report and tax return checklist", "For an ENK the business specification (næringsspesifikasjon) is filed with the owner's tax return (normally due 31 May). The bot builds a checklist from January: everything booked, bank reconciled, private withdrawals and contributions booked correctly, assets and depreciation, and questions for the owner.", "Tax &amp; compliance, accountant", "The owner reviews and files it himself."] },
+  { no: ["Kontraktsregister med varsel om fornyelse", "En enkel liste over avtaler med start, oppsigelsestid og fornyelsesdato. Boten varsler i god tid før en avtale fornyes eller må sies opp.", "Admin", "Eieren bestemmer om avtalen skal fornyes, reforhandles eller sies opp."],
+    en: ["A contract register with renewal reminders", "A simple list of agreements with start date, notice period and renewal date. The bot warns well before an agreement renews or must be cancelled.", "Admin", "The owner decides whether to renew, renegotiate or cancel."] },
+  { no: ["Gjentakende abonnementsfakturaer", "Fiken har gjentakende fakturaer i API-et (<code>/recurringInvoices</code>, med jobber som kan pauses, gjenopptas og stoppes). Boten foreslår oppsettet og kontrollerer hver måned at fakturaene faktisk gikk ut.", "Regnskapsfører", "Eieren godkjenner oppsettet før det aktiveres, og alle endringer i pris eller mottaker."],
+    en: ["Recurring subscription invoices", "Fiken has recurring invoices in the API (<code>/recurringInvoices</code>, with jobs that can be paused, resumed and stopped). The bot proposes the setup and checks every month that the invoices actually went out.", "Accountant", "The owner approves the setup before it is activated, and any change of price or recipient."] },
+  { no: ["Månedlig kostnadsgjennomgang som finner abonnementer", "CFO ser etter kostnader som går igjen hver måned i Folio og Fiken, og lager en liste over abonnementer med spørsmålet «bruker vi dette?».", "CFO", "Eieren bestemmer hva som sies opp, og sier opp selv."],
+    en: ["A monthly cost review that spots subscriptions", "The CFO looks for costs that repeat every month in Folio and Fiken, and lists the subscriptions with the question \"do we use this?\".", "CFO", "The owner decides what to cancel, and cancels it himself."] },
+  { no: ["Forberedelse til årsavslutning", "I desember lager regnskapsføreren en liste: periodiseringer, uavklarte poster, bilag som mangler, siste MVA-termin og avstemming av alle kontoer per årsskiftet. Revisoren kontrollerer listen.", "Regnskapsfører, revisor", "Eieren godkjenner alle avslutningsposteringer før de bokføres."],
+    en: ["Year-end closing preparation", "In December the accountant builds a list: accruals, open items, missing vouchers, the last VAT term, and reconciliation of every account at year end. The revisor checks the list.", "Accountant, revisor", "The owner approves every closing entry before it is booked."] },
+];
+const LBL = { no: ["Slik virker det", "Eier", "Mennesket godkjenner"], en: ["How it works", "Owner", "Human approval"] };
+// titles and owners are plain text and get escaped; the "how" and approval texts are trusted hand-written HTML (<code> only)
+const ideaCards = (L) => IDEAS.map((i) => { const [t, how, who, ok] = i[L]; return `<section class="idea"><h3>${esc(t)}</h3><dl><dt>${LBL[L][0]}</dt><dd>${how}</dd><dt>${LBL[L][1]}</dt><dd>${who.includes("&amp;") ? who : esc(who)}</dd><dt>${LBL[L][2]}</dt><dd>${ok}</dd></dl></section>`; }).join("");
+
+const AUTO_NO = `
+  <h2>Mer å automatisere, med fakturering først</h2>
+  <h3>Det vi har satt opp: månedlig fakturautkast</h3>
+  <p>Den første rutinen etter MVA er fakturering av timer:</p>
+  <ul>
+    <li><b>Når:</b> den 1. hver måned kl. 06:00.</li>
+    <li><b>Kilde:</b> en egen kalender bare for timeføring. Timene leses fra Google Kalender via koblingen, eller fra en Proton-kalender via en delingslenke som bare gir lesetilgang. En hendelse er en arbeidsøkt, og kunden står i tittelen.</li>
+    <li><b>Hva boten gjør:</b> summerer de fakturerbare timene for forrige måned per kunde. Deretter lager regnskapsføreren et fakturautkast i Fiken (<code>POST /companies/{slug}/invoices/drafts</code>, med kunden som kontakt og timeprisen fra et produkt i Fiken).</li>
+    <li><b>Hvor mennesket godkjenner:</b> boten lager bare <b>utkast</b>. Eieren går gjennom timer, tekst og pris, og sender fakturaen selv fra Fiken. Boten bruker aldri utsendingsendepunktet.</li>
+    <li><b>Stopp:</b> finnes det timer uten en kjent kunde, eller avviker summen mye fra vanlig, lages ingen utkast for den kunden. Boten spør eieren i stedet.</li>
+  </ul>
+  <p>Fiken har også en egen timeføringsmodul, som kan lage fakturautkast direkte fra timer (<code>/timeEntries/createInvoiceDraft</code>). Kalenderen ble valgt fordi timene allerede lå der.</p>
+  <h3>Flere ideer</h3>
+  <p>Felles for alle: botene leser og lager utkast, og eieren godkjenner. Ingenting sendes til kunder eller myndigheter, og ingen penger flyttes, uten eierens ja. (Folio-koblingen kan lage betalinger, men bare som utkast som må signeres i Folio-appen. Teamet bruker det likevel ikke.)</p>
+  <div class="ideas">${ideaCards("no")}</div>`;
+const AUTO_EN = `
+  <h2>More to automate, starting with invoicing</h2>
+  <h3>What we set up: a monthly invoice draft</h3>
+  <p>The first routine after VAT is invoicing hours:</p>
+  <ul>
+    <li><b>When:</b> on the 1st of every month at 06:00.</li>
+    <li><b>Source:</b> a dedicated time-tracking calendar. Hours are read from Google Calendar through its connector, or from a Proton Calendar through a read-only share link. One event is one work session, with the customer in the title.</li>
+    <li><b>What the bot does:</b> sums the billable hours for the previous month per customer. Then the accountant creates an invoice draft in Fiken (<code>POST /companies/{slug}/invoices/drafts</code>, with the customer as the contact and the hourly rate from a product in Fiken).</li>
+    <li><b>Where the human approves:</b> the bot only creates <b>drafts</b>. The owner reviews hours, text and price, and sends the invoice himself from Fiken. The bot never uses the send endpoint.</li>
+    <li><b>Stop:</b> if there are hours without a known customer, or the total differs a lot from usual, no draft is created for that customer. The bot asks the owner instead.</li>
+  </ul>
+  <p>Fiken also has its own time-tracking module, which can create invoice drafts straight from hours (<code>/timeEntries/createInvoiceDraft</code>). We chose the calendar because the hours were already there.</p>
+  <h3>More ideas</h3>
+  <p>The same rule applies to all of them: bots read and draft, and the owner approves. Nothing goes to customers or authorities, and no money moves, without the owner's yes. (The Folio connector can create payments, but only as drafts that must be signed in the Folio app. The team still does not use it.)</p>
+  <div class="ideas">${ideaCards("en")}</div>`;
+
 const CSS = `
 .page,.band .inner{max-width:900px}
 .band .tag{color:var(--band-ink);opacity:.7;font-size:14px}
@@ -103,6 +165,13 @@ code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-s
 pre{background:#111827;color:#F9FAFB;padding:12px 14px;overflow-x:auto}
 .diagram{background:var(--paper);border:1px solid var(--line);padding:12px;overflow-x:auto;margin:12px 0}
 pre.mermaid{background:var(--paper);color:var(--ink);padding:0;margin:0;text-align:center}
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:760px){.ideas{grid-template-columns:1fr}}
+.idea{background:var(--paper);border:1px solid var(--line);padding:4px 14px 10px}
+.idea h3{margin:10px 0 6px;font-size:16px}
+.idea dl{margin:0;font-size:14.5px}
+.idea dt{font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.idea dd{margin:0}
 ul.check{list-style:none;padding-left:0}
 ul.check li{padding-left:28px;position:relative;margin:6px 0}
 ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:17px}
@@ -183,6 +252,8 @@ const NO = `
   <div class="diagram" role="img" aria-label="Diagram over arbeidsflyten: Myrt ruter til regnskapsføreren, som leser Fiken og Folio parallelt. Utkastet kontrolleres av revisoren og av skatt og compliance. Ved avvik godkjenner eieren rettelsene før de bokføres. Til slutt sender eieren MVA-meldingen selv.">
     <pre class="mermaid">${esc(GRAPH_NO)}</pre>
   </div>
+
+${AUTO_NO}
 
   <h2>Sjekkliste for oppsett</h2>
   <ul class="check">
@@ -276,6 +347,8 @@ const EN = `
   <div class="diagram" role="img" aria-label="Workflow diagram: Myrt routes to the accountant, who reads Fiken and Folio in parallel. The revisor and tax and compliance check the draft. If there are differences, the owner approves the corrections before they are booked. Finally the owner submits the VAT return himself.">
     <pre class="mermaid">${esc(GRAPH_EN)}</pre>
   </div>
+
+${AUTO_EN}
 
   <h2>Setup checklist</h2>
   <ul class="check">
