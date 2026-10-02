@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "source": "jQrgen's AI team roster",
   "people": [
     {
@@ -28,16 +28,6 @@
       "groups": [
         "Nexa leadership team",
         "Nexa go-to-market team"
-      ],
-      "contributions": []
-    },
-    {
-      "name": "Nexa chief of staff",
-      "type": "ai",
-      "role": "Coordinates the AI agents: priorities, owners, follow-ups and briefings",
-      "department": "Chief of staff",
-      "groups": [
-        "Nexa leadership team"
       ],
       "contributions": []
     },
@@ -297,6 +287,16 @@
       "contributions": []
     },
     {
+      "name": "Smith",
+      "type": "ai",
+      "role": "AI agent (role line to come)",
+      "department": "Unassigned",
+      "groups": [
+        "Nexa leadership team"
+      ],
+      "contributions": []
+    },
+    {
       "name": "Wally Dev",
       "type": "ai",
       "role": "Wally Wallet on Android, desktop and iOS",
@@ -318,7 +318,7 @@
         "Nexa product manager",
         "Nexa chief scientist",
         "Marketing strategy",
-        "Nexa chief of staff",
+        "Smith",
         "Nexa strategist"
       ]
     },
