@@ -1,0 +1,346 @@
+// jQrgenCorp accounting article (bilingual, NO/EN toggle): <out>/jqrgencorp-regnskap/index.html
+//   node orgchart/build-jqrgencorp-regnskap.js   [--out <docsDir>] (default ../docs)
+//
+// Hand-written text only: nothing is read from agent profiles, the books, the bank or any data file.
+// After writing, two privacy gates run on the output; any hit deletes the output and exits 1:
+//   1. term gate: orgchart/jqrgencorp-regnskap-terms.json (counterparties, banks, exchanges, company numbers, currency, medical words)
+//   2. digit gate on the visible text: amount-like numbers (thousand separators, decimals) and any run of 3+ digits
+//      other than the years in YEARS (invoice, account and company numbers all look like that).
+const fs = require("fs");
+const path = require("path");
+const { head, esc } = require("../theme.js");
+const { gate, loadTerms } = require("./grep-gate.js");
+
+const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
+const SRC = path.join(__dirname, "..");
+const DOCS = path.resolve(arg("--out", path.join(SRC, "..", "docs")));
+const UPDATED = "2026-10-02";
+const URL = "https://jqrgen.github.io/presentations/jqrgencorp-regnskap/";
+const YEARS = new Set(["2026"]);
+
+const TITLE_NO = "Regnskap med et AI-regnskapsteam: Folio MCP + Fiken API + Grok Bot";
+const TITLE_EN = "Accounting with an AI accounting team: Folio MCP + Fiken API + Grok Bot";
+
+// --- the graph (mermaid), one per language --------------------------------------------------------------------
+const GRAPH_NO = `flowchart TD
+  O([jQrgen, eier]) -->|ber om MVA-utkast| M[Myrt, stabssjef: ruter arbeidet]
+  M --> RF[Regnskapsfører: leser Fiken]
+  M --> RB[Regnskapsfører: leser Folio, transaksjoner og kvitteringer]
+  RF --> U[Utkast til MVA-grunnlag + liste over mangler]
+  RB --> U
+  U --> REV[Revisor, ny kontekst, kun lesing: Fiken mot banken]
+  U --> TC[Skatt og compliance: koder, snudd avregning, periodisering]
+  REV --> G{Stemmer Fiken med banken?}
+  TC --> G
+  G -->|nei, avvik| K[Forslag til rettelser]
+  K --> A{Godkjenner eieren?}
+  A -->|ja| BOK[Regnskapsfører bokfører rettelsene i Fiken]
+  A -->|nei| STOP[Stopp: eieren avgjør]
+  BOK --> REV
+  G -->|ja| F[Endelig gjennomgang og eierens godkjenning]
+  F --> S([Eieren sender MVA-meldingen selv fra Fiken])
+  S --> AR[Arkiv og oppfølging av betaling]
+  G -.->|maks to runder, så eskalering| STOP`;
+const GRAPH_EN = `flowchart TD
+  O([jQrgen, owner]) -->|asks for a VAT draft| M[Myrt, chief of staff: routes the work]
+  M --> RF[Accountant: reads Fiken]
+  M --> RB[Accountant: reads Folio, transactions and receipts]
+  RF --> U[Draft VAT basis + list of what is missing]
+  RB --> U
+  U --> REV[Revisor, fresh context, read-only: Fiken vs the bank]
+  U --> TC[Tax and compliance: codes, reverse charge, periods]
+  REV --> G{Does Fiken match the bank?}
+  TC --> G
+  G -->|no, differences| K[Proposed corrections]
+  K --> A{Does the owner approve?}
+  A -->|yes| BOK[Accountant books the corrections in Fiken]
+  A -->|no| STOP[Stop: the owner decides]
+  BOK --> REV
+  G -->|yes| F[Final review and owner approval]
+  F --> S([The owner submits the VAT return himself from Fiken])
+  S --> AR[Archive and follow up payment]
+  G -.->|at most two rounds, then escalate| STOP`;
+
+// --- routine tables -------------------------------------------------------------------------------------------
+const STEPS = [
+  ["F−14", "Regnskapsføreren leser ut Fiken og Folio og lister det som mangler: bilag, kvitteringer, kryptooppgjør og uavklarte poster. Myrt sender listen til eieren som en sjekkliste.", "The accountant reads out Fiken and Folio and lists what is missing: vouchers, receipts, crypto settlements and open items. Myrt sends the list to the owner as a checklist.", "Regnskapsfører, Myrt", "Accountant, Myrt"],
+  ["F−10", "Eieren gjør seg klar: laster opp kvitteringer, henter kryptooppgjør og svarer på spørsmålene.", "The owner gets ready: uploads receipts, fetches crypto settlements and answers the questions.", "Eieren", "Owner"],
+  ["F−7", "Alt bokføres i Fiken, og regnskapsføreren lager utkast til MVA-melding med kodene.", "Everything is booked in Fiken, and the accountant drafts the VAT return with its codes.", "Regnskapsfører", "Accountant"],
+  ["F−5", "Skatt og compliance sjekker koder, snudd avregning og periodisering. Revisoren kontrollerer uavhengig mot det som faktisk er bokført i Fiken.", "Tax & compliance checks codes, reverse charge and periods. The revisor checks independently against what is actually booked in Fiken.", "Skatt og compliance, revisor", "Tax & compliance, revisor"],
+  ["F−4", "Endelig gjennomgang hos regnskapsføreren (regnskapsboten, eller en ekstern regnskapsfører om man vil).", "Final review by the regnskapsfører (the accounting bot, or an external accountant if you prefer).", "Regnskapsfører", "Accountant"],
+  ["F−3", "Eieren godkjenner utkastet og eventuelle rettelser.", "The owner approves the draft and any corrections.", "Eieren", "Owner"],
+  ["F−2", "Eieren sender inn MVA-meldingen selv fra Fiken.", "The owner submits the VAT return himself from Fiken.", "Eieren", "Owner"],
+  ["F+1", "Kvitteringen arkiveres, og betaling eller tilgodebeløp følges opp.", "The receipt is archived, and the payment or refund is followed up.", "Regnskapsfører, Myrt", "Accountant, Myrt"],
+];
+const TERMS = [["januar–februar", "January–February", "10. april", "10 April"], ["mars–april", "March–April", "10. juni", "10 June"],
+  ["mai–juni", "May–June", "31. august", "31 August"], ["juli–august", "July–August", "10. oktober", "10 October"],
+  ["september–oktober", "September–October", "10. desember", "10 December"], ["november–desember", "November–December", "10. februar (året etter)", "10 February (the following year)"]];
+const stepRows = (L) => STEPS.map((s) => `<tr><th scope="row">${esc(s[0])}</th><td>${esc(L === "no" ? s[1] : s[2])}</td><td>${esc(L === "no" ? s[3] : s[4])}</td></tr>`).join("");
+const termRows = (L) => TERMS.map((t) => `<tr><td>${esc(L === "no" ? t[0] : t[1])}</td><td>${esc(L === "no" ? t[2] : t[3])}</td></tr>`).join("");
+
+const CSS = `
+.page,.band .inner{max-width:900px}
+.band .tag{color:var(--band-ink);opacity:.7;font-size:14px}
+.lede{max-width:70ch;font-size:17px}
+.updated{margin:10px 0 0;font-size:13px;color:var(--muted)}
+h2{margin-top:40px;font-size:22px;font-weight:600}
+h3{margin-top:24px;font-size:17px}
+p,li{max-width:75ch}
+.toggle{display:inline-flex;border:1px solid var(--line);margin:16px 0 0;background:var(--paper)}
+.toggle a{padding:6px 14px;text-decoration:none;font-size:14px;font-weight:600}
+.toggle a[aria-current="true"]{background:var(--band);color:var(--band-ink)}
+.js .lang{display:none}
+.js.show-no .lang[lang="nb"],.js.show-en .lang[lang="en"]{display:block}
+.lang + .lang{border-top:2px solid var(--line);margin-top:48px;padding-top:8px}
+.js .lang + .lang{border-top:0;margin-top:0;padding-top:0}
+.disc{border:1px solid var(--line);border-left:6px solid var(--ink);background:var(--paper);padding:10px 14px;font-size:14.5px;margin:18px 0}
+.key{border:1px solid var(--line);background:#FFFBEB;padding:10px 14px;margin:14px 0}
+table{border-collapse:collapse;background:var(--paper);margin:12px 0;font-size:14.5px;width:100%}
+th,td{border:1px solid var(--hair);padding:6px 9px;text-align:left;vertical-align:top}
+thead th{background:#F3F4F6}
+tbody th{white-space:nowrap;font-variant-numeric:tabular-nums}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px}
+pre{background:#111827;color:#F9FAFB;padding:12px 14px;overflow-x:auto}
+.diagram{background:var(--paper);border:1px solid var(--line);padding:12px;overflow-x:auto;margin:12px 0}
+pre.mermaid{background:var(--paper);color:var(--ink);padding:0;margin:0;text-align:center}
+ul.check{list-style:none;padding-left:0}
+ul.check li{padding-left:28px;position:relative;margin:6px 0}
+ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:17px}
+`;
+
+// --- Norwegian ------------------------------------------------------------------------------------------------
+const NO = `
+<article class="lang" lang="nb" id="art-no">
+  <header>
+    <h1>${esc(TITLE_NO)}</h1>
+    <p class="lede">Slik fører jQrgenCorp, et norsk enkeltpersonforetak (ENK), regnskap og MVA med et lite team av AI-agenter i Grok Bot. Agentene leser banken og kvitteringene fra Folio og regnskapet fra Fiken, lager utkast og kontrollerer hverandre. Eieren godkjenner og sender inn selv.</p>
+    <p class="updated">Jørgen S. Notland (jQrgen), Oslo · <time datetime="${UPDATED}">2. oktober 2026</time></p>
+  </header>
+  <p class="disc"><b>Ansvarsfraskrivelse:</b> Dette er ikke regnskapsråd, skatteråd eller juridisk rådgivning, bare en beskrivelse av hvordan jeg har satt opp mitt eget arbeid. «Regnskapsfører», «revisor» og de andre er AI-roller i en app, ikke autoriserte fagpersoner. Revisoren er en kontrollør som bare kan lese, ikke en statsautorisert eller registrert revisor. Ansvaret for regnskapet og MVA-meldingen ligger hos eieren. Snakk med en autorisert regnskapsfører hvis du er usikker.</p>
+  <p>Siden inneholder ingen regnskapstall: ingen beløp, saldoer, kunder eller kontoer. Den beskriver bare oppsettet.</p>
+
+  <h2>Teamet</h2>
+  <p><b>Grok Bot</b> er en AI-assistent for skrivebordet der hver bot er en agent med egen persona, eget minne, egne rutiner og egne gruppechatter. jQrgenCorp-teamet består av:</p>
+  <ul>
+    <li><b>Myrt, stabssjef</b>: eneste kontaktpunkt for eieren. Tar imot oppgaver, ruter dem til riktig agent og eier rutinene.</li>
+    <li><b>CFO</b>: økonomisk oversikt og prioriteringer.</li>
+    <li><b>Regnskapsfører</b>: leser Fiken og Folio, lager utkast og bokfører i Fiken når eieren har godkjent.</li>
+    <li><b>Skatt og compliance</b>: MVA-koder, frister og regelverk.</li>
+    <li><b>Revisor</b>: uavhengig kontrollør som bare kan lese, og som rapporterer til eieren, ikke til regnskapsføreren.</li>
+    <li><b>Admin</b>, <b>strateg</b> og <b>forretningsutvikler</b>: drift, retning og nye forretningsideer.</li>
+    <li><b>D-SCOR-ansvarlig</b>: passer på balansen i teamet (se <a href="../jqrgencorp-team/">jQrgenCorp: et D-SCOR-inspirert AI-team</a>).</li>
+  </ul>
+  <p>Arbeidet skjer i to gruppechatter: <b>«ledelse»</b> for retning og prioriteringer, og <b>«regnskap»</b> for regnskapsføreren, skatt og compliance, revisoren og CFO.</p>
+
+  <h2>Verktøyene</h2>
+  <h3>Folio MCP: banken og kvitteringene</h3>
+  <p>Folio er en norsk bedriftsbank og kvitteringsapp. Gjennom Folio-koblingen (en MCP-server) kan agentene lese transaksjoner, kategorier og kvitteringsvedlegg. Koblingen har også verktøy for å opprette betalinger. Det bruker vi aldri: <b>ingen agent flytter penger</b>. Gi agentene bare de verktøyene de trenger, og helst bare lesetilgang.</p>
+  <h3>Fiken API v2: regnskapet</h3>
+  <p><a href="https://fiken.no">Fiken</a> er regnskapssystemet, og det som står bokført der er fasiten. Agentene bruker <a href="https://api.fiken.no/api/v2/docs/">Fiken API v2</a>:</p>
+  <ul>
+    <li><b>Slå på API-tilgang:</b> aktiver API-tilleggstjenesten for foretaket under <b>Foretak → Tilleggstjenester</b>. Den har en egen månedspris.</li>
+    <li><b>Lag en personlig API-nøkkel:</b> <b>Rediger konto → API → Personlige API-nøkler</b>. Personlige nøkler utløper ikke, men kan trekkes tilbake samme sted. Ifølge Fiken er de for egne integrasjoner. Tredjepartsapper skal bruke OAuth2.</li>
+    <li><b>Lagre nøkkelen som en maskert hemmelighet</b>, altså en miljøvariabel som agentene kan bruke uten å kunne se eller skrive den ut. Nøkkelen skal aldri stå i en chat, en fil eller en logg.</li>
+    <li><b>Test:</b> nøkkelen sendes som bearer-token. Svaret er listen over foretak du har tilgang til:</li>
+  </ul>
+  <pre><code>curl -s -H "Authorization: Bearer $FIKEN_API_KEY" https://api.fiken.no/api/v2/companies</code></pre>
+  <ul>
+    <li><b>Ett kall om gangen:</b> Fiken tillater bare én samtidig forespørsel, og kall kan bli strupet over fire per sekund. Agenter som jobber parallelt, må derfor dele en kø mot Fiken.</li>
+    <li><b>Ingen ferdig MVA-rapport i API-et:</b> grunnlaget bygges fra bilag, posteringer og kontosaldoer med MVA-koder (for eksempel <code>/companies/{slug}/journalEntries</code>, <code>/accountBalances</code>, <code>/purchases</code> og <code>/sales</code>). Eieren sammenligner med MVA-oppgaven i Fiken før innsending.</li>
+  </ul>
+
+  <h2>Arbeidsflyten</h2>
+  <ol>
+    <li><b>Regnskapsføreren</b> leser Fiken og Folio og lager et utkast til MVA-grunnlaget, sammen med en liste over det som mangler.</li>
+    <li><b>Revisoren</b> går gjennom utkastet uavhengig og med bare lesetilgang. Den har ikke skrivetilgang til Fiken og ser ikke regnskapsførerens resonnement, bare resultatet og kildene.</li>
+    <li><b>Rettelser</b> blir forslag som venter på eierens uttrykkelige godkjenning. Først da bokfører regnskapsføreren dem.</li>
+    <li><b>Eieren sender alltid MVA-meldingen selv</b> fra Fiken. Agentene sender aldri noe til Altinn eller Skatteetaten, og flytter aldri penger.</li>
+  </ol>
+  <div class="key"><b>Den viktigste lærdommen: kontroller mot Fiken, ikke mot Folio-kategoriene.</b> I første runde sammenlignet revisoren med kategoriene i Folio. Det ga store, falske rettelser, fordi en kategori i bankappen bare er en merkelapp og ikke en postering. Det som teller er hva som faktisk er bokført i Fiken, med konto og MVA-kode. Da revisoren avstemte mot Fiken, og mot banktransaksjonene som rådata, forsvant de falske avvikene. Folio-kategoriene er nyttige hint, men aldri fasiten.</div>
+
+  <h2>MVA-rutinen</h2>
+  <p>MVA-terminene er tomånedlige. Faller fristen på en helg eller helligdag, flyttes den til neste virkedag (i 2026 falt for eksempel fristen 10. oktober på en lørdag).</p>
+  <table><thead><tr><th>Termin</th><th>Frist</th></tr></thead><tbody>${termRows("no")}</tbody></table>
+  <p>Myrt eier rutinen. Den kjører hver mandag, finner nærmeste frist (F) og tar steget som hører til den uken, regnet bakover fra fristen:</p>
+  <table><thead><tr><th>Når</th><th>Hva</th><th>Hvem</th></tr></thead><tbody>${stepRows("no")}</tbody></table>
+  <p>Mangler noe på F−5, varsler Myrt eieren samme dag i stedet for å vente.</p>
+
+  <h2>Særlig for ENK</h2>
+  <ul>
+    <li><b>Uttak er privat uttak, ikke lønn.</b> Eieren av et ENK kan ikke lønne seg selv. Penger eieren tar ut av foretaket bokføres som privat uttak mot egenkapitalen, og de er ingen kostnad.</li>
+    <li><b>Personlig skatt er privat.</b> Eieren skattlegges personlig for overskuddet. Personlig skatt og skattemelding er eierens egen sak og bokføres ikke som kostnad i foretaket. Selskapsteamet lager ikke private skatteberegninger.</li>
+    <li><b>Skill privat og firma.</b> Firmautgifter betales fra firmakontoen, og private utgifter fra privatkontoen. Betaler firmaet noe privat, er det privat uttak. Betaler eieren en firmautgift privat, bokføres den med kvittering som innskudd fra eieren. Agentene flagger alt som ser privat ut og gjetter aldri.</li>
+  </ul>
+
+  <h2>Graf- og løkkedesign</h2>
+  <p>Teamet er satt opp som en liten graf med en kontrolløkke, ikke som én agent som gjør alt:</p>
+  <ul>
+    <li><b>Uavhengige steg går parallelt.</b> Å lese Fiken og å lese Folio er uavhengige steg, og det samme gjelder revisorens og skatt og compliance sine kontroller. (Kallene mot Fiken går likevel ett om gangen, i kø.)</li>
+    <li><b>En egen kontrollør med ny kontekst.</b> Revisoren starter uten regnskapsførerens arbeidsnotater, så den ikke arver de samme feilene, og den sjekker et ekte signal: at Fiken stemmer med banken. «Ser riktig ut» er ikke et signal.</li>
+    <li><b>Stoppbetingelser.</b> Løkken stopper når Fiken stemmer med banken, eller etter høyst to runder med rettelser, og da eskalerer den til eieren. Den stopper også når noe krever et valg bare eieren kan ta, og når fristen nærmer seg.</li>
+    <li><b>Et menneske godkjenner.</b> Ingen rettelse bokføres og ingen melding sendes uten eierens uttrykkelige ja.</li>
+  </ul>
+  <div class="diagram" role="img" aria-label="Diagram over arbeidsflyten: Myrt ruter til regnskapsføreren, som leser Fiken og Folio parallelt. Utkastet kontrolleres av revisoren og av skatt og compliance. Ved avvik godkjenner eieren rettelsene før de bokføres. Til slutt sender eieren MVA-meldingen selv.">
+    <pre class="mermaid">${esc(GRAPH_NO)}</pre>
+  </div>
+
+  <h2>Sjekkliste for oppsett</h2>
+  <ul class="check">
+    <li>Aktiver API-tilleggstjenesten i Fiken (<b>Foretak → Tilleggstjenester</b>).</li>
+    <li>Lag en personlig API-nøkkel (<b>Rediger konto → API → Personlige API-nøkler</b>).</li>
+    <li>Lagre nøkkelen som en maskert hemmelighet, og test med <code>GET /api/v2/companies</code>.</li>
+    <li>Koble til Folio MCP, og gi agentene bare de verktøyene de trenger. Betalingsverktøy skal ikke brukes.</li>
+    <li>Lag rollene: stabssjef, regnskapsfører, skatt og compliance, og en revisor som bare kan lese og som rapporterer til eieren.</li>
+    <li>Opprett gruppechattene «ledelse» og «regnskap».</li>
+    <li>Skriv reglene inn i hver rolle: Fiken er fasiten, ingen innsending til Altinn eller Skatteetaten, ingen pengeflytting, og rettelser krever eierens godkjenning.</li>
+    <li>Sett opp den ukentlige MVA-rutinen med fristene og F-stegene over.</li>
+    <li>La revisoren avstemme Fiken mot banken, ikke mot bankappens kategorier.</li>
+    <li>Sett stoppbetingelser: høyst to runder med rettelser før eskalering.</li>
+    <li>Første gang: gå gjennom hele utkastet selv, og sammenlign med MVA-oppgaven i Fiken før du sender.</li>
+  </ul>
+  <p class="disc">Dette er ikke regnskapsråd. Agentene er AI-roller, ikke autoriserte regnskapsførere eller revisorer. Eieren har alltid ansvaret og siste ord.</p>
+</article>`;
+
+// --- English --------------------------------------------------------------------------------------------------
+const EN = `
+<article class="lang" lang="en" id="art-en">
+  <header>
+    <h1>${esc(TITLE_EN)}</h1>
+    <p class="lede">How jQrgenCorp, a Norwegian sole proprietorship (ENK), does its bookkeeping and VAT (MVA) with a small team of AI agents in Grok Bot. The agents read the bank and receipts from Folio and the books from Fiken, draft, and check each other. The owner approves and submits himself.</p>
+    <p class="updated">Jørgen S. Notland (jQrgen), Oslo · <time datetime="${UPDATED}">2 October 2026</time></p>
+  </header>
+  <p class="disc"><b>Disclaimer:</b> This is not accounting, tax or legal advice. It only describes how I set up my own work. The "accountant", the "revisor" and the others are AI roles in an app, not licensed professionals. The revisor is a reviewer that can only read, not a state-authorised or registered auditor. The owner is responsible for the books and the VAT return. If in doubt, talk to an authorised accountant.</p>
+  <p>This page contains no accounting figures: no amounts, balances, customers or accounts. It only describes the setup.</p>
+
+  <h2>The team</h2>
+  <p><b>Grok Bot</b> is a desktop AI assistant where each bot is an agent with its own persona, memory, routines and group chats. The jQrgenCorp team is:</p>
+  <ul>
+    <li><b>Myrt, chief of staff</b>: the owner's single point of contact. Takes requests, routes them to the right agent and owns the routines.</li>
+    <li><b>CFO</b>: the financial overview and priorities.</li>
+    <li><b>Accountant</b>: reads Fiken and Folio, drafts, and books entries in Fiken once the owner has approved them.</li>
+    <li><b>Tax &amp; compliance</b>: VAT codes, deadlines and rules.</li>
+    <li><b>Revisor</b>: an independent reviewer that can only read, and that reports to the owner, not to the accountant.</li>
+    <li><b>Admin</b>, <b>strategist</b> and <b>business developer</b>: operations, direction and new business ideas.</li>
+    <li><b>D-SCOR lead</b>: keeps the team balanced (see <a href="../jqrgencorp-team/">jQrgenCorp: a D-SCOR-inspired AI team</a>, in Norwegian).</li>
+  </ul>
+  <p>The work happens in two group chats: <b>«ledelse»</b> (leadership) for direction and priorities, and <b>«regnskap»</b> (accounting) for the accountant, tax &amp; compliance, the revisor and the CFO.</p>
+
+  <h2>The tools</h2>
+  <h3>Folio MCP: the bank and the receipts</h3>
+  <p>Folio is a Norwegian business bank and receipt app. Through the Folio connector (an MCP server) the agents read transactions, categories and receipt attachments. The connector also has tools for creating payments. We never use them: <b>no agent moves money</b>. Give agents only the tools they need, read-only where you can.</p>
+  <h3>Fiken API v2: the books</h3>
+  <p><a href="https://fiken.no">Fiken</a> is the accounting system, and what is booked there is the record. The agents use the <a href="https://api.fiken.no/api/v2/docs/">Fiken API v2</a>:</p>
+  <ul>
+    <li><b>Turn on API access:</b> activate the API add-on for the company under <b>Foretak → Tilleggstjenester</b>. It has its own monthly price.</li>
+    <li><b>Create a personal API key:</b> <b>Rediger konto → API → Personlige API-nøkler</b>. Personal keys do not expire, but you can revoke them in the same place. Fiken says they are for your own integrations. Third-party apps must use OAuth2.</li>
+    <li><b>Store the key as a masked secret</b>, an environment variable the agents can use but cannot see or print. The key never goes into a chat, a file or a log.</li>
+    <li><b>Test:</b> the key is sent as a bearer token. The response lists the companies you have access to:</li>
+  </ul>
+  <pre><code>curl -s -H "Authorization: Bearer $FIKEN_API_KEY" https://api.fiken.no/api/v2/companies</code></pre>
+  <ul>
+    <li><b>One call at a time:</b> Fiken allows only one concurrent request, and calls may be throttled above four per second. Agents that work in parallel therefore share one queue to Fiken.</li>
+    <li><b>No ready-made VAT report in the API:</b> the basis is built from journal entries and account balances with their VAT codes (for example <code>/companies/{slug}/journalEntries</code>, <code>/accountBalances</code>, <code>/purchases</code> and <code>/sales</code>). Before submitting, the owner compares it with the VAT report in Fiken.</li>
+  </ul>
+
+  <h2>The workflow</h2>
+  <ol>
+    <li><b>The accountant</b> reads Fiken and Folio and drafts the VAT basis, together with a list of what is missing.</li>
+    <li><b>The revisor</b> reviews the draft independently and read-only. It has no write access to Fiken and does not see the accountant's reasoning, only the result and the sources.</li>
+    <li><b>Corrections</b> become proposals that wait for the owner's explicit approval. Only then does the accountant book them.</li>
+    <li><b>The owner always submits the VAT return himself</b> from Fiken. Agents never submit anything to Altinn or Skatteetaten (the tax authority), and never move money.</li>
+  </ol>
+  <div class="key"><b>The key lesson: check against Fiken, not Folio's categories.</b> On the first pass the revisor compared against the categories in Folio. That produced big, false corrections, because a category in the bank app is just a label, not a booked entry. What counts is what is actually booked in Fiken, with its account and VAT code. Once the revisor reconciled against Fiken, with the bank transactions as raw data, the false differences went away. Folio's categories are useful hints, never the record.</div>
+
+  <h2>The VAT routine</h2>
+  <p>VAT terms are bimonthly. If a deadline falls on a weekend or public holiday, it moves to the next working day (in 2026, for example, the 10 October deadline fell on a Saturday).</p>
+  <table><thead><tr><th>Term</th><th>Deadline</th></tr></thead><tbody>${termRows("en")}</tbody></table>
+  <p>Myrt owns the routine. It runs every Monday, finds the nearest deadline (F) and takes that week's step, counting back from the deadline:</p>
+  <table><thead><tr><th>When</th><th>What</th><th>Who</th></tr></thead><tbody>${stepRows("en")}</tbody></table>
+  <p>If anything is still missing at F−5, Myrt tells the owner the same day instead of waiting.</p>
+
+  <h2>Points specific to an ENK</h2>
+  <ul>
+    <li><b>Owner withdrawals are privat uttak, not salary.</b> The owner of an ENK cannot pay himself a salary. Money the owner takes out is booked as a private withdrawal against equity, and it is not an expense.</li>
+    <li><b>Personal tax is private.</b> The owner is taxed personally on the profit. Personal tax and the tax return are the owner's own business and are not booked as company expenses. The company team does not do private tax calculations.</li>
+    <li><b>Keep private and company apart.</b> Company costs are paid from the company account, private costs from the private account. If the company pays something private, that is a private withdrawal. If the owner pays a company cost privately, it is booked with its receipt as a contribution from the owner. Agents flag anything that looks private and never guess.</li>
+  </ul>
+
+  <h2>Graph and loop design</h2>
+  <p>The team is set up as a small graph with a verification loop, not as one agent that does everything:</p>
+  <ul>
+    <li><b>Independent steps run in parallel.</b> Reading Fiken and reading Folio are independent, and so are the revisor's and tax &amp; compliance's checks. (Calls to Fiken still go one at a time, through a queue.)</li>
+    <li><b>A separate verifier with a fresh context.</b> The revisor starts without the accountant's working notes, so it does not inherit the same mistakes, and it checks a real signal: Fiken matches the bank. "Looks right" is not a signal.</li>
+    <li><b>Stop conditions.</b> The loop stops when Fiken matches the bank, or after at most two rounds of corrections, and then it escalates to the owner. It also stops when something needs a decision only the owner can make, and when the deadline gets close.</li>
+    <li><b>A human approves.</b> No correction is booked and nothing is submitted without the owner's explicit yes.</li>
+  </ul>
+  <div class="diagram" role="img" aria-label="Workflow diagram: Myrt routes to the accountant, who reads Fiken and Folio in parallel. The revisor and tax and compliance check the draft. If there are differences, the owner approves the corrections before they are booked. Finally the owner submits the VAT return himself.">
+    <pre class="mermaid">${esc(GRAPH_EN)}</pre>
+  </div>
+
+  <h2>Setup checklist</h2>
+  <ul class="check">
+    <li>Activate the API add-on in Fiken (<b>Foretak → Tilleggstjenester</b>).</li>
+    <li>Create a personal API key (<b>Rediger konto → API → Personlige API-nøkler</b>).</li>
+    <li>Store the key as a masked secret, and test it with <code>GET /api/v2/companies</code>.</li>
+    <li>Connect Folio MCP, and give agents only the tools they need. Payment tools are never used.</li>
+    <li>Create the roles: chief of staff, accountant, tax &amp; compliance, and a read-only revisor that reports to the owner.</li>
+    <li>Create the group chats «ledelse» and «regnskap».</li>
+    <li>Write the rules into every role: Fiken is the record, nothing is submitted to Altinn or Skatteetaten, no money moves, and corrections need the owner's approval.</li>
+    <li>Set up the weekly VAT routine with the deadlines and F steps above.</li>
+    <li>Have the revisor reconcile Fiken against the bank, not against the bank app's categories.</li>
+    <li>Set stop conditions: at most two rounds of corrections before escalating.</li>
+    <li>The first time, review the whole draft yourself, and compare it with the VAT report in Fiken before you submit.</li>
+  </ul>
+  <p class="disc">This is not accounting advice. The agents are AI roles, not authorised accountants or auditors. The owner is always responsible and has the final word.</p>
+</article>`;
+
+const html = head(TITLE_NO).replace('<html lang="en">', '<html lang="nb">')
+  .replace("<title>", `<meta name="description" content="${esc(TITLE_EN)}. Bilingual article (Norwegian and English).">\n<link rel="canonical" href="${URL}">\n<title>`)
+  .replace(/text-wrap:\s*bal(?:ance)/g, "text-wrap:pretty").replace("</style>", CSS + "</style>")
+  .replace("<body>", `<body>\n<script>document.documentElement.classList.add("js", location.hash === "#en" ? "show-en" : "show-no")</script>`) + `<div class="band"><div class="inner">
+    <a class="name" href="../">Jørgen S. Notland</a><span class="tag">Alle foredrag, artikler og papers · All talks, articles and papers</span>
+  </div></div>
+<div class="page">
+  <nav class="toggle" aria-label="Språk / Language"><a href="#no" data-l="no" lang="nb">Norsk</a><a href="#en" data-l="en" lang="en">English</a></nav>
+${NO}
+${EN}
+  <footer class="site">Generert av src/orgchart/build-jqrgencorp-regnskap.js · <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
+</div>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict", flowchart: { htmlLabels: false } });
+const root = document.documentElement;
+const show = (l) => {
+  root.classList.toggle("show-no", l === "no"); root.classList.toggle("show-en", l === "en");
+  document.querySelectorAll(".toggle a").forEach((a) => a.setAttribute("aria-current", String(a.dataset.l === l)));
+  document.title = l === "en" ? ${JSON.stringify(TITLE_EN)} : ${JSON.stringify(TITLE_NO)};
+  root.lang = l === "en" ? "en" : "nb";
+  document.querySelectorAll(".show-" + l + " .lang[lang=" + (l === "en" ? "en" : "nb") + "] pre.mermaid:not([data-processed])").forEach((n) => mermaid.run({ nodes: [n] }).catch(() => {}));
+};
+document.querySelectorAll(".toggle a").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); history.replaceState(null, "", "#" + a.dataset.l); show(a.dataset.l); window.scrollTo(0, 0); }));
+show(location.hash === "#en" ? "en" : "no");
+</script>
+</body>
+</html>
+`;
+
+const out = path.join(DOCS, "jqrgencorp-regnskap");
+fs.mkdirSync(out, { recursive: true });
+const file = path.join(out, "index.html");
+fs.writeFileSync(file, html);
+console.log("wrote", file);
+
+// gate 1: terms
+const okTerms = gate([out], loadTerms(path.join(__dirname, "jqrgencorp-regnskap-terms.json")));
+// gate 2: digits in the visible text (scripts, styles and tags stripped; entities decoded)
+const text = html.replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<style[\s\S]*?<\/style>/g, " ").replace(/<[^>]+>/g, " ")
+  .replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"');
+const bad = [];
+for (const m of text.matchAll(/\d+(?:[  .,']\d+)+|\d{3,}/g)) {
+  const s = m[0];
+  if (/^\d+$/.test(s) && YEARS.has(s)) continue;
+  bad.push(s);
+}
+if (bad.length) console.error(`digit gate: FAIL, ${bad.length} amount- or number-like token(s) in the visible text`);
+else console.log("digit gate: PASS (visible text: no amount-like numbers, no 3+ digit runs except allowed years)");
+if (!okTerms || bad.length) { fs.rmSync(file); console.error("build-jqrgencorp-regnskap: privacy gate failed, output removed"); process.exit(1); }

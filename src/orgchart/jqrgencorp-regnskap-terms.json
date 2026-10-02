@@ -1,0 +1,13 @@
+{
+  "_note": "Grep gate for the public accounting article (jqrgencorp-regnskap) only. This page may name Folio (as a product), Fiken, MVA and privat uttak, so the shared forbidden-terms.json is not used here; this list covers what must never appear: counterparties, other banks, crypto exchanges, company numbers, currency amounts, health words. Case-insensitive substring match. Extend freely; never weaken a term to dodge a false positive, change the text instead. build-jqrgencorp-regnskap.js also runs a digit check (amount- and invoice-number-like digits) on the visible text.",
+  "terms": [
+    "B.U.", "BU Inc", "Incorporated",
+    "919057343", "919 057", "org.nr", "org. nr", "org.no", "org. no", "orgnr", "organisasjonsnummer", "organization number",
+    "Nordea", "DNB", "Sbanken", "SpareBank", "Handelsbanken", "Danske Bank", "Revolut", "Storebrand", "Bulder", "KLP",
+    "Bare Bitcoin", "Bitmynt", "Firi", "Coinbase", "Binance", "Kraken", "Bitstamp", "NBX", "Bitpanda", "Nordic Bitcoin",
+    "Tripletex",
+    "kr ", "kr.", "NOK", "EUR ", "USD", "€", "$ ", "beløp:", "amount:", "saldo:", "balance:",
+    "fakturanr", "faktura nr", "fakturanummer", "invoice no", "invoice number", "kontonr", "kontonummer", "account number", "IBAN",
+    "pouch", "colectomy", "colitis", "gastro", "ulcerative", "ileal", "IBD", "Crohn", "stoma", "diagnos", "helse", "health", "sykdom", "sykemeld"
+  ]
+}
