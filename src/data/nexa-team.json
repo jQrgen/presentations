@@ -32,6 +32,16 @@
       "contributions": []
     },
     {
+      "name": "Nexa chief of staff",
+      "type": "ai",
+      "role": "Coordinates the AI agents: priorities, owners, follow-ups and briefings",
+      "department": "Chief of staff",
+      "groups": [
+        "Nexa leadership team"
+      ],
+      "contributions": []
+    },
+    {
       "name": "Nexa chief scientist",
       "type": "ai",
       "role": "Protocol and consensus research, papers, design reviews",
@@ -114,7 +124,13 @@
         "Nexa product & design team",
         "Nexa design review"
       ],
-      "contributions": []
+      "contributions": [
+        {
+          "title": "\"One block, many winners\" Tailstorm rewards diagram",
+          "url": "https://jqrgen.github.io/presentations/tailstorm/mining-rewards/",
+          "date": "2026-10-02"
+        }
+      ]
     },
     {
       "name": "Nexa DevRel & BON grants",
@@ -172,7 +188,13 @@
         "Nexa go-to-market team",
         "Nexa design review"
       ],
-      "contributions": []
+      "contributions": [
+        {
+          "title": "Tailstorm mining-rewards article: \"One Block, Many Winners\"",
+          "url": "https://jqrgen.github.io/presentations/tailstorm/mining-rewards/",
+          "date": "2026-10-02"
+        }
+      ]
     },
     {
       "name": "Nexa Presentations",
@@ -287,16 +309,6 @@
       "contributions": []
     },
     {
-      "name": "Smith",
-      "type": "ai",
-      "role": "AI agent (role line to come)",
-      "department": "Unassigned",
-      "groups": [
-        "Nexa leadership team"
-      ],
-      "contributions": []
-    },
-    {
       "name": "Wally Dev",
       "type": "ai",
       "role": "Wally Wallet on Android, desktop and iOS",
@@ -318,7 +330,7 @@
         "Nexa product manager",
         "Nexa chief scientist",
         "Marketing strategy",
-        "Smith",
+        "Nexa chief of staff",
         "Nexa strategist"
       ]
     },

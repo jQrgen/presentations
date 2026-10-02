@@ -122,7 +122,12 @@ function snapshot() {
   }
   const inNexaGroup = new Set(groups.flatMap((g) => g.ids));
   const named = new Set(["Nexa chief of staff", ...DEPARTMENTS.flatMap(([, n]) => n)]);
-  for (const [d, p] of Object.entries(all)) if (named.has(p.name) || nexaName(p.name) || inNexaGroup.has(d)) agents[d] = p;
+  // an agent the user has given a personal name keeps its org-chart role through its title (e.g. title "Nexa chief of staff"):
+  // the chart is keyed by role, so it is placed and shown under that role name; the personal name is not published
+  for (const [d, p0] of Object.entries(all)) {
+    const p = !named.has(p0.name) && named.has(p0.title) ? { ...p0, name: p0.title } : p0;
+    if (named.has(p.name) || nexaName(p.name) || inNexaGroup.has(d)) agents[d] = p;
+  }
   const deptOf = {}; DEPARTMENTS.forEach(([dep, names]) => names.forEach((n) => (deptOf[n] = dep)));
   const gl = groups.map((g) => ({ name: g.name, members: g.ids.filter((id) => agents[id]).map((id) => agents[id].name) }))
     .filter((g) => g.members.length)
