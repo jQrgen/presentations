@@ -195,7 +195,6 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 .viewtabs button{background:none;border:0;border-bottom:3px solid transparent;color:#b4bac6;font:650 15px/1.2 system-ui,sans-serif;padding:8px 14px;cursor:pointer;margin-bottom:-1px;min-height:44px}
 .viewtabs button[aria-selected=true]{color:var(--gold2);border-bottom-color:var(--gold)}
 .viewtabs button:hover{color:#efeadf}
-.viewtabs .illus{margin-left:6px}
 html.view-reward:not(.kiosk) #sec-cur,html.view-reward:not(.kiosk) #sec-prev{display:none}
 #sec-reward{display:none}
 html.view-reward:not(.kiosk) #sec-reward{display:block}
@@ -210,19 +209,20 @@ html.simmode #sec-reward h2::after{content:"SIMULATED";margin-left:10px;padding:
 .oneBlock{display:flex;align-items:center;justify-content:center;aspect-ratio:1.6;max-height:190px;border-radius:8px;background:#f2896b;color:#12151c;font-weight:800;font-size:16px;text-align:center;padding:8px}
 .pieces{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:3px}
 .pieces i{aspect-ratio:1;border-radius:2px;background:var(--line)}
-.pieces i.sum{outline:2px solid var(--gold);outline-offset:-2px;box-shadow:0 0 0 1px #1a1405 inset}
+.pieces i.sum{outline:3px solid #e0b341;outline-offset:-3px;box-shadow:0 0 6px #e0b34199}
 .paidLine{color:#efeadf;font-weight:700;font-size:15px;margin-top:8px}
 .paidLine b{color:var(--ok)}
 .prob{margin:12px 0 0}
 .prob h3{margin:0 0 6px;font-size:15px;color:#efeadf}
-.prob h3 small{color:#b4bac6;font-weight:400}
+.prob h3 small{color:#cfcabd;font-weight:400}
 .pbar{display:grid;grid-template-columns:8.5em minmax(0,1fr) 4em;gap:10px;align-items:center;margin:5px 0;font-size:14px;color:#efeadf}
 .pbar .t{height:22px;background:#0d1016;border:1px solid var(--line);border-radius:5px;overflow:hidden}
 .pbar .t i{display:block;height:100%;background:var(--gold);border-radius:4px 0 0 4px;min-width:3px}
+.pbar .t i.today{min-width:4px}
 .pbar .v{font-weight:800;color:var(--gold2);text-align:right;font-variant-numeric:tabular-nums}
 .payStat{color:#efeadf;font-size:14px;line-height:1.35;margin:10px 0 0}
 .payStat b{color:var(--gold2)}
-.payStat .pst{color:#b4bac6}
+.payStat .pst{display:block;color:#b4bac6;margin-top:.25em}
 .same{margin:10px 0 0;padding:8px 12px;border-left:3px solid var(--gold);background:var(--panel2);border-radius:0 8px 8px 0;color:#efeadf;font-size:15px}
 .same b{color:var(--gold2)}
 .rw .src{color:#b4bac6;font-size:12.5px;margin:8px 0 0}
@@ -317,7 +317,7 @@ html.kiosk .same{font-size:clamp(16px,1.25vw,36px);line-height:1.2;margin-top:.6
   <div class="card"><div class="k">Branching</div><div class="v" id="c-br">–</div></div>
   <div class="card"><div class="k">DAG tip</div><div class="v" id="c-tipv" style="font-size:15px;margin-top:8px"><code id="c-tip">–</code></div></div>
 </div>
-<div class="viewtabs" role="tablist" aria-label="View"><button type="button" role="tab" id="tab-dag" aria-controls="sec-cur" aria-selected="true">Live DAG</button><button type="button" role="tab" id="tab-reward" aria-controls="sec-reward" aria-selected="false">Reward split <span class="illus">Illustrative</span></button></div>
+<div class="viewtabs" role="tablist" aria-label="View"><button type="button" role="tab" id="tab-dag" aria-controls="sec-cur" aria-selected="true">Live DAG</button><button type="button" role="tab" id="tab-reward" aria-controls="sec-reward" aria-selected="false">Reward split</button></div>
 <section id="sec-cur">
   <h2><span class="roundLong">This round: subblocks since the last summary block</span><span class="roundShort">Round subblocks</span> <span class="m" id="cur-m"></span></h2>
   <div class="legend" id="legend"></div>
@@ -333,7 +333,7 @@ html.kiosk .same{font-size:clamp(16px,1.25vw,36px);line-height:1.2;margin-top:.6
     <div class="rwCard"><h3>Tailstorm: split across subblock miners</h3><p>The block is k pieces of work. The full reward is split by DAG connectivity.</p><div class="pieces" id="rwPieces"></div><div class="paidLine" id="rwPaid"></div><div class="cap" id="rwCap"></div></div>
   </div>
   <div class="prob"><h3>Chance a 1% miner gets paid in a block <small>1 − 0.99<sup>k</sup></small></h3>
-    <div class="pbar"><span>Today</span><span class="t"><i style="width:1%"></i></span><span class="v">1%</span></div>
+    <div class="pbar"><span>Today</span><span class="t"><i class="today" style="width:1%"></i></span><span class="v">1%</span></div>
     <div class="pbar"><span>k = 40</span><span class="t"><i style="width:33.1%"></i></span><span class="v">33.1%</span></div>
     <div class="pbar"><span>k = 120</span><span class="t"><i style="width:70.1%"></i></span><span class="v">70.1%</span></div>
   </div>
@@ -878,7 +878,7 @@ function render() {
 
 // ---- Reward split panel (illustrative: facts only from the "One Block, Many Winners" article, plus subblock and miner counts)
 function payStatHtml() {   // 1 - 0.99^k for a 1% miner
-  const st = ` <span class="pst">Tailstorm on mainnet: implemented, activation pending.</span>`;
+  const st = `<span class="pst">Tailstorm on mainnet: implemented, activation pending.</span>`;
   if (K === 120) return `A 1% miner gets paid in <b>70.1%</b> of blocks here (k=120, as in the mainnet code) vs <b>1%</b> today; <b>33.1%</b> at k=40 (upstream stormtest).` + st;
   if (K === 40) return `A 1% miner gets paid in <b>33.1%</b> of blocks here (k=40, as in upstream stormtest) vs <b>1%</b> today; <b>70.1%</b> at k=120 (mainnet code).` + st;
   return `A 1% miner gets paid in <b>1%</b> of blocks today, <b>33.1%</b> at k=40 (upstream stormtest) and <b>70.1%</b> at k=120 (mainnet code).` + st;
