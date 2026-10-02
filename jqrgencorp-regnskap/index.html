@@ -140,6 +140,15 @@ ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:
     <li><b>Ingen ferdig MVA-rapport i API-et:</b> grunnlaget bygges fra bilag, posteringer og kontosaldoer med MVA-koder (for eksempel <code>/companies/{slug}/journalEntries</code>, <code>/accountBalances</code>, <code>/purchases</code> og <code>/sales</code>). Eieren sammenligner med MVA-oppgaven i Fiken før innsending.</li>
   </ul>
 
+  <h3>Alternativ: en bank-MCP som datakilde</h3>
+  <p>Folio er ikke det eneste mulige. En bank kan også kobles til som en MCP-server, enten via bankens egen MCP-kobling, hvis banken tilbyr en, eller via en MCP-server bygget på åpen bank (PSD2), som leser kontoer gjennom en lisensiert tilbyder av kontoinformasjon. Da får agentene transaksjoner og saldoer rett fra banken, ved siden av Folio eller i stedet for Folio. Jeg har ikke funnet noen norsk bank som tilbyr en egen MCP-server. Det finnes åpen kildekode-servere som når europeiske banker gjennom en lisensiert PSD2-tilbyder og bare kan lese (ett eksempel er <a href="https://bankmcp.dk/">BankMCP</a>; ikke testet av oss, og ingen anbefaling). Samtykket til åpen bank er tidsbegrenset og må fornyes jevnlig. De samme prinsippene gjelder:</p>
+  <ul>
+    <li><b>Lesetilgang først:</b> velg en kobling som bare kan lese, eller gi agentene bare leseverktøyene.</li>
+    <li><b>Betalingsverktøy brukes aldri</b>, selv om koblingen har dem. Ingen agent flytter penger.</li>
+    <li><b>Fiken er fortsatt fasiten:</b> bankdataene er rådata å avstemme mot, ikke bokføring. Bankens egne kategorier er bare hint, akkurat som Folio-kategoriene.</li>
+    <li><b>Revisoren avstemmer Fiken mot bankdataene</b>, uansett om de kommer fra Folio eller fra en bank-MCP.</li>
+  </ul>
+
   <h2>Arbeidsflyten</h2>
   <ol>
     <li><b>Regnskapsføreren</b> leser Fiken og Folio og lager et utkast til MVA-grunnlaget, sammen med en liste over det som mangler.</li>
@@ -214,7 +223,7 @@ ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:
     <li>Aktiver API-tilleggstjenesten i Fiken (<b>Foretak → Tilleggstjenester</b>).</li>
     <li>Lag en personlig API-nøkkel (<b>Rediger konto → API → Personlige API-nøkler</b>).</li>
     <li>Lagre nøkkelen som en maskert hemmelighet, og test med <code>GET /api/v2/companies</code>.</li>
-    <li>Koble til Folio MCP, og gi agentene bare de verktøyene de trenger. Betalingsverktøy skal ikke brukes.</li>
+    <li>Koble til Folio MCP (eller en bank-MCP), og gi agentene bare de verktøyene de trenger. Betalingsverktøy skal ikke brukes.</li>
     <li>Lag rollene: stabssjef, regnskapsfører, skatt og compliance, og en revisor som bare kan lese og som rapporterer til eieren.</li>
     <li>Opprett gruppechattene «ledelse» og «regnskap».</li>
     <li>Skriv reglene inn i hver rolle: Fiken er fasiten, ingen innsending til Altinn eller Skatteetaten, ingen pengeflytting, og rettelser krever eierens godkjenning.</li>
@@ -263,6 +272,15 @@ ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:
   <ul>
     <li><b>One call at a time:</b> Fiken allows only one concurrent request, and calls may be throttled above four per second. Agents that work in parallel therefore share one queue to Fiken.</li>
     <li><b>No ready-made VAT report in the API:</b> the basis is built from journal entries and account balances with their VAT codes (for example <code>/companies/{slug}/journalEntries</code>, <code>/accountBalances</code>, <code>/purchases</code> and <code>/sales</code>). Before submitting, the owner compares it with the VAT report in Fiken.</li>
+  </ul>
+
+  <h3>Alternative: a bank MCP as the data source</h3>
+  <p>Folio is not the only option. A bank can also be connected as an MCP server, either through the bank's own MCP connector, if the bank offers one, or through an MCP server built on open banking (PSD2), which reads accounts through a licensed account-information provider. The agents then get transactions and balances straight from the bank, alongside Folio or instead of it. I have not found any Norwegian bank that offers its own MCP server. There are open-source, read-only servers that reach European banks through a licensed PSD2 provider (one example is <a href="https://bankmcp.dk/">BankMCP</a>; not tested by us, and not a recommendation). Open-banking consent is time-limited and has to be renewed regularly. The same principles apply:</p>
+  <ul>
+    <li><b>Read-only first:</b> pick a connector that can only read, or give the agents only the read tools.</li>
+    <li><b>Payment tools are never used</b>, even if the connector has them. No agent moves money.</li>
+    <li><b>Fiken stays the source of truth:</b> bank data is raw data to reconcile against, not bookkeeping. The bank's own categories are only hints, just like Folio's.</li>
+    <li><b>The revisor reconciles Fiken against the bank data</b>, whether it comes from Folio or from a bank MCP.</li>
   </ul>
 
   <h2>The workflow</h2>
@@ -339,7 +357,7 @@ ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:
     <li>Activate the API add-on in Fiken (<b>Foretak → Tilleggstjenester</b>).</li>
     <li>Create a personal API key (<b>Rediger konto → API → Personlige API-nøkler</b>).</li>
     <li>Store the key as a masked secret, and test it with <code>GET /api/v2/companies</code>.</li>
-    <li>Connect Folio MCP, and give agents only the tools they need. Payment tools are never used.</li>
+    <li>Connect Folio MCP (or a bank MCP), and give agents only the tools they need. Payment tools are never used.</li>
     <li>Create the roles: chief of staff, accountant, tax &amp; compliance, and a read-only revisor that reports to the owner.</li>
     <li>Create the group chats «ledelse» and «regnskap».</li>
     <li>Write the rules into every role: Fiken is the record, nothing is submitted to Altinn or Skatteetaten, no money moves, and corrections need the owner's approval.</li>
