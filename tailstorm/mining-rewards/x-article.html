@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>X Article paste page: One Block, Many Winners</title>
+<style>
+body{margin:0;padding:24px;background:#fff;color:#000;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto}
+.howto{border:2px dashed #888;border-radius:6px;padding:12px 16px;margin-bottom:32px;font-size:15px}
+.howto p{margin:6px 0}
+.title-line{border:1px solid #ccc;padding:6px 8px;user-select:all;-webkit-user-select:all}
+button{font:inherit;font-size:15px;padding:6px 14px;cursor:pointer}
+#article img{max-width:100%;height:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="howto">
+<p><strong>INSTRUCTIONS — NOT PART OF THE ARTICLE. Do not copy this box.</strong></p>
+<p>1. Title (copy this one line into X's title field):</p>
+<p class="title-line">One Block, Many Winners: How Tailstorm Decentralizes Mining Rewards on Nexa</p>
+<p>2. Click <button type="button" id="select">Select article</button> then press Cmd+C (Ctrl+C on Windows/Linux) and paste into the X Articles body.</p>
+<p>3. If the diagram does not paste, upload it where the note [Insert diagram here] appears, then delete the note. Diagram file: <a href="https://jqrgen.github.io/presentations/tailstorm/assets/tailstorm-rewards-diagram.png">tailstorm-rewards-diagram.png</a></p>
+</div>
+
+<div id="article">
+<p><em>By jQrgen (Jørgen S. Notland)</em></p>
+<hr>
+<p>In Bitcoin-style mining, one miner wins each block and everyone else gets nothing for that round. If you are small, you can go a long time between payouts. So small miners join big pools, and big pools get bigger.</p>
+<p>Tailstorm, the consensus upgrade coming to Nexa with Hard Fork 2, changes that maths. Every block is assembled from many smaller proofs of work, and the block reward is split across their miners. Here is how that works, what the research actually shows, and what is still open.</p>
+
+<h2>The problem: winner-takes-all is lumpy</h2>
+<p>On Nexa today, as on Bitcoin, a block needs one proof of work, and its finder takes the whole reward. Nexa targets one block every 2 minutes.</p>
+<p>If you control 1% of the hash rate, you win about 1 block in 100 on average. That is roughly one payout every 200 minutes, with long dry spells in between. (This is simple arithmetic from the 2-minute target, not a measurement.)</p>
+<p>Most miners don't want that variance, so they join pools. The Tailstorm paper puts it directly: unfair or inconsistent rewards encourage the formation of pools and centralisation. The wider research is blunt too: even small advantages for larger miners push a proof-of-work system toward centralisation.</p>
+
+<h2>What Tailstorm changes</h2>
+<p>Tailstorm comes from a peer-reviewed paper by Patrik Keller, Ben Glickenhaus, George Bissias and Gregory Griffith (AFT 2023). The core idea in plain language:</p>
+<ul>
+<li><strong>One block becomes k small proofs of work.</strong> Miners find <em>subblocks</em>, each one much easier than a full block. Once there are <em>k</em> of them, they are tied together into a <em>summary block</em>.</li>
+<li><strong>Subblocks don't race each other.</strong> Subblocks that build on the same summary don't conflict, so they can be found in parallel, and fewer are thrown away than in Bitcoin's one-winner race.</li>
+<li><strong>Rewards go to subblock miners.</strong> In the paper, <em>every</em> subblock in a summary gets paid, not just one lucky winner.</li>
+</ul>
+<p>On Nexa, in the current code, the summary block's coinbase (the transaction that pays the block reward) pays out the full reward, so nothing is burned. It is split across every subblock in the winning DAG, weighted by how well-connected each subblock is. In a clean, linear chain of subblocks, every subblock, and the summary block's own miner, gets an equal share. Late subblocks (uncles) are still paid in the next block, at slightly less than a well-linked subblock. Nodes enforce the split: a summary block whose coinbase doesn't match the DAG is rejected.</p>
+<p>The number of subblocks per summary isn't final. The code uses <strong>k = 120</strong> for mainnet and testnet, about one per second at 2-minute blocks. The stormtest test network is still set to <strong>40</strong> upstream, which is likely where the "about 40, every 3 seconds" in recent announcements comes from. Neither number is a final activation setting. Either way, a block reward that today goes to one miner would be split across dozens of miners.</p>
+<p><img src="https://jqrgen.github.io/presentations/tailstorm/assets/tailstorm-rewards-diagram.png" width="1600" height="900" alt="Two-panel diagram titled &quot;One block, many winners&quot;. Left, &quot;Today: winner takes all&quot;: one block sends the whole reward to Miner A, while miners B, C and D get nothing. Right, &quot;Tailstorm: reward split across subblocks&quot;: a small DAG of subblocks mined by miners A, B, C and D feeds a summary block, which splits the reward into a share for each miner. Footnote: illustrative; in the current Nexa code the reward is split by how well-linked each subblock is."></p>
+<p><em>[Insert diagram here]</em></p>
+
+<h2>Why smaller miners benefit, and why pools may matter less</h2>
+<h3>1. Payouts become frequent instead of lumpy</h3>
+<p>The paper simulated one strong miner and one weak miner over many simulated days. Higher <em>k</em> gave more frequent rewards and lower day-to-day volatility.</p>
+<p>To illustrate (my own arithmetic, idealised: no orphans, equal shares), take a miner with 1% of the hash rate. Here <em>k</em> is the number of pieces of work per block, including the summary, and the chance of winning at least one is 1 − 0.99^k. Chance of earning something in a given 2-minute block:</p>
+<ul>
+<li><strong>Today (1 proof of work per block):</strong> about 1%</li>
+<li><strong>Tailstorm, k = 40:</strong> 33.1%</li>
+<li><strong>Tailstorm, k = 120:</strong> 70.1%</li>
+</ul>
+<p>Total expected income stays the same. What changes is how <em>smooth</em> it is.</p>
+<h3>2. Less unfairness from network delays</h3>
+<p>In Bitcoin, when two blocks are found at about the same time, one is orphaned, and the bigger miner is more likely to win that race. Tailstorm's analysis gives a lower upper bound on orphan rates than Bitcoin's at the same block interval. In simulation, the weak miner got closer to its fair share. The paper also shows a design benefit: block interval (for fairness) and subblock interval (for frequent payouts) can be tuned separately, instead of trading one against the other as Bitcoin must.</p>
+<h3>3. Withholding blocks pays less, in the paper's model</h3>
+<p>"Selfish mining" means a big miner hides blocks to gain an unfair share. In the paper's attack search, Tailstorm needed the largest share of hash rate before dishonest strategies paid off, compared with Bitcoin and a parallel-PoW protocol without Tailstorm's reward rule. That matters for decentralisation, because a protocol that rewards size invites consolidation.</p>
+<p>One caveat: that result is for the paper's reward rule. Nexa splits the reward differently (see above), and nobody has yet analysed whether Nexa's rule resists withholding as well. It's an open research question.</p>
+
+<h2>What the research does <em>not</em> claim</h2>
+<p>I want to be precise here:</p>
+<ul>
+<li>The paper measures <strong>fairness</strong> (are rewards proportional to hash rate?), <strong>reward volatility</strong>, <strong>orphan rates</strong> and <strong>resistance to withholding attacks</strong>.</li>
+<li>It <em>states</em> that unfair or inconsistent reward allocation "encourages the formation of pools and centralization". But it does <strong>not</strong> model pools, pool fees, or miners' decisions to join or leave pools. "Smaller pools become more viable" is my reasoning from lower variance and better fairness. It is not a measured result in the paper.</li>
+<li>The authors themselves say Tailstorm <strong>reduces but cannot fully remove</strong> centralisation pressure, because economies of scale in energy and hardware affect every proof-of-work coin.</li>
+<li>Nexa's reward weighting is its own implementation of the idea. In the paper, the total paid shrinks when the subblock tree branches. Nexa's current code always pays the full reward and changes only how it is split. How that behaves under adversarial conditions deserves independent review.</li>
+</ul>
+
+<h2>Status</h2>
+<p>The Tailstorm code shipped in Nexa Full-Node 2.2.0.0 and is dormant until Hard Fork 2 activates in the next release. The roadmap targets the 2026 hard fork. The spec page lists 1 November 2026, while the released code still carries a placeholder date, so treat the date as provisional.</p>
+
+<h2>For developers</h2>
+<p>A network that pays many miners every block is the kind of base layer I want under payment apps: confirmations in seconds, and security that doesn't depend on a handful of pools. If you are building payments, point-of-sale, tokens or mining tooling (pool dashboards, payout trackers, gettailstorminfo monitors), start now:</p>
+<ul>
+<li>Build On Nexa: <a href="https://build.nexa.org">https://build.nexa.org</a></li>
+<li>Hard Fork 2 spec: <a href="https://spec.nexa.org/upgrades/hard-fork-2/">https://spec.nexa.org/upgrades/hard-fork-2/</a></li>
+<li>Tailstorm implementation notes: <a href="https://gitlab.com/nexa/nexa/-/blob/dev/doc/tailstorm.md">https://gitlab.com/nexa/nexa/-/blob/dev/doc/tailstorm.md</a></li>
+<li>The paper: <a href="https://arxiv.org/abs/2306.12206">https://arxiv.org/abs/2306.12206</a></li>
+</ul>
+<p>Building in Scandinavia? Reply or DM me.</p>
+<p>Read the full article: <a href="https://jqrgen.github.io/presentations/tailstorm/mining-rewards/">https://jqrgen.github.io/presentations/tailstorm/mining-rewards/</a></p>
+</div>
+</div>
+<script>
+document.getElementById('select').addEventListener('click', function () {
+  var r = document.createRange();
+  r.selectNodeContents(document.getElementById('article'));
+  var s = window.getSelection();
+  s.removeAllRanges();
+  s.addRange(r);
+});
+</script>
+</body>
+</html>
