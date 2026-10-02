@@ -6,24 +6,24 @@
       "name": "jQrgen",
       "fullName": "Jørgen S. Notland",
       "type": "human",
-      "role": "Runs the team · Bitcoin Unlimited / Nexa"
+      "role": "CEO"
     }
   ],
   "departments": [
     "Engineering",
     "Product & Design",
     "Research",
-    "Go-to-market & Community",
-    "Security (independent)",
+    "Go-to-market",
+    "Security & audit (independent)",
     "Advisor",
-    "D-SCOR"
+    "Team dynamics"
   ],
   "members": [
     {
       "name": "Marketing strategy",
       "type": "ai",
       "role": "Developer marketing plan, messaging and campaigns",
-      "department": "Go-to-market & Community",
+      "department": "Go-to-market",
       "lead": true,
       "groups": [
         "Nexa leadership team",
@@ -68,7 +68,7 @@
       "name": "Nexa community manager",
       "type": "ai",
       "role": "Community channels, updates and developer feedback",
-      "department": "Go-to-market & Community",
+      "department": "Go-to-market",
       "groups": [
         "Nexa go-to-market team"
       ],
@@ -78,7 +78,7 @@
       "name": "Nexa conferences",
       "type": "ai",
       "role": "Developer conferences, hackathons and meetups, Scandinavia first",
-      "department": "Go-to-market & Community",
+      "department": "Go-to-market",
       "groups": [
         "Nexa go-to-market team"
       ],
@@ -110,8 +110,8 @@
     {
       "name": "Nexa D-SCOR-ansvarlig",
       "type": "ai",
-      "role": "AI-rolle som D-SCOR-ansvarlig, basert på D-SCOR-modellen",
-      "department": "D-SCOR",
+      "role": "Team dynamics reviewer",
+      "department": "Team dynamics",
       "groups": [],
       "contributions": []
     },
@@ -136,7 +136,7 @@
       "name": "Nexa DevRel & BON grants",
       "type": "ai",
       "role": "Builder onboarding, tutorials and BON grants",
-      "department": "Go-to-market & Community",
+      "department": "Go-to-market",
       "groups": [
         "Nexa product & design team",
         "Nexa go-to-market team"
@@ -167,8 +167,9 @@
     },
     {
       "name": "Nexa lead dev",
+      "displayName": "Andrew Stone",
       "type": "ai",
-      "role": "Technical direction: architecture, roadmap, protocol changes",
+      "role": "Lead developer: technical direction, architecture, roadmap, protocol changes",
       "department": "Engineering",
       "lead": true,
       "groups": [
@@ -183,7 +184,7 @@
       "name": "Nexa media & communications",
       "type": "ai",
       "role": "Announcements, posts, newsletters, content calendar",
-      "department": "Go-to-market & Community",
+      "department": "Go-to-market",
       "groups": [
         "Nexa go-to-market team",
         "Nexa design review"
@@ -200,7 +201,7 @@
       "name": "Nexa Presentations",
       "type": "ai",
       "role": "Talks, pitch decks and these pages",
-      "department": "Go-to-market & Community",
+      "department": "Go-to-market",
       "groups": [
         "Nexa go-to-market team",
         "Nexa design review"
@@ -266,7 +267,8 @@
       "name": "Nexa security & audit",
       "type": "ai",
       "role": "Independent security reviews, threat models and audit prep",
-      "department": "Security (independent)",
+      "department": "Security & audit (independent)",
+      "independent": true,
       "groups": [
         "Nexa security team"
       ],
