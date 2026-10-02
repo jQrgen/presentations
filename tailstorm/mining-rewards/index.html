@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Block, Many Winners: How Tailstorm Spreads Mining Rewards on Nexa</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect x=%272%27 y=%272%27 width=%2712%27 height=%2712%27 rx=%272%27 fill=%27%23e0b341%27/%3E%3C/svg%3E">
+<meta name="description" content="How Tailstorm, coming to Nexa with Hard Fork 2, splits each block reward across the miners of many subblocks: what the research shows and what is still open.">
+<style>
+:root{--bg:#0a0c10;--panel:#12151c;--panel2:#181c25;--line:#262b36;--text:#e7e3d8;--muted:#8d93a1;--gold:#e0b341;--gold2:#f5d27a;--golddim:#6f5a22}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--gold2);overflow-wrap:anywhere}
+a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.top{max-width:760px;margin:0 auto;padding:16px 20px 0;font-size:14px;color:var(--muted)}
+.top a{color:var(--gold)}
+article{max-width:760px;margin:0 auto;padding:10px 20px 30px}
+h1{font-size:34px;line-height:1.2;margin:18px 0 10px;letter-spacing:-.01em;color:var(--gold)}
+h2{font-size:23px;line-height:1.3;margin:36px 0 8px;padding-top:10px;border-top:1px solid var(--line)}
+hr{border:0;border-top:2px solid var(--golddim);width:80px;margin:18px 0 24px}
+p,li{color:#ddd8cc}
+strong{color:var(--text)}
+em{color:#e9dfc2}
+ul{padding-left:22px}
+li{margin:6px 0}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em;background:var(--panel2);border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:#cfd6e0}
+figure{margin:26px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px}
+figure img{display:block;width:100%;height:auto;border-radius:8px}
+table{width:100%;border-collapse:collapse;margin:18px 0;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:15.5px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--panel2);color:var(--gold);font-weight:650}
+tr:last-child td{border-bottom:0}
+td:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+footer{max-width:760px;margin:0 auto;padding:18px 20px 44px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px}
+footer a{color:var(--gold)}
+@media (max-width:600px){
+  html,body{font-size:16px}
+  h1{font-size:27px}
+  h2{font-size:20px}
+  table{font-size:14px}
+  th,td{padding:8px 9px}
+  td:last-child{white-space:normal}
+}
+</style>
+</head>
+<body>
+<nav class="top" aria-label="Breadcrumb"><a href="../">&larr; Nexa Tailstorm: live DAG</a> · <a href="../../">Jørgen S. Notland: all talks, articles and papers</a></nav>
+<article>
+<h1>One Block, Many Winners: How Tailstorm Spreads Mining Rewards on Nexa</h1>
+<p><em>By jQrgen (Jørgen S. Notland)</em></p>
+<hr />
+<p>In Bitcoin-style mining, one miner wins each block and everyone else gets nothing for that round. If you are small, you can go a long time between payouts. So small miners join big pools, and big pools get bigger.</p>
+<p>Tailstorm, the consensus upgrade coming to Nexa with Hard Fork 2, changes that maths. Every block is assembled from many smaller proofs of work, and the block reward is split across their miners. Here is how that works, what the research actually shows, and what is still open.</p>
+<h2>The problem: winner-takes-all is lumpy</h2>
+<p>On Nexa today, as on Bitcoin, a block needs one proof of work, and its finder takes the whole reward. Nexa targets one block every 2 minutes.</p>
+<p>If you control 1% of the hash rate, you win about 1 block in 100 on average. That is roughly one payout every 200 minutes, with long dry spells in between. (This is simple arithmetic from the 2-minute target, not a measurement.)</p>
+<p>Most miners don't want that variance, so they join pools. The Tailstorm paper puts it directly: unfair or inconsistent rewards encourage the formation of pools and centralisation. The wider research is blunt too: even small advantages for larger miners push a proof-of-work system toward centralisation.</p>
+<h2>What Tailstorm changes</h2>
+<p>Tailstorm comes from a peer-reviewed paper by Patrik Keller, Ben Glickenhaus, George Bissias and Gregory Griffith (AFT 2023). The core idea in plain language:</p>
+<ul>
+<li><strong>One block becomes k small proofs of work.</strong> Miners find <em>subblocks</em>, each one much easier than a full block. Once there are <em>k</em> of them, they are tied together into a <em>summary block</em>.</li>
+<li><strong>Subblocks don't race each other.</strong> Subblocks that build on the same summary don't conflict, so they can be found in parallel, and fewer are thrown away than in Bitcoin's one-winner race.</li>
+<li><strong>Rewards go to subblock miners.</strong> In the paper, <em>every</em> subblock in a summary gets paid, not just one lucky winner.</li>
+</ul>
+<p>On Nexa, in the current code, the summary block's coinbase (the transaction that pays the block reward) pays out the full reward, so nothing is burned. It is split across every subblock in the winning DAG, weighted by how well-connected each subblock is. In a clean, linear chain of subblocks, every subblock, and the summary block's own miner, gets an equal share. Late subblocks (uncles) are still paid in the next block, at slightly less than a well-linked subblock. Nodes enforce the split: a summary block whose coinbase doesn't match the DAG is rejected.</p>
+<p>The number of subblocks per summary isn't final. The code uses <strong>k = 120</strong> for mainnet and testnet, about one per second at 2-minute blocks. The stormtest test network is still set to <strong>40</strong> upstream, which is likely where the "about 40, every 3 seconds" in recent announcements comes from. Neither number is a final activation setting. Either way, a block reward that today goes to one miner would be split across dozens of miners.</p>
+<figure><a href="../assets/tailstorm-rewards-diagram.png"><img src="../assets/tailstorm-rewards-diagram.png" width="1600" height="900" alt="Two-panel diagram titled &quot;One block, many winners&quot;. Left, &quot;Today: winner takes all&quot;: one block sends the whole reward to Miner A, while miners B, C and D get nothing. Right, &quot;Tailstorm: reward split across subblocks&quot;: a small DAG of subblocks mined by miners A, B, C and D feeds a summary block, which splits the reward into a share for each miner. Footnote: illustrative; in the current Nexa code the reward is split by how well-linked each subblock is." loading="lazy"></a></figure>
+<h2>Why smaller miners benefit, and why pools may matter less</h2>
+<p><strong>1. Payouts become frequent instead of lumpy.</strong>
+The paper simulated one strong miner and one weak miner over many simulated days. Higher <em>k</em> gave more frequent rewards and lower day-to-day volatility.</p>
+<p>To illustrate (my own arithmetic, idealised: no orphans, equal shares), take a miner with 1% of the hash rate. Here <em>k</em> is the number of pieces of work per block, including the summary, and the chance of winning at least one is 1 − 0.99^k:</p>
+<table>
+<thead>
+<tr>
+<th>Setup</th>
+<th>Chance of earning something in a given 2-minute block</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Today (1 proof of work per block)</td>
+<td>about 1%</td>
+</tr>
+<tr>
+<td>Tailstorm, k = 40</td>
+<td>33.1%</td>
+</tr>
+<tr>
+<td>Tailstorm, k = 120</td>
+<td>70.1%</td>
+</tr>
+</tbody>
+</table>
+<p>Total expected income stays the same. What changes is how <em>smooth</em> it is.</p>
+<p><strong>2. Less unfairness from network delays.</strong>
+In Bitcoin, when two blocks are found at about the same time, one is orphaned, and the bigger miner is more likely to win that race. Tailstorm's analysis gives a lower upper bound on orphan rates than Bitcoin's at the same block interval. In simulation, the weak miner got closer to its fair share. The paper also shows a design benefit: block interval (for fairness) and subblock interval (for frequent payouts) can be tuned separately, instead of trading one against the other as Bitcoin must.</p>
+<p><strong>3. Withholding blocks pays less, in the paper's model.</strong>
+"Selfish mining" means a big miner hides blocks to gain an unfair share. In the paper's attack search, Tailstorm needed the largest share of hash rate before dishonest strategies paid off, compared with Bitcoin and a parallel-PoW protocol without Tailstorm's reward rule. That matters for decentralisation, because a protocol that rewards size invites consolidation.</p>
+<p>One caveat: that result is for the paper's reward rule. Nexa splits the reward differently (see above), and nobody has yet analysed whether Nexa's rule resists withholding as well. It's an open research question.</p>
+<h2>What the research does <em>not</em> claim</h2>
+<p>I want to be precise here:</p>
+<ul>
+<li>The paper measures <strong>fairness</strong> (are rewards proportional to hash rate?), <strong>reward volatility</strong>, <strong>orphan rates</strong> and <strong>resistance to withholding attacks</strong>.</li>
+<li>It <em>states</em> that unfair or inconsistent reward allocation "encourages the formation of pools and centralization". But it does <strong>not</strong> model pools, pool fees, or miners' decisions to join or leave pools. "Smaller pools become more viable" is my reasoning from lower variance and better fairness. It is not a measured result in the paper.</li>
+<li>The authors themselves say Tailstorm <strong>reduces but cannot fully remove</strong> centralisation pressure, because economies of scale in energy and hardware affect every proof-of-work coin.</li>
+<li>Nexa's reward weighting is its own implementation of the idea. In the paper, the total paid shrinks when the subblock tree branches. Nexa's current code always pays the full reward and changes only how it is split. How that behaves under adversarial conditions deserves independent review.</li>
+</ul>
+<h2>Status</h2>
+<p>The Tailstorm code shipped in Nexa Full-Node 2.2.0.0 and is dormant until Hard Fork 2 activates in the next release. The roadmap targets the 2026 hard fork. The spec page lists 1 November 2026, while the released code still carries a placeholder date, so treat the date as provisional.</p>
+<h2>For developers</h2>
+<p>A network that pays many miners every block is the kind of base layer I want under payment apps: confirmations in seconds, and security that doesn't depend on a handful of pools. If you are building payments, point-of-sale, tokens or mining tooling (pool dashboards, payout trackers, <code>gettailstorminfo</code> monitors), start now:</p>
+<ul>
+<li>Build On Nexa: <a href="https://build.nexa.org" rel="noopener">https://build.nexa.org</a></li>
+<li>Hard Fork 2 spec: <a href="https://spec.nexa.org/upgrades/hard-fork-2/" rel="noopener">https://spec.nexa.org/upgrades/hard-fork-2/</a></li>
+<li>Tailstorm implementation notes: <a href="https://gitlab.com/nexa/nexa/-/blob/dev/doc/tailstorm.md" rel="noopener">https://gitlab.com/nexa/nexa/-/blob/dev/doc/tailstorm.md</a></li>
+<li>The paper: <a href="https://arxiv.org/abs/2306.12206" rel="noopener">https://arxiv.org/abs/2306.12206</a></li>
+</ul>
+<p>Building in Scandinavia? Reply or DM me.</p>
+</article>
+<footer>
+  Article by jQrgen (Jørgen S. Notland), 2 October 2026. Watch Tailstorm subblocks and summary blocks being mined on a private test network: <a href="../">Nexa Tailstorm live DAG</a>. Also: <a href="https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9" rel="noopener">&ldquo;Seconds, Not Minutes: What Tailstorm Means for Developers Building on Nexa&rdquo;</a> on Medium.
+</footer>
+</body>
+</html>
