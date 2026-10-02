@@ -21,6 +21,15 @@ h1 .g{color:var(--gold)}
 .terms{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:10px 0 2px}.terms dt{color:var(--gold);font-weight:600}.terms dd{margin:0}#terms summary{cursor:pointer}
 .stale{display:none;margin:0 0 14px;padding:10px 14px;background:#3a1a12;border:1px solid var(--warn);color:#ffd2c4;border-radius:8px;font-weight:600}
 .stale.on{display:block}
+.simbanner{display:none;margin:0 0 14px;padding:12px 16px;border:2px solid #f5b942;border-radius:8px;color:#fff3d6;font-weight:600;
+  background:repeating-linear-gradient(135deg,#3a2c0c 0 18px,#2e230a 18px 36px)}
+.simbanner b{color:#ffd166;text-transform:uppercase;letter-spacing:.06em;margin-right:6px}
+.simbanner span{font-weight:500;color:#f1e3c0}
+html.simmode .simbanner{display:block}
+.simword{display:none} html.simmode .simword{display:inline;color:#ffd166} html.simmode .liveword{display:none}
+html.simmode #stale{display:none}
+html.simmode #sec-cur h2::after,html.simmode #sec-prev h2::after{content:"SIMULATED";margin-left:10px;padding:1px 7px;border:1px solid #f5b942;border-radius:4px;color:#ffd166;font-size:11px;letter-spacing:.1em;vertical-align:middle}
+html.simmode #c-age{color:#ffd166}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
 .card .k{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
@@ -89,6 +98,7 @@ html.kiosk .grp{flex:1 1 0;min-height:0;display:flex;flex-direction:column;paddi
 html.kiosk .grp .hd{font-size:.78em;white-space:nowrap;overflow:hidden}
 html.kiosk .grp .hd b{font-size:1.1em}
 html.kiosk .grp svg{flex:1 1 0;min-height:0;height:100%}
+html.kiosk.simmode .simbanner{position:fixed;top:1.2vh;left:50%;transform:translateX(-50%);z-index:60;font-size:1.1em;max-width:80vw;box-shadow:0 6px 30px #000c}
 html.kiosk .stale{position:fixed;top:1.2vh;left:50%;transform:translateX(-50%);z-index:60;font-size:1.1em;max-width:80vw;box-shadow:0 6px 30px #000c}
 html.kiosk.idle,html.kiosk.idle *{cursor:none!important}
 html.kiosk #kbar{display:flex;position:fixed;right:1.2vw;bottom:1.2vh;gap:10px;z-index:70;transition:opacity .4s}
@@ -174,6 +184,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
   html:not(.kiosk) .wrap>*{min-width:0}
   html:not(.kiosk) .wrap>header{order:-4}
   html:not(.kiosk) .wrap>.stale{order:-3}
+  html:not(.kiosk) .wrap>.simbanner{order:-4}
   html:not(.kiosk) #sec-cur{order:-2}
   html:not(.kiosk) .wrap>.cards{order:-1}
   html:not(.kiosk) .wrap>header{margin-bottom:12px}
@@ -183,14 +194,14 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 <body>
 <div class="wrap">
 <header>
-  <h1><span class="g">Nexa Tailstorm</span> · live blocks</h1>
+  <h1><span class="g">Nexa Tailstorm</span> · <span class="liveword">live</span><span class="simword">simulated</span> blocks</h1>
   <span class="tag">STORMTEST DEMO · 4 TEST MINERS</span>
   <span class="rd" id="explainer">Read the explainer: <a href="https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9" rel="noopener">article on Medium</a> · <a href="https://x.com/jQrgensn/status/2105689136757604437" rel="noopener">thread on X</a> · <a href="mining-rewards/">How Tailstorm decentralizes mining rewards</a></span>
   <button type="button" class="fsbtn" id="fsbtn" title="Show this page full screen as an office display (shortcut: F, exit: Esc)">⛶ Full screen<kbd>F</kbd></button>
   <span class="kclock" id="kclock"></span>
 </header>
 <aside id="explain" aria-label="What you're watching">
-<div class="headline">Live: ~1 s blocks. Merged, not wasted.</div>
+<div class="headline"><span class="liveword">Live</span><span class="simword">Simulated</span>: ~1 s blocks. Merged, not wasted.</div>
 <h2>What you&#39;re watching</h2>
 <p class="purpose"><b>Fast, fair confirmations.</b> One summary closes each round.</p>
 <dl class="lg">
@@ -217,6 +228,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 <dt>Width and depth</dt><dd>Width is the largest number of subblocks found side by side (in parallel) in one DAG, and depth is the length of its longest path. A wider DAG means more parallel mining. A DAG with width 1 is a plain chain.</dd>
 <dt>Stormtest</dt><dd>A private Nexa test network with Tailstorm switched on. It is used only for this demo and isn't mainnet. On mainnet, Tailstorm is implemented but its activation is still pending.</dd>
 </dl></details>
+<div class="simbanner" id="simBanner" role="status" aria-live="polite"><b>Simulated view: live feed offline.</b> <span>The DAG and numbers below are generated in your browser to show how Tailstorm behaves; they are not real stormtest data. The page keeps checking the live feed and switches back automatically when it returns.</span></div>
 <div class="stale" id="stale">Data is stale.</div>
 <div id="summaryBanner" role="status" aria-live="polite"></div>
 <div class="cards">
@@ -251,6 +263,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 </dl></details>
 <section class="note" id="changelog"><b>Changelog</b> <span style="color:#8a93a6;font-size:13px">(newest first, Oslo time)</span>
 <ol>
+<li><time>2 Oct 2026, 12:30</time>When the live feed is offline or stale, the page now shows a clearly labelled simulated DAG (generated in your browser) instead of an empty view, and switches back to live data automatically when the feed returns.</li>
 <li><time>2 Oct 2026, 04:45</time>New article: <a href="mining-rewards/">&ldquo;One Block, Many Winners: How Tailstorm Decentralizes Mining Rewards on Nexa&rdquo;</a>, with a diagram, linked in the header and the footer.</li>
 <li><time>1 Oct 2026, 18:50</time>On phones, the live DAG now comes first, right under the title, with the stats and the explainer below it.</li>
 <li><time>1 Oct 2026, 18:30</time>Links to the explainer article on Medium and the thread on X, in the header and the footer.</li>
@@ -284,6 +297,10 @@ const $ = id => document.getElementById(id);
 const NS = "http://www.w3.org/2000/svg";
 let dataUrl = new URLSearchParams(location.search).get("src");
 let data = null, lastOkAt = 0, fails = 0, lastPointerAt = 0, lastSeq = -1, lastHeight = null;
+// live = last snapshot from the real feed; data = what is drawn (live, or the in-browser simulation when the feed is down)
+let live = null, mode = "live";
+const SIM_PARAM = new URLSearchParams(location.search).get("sim");   // ?sim=1 force the simulation, ?sim=0 never simulate
+const SIM_AFTER_MS = 8000;   // with no live data at all, start simulating this long after page load
 const known = new Set(); let firstRender = true;
 
 function el(tag, attrs, parent, text) {
@@ -318,21 +335,110 @@ async function poll() {
     const r = await tfetch(dataUrl + (dataUrl.includes("?") ? "&" : "?") + "t=" + Date.now());
     if (!r.ok) throw new Error("HTTP " + r.status);
     const j = await r.json();
-    if (j.k) K = j.k;
-    data = j; lastOkAt = Date.now(); fails = 0;
-    $("src").textContent = " Data endpoint: " + dataUrl.replace(/^https?:\/\//, "") + " · seq " + j.seq;
-    if (j.seq !== lastSeq) { lastSeq = j.seq; render(); }
+    live = j; lastOkAt = Date.now(); fails = 0;
+    updateMode();
+    if (mode === "live") {
+      if (j.k) K = j.k;
+      data = j;
+      $("src").textContent = " Data endpoint: " + dataUrl.replace(/^https?:\/\//, "") + " · seq " + j.seq;
+      if (j.seq !== lastSeq) { lastSeq = j.seq; render(); }
+    }
   } catch (e) {
     fails++;
     // the tunnel URL changes when the publisher restarts: re-read the pointer (at most once a minute)
     if (fails >= 3 && Date.now() - lastPointerAt > 60000 && !new URLSearchParams(location.search).get("src")) dataUrl = null;
   }
   busy = false;
+  updateMode();
+  tick();
+}
+
+// ---- fallback: simulated DAG while the live feed is unreachable or stale
+const liveFresh = () => !!(live && live.ok && Date.now() / 1000 - live.ts <= STALE_S);
+function wantSim() {
+  if (SIM_PARAM === "1") return true;
+  if (SIM_PARAM === "0" || liveFresh()) return false;
+  if (live) return true;                                        // we had live data, but it is stale or the node is down
+  return fails >= 2 || Date.now() - bootAt > SIM_AFTER_MS;      // never got live data
+}
+function resetView() { known.clear(); firstRender = true; lastHeight = null; lastSeq = -1; }
+function updateMode() {
+  const m = wantSim() ? "sim" : "live";
+  if (m === mode) return;
+  mode = m; resetView();
+  document.documentElement.classList.toggle("simmode", mode === "sim");
+  if (mode === "sim") { sim.start(live); simStep(); }
+  else { sim.stop(); if (live) { if (live.k) K = live.k; data = live; lastSeq = live.seq; render(); } }
+}
+const sim = (() => {
+  const rnd = () => Math.floor(Math.random() * 0xffffffff).toString(16).padStart(8, "0");
+  const hash = () => rnd() + rnd();
+  let st = null, timer = null;
+  const miner = () => 1 + Math.floor(Math.random() * 4);
+  function tips(subs) { const used = new Set(); subs.forEach(s => s.p.forEach(x => used.add(x))); return subs.filter(s => !used.has(s.h)); }
+  function addSub(t) {
+    const subs = st.cur.subs, tp = tips(subs);
+    let p;
+    if (!subs.length) p = [];
+    else if (tp.length > 1 && Math.random() < 0.6) p = tp.slice(-3).map(s => s.h);        // merge the branches
+    else if (Math.random() < 0.4 && subs.length > 1) { const last = subs[subs.length - 1]; p = last.p.length ? last.p.slice() : [last.h]; }  // parallel find: branch
+    else p = [tp[tp.length - 1].h];
+    const s = {h: hash(), p, t: Math.floor(t), m: miner()};
+    subs.push(s); st.lastMined = Math.floor(t); st.minedLog.push(s);
+  }
+  function closeRound(t) {
+    const c = st.cur, b = {height: c.base.height + 1, hash: hash(), prev: c.base.hash, time: Math.floor(t), mdv: 2,
+      nsub: c.subs.length, nunc: 0, tx: 1, m: miner(), subs: c.subs};
+    st.prev.unshift(b); st.prev = st.prev.slice(0, 5);
+    st.cur = {base: {height: b.height, hash: b.hash}, subs: [], uncles: []};
+    st.height = b.height; st.tiptime = b.time;
+  }
+  function advance(t) {   // one find at time t: a subblock, or the summary block once the round holds K-1 subblocks
+    if (st.cur.subs.length >= K - 1) closeRound(t); else addSub(t);
+  }
+  function snapshot() {
+    const now = Date.now() / 1000, tp = tips(st.cur.subs);
+    st.minedLog = st.minedLog.filter(s => s.t > now - 300);
+    const per = {1: 0, 2: 0, 3: 0, 4: 0}; st.minedLog.forEach(s => per[s.m]++);
+    st.seq++;
+    return {v: 1, ok: true, simulated: true, ts: now, chain: "simulated", k: K, height: st.height, tip: st.cur.base.hash, tiptime: st.tiptime,
+      active: true, dagtip: tp.length ? tp[tp.length - 1].h : st.cur.base.hash, bestdag: st.cur.subs.length, uncles: 0, total: st.minedLog.length,
+      rate_per_min: Math.round(st.minedLog.filter(s => s.t > now - 60).length), miner_running: true, last_mined: st.lastMined,
+      miners: 4, per_miner_5min: per, cur: {base: st.cur.base, subs: st.cur.subs.slice(), uncles: []}, prev: st.prev.slice(), seq: st.seq};
+  }
+  return {
+    start(from) {
+      if (st) { schedule(); return; }
+      const now = Date.now() / 1000, h0 = (from && from.height) || 1000;
+      st = {height: h0 - 3, tiptime: now, cur: {base: {height: h0 - 3, hash: hash()}, subs: [], uncles: []}, prev: [], seq: 0, lastMined: now, minedLog: []};
+      // pre-fill 3 finished rounds and part of the current one, back-dated at ~1 find/s, so the view is not empty
+      const n = 3 * K + Math.floor(K * 0.35); let t = now - n;
+      for (let i = 0; i < n; i++) { advance(t); t += 1; }
+      schedule();
+    },
+    stop() { clearTimeout(timer); timer = null; },
+    step() { advance(Date.now() / 1000); return snapshot(); },
+    peek: snapshot,
+  };
+  function schedule() {   // ~1 find per second on average (4 miners), exponential gaps like the real miners
+    clearTimeout(timer);
+    const gap = Math.min(6000, Math.max(250, -Math.log(1 - Math.random()) * 1000));
+    timer = setTimeout(() => { if (mode !== "sim") return; data = sim.step(); render(); tick(); schedule(); }, gap);
+  }
+})();
+function simStep() {
+  data = sim.peek(); render();
+  $("src").textContent = " Simulated in your browser (live feed offline" + (dataUrl ? ": " + dataUrl.replace(/^https?:\/\//, "") : "") + ")";
   tick();
 }
 
 function tick() {
   const st = $("stale");
+  if (mode === "sim") {
+    $("c-age").innerHTML = "SIM<small> live: " + (live ? Math.round(Date.now() / 1000 - live.ts) + " s old" : "offline") + "</small>";
+    $("c-age").className = "v";
+    st.textContent = ""; st.classList.remove("on"); return;
+  }
   const age = data ? Date.now() / 1000 - data.ts : null;
   if (age != null) {
     $("c-age").innerHTML = (age < 0 ? 0 : age).toFixed(age < 10 ? 1 : 0) + "<small> s ago</small>";
@@ -669,7 +775,7 @@ function render() {
 }
 
 window.addEventListener("resize", () => { clearTimeout(window._rz); window._rz = setTimeout(render, 200); });
-applyLayout(); poll(); setInterval(poll, POLL_MS); setInterval(tick, 1000);
+applyLayout(); poll(); setInterval(poll, POLL_MS); setInterval(() => { updateMode(); tick(); }, 1000);
 </script>
 </body>
 </html>
