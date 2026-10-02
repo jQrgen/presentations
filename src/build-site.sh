@@ -27,7 +27,7 @@ node home.js data "$D" "$REPO"
 touch "$D/.nojekyll"
 # sources
 mkdir -p "$OUT/src/orgchart"; cp orgchart/*.js orgchart/*.sh "$OUT/src/orgchart/" 2>/dev/null || true
-cp build.js chart.js content-en.js content-no.js site.js site-gamejam.js viewer.js theme.js home.js gl_commit.py package.json build-site.sh "$OUT/src/"
+cp build.js chart.js content-en.js content-no.js site.js site-gamejam.js viewer.js theme.js share.js home.js gl_commit.py package.json build-site.sh "$OUT/src/"
 cp brand/*.svg "$OUT/src/brand/"; cp data/*.json "$OUT/src/data/"
 cat > "$OUT/.gitlab-ci.yml" <<'YML'
 # Mirrors docs/ to GitLab Pages (GitHub Pages serves docs/ directly).

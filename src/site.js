@@ -20,6 +20,7 @@ const spec = {
   pptxUrl: process.env.PPTX_URL || "",
   pdfUrl: process.env.PDF_URL || "",
   depth: "../../",
+  share: { url: `https://jqrgen.github.io/presentations/nexa-vs-bitcoin-ethereum/${LANG}/` },
 };
 
 const out = writeViewer(spec, path.join(__dirname, `site-${LANG}`));

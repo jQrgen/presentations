@@ -42,12 +42,22 @@ footer a{color:var(--gold)}
   td:last-child{white-space:normal}
 }
 </style>
+<!-- share:begin --><style>
+.share{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:14px 0}
+.share-label{font-size:13px;color:var(--muted,#4B5563);margin-right:2px}
+.share a,.share button{font:inherit;font-size:13.5px;line-height:1.2;color:var(--ink,#000);background:var(--paper,#fff);border:1px solid var(--line,#000);padding:5px 10px;text-decoration:none;cursor:pointer}
+.share a:hover,.share button:hover{background:var(--band,#000);color:var(--band-ink,#fff)}
+.share a:focus-visible,.share button:focus-visible{outline:2px solid var(--ink,#000);outline-offset:2px}
+.share-status{font-size:13px;color:var(--muted,#4B5563)}
+.share{--ink:var(--text);--paper:var(--panel);--line:var(--golddim);--band:var(--gold);--band-ink:#0a0c10}
+</style><!-- share:end -->
 </head>
 <body>
 <nav class="top" aria-label="Breadcrumb"><a href="../">&larr; Nexa Tailstorm: live DAG</a> · <a href="../../">Jørgen S. Notland: all talks, articles and papers</a></nav>
 <article>
 <h1>One Block, Many Winners: How Tailstorm Decentralizes Mining Rewards on Nexa</h1>
 <p><em>By jQrgen (Jørgen S. Notland)</em></p>
+<!-- share:begin --><nav class="share" aria-label="Share this article"><span class="share-label">Share:</span><a class="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Ftailstorm%2Fmining-rewards%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="share-x" href="https://x.com/intent/post?text=One%20Block%2C%20Many%20Winners%3A%20How%20Tailstorm%20Decentralizes%20Mining%20Rewards%20on%20Nexa&amp;url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Ftailstorm%2Fmining-rewards%2F" target="_blank" rel="noopener noreferrer">X</a><a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Ftailstorm%2Fmining-rewards%2F" target="_blank" rel="noopener noreferrer">Facebook</a><a class="share-email" href="mailto:?subject=One%20Block%2C%20Many%20Winners%3A%20How%20Tailstorm%20Decentralizes%20Mining%20Rewards%20on%20Nexa&amp;body=You%20might%20find%20this%20interesting%3A%0Ahttps%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Ftailstorm%2Fmining-rewards%2F">Email</a><button type="button" class="share-copy" data-url="https://jqrgen.github.io/presentations/tailstorm/mining-rewards/" data-done="Link copied">Copy link</button><span class="share-status" role="status" aria-live="polite"></span></nav><!-- share:end -->
 <hr />
 <p>In Bitcoin-style mining, one miner wins each block and everyone else gets nothing for that round. If you are small, you can go a long time between payouts. So small miners join big pools, and big pools get bigger.</p>
 <p>Tailstorm, the consensus upgrade coming to Nexa with Hard Fork 2, changes that maths. Every block is assembled from many smaller proofs of work, and the block reward is split across their miners. Here is how that works, what the research actually shows, and what is still open.</p>
@@ -116,9 +126,19 @@ In Bitcoin, when two blocks are found at about the same time, one is orphaned, a
 <li>The paper: <a href="https://arxiv.org/abs/2306.12206" rel="noopener">https://arxiv.org/abs/2306.12206</a></li>
 </ul>
 <p>Building in Scandinavia? Reply or DM me.</p>
+<!-- share:begin --><nav class="share" aria-label="Share this article"><span class="share-label">Share:</span><a class="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Ftailstorm%2Fmining-rewards%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="share-x" href="https://x.com/intent/post?text=One%20Block%2C%20Many%20Winners%3A%20How%20Tailstorm%20Decentralizes%20Mining%20Rewards%20on%20Nexa&amp;url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Ftailstorm%2Fmining-rewards%2F" target="_blank" rel="noopener noreferrer">X</a><a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Ftailstorm%2Fmining-rewards%2F" target="_blank" rel="noopener noreferrer">Facebook</a><a class="share-email" href="mailto:?subject=One%20Block%2C%20Many%20Winners%3A%20How%20Tailstorm%20Decentralizes%20Mining%20Rewards%20on%20Nexa&amp;body=You%20might%20find%20this%20interesting%3A%0Ahttps%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Ftailstorm%2Fmining-rewards%2F">Email</a><button type="button" class="share-copy" data-url="https://jqrgen.github.io/presentations/tailstorm/mining-rewards/" data-done="Link copied">Copy link</button><span class="share-status" role="status" aria-live="polite"></span></nav><!-- share:end -->
 </article>
 <footer>
   Article by jQrgen (Jørgen S. Notland), 2 October 2026. Watch Tailstorm subblocks and summary blocks being mined on a private test network: <a href="../">Nexa Tailstorm live DAG</a>. Also: <a href="https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9" rel="noopener">&ldquo;Seconds, Not Minutes: What Tailstorm Means for Developers Building on Nexa&rdquo;</a> on Medium.
 </footer>
+<!-- share:begin --><script>
+document.addEventListener("click", function (e) {
+  var b = e.target.closest && e.target.closest(".share-copy"); if (!b) return;
+  var url = b.getAttribute("data-url"), st = b.parentNode.querySelector(".share-status");
+  var done = function () { if (st) { st.textContent = b.getAttribute("data-done"); setTimeout(function () { st.textContent = ""; }, 2500); } };
+  var fallback = function () { var i = document.createElement("input"); i.value = url; document.body.appendChild(i); i.select(); try { document.execCommand("copy"); done(); } catch (x) { window.prompt("", url); } i.remove(); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, fallback); else fallback();
+});
+</script><!-- share:end -->
 </body>
 </html>

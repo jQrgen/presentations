@@ -1,10 +1,12 @@
 // Generic slide viewer page in the personal-site theme (the slides themselves carry the deck's own branding).
 //   const { writeViewer } = require("./viewer.js"); writeViewer(spec, outDir)
-// spec: { lang, pageTitle, meta, slides: [{ title, notes }], pptxUrl?, pdfUrl?, homeUrl?, depth? }
+// spec: { lang, pageTitle, meta, slides: [{ title, notes }], pptxUrl?, pdfUrl?, homeUrl?, depth?, share?: { url, title } }
+// share (optional): adds the share buttons from share.js under the heading; pages without it are unchanged.
 // Slides are expected at <outDir>/slides/NN.png (1600x900).
 const fs = require("fs");
 const path = require("path");
 const { head, esc } = require("./theme.js");
+const share = require("./share.js");
 
 const UI = {
   en: { of: "of", prev: "Previous slide", next: "Next slide", notes: "Notes", fullscreen: "Fullscreen",
@@ -51,12 +53,13 @@ function renderViewer(spec) {
   const U = UI[spec.lang] || UI.en;
   const slides = spec.slides.map((s, i) => ({ n: i + 1, title: s.title, notes: s.notes || "", img: `slides/${String(i + 1).padStart(2, "0")}.png` }));
   const hasNotes = slides.some((s) => s.notes.trim().length > 0);
-  return head(spec.pageTitle).replace("</style>", EXTRA + "</style>").replace('<html lang="en">', `<html lang="${U.lang}">`) + `<div class="band"><div class="inner"><a class="name" href="${spec.depth ?? "../../"}">J\u00f8rgen S. Notland</a><span class="tag">${esc(spec.homeLabel || "All talks, articles and papers")}</span></div></div>` + `
+  return head(spec.pageTitle).replace("</style>", EXTRA + (spec.share ? share.CSS : "") + "</style>").replace('<html lang="en">', `<html lang="${U.lang}">`) + `<div class="band"><div class="inner"><a class="name" href="${spec.depth ?? "../../"}">J\u00f8rgen S. Notland</a><span class="tag">${esc(spec.homeLabel || "All talks, articles and papers")}</span></div></div>` + `
 <div class="page">
   <header class="deck-head">
     <h1>${esc(spec.pageTitle)}</h1>
     <span class="meta">${esc(spec.meta)}</span>
-  </header>
+  </header>${spec.share ? `
+  ${share.bar({ url: spec.share.url, title: spec.share.title || spec.pageTitle, lang: U.lang === "no" || U.lang === "nb" ? "no" : "en" })}` : ""}
   <main>
     <section aria-label="${esc(spec.pageTitle)}">
       <figure class="frame" id="frame" tabindex="0">
@@ -141,7 +144,7 @@ ${slides.map((s) => `        <li><button type="button" data-n="${s.n}"${s.n === 
   var h0 = parseInt(location.hash.slice(1), 10);
   go(h0>=1 && h0<=S.length ? h0-1 : 0, false);
 })();
-</script>
+</script>${spec.share ? "\n" + share.SCRIPT : ""}
 </body>
 </html>
 `;
