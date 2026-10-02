@@ -92,6 +92,13 @@ pre.mermaid{background:var(--paper);color:var(--ink);padding:0;margin:0;text-ali
 ul.check{list-style:none;padding-left:0}
 ul.check li{padding-left:28px;position:relative;margin:6px 0}
 ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:17px}
+
+.share{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:14px 0}
+.share-label{font-size:13px;color:var(--muted,#4B5563);margin-right:2px}
+.share a,.share button{font:inherit;font-size:13.5px;line-height:1.2;color:var(--ink,#000);background:var(--paper,#fff);border:1px solid var(--line,#000);padding:5px 10px;text-decoration:none;cursor:pointer}
+.share a:hover,.share button:hover{background:var(--band,#000);color:var(--band-ink,#fff)}
+.share a:focus-visible,.share button:focus-visible{outline:2px solid var(--ink,#000);outline-offset:2px}
+.share-status{font-size:13px;color:var(--muted,#4B5563)}
 </style>
 </head>
 <body>
@@ -107,6 +114,7 @@ ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:
     <p class="lede">Slik fører jQrgenCorp, et norsk enkeltpersonforetak (ENK), regnskap og MVA med et lite team av AI-agenter i Grok Bot. Agentene leser banken og kvitteringene fra Folio og regnskapet fra Fiken, lager utkast og kontrollerer hverandre. Eieren godkjenner og sender inn selv.</p>
     <p class="updated">Jørgen S. Notland (jQrgen), Oslo · <time datetime="2026-10-02">2. oktober 2026</time></p>
   </header>
+  <nav class="share" aria-label="Del artikkelen"><span class="share-label">Del:</span><a class="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="share-x" href="https://x.com/intent/post?text=Regnskap%20med%20et%20AI-regnskapsteam%3A%20Folio%20MCP%20%2B%20Fiken%20API%20%2B%20Grok%20Bot&amp;url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F" target="_blank" rel="noopener noreferrer">X</a><a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F" target="_blank" rel="noopener noreferrer">Facebook</a><a class="share-email" href="mailto:?subject=Regnskap%20med%20et%20AI-regnskapsteam%3A%20Folio%20MCP%20%2B%20Fiken%20API%20%2B%20Grok%20Bot&amp;body=Kanskje%20interessant%20for%20deg%3A%0Ahttps%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F">E-post</a><button type="button" class="share-copy" data-url="https://jqrgen.github.io/presentations/jqrgencorp-regnskap/" data-done="Lenken er kopiert">Kopier lenke</button><span class="share-status" role="status" aria-live="polite"></span></nav>
   <p class="disc"><b>Ansvarsfraskrivelse:</b> Dette er ikke regnskapsråd, skatteråd eller juridisk rådgivning, bare en beskrivelse av hvordan jeg har satt opp mitt eget arbeid. «Regnskapsfører», «revisor» og de andre er AI-roller i en app, ikke autoriserte fagpersoner. Revisoren er en kontrollør som bare kan lese, ikke en statsautorisert eller registrert revisor. Ansvaret for regnskapet og MVA-meldingen ligger hos eieren. Snakk med en autorisert regnskapsfører hvis du er usikker.</p>
   <p>Siden inneholder ingen regnskapstall: ingen beløp, saldoer, kunder eller kontoer. Den beskriver bare oppsettet.</p>
 
@@ -233,6 +241,7 @@ ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:
     <li>Første gang: gå gjennom hele utkastet selv, og sammenlign med MVA-oppgaven i Fiken før du sender.</li>
   </ul>
   <p class="disc">Dette er ikke regnskapsråd. Agentene er AI-roller, ikke autoriserte regnskapsførere eller revisorer. Eieren har alltid ansvaret og siste ord.</p>
+  <nav class="share" aria-label="Del artikkelen"><span class="share-label">Del:</span><a class="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="share-x" href="https://x.com/intent/post?text=Regnskap%20med%20et%20AI-regnskapsteam%3A%20Folio%20MCP%20%2B%20Fiken%20API%20%2B%20Grok%20Bot&amp;url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F" target="_blank" rel="noopener noreferrer">X</a><a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F" target="_blank" rel="noopener noreferrer">Facebook</a><a class="share-email" href="mailto:?subject=Regnskap%20med%20et%20AI-regnskapsteam%3A%20Folio%20MCP%20%2B%20Fiken%20API%20%2B%20Grok%20Bot&amp;body=Kanskje%20interessant%20for%20deg%3A%0Ahttps%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F">E-post</a><button type="button" class="share-copy" data-url="https://jqrgen.github.io/presentations/jqrgencorp-regnskap/" data-done="Lenken er kopiert">Kopier lenke</button><span class="share-status" role="status" aria-live="polite"></span></nav>
 </article>
 
 <article class="lang" lang="en" id="art-en">
@@ -241,6 +250,7 @@ ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:
     <p class="lede">How jQrgenCorp, a Norwegian sole proprietorship (ENK), does its bookkeeping and VAT (MVA) with a small team of AI agents in Grok Bot. The agents read the bank and receipts from Folio and the books from Fiken, draft, and check each other. The owner approves and submits himself.</p>
     <p class="updated">Jørgen S. Notland (jQrgen), Oslo · <time datetime="2026-10-02">2 October 2026</time></p>
   </header>
+  <nav class="share" aria-label="Share this article"><span class="share-label">Share:</span><a class="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F%23en" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="share-x" href="https://x.com/intent/post?text=Accounting%20with%20an%20AI%20accounting%20team%3A%20Folio%20MCP%20%2B%20Fiken%20API%20%2B%20Grok%20Bot&amp;url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F%23en" target="_blank" rel="noopener noreferrer">X</a><a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F%23en" target="_blank" rel="noopener noreferrer">Facebook</a><a class="share-email" href="mailto:?subject=Accounting%20with%20an%20AI%20accounting%20team%3A%20Folio%20MCP%20%2B%20Fiken%20API%20%2B%20Grok%20Bot&amp;body=You%20might%20find%20this%20interesting%3A%0Ahttps%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F%23en">Email</a><button type="button" class="share-copy" data-url="https://jqrgen.github.io/presentations/jqrgencorp-regnskap/#en" data-done="Link copied">Copy link</button><span class="share-status" role="status" aria-live="polite"></span></nav>
   <p class="disc"><b>Disclaimer:</b> This is not accounting, tax or legal advice. It only describes how I set up my own work. The "accountant", the "revisor" and the others are AI roles in an app, not licensed professionals. The revisor is a reviewer that can only read, not a state-authorised or registered auditor. The owner is responsible for the books and the VAT return. If in doubt, talk to an authorised accountant.</p>
   <p>This page contains no accounting figures: no amounts, balances, customers or accounts. It only describes the setup.</p>
 
@@ -367,9 +377,19 @@ ul.check li::before{content:"☐";position:absolute;left:4px;top:-1px;font-size:
     <li>The first time, review the whole draft yourself, and compare it with the VAT report in Fiken before you submit.</li>
   </ul>
   <p class="disc">This is not accounting advice. The agents are AI roles, not authorised accountants or auditors. The owner is always responsible and has the final word.</p>
+  <nav class="share" aria-label="Share this article"><span class="share-label">Share:</span><a class="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F%23en" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="share-x" href="https://x.com/intent/post?text=Accounting%20with%20an%20AI%20accounting%20team%3A%20Folio%20MCP%20%2B%20Fiken%20API%20%2B%20Grok%20Bot&amp;url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F%23en" target="_blank" rel="noopener noreferrer">X</a><a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F%23en" target="_blank" rel="noopener noreferrer">Facebook</a><a class="share-email" href="mailto:?subject=Accounting%20with%20an%20AI%20accounting%20team%3A%20Folio%20MCP%20%2B%20Fiken%20API%20%2B%20Grok%20Bot&amp;body=You%20might%20find%20this%20interesting%3A%0Ahttps%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Fjqrgencorp-regnskap%2F%23en">Email</a><button type="button" class="share-copy" data-url="https://jqrgen.github.io/presentations/jqrgencorp-regnskap/#en" data-done="Link copied">Copy link</button><span class="share-status" role="status" aria-live="polite"></span></nav>
 </article>
   <footer class="site">Generert av src/orgchart/build-jqrgencorp-regnskap.js · <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
 </div>
+<script>
+document.addEventListener("click", function (e) {
+  var b = e.target.closest && e.target.closest(".share-copy"); if (!b) return;
+  var url = b.getAttribute("data-url"), st = b.parentNode.querySelector(".share-status");
+  var done = function () { if (st) { st.textContent = b.getAttribute("data-done"); setTimeout(function () { st.textContent = ""; }, 2500); } };
+  var fallback = function () { var i = document.createElement("input"); i.value = url; document.body.appendChild(i); i.select(); try { document.execCommand("copy"); done(); } catch (x) { window.prompt("", url); } i.remove(); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, fallback); else fallback();
+});
+</script>
 <script type="module">
 import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict", flowchart: { htmlLabels: false } });
