@@ -265,7 +265,7 @@ html.kiosk .same{font-size:clamp(16px,1.25vw,36px);line-height:1.2;margin-top:.6
   html:not(.kiosk) .viewtabs button{padding:8px 10px}
 }
 @media (max-width:768px){ html:not(.kiosk) .viewtabs,html:not(.kiosk) #sec-reward{order:-2} }
-/* ===== Live reward split panel (replaces Option B; from live-split/mock-frozen-1648/split.css) ===== */
+/* ===== Live reward split panel (replaces Option B; from live-split/mock-v3/split.css) ===== */
 #sec-reward,.viewtabs,.rtabs{display:none!important}
 #sec-split{--ls-muted:#b4bac6;--ls-gold:#e0b341;border-color:#3a3320;font-variant-numeric:tabular-nums}
 #sec-split .tn,#sec-split .num,#sec-split .amt{font-variant-numeric:tabular-nums}
@@ -477,7 +477,42 @@ html.kiosk .ls-tbl{grid-template-columns:4.3em repeat(4,minmax(0,1fr)) 4.6em}
 html.kiosk .ls-tbl .tot.lsrd{font-size:.66em}
 html.kiosk .ls-key{white-space:normal}
 
-/* ===== live build additions on top of mock-frozen-1648/split.css ===== */
+/* ===== v3 (jQrgen call feedback + Andrew's answers, 16:50) ===== */
+.blk,.ls-tbl .lsrd .blk{color:var(--ls-gold);text-decoration:none!important;font-weight:700}
+.ls-tbl .lsrd .t{display:block}
+.lshint{display:block;color:var(--ls-muted);font-size:.68em;line-height:1.15;margin-top:.25em;font-weight:400}
+.hintrow{grid-column:2/-1;border-top:0!important;padding:0 0 2px!important;text-align:right;color:var(--ls-muted);font-size:.72em}
+.hintrow .s,.lshint .s{color:var(--ls-gold)}
+.esth{color:var(--ls-muted);font-style:italic;font-weight:500;font-size:.78em;white-space:nowrap}
+.ls-tbl .ok.bad{color:var(--warn)}
+.ls-cap{display:none}
+.ls-mob .rch .sm{color:var(--ls-muted);font-size:13px}
+.ls-mob .rch .paid{margin-left:auto;color:#efeadf;font-size:13px;font-weight:650}
+.ls-mob .rt{color:var(--ls-muted);font-size:12.5px;margin:-2px 0 3px}
+.ls-mob .lshint{font-size:11.5px;margin:0 0 4px}
+/* kiosk: caption line instead of the empty slot; one explanation at a time */
+html.kiosk .ls-capslot{display:none!important}
+html.kiosk .ls-cap{display:flex;flex:none;align-items:center;gap:.6em;height:1.9em;margin:1.2vh 0 1vh;padding:0 .7vw;border-left:.22em solid var(--ls-gold);background:#181c25;border-radius:0 .4em .4em 0;font-size:clamp(20px,1.3vw,50px);color:#efeadf;white-space:nowrap;overflow:hidden}
+html.kiosk .ls-cap .ci{color:var(--gold2);font-size:.7em;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+html.kiosk .ls-cap .ct{overflow:hidden;text-overflow:ellipsis}
+html.kiosk .ls-why{margin-top:auto}
+html.kiosk .lshint{font-size:.6em}
+html.kiosk .hintrow{font-size:.62em;padding:0!important}
+html.kiosk .shr .v{font-size:.95em}
+html.kiosk .ls-cur-h{grid-template-columns:minmax(0,1fr) auto auto}
+html.kiosk .esth{font-size:.66em}
+/* kiosk: no multi-item legend above the DAG (keep the one-line progress), no long subtitle on "Recent summary blocks" */
+html.kiosk #legend>span:not(.progressTrack){display:none}
+html.kiosk #legend .progressTrack{flex:1 1 auto}
+html.kiosk #sec-prev h2 .m{display:none}
+html.kiosk .wrap{grid-template-rows:auto auto minmax(0,1fr) minmax(0,1fr)}
+html.kiosk #sec-split .ls-cur-h .okv.km{display:none}
+/* v3: let the DAG svgs take the panel height so fitDag can wrap them larger */
+html.kiosk #curScroll,html.kiosk .grp .dagScroll{flex:1 1 0;min-height:0;display:flex;flex-direction:column}
+html.kiosk #curScroll svg,html.kiosk .grp .dagScroll svg{flex:1 1 0;min-height:0;height:100%;width:100%}
+html.kiosk #sec-prev .grp .hd>span:nth-child(2),html.kiosk #sec-prev .grp .hd>span:nth-child(5){display:none}
+
+/* ===== live build additions on top of mock-v3/split.css ===== */
 #sec-split .blk{color:var(--ls-gold);font-weight:700;text-decoration:none}
 .ls-crow.zero .mlab,.ls-crow.zero .num,.ls-crow.zero .est{opacity:.5}
 .ls-crow .ztag{position:absolute;inset:0;display:flex;align-items:center;padding-left:.6em;font-size:.72em;color:var(--ls-muted);font-style:italic}
@@ -490,12 +525,18 @@ html.kiosk .ls-key{white-space:normal}
 #sec-split .bad{color:#ff9a7a;font-weight:700}
 .ls-mob .rch .tt{margin-left:auto;color:#efeadf;font-weight:650;font-size:14px}
 .ls-mob .rct{color:var(--ls-muted);font-size:12.5px;margin:-2px 0 4px}
-.ls-mob .rch .ok{margin-left:auto}
+.ls-mob .rch .ok{margin-left:auto;color:#5fbf7f;font-size:12.5px}
 .khead{display:none}
 html.kiosk .khead{display:block;flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--gold2);font-weight:750;font-size:clamp(18px,1.3vw,48px);text-align:right;margin-left:auto}
-html.kiosk .ls-capslot{border:0}
-html.kiosk .ls-crow{height:1.5em}
+html.kiosk .ls-crow{height:1.36em}
+html.kiosk .ls-cap{margin:.8vh 0 .6vh}
+html.kiosk .ls-cur{padding:.8vh 1vw}
+html.kiosk .ls-cur-h{margin-bottom:.4vh}
 @media (max-width:768px){ html:not(.kiosk) #sec-split{order:-2} }
+html.kiosk .ls-head{flex-wrap:nowrap}
+html.kiosk .ls-head h2{flex:none}
+html.kiosk .ls-upd{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.kiosk.ls-isstale .esth{display:none}
 
 </style>
 </head>
@@ -885,14 +926,14 @@ function drawDag(svg, subs, o) {
   for (const s of subs) {
     const [x, y] = xy.get(s.h), ps = s.p.filter(p => byH.has(p));
     if (!ps.length) arrow(gE, x, y, B[0], B[1], o.r, sq, "ahg", "#b8952f");
-    for (const p of ps) { const [px, py] = xy.get(p); arrow(gE, x, y, px, py, o.r, o.r, "ah", s.p.length > 1 ? "#c3cbe0" : "#7d8aa0"); }
+    for (const p of ps) { const [px, py] = xy.get(p); arrow(gE, x, y, px, py, o.r, o.r, "ah", s.p.length > 1 ? "#c3cbe0" : "#7d8aa0"); if (rows > 1 && Math.abs(py - y) > rowH * 0.6) gE.lastChild.setAttribute("opacity", .2); /* v3: faint cross-row edges */ }
   }
   // closing summary -> tips of what it includes (+ included uncles)
   const ref = new Set(inc.flatMap(s => s.p));
   if (o.closing) {
     for (const t of inc.filter(s => !ref.has(s.h))) { const [x, y] = xy.get(t.h); arrow(gE, C[0], C[1], x, y, sq, o.r, "ahg", "#b8952f"); }
   }
-  for (const [i, u] of uncles.entries()) { const [x, y] = xy.get("U:" + u.h); if (o.closing) arrow(gE, C[0], C[1], x, y, sq, o.r, "ahg", UNC, "4 3"); }
+  for (const [i, u] of uncles.entries()) { const [x, y] = xy.get("U:" + u.h); if (o.closing) { arrow(gE, C[0], C[1], x, y, sq, o.r, "ahg", UNC, "4 3"); if (rows > 1) gE.lastChild.setAttribute("opacity", .3); } }
   // placeholders are represented by the progress track in the legend
   summaryNode(gN, B[0], B[1], sq, o.base.height, `summary block #${o.base.height}\n${o.base.hash}…`, {summary: true, start: !!o.mini});
   if (o.closing) summaryNode(gN, C[0], C[1], sq, o.closing.height, `summary block #${o.closing.height}\n${o.closing.hash}…\nmined by miner ${o.closing.m || "?"}\nincludes ${inc.length} subblocks + ${uncles.length} uncles`, {m: o.closing.m, summary: true, sealed: !!o.mini, labelRight: o.mini ? o.W - 4 : null});
@@ -1038,7 +1079,11 @@ function fitDag(svg, subs, o, step) {
     const s = Math.min(cw / W, ch / H);
     if (!best || s > best.s) best = {s, W, cols};
   }
-  drawDag(svg, subs, {...o, W: best.W, cols: best.cols});
+  /* v3: move the row break to where the DAG is narrowest, so few edges cross between rows (kept within 15% of the best scale) */
+  { const {byH, depth} = depths(subs); const cross = cols => { let n = 0; for (const s of subs) for (const p of s.p) { const ps = byH.get(p); if (ps && Math.floor(depth.get(ps.h) / cols) !== Math.floor(depth.get(s.h) / cols)) n++; } return n; };
+    let pick = best; for (let cols = Math.max(6, best.cols - 6); cols <= best.cols + 6; cols++) { const W = o.r * 4.8 + (cols - 1) * o.r * step, {H} = drawDag(svg, subs, {...o, W, cols, dry: true}); const sc = Math.min(cw / W, ch / H);
+      if (sc >= best.s * 0.85 && (cross(cols) < cross(pick.cols) || (cross(cols) === cross(pick.cols) && sc > pick.s))) pick = {s: sc, W, cols}; }
+    drawDag(svg, subs, {...o, W: pick.W, cols: pick.cols}); }
 }
 
 function summaryArrived(d, oldHeight) {
@@ -1076,10 +1121,10 @@ function render() {
   const curSvg = $("cur");
   curSvg.style.width = mobile ? `${W}px` : "";
   const curO = {W, cols, r: mobile ? 10 : (w < 520 ? 12 : 14), ghost: true, oneRow: true, base: d.cur.base, uncles, animate: true, tip: d.dagtip, mini: false};
-  if (KI) fitDag(curSvg, subs, curO, 3.3); else drawDag(curSvg, subs, curO);
+  if (KI) fitDag(curSvg, subs, {...curO, oneRow: false}, 3.3);   /* v3: wrap to use the height */ else drawDag(curSvg, subs, curO);
   if (mobile && (firstRender || fresh)) requestAnimationFrame(() => { const sc = $("curScroll"); sc.scrollLeft = sc.scrollWidth; });
   const box = $("prev"); box.innerHTML = "";
-  const pv = (d.prev || []).slice(0, KI ? 2 : undefined);
+  const pv = (d.prev || []).slice(0, KI ? 1 : undefined);   /* v3: kiosk shows only the newest finished round */
   for (let i = 0; i < pv.length; i++) {
     const b = pv[i];
     const div = document.createElement("div"); div.className = "grp"; box.appendChild(div);
@@ -1099,7 +1144,7 @@ function render() {
       const wide = w >= 800, miniW = mobile ? Math.max(1000, (st.depth + 2) * 18) : W;
       svg.style.width = mobile ? `${miniW}px` : "";
       const pO = {W: miniW, cols: wide ? 42 : 14, r: mobile ? 9 : 8, ghost: false, oneRow: true, mini: true, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash, m: b.m}, uncles: unc, labelRight: mobile ? miniW - 4 : null};
-      if (KI) fitDag(svg, all, pO, 3.1); else drawDag(svg, all, pO);
+      if (KI) fitDag(svg, all, {...pO, oneRow: false, r: 10}, 2.8);   /* v3: one larger mini-DAG */ else drawDag(svg, all, pO);
     } else if (b.mdv === 2) {
       div.insertAdjacentHTML("beforeend", `<div style="color:var(--muted);font-size:13px;padding:4px 0">The node's recent-DAG view no longer holds subblock details for this group.</div>`);
     }
@@ -1160,13 +1205,13 @@ function rSet(v) {
   document.querySelectorAll(".rtabs").forEach(t => t.classList.toggle("frozen", !!rHold));
   document.querySelectorAll(".rtabs span").forEach(sp => { const on = sp.dataset.t === rShow; sp.classList.toggle("on", on); const i = sp.querySelector("i"); i.style.animation = "none"; void i.offsetWidth; i.style.animation = ""; });
   if (rShow === "reward") clearTimeout(faqT); else { faqShow(); faqSchedule(); }
-  clearTimeout(rT);   // the live reward split panel replaced the rotating Option B view: no rotation
+  clearTimeout(rT);   /* the live reward split panel replaced the rotating Option B view: no rotation */
 }
 document.querySelectorAll(".rtabs span").forEach(sp => sp.addEventListener("click", () => rSet(sp.dataset.t)));
 rSet(rHold === "reward" ? "reward" : "explain");
 
 window.addEventListener("resize", () => { clearTimeout(window._rz); window._rz = setTimeout(render, 200); });
-// ===== Live reward split panel (built from live-split/mock-frozen-1648). Data: dag.json -> rewards (patched publisher). =====
+/* ===== Live reward split panel (built from live-split/mock-frozen-1648 + mock-v3). Data: dag.json -> rewards (patched publisher). ===== */
 const LS = (() => {
 const MCOL = {1:"#4fd1b5",2:"#a78bfa",3:"#f2896b",4:"#62b3f5"}, MS = ["1","2","3","4"];
 const nexFull = sat => (sat/100).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -1174,7 +1219,7 @@ const nexM = (sat,d) => (sat/1e8).toFixed(d) + "\u2009M";
 const hms = t => t ? new Date(t*1000).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false,timeZone:"Europe/Oslo"}) : "–";
 const pct = (a,b) => b ? (a/b*100).toFixed(1) + "%" : "–";
 const v = (o,m) => (o && o[m]) || 0;
-const blk = h => `<span class="blk">#${h}</span>`;   // plain text: no stormtest explorer
+const blk = h => `<span class="blk">#${h}</span>`;   /* plain text, no link (Andrew) */
 const mlab = m => `<span class="mlab"><i class="mdot m${m}"></i>Miner ${m}</span>`;
 const sec = () => document.getElementById("sec-split");
 let lastKey = null;
@@ -1190,10 +1235,10 @@ function build(j) {
   const W = j.rewards, c = W.current || {}, R = (W.rounds || []).slice(0, 5), KK = j.k || 120, OF = c.of || KK - 1;
   const next = W.reward_sat_next || 0, est = c.expected_sat_by_miner_so_far || {}, sumShare = c.expected_sat_summary_share || 0;
   const tot = (c.subblocks || 0) + (c.uncles || 0);
-  // ---- current round (estimate)
+  /* ---- current round (estimate) */
   let cur = `<div class="ls-cur" aria-label="This round, live, estimate">
  <div class="ls-cur-h"><span>This round → <span class="full">summary </span><span class="pend" title="not mined yet">#${c.next_summary_height ?? "–"}</span> <span style="color:var(--ls-muted);font-weight:500"><span class="full">(not mined yet)</span><span class="km okv">(open)</span></span> <span class="paused">· paused</span></span>
-  <span class="cnt"><b>${tot}</b> / ${OF} <span class="full">subblocks (${c.uncles || 0} uncle${c.uncles === 1 ? "" : "s"})</span></span><span class="km esth">≈ estimate if it closed now</span></div>`;
+  <span class="cnt"><b>${tot}</b> / ${OF} <span class="full">subblocks (${c.uncles || 0} uncle${c.uncles === 1 ? "" : "s"})</span></span><span class="esth">dashed = estimate, if it closed now</span></div>`;
   for (const m of MS) {
     const n = v(c.subblocks_by_miner, m), p = v(est, m), zero = n === 0;
     cur += `<div class="ls-crow${zero ? " zero" : ""}">${mlab(m)}<span class="num"><b>${n}</b><small> /${OF}</small></span>
@@ -1204,47 +1249,56 @@ function build(j) {
   cur += `<div class="ls-crow ls-srow"><span class="mlab"><i class="sumsq"></i>Summary</span><span class="num"><small>${pct(sumShare, next)}</small></span>
    <span class="cbar" title="share of the reward the next summary miner would get now"><i style="width:${Math.min(100, sp*100)}%;background:var(--ls-gold)"></i></span>
    <span class="est" title="estimate only"><span class="full">≈ ${nexFull(sumShare)} <span class="u">NEX est.</span></span><span class="km">≈ ${nexM(sumShare,3)}</span></span></div>`;
-  cur += `<div class="ls-cnote"><b>≈ Estimate if the round closed now</b><span class="full">: each subblock is weighted by its DAG score, the same rule as the real payout, so these are not paid yet. The rest (≈ ${nexFull(sumShare)} NEX, ${pct(sumShare, next)}) would go to whoever mines summary #${c.next_summary_height}; early in a round that is most of the reward, and it shrinks as subblocks arrive. Only finished rounds show paid NEX.</span><span class="km">, not paid yet.</span></div></div>`;
-  // ---- finished rounds
+  cur += `<div class="ls-cnote">The other ≈ ${nexFull(sumShare)} NEX goes to whoever mines #${c.next_summary_height}.</div></div>`;
+  /* ---- finished rounds */
   const shr = (r,m) => { const sb = v(r.pieces_by_miner,m)/KK, rw = r.reward_sat_total ? v(r.reward_sat_by_miner,m)/r.reward_sat_total : 0, sc = 100/0.36;
     return `<div class="shr" style="color:${MCOL[m]}"><span class="lb">pieces</span><span class="b sb"><i style="width:${Math.min(100,sb*sc)}%"></i></span><span class="lb">paid</span><span class="b rw"><i style="width:${Math.min(100,rw*sc)}%"></i></span>
-   <span class="v">${(sb*100).toFixed(1)}% → ${pct(v(r.reward_sat_by_miner,m), r.reward_sat_total)}</span></div>`; };
+   <span class="v">${(sb*100).toFixed(2)}→${(rw*100).toFixed(2)}%</span></div>`; };
   const det = (r,m) => { const u = v(r.uncles_by_miner,m), sb = v(r.subblocks_by_miner,m) - u, s = r.summary_miner == m;
     return `${v(r.pieces_by_miner,m)}<span class="full"> pieces</span> = ${sb}+${u}u${s ? `+<span class="s" title="found the summary block">◆</span>` : ""}`; };
   const rsum = r => MS.reduce((a,m)=>a+v(r.reward_sat_by_miner,m),0) + (r.reward_sat_other || 0);
-  let tbl = `<div class="ls-tbl" role="table" aria-label="Finished rounds"><div class="th">Round</div>${MS.map(m=>`<div class="th r">${mlab(m)}</div>`).join("")}<div class="th r">Paid <span class="km">(actual)</span><span class="full">out (actual)</span></div>`;
+  let tbl = `<div class="ls-tbl" role="table" aria-label="Finished rounds"><div class="th">Round</div>${MS.map(m=>`<div class="th r">${mlab(m)}</div>`).join("")}<div class="th r">Paid <span class="km">(actual)</span><span class="full">out (actual)</span></div><div class="hintrow">u = uncle · <span class="s">◆</span> = found summary</div>`;
   R.forEach((r,i) => {
     const cls = (i === 0 ? "newest " : "") + (i >= 2 ? "kx " : ""), sum = rsum(r);
-    tbl += `<div class="${cls}lsrd">${blk(r.height)}<span class="t">${hms(r.time)}</span>${r.counts_exact === false ? `<span class="t" title="the payout is final (on-chain); the piece counts are still being matched to it">counts settling…</span>` : ""}</div>`;
+    tbl += `<div class="${cls}lsrd">${blk(r.height)}<span class="t">${hms(r.time)}</span>${i === 0 ? `<span class="lshint">hatched = pieces share · solid = paid</span>` : ""}${r.counts_exact === false ? `<span class="t" title="the payout is final (on-chain); the piece counts are still being matched to it">counts settling…</span>` : ""}</div>`;
     for (const m of MS) tbl += `<div class="${cls}r${v(r.reward_sat_by_miner,m) ? "" : " zero"}"><span class="amt"><span class="full">${nexFull(v(r.reward_sat_by_miner,m))}</span><span class="km">${nexM(v(r.reward_sat_by_miner,m),3)}</span></span><span class="det">${det(r,m)}</span>${i === 0 ? shr(r,m) : ""}</div>`;
-    tbl += `<div class="${cls}r"><span class="amt"><span class="full">${nexFull(sum)}</span><span class="km">${nexM(sum,3)}</span></span>${r.reward_sat_other ? `<span class="det">incl. ${nexFull(r.reward_sat_other)} other</span>` : ""}</div>`;
+    tbl += `<div class="${cls}r"><span class="amt"><span class="full">${nexFull(sum)}</span><span class="km">${nexM(sum,3)}</span></span>${r.reward_sat_other ? `<span class="det">incl. ${nexFull(r.reward_sat_other)} other</span>` : ""}${sum === r.reward_sat_total ? "" : `<span class="ok bad">✗ MISMATCH</span>`}</div>`;
   });
   const CW = W.cumulative_window;
   const totRow = (n, cls) => { const rs = R.slice(0, n); if (!rs.length) return "";
     const t = m => rs.reduce((a,r)=>a+v(r.reward_sat_by_miner,m),0), p = m => rs.reduce((a,r)=>a+v(r.pieces_by_miner,m),0);
     const all = rs.reduce((a,r)=>a+rsum(r),0), exp = rs.reduce((a,r)=>a+r.reward_sat_total,0);
     const ok = all === exp && (n !== R.length || !CW || n !== 5 || MS.every(m => t(m) === v(CW.reward_sat_by_miner,m)));
-    return `<div class="tot lsrd ${cls}">Σ last ${rs.length} rounds<span class="t">#${rs[rs.length-1].height}–${rs[0].height}</span></div>${MS.map(m=>`<div class="tot r ${cls}"><span class="amt"><span class="full">${nexFull(t(m))}</span><span class="km">${nexM(t(m),3)}</span></span><span class="det">${p(m)}<span class="full"> pieces</span><span class="km"> pc</span> · ${pct(t(m),all)}</span></div>`).join("")}<div class="tot r ${cls}"><span class="amt"><span class="full">${nexFull(all)}</span><span class="km">${nexM(all,3)}</span></span><span class="ok">${ok ? "✓ sum ok" : `<span class="bad">✗ sum mismatch</span>`}</span></div>`; };
+    return `<div class="tot lsrd ${cls}">Σ last ${rs.length} rounds<span class="t">#${rs[rs.length-1].height}–${rs[0].height}</span></div>${MS.map(m=>`<div class="tot r ${cls}"><span class="amt"><span class="full">${nexFull(t(m))}</span><span class="km">${nexM(t(m),3)}</span></span><span class="det">${p(m)}<span class="full"> pieces</span><span class="km"> pc</span> · ${pct(t(m),all)}</span></div>`).join("")}<div class="tot r ${cls}"><span class="amt"><span class="full">${nexFull(all)}</span><span class="km">${nexM(all,3)}</span></span><span class="ok">${ok ? `<span class="km">✓ sum ok</span><span class="full">✓ ${rs.length} × block reward</span>` : `<span class="bad">✗ MISMATCH</span>`}</span></div>`; };
   tbl += totRow(R.length, "kx") + totRow(Math.min(2, R.length), "konly") + `</div>`;
-  // ---- phone: the same 5 rounds as cards
+  /* ---- phone: the 3 newest rounds as cards (v3) */
+  const R3 = R.slice(0, 3);
   let mob = `<div class="ls-mob">`;
-  R.forEach((r,i) => {
-    mob += `<div class="rc${i===0?" newest":""}"><div class="rch">${blk(r.height)}<span class="tt">${nexFull(rsum(r))} NEX</span></div><div class="rct">${hms(r.time)} · <span class="s">◆</span> summary by miner ${r.summary_miner}</div>`;
+  R3.forEach((r,i) => {
+    const sum = rsum(r);
+    mob += `<div class="rc${i===0?" newest":""}"><div class="rch">${blk(r.height)}<span class="sm"><span class="s">◆</span> summary by miner ${r.summary_miner}</span><span class="paid">${sum===r.reward_sat_total ? nexFull(sum) + " NEX" : `<span class="bad">✗ mismatch</span>`}</span></div><div class="rt">${hms(r.time)}${r.counts_exact === false ? " · counts settling…" : ""}</div>${i===0 ? `<div class="lshint">u = uncle · <span class="s">◆</span> = found summary · hatched = pieces share · solid = paid</div>` : ""}`;
     for (const m of MS) mob += `<div class="mr${v(r.reward_sat_by_miner,m) ? "" : " zero"}">${mlab(m)}<span class="det">${det(r,m).replace('<span class="full"> pieces</span>',' pc')}</span><span class="amt">${nexFull(v(r.reward_sat_by_miner,m))}</span>${i===0?shr(r,m):""}</div>`;
     mob += `</div>`;
   });
-  if (R.length) {
-    const t = m => R.reduce((a,r)=>a+v(r.reward_sat_by_miner,m),0), p = m => R.reduce((a,r)=>a+v(r.pieces_by_miner,m),0), all = R.reduce((a,r)=>a+rsum(r),0), exp = R.reduce((a,r)=>a+r.reward_sat_total,0);
-    mob += `<div class="rc tot"><div class="rch">Σ last ${R.length} rounds <span class="ok">${all===exp?"✓ sum ok":"<span class='bad'>✗ sum mismatch</span>"}</span></div><div class="rct">#${R[R.length-1].height}–${R[0].height} · ${nexFull(all)} NEX</div>${MS.map(m=>`<div class="mr">${mlab(m)}<span class="det">${p(m)} pc · ${pct(t(m),all)}</span><span class="amt">${nexFull(t(m))}</span></div>`).join("")}</div>`;
+  if (R3.length) {
+    const t = m => R3.reduce((a,r)=>a+v(r.reward_sat_by_miner,m),0), p = m => R3.reduce((a,r)=>a+v(r.pieces_by_miner,m),0), all = R3.reduce((a,r)=>a+rsum(r),0), exp = R3.reduce((a,r)=>a+r.reward_sat_total,0);
+    mob += `<div class="rc tot"><div class="rch">Σ last ${R3.length} rounds<span class="ok">${all===exp ? "✓ " + nexFull(all) : "<span class='bad'>✗ MISMATCH</span>"}</span></div><div class="rt">#${R3[R3.length-1].height}–${R3[0].height}</div>${MS.map(m=>`<div class="mr">${mlab(m)}<span class="det">${p(m)} pc · ${pct(t(m),all)}</span><span class="amt">${nexFull(t(m))}</span></div>`).join("")}</div>`;
   }
   mob += `</div>`;
   return head(j) + cur + `
-<div class="ls-capslot" aria-hidden="true"></div>
+<div class="ls-cap" role="status" aria-live="off"><span class="ci"></span><span class="ct"></span></div>
 <div class="ls-fin-h"><h3>Finished rounds: actual payout <small>on-chain coinbase, newest first</small></h3></div>
 <p class="ls-why">Payout follows each miner's DAG score, not just its subblock count.</p>
-${R.length ? tbl + mob : `<p class="ls-wait">No finished rounds recorded yet.</p>`}
-<p class="ls-key"><span class="full"><b>pieces</b> = subblocks + uncles (u, late subblocks) + <span class="sumk">◆</span> the summary block; every round has ${KK}. Bars: hatched = share of the ${KK} pieces, solid = share of the payout.</span><span class="km"><b>pieces</b> = subblocks + u (uncles) + <span class="sumk">◆</span> summary · hatched = share of ${KK} pieces, solid = paid</span></p>`;
+${R.length ? tbl + mob : `<p class="ls-wait">No finished rounds recorded yet.</p>`}`;
 }
+/* ---- caption line (kiosk): one short caption at a time, every 7 s; ?cap=N pins caption N */
+const CAPS = ["Each subblock earns its miner a share of the block reward.", "Gold square = summary block. It closes the round and pays out.",
+  "Well-linked subblocks score higher, so pay isn't just a headcount.", "Late subblocks become uncles: paid next round, 4 points below top score.",
+  "One round = 120 pieces: 119 subblocks plus the summary.", "Testnet only: 4 simulated miners on one machine, no real value."];
+const capQ = +new URLSearchParams(location.search).get("cap") || 0;
+let capI = Math.max(0, Math.min(CAPS.length - 1, (capQ || 1) - 1));
+function showCap() { const s = sec(); if (!s) return; const n = s.querySelector(".ls-cap .ci"), t = s.querySelector(".ls-cap .ct"); if (n) n.textContent = (capI + 1) + "/" + CAPS.length; if (t) t.textContent = CAPS[capI]; }
+if (!capQ) setInterval(() => { capI = (capI + 1) % CAPS.length; showCap(); }, 7000);
 function render(j) {
   const s = sec(); if (!s) return;
   const stale = isStale(j);
@@ -1257,7 +1311,7 @@ function render(j) {
     if (!j || !j.rewards || !j.rewards.current) {
       s.innerHTML = head(j) + `<p class="ls-wait">${j ? "Reward data starting… The live feed does not carry the reward split yet." : "Reward data starting… waiting for the live feed."}</p>`;
       s.classList.add("ls-nodata");
-    } else { s.innerHTML = build(j); s.classList.remove("ls-nodata"); }
+    } else { s.innerHTML = build(j); s.classList.remove("ls-nodata"); showCap(); }
   } catch (e) { console.warn("reward split render failed", e); s.innerHTML = head(j) + `<p class="ls-wait">Reward data unavailable.</p>`; }
 }
 return {render};
