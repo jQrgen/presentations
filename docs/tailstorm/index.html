@@ -189,6 +189,82 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
   html:not(.kiosk) .wrap>.cards{order:-1}
   html:not(.kiosk) .wrap>header{margin-bottom:12px}
 }
+/* Reward split view: "who gets paid per block", today vs Tailstorm (a tab on the normal page; alternates with the explainer on the display) */
+.illus{display:inline-block;font:800 clamp(14px,1.1vw,32px)/1.3 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#1a1405;background:#e0b341;border-radius:4px;padding:.1em .5em;vertical-align:middle;margin-left:8px;white-space:nowrap}
+.viewtabs{display:flex;gap:6px;margin:0 0 10px;border-bottom:1px solid var(--line)}
+.viewtabs button{background:none;border:0;border-bottom:3px solid transparent;color:#b4bac6;font:650 15px/1.2 system-ui,sans-serif;padding:8px 14px;cursor:pointer;margin-bottom:-1px;min-height:44px}
+.viewtabs button[aria-selected=true]{color:var(--gold2);border-bottom-color:var(--gold)}
+.viewtabs button:hover{color:#efeadf}
+.viewtabs .illus{margin-left:6px}
+html.view-reward:not(.kiosk) #sec-cur,html.view-reward:not(.kiosk) #sec-prev{display:none}
+#sec-reward{display:none}
+html.view-reward:not(.kiosk) #sec-reward{display:block}
+html.simmode #sec-reward h2::after{content:"SIMULATED";margin-left:10px;padding:1px 7px;border:1px solid #f5b942;border-radius:4px;color:#ffd166;font-size:11px;letter-spacing:.1em;vertical-align:middle}
+.rw h2{display:flex;align-items:center;flex-wrap:wrap;gap:4px 0}
+.rw .lead{color:#efeadf;font-size:15px;margin:2px 0 10px}
+.rwCols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:12px}
+.rwCard{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.rwCard h3{margin:0 0 4px;font-size:16px;color:var(--gold2)}
+.rwCard p{margin:0 0 8px;color:#efeadf;font-size:14px;line-height:1.35}
+.rwCard .cap{color:#b4bac6;font-size:13px;margin:6px 0 0}
+.oneBlock{display:flex;align-items:center;justify-content:center;aspect-ratio:1.6;max-height:190px;border-radius:8px;background:#f2896b;color:#12151c;font-weight:800;font-size:16px;text-align:center;padding:8px}
+.pieces{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:3px}
+.pieces i{aspect-ratio:1;border-radius:2px;background:var(--line)}
+.pieces i.sum{outline:2px solid var(--gold);outline-offset:-2px;box-shadow:0 0 0 1px #1a1405 inset}
+.paidLine{color:#efeadf;font-weight:700;font-size:15px;margin-top:8px}
+.paidLine b{color:var(--ok)}
+.prob{margin:12px 0 0}
+.prob h3{margin:0 0 6px;font-size:15px;color:#efeadf}
+.prob h3 small{color:#b4bac6;font-weight:400}
+.pbar{display:grid;grid-template-columns:8.5em minmax(0,1fr) 4em;gap:10px;align-items:center;margin:5px 0;font-size:14px;color:#efeadf}
+.pbar .t{height:22px;background:#0d1016;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.pbar .t i{display:block;height:100%;background:var(--gold);border-radius:4px 0 0 4px;min-width:3px}
+.pbar .v{font-weight:800;color:var(--gold2);text-align:right;font-variant-numeric:tabular-nums}
+.payStat{color:#efeadf;font-size:14px;line-height:1.35;margin:10px 0 0}
+.payStat b{color:var(--gold2)}
+.payStat .pst{color:#b4bac6}
+.same{margin:10px 0 0;padding:8px 12px;border-left:3px solid var(--gold);background:var(--panel2);border-radius:0 8px 8px 0;color:#efeadf;font-size:15px}
+.same b{color:var(--gold2)}
+.rw .src{color:#b4bac6;font-size:12.5px;margin:8px 0 0}
+/* display layout: the right column alternates explainer <-> reward panel every 20 s, with tabs and a progress line */
+.rtabs{display:none}
+html.kiosk .viewtabs{display:none}
+html.kiosk #explain>h2{display:none}
+html.kiosk .rtabs{display:flex;gap:.5vw;flex:none;margin:0 0 .6vh}
+html.kiosk .rtabs span{flex:1;text-align:center;font:700 clamp(15px,1.15vw,34px)/1.2 system-ui,sans-serif;color:#b4bac6;padding:.25em .3em .35em;border-radius:.35em;background:var(--panel2);position:relative;overflow:hidden;white-space:nowrap;cursor:pointer}
+html.kiosk .rtabs span.on{color:#1a1405;background:var(--gold2)}
+html.kiosk .rtabs span.on i{position:absolute;left:0;bottom:0;height:.22em;width:100%;background:#1a1405;transform-origin:left;animation:rtab 20s linear forwards;opacity:.55}
+html.kiosk .rtabs.frozen span.on i{animation:none;transform:none}
+@keyframes rtab{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+html.kiosk #sec-reward{grid-column:2;grid-row:3/5;margin:0;padding:1.4vh 1vw;border-radius:.7em;flex-direction:column;gap:.8vh;min-height:0;overflow:hidden;border:1px solid var(--golddim)}
+html.kiosk.rshow-reward #sec-reward{display:flex}
+html.kiosk.rshow-reward #explain{display:none!important}
+html.kiosk #sec-reward>*{flex:none}
+html.kiosk #sec-reward h2{font-size:clamp(22px,1.8vw,52px);color:var(--gold2);white-space:normal;overflow:visible;margin:0;line-height:1.15;gap:.3em 0}
+html.kiosk.simmode #sec-reward h2::after{font-size:.5em}
+html.kiosk #rwCap,html.kiosk .rwCard .kx,html.kiosk .rw .lead,html.kiosk .rwCard p,html.kiosk .rwsrc{display:none}
+html.kiosk .rwCols{grid-template-columns:minmax(0,.62fr) minmax(0,1fr);gap:.6vw}
+html.kiosk .rwCard{padding:.8vh .6vw;border-radius:.4em}
+html.kiosk .rwCard h3{font-size:clamp(16px,1.3vw,38px);line-height:1.1}
+html.kiosk .rwCard .cap{font-size:clamp(16px,1.25vw,36px);line-height:1.15;margin-top:.5vh}
+html.kiosk .oneBlock{font-size:clamp(15px,1.15vw,34px);aspect-ratio:auto;height:clamp(70px,5.6vw,160px);max-height:none;line-height:1.1;border-radius:.3em}
+html.kiosk .pieces{grid-template-columns:repeat(20,minmax(0,1fr));gap:.12vw}
+html.kiosk .paidLine{font-size:clamp(16px,1.25vw,36px);margin-top:.5vh;line-height:1.15}
+html.kiosk .prob{margin:0}
+html.kiosk .prob h3{font-size:clamp(16px,1.25vw,36px);line-height:1.15;margin-bottom:.4vh}
+html.kiosk .prob h3 small{display:block;font-size:.8em}
+html.kiosk .pbar{font-size:clamp(16px,1.25vw,36px);grid-template-columns:5.6em minmax(0,1fr) 3.6em;gap:.5vw;margin:.45vh 0}
+html.kiosk .pbar .t{height:1.1em}
+html.kiosk .payStat{font-size:clamp(16px,1.15vw,34px);line-height:1.2;margin:auto 0 0}
+html.kiosk .same{font-size:clamp(16px,1.25vw,36px);line-height:1.2;margin-top:.6vh;padding:.5vh .7vw}
+@media (max-width:600px){
+  html:not(.kiosk) .rwCols{grid-template-columns:1fr}
+  html:not(.kiosk) .oneBlock{aspect-ratio:auto;height:90px}
+  html:not(.kiosk) .pieces{grid-template-columns:repeat(15,minmax(0,1fr))}
+  html:not(.kiosk) .pbar{grid-template-columns:4.6em minmax(0,1fr) 3.4em;font-size:13px}
+  html:not(.kiosk) .viewtabs button{padding:8px 10px}
+}
+@media (max-width:768px){ html:not(.kiosk) .viewtabs,html:not(.kiosk) #sec-reward{order:-2} }
 </style>
 </head>
 <body>
@@ -201,6 +277,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
   <span class="kclock" id="kclock"></span>
 </header>
 <aside id="explain" aria-label="What you're watching">
+<div class="rtabs" aria-hidden="true"><span data-t="explain">What you&#39;re watching<i></i></span><span data-t="reward">Reward split<i></i></span></div>
 <div class="headline"><span class="liveword">Live</span><span class="simword">Simulated</span>: ~1 s blocks. Merged, not wasted.</div>
 <h2>What you&#39;re watching</h2>
 <p class="purpose"><b>Fast, fair confirmations.</b> One summary closes each round.</p>
@@ -240,11 +317,29 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
   <div class="card"><div class="k">Branching</div><div class="v" id="c-br">–</div></div>
   <div class="card"><div class="k">DAG tip</div><div class="v" id="c-tipv" style="font-size:15px;margin-top:8px"><code id="c-tip">–</code></div></div>
 </div>
+<div class="viewtabs" role="tablist" aria-label="View"><button type="button" role="tab" id="tab-dag" aria-controls="sec-cur" aria-selected="true">Live DAG</button><button type="button" role="tab" id="tab-reward" aria-controls="sec-reward" aria-selected="false">Reward split <span class="illus">Illustrative</span></button></div>
 <section id="sec-cur">
   <h2><span class="roundLong">This round: subblocks since the last summary block</span><span class="roundShort">Round subblocks</span> <span class="m" id="cur-m"></span></h2>
   <div class="legend" id="legend"></div>
   <div id="curSwipe" class="swipeHint" aria-hidden="true">swipe → to explore the DAG</div>
   <div id="curScroll" class="dagScroll"><svg id="cur" viewBox="0 0 1200 200"></svg></div>
+</section>
+<section id="sec-reward" class="rw" role="tabpanel" aria-label="Reward split: who gets paid per block">
+  <div class="rtabs" aria-hidden="true"><span data-t="explain">What you&#39;re watching<i></i></span><span data-t="reward">Reward split<i></i></span></div>
+  <h2>Who gets paid per block <span class="illus">Illustrative</span></h2>
+  <p class="lead">How Tailstorm decentralizes block rewards: one block, many winners.</p>
+  <div class="rwCols">
+    <div class="rwCard"><h3>Today: winner takes all</h3><p>One proof of work per block. Its finder takes the whole reward.</p><div class="oneBlock" id="rwOne">1 block →<br>1 miner paid</div><div class="cap"><span class="kx">Colour = the one miner. </span>Everyone else: nothing.</div></div>
+    <div class="rwCard"><h3>Tailstorm: split across subblock miners</h3><p>The block is k pieces of work. The full reward is split by DAG connectivity.</p><div class="pieces" id="rwPieces"></div><div class="paidLine" id="rwPaid"></div><div class="cap" id="rwCap"></div></div>
+  </div>
+  <div class="prob"><h3>Chance a 1% miner gets paid in a block <small>1 − 0.99<sup>k</sup></small></h3>
+    <div class="pbar"><span>Today</span><span class="t"><i style="width:1%"></i></span><span class="v">1%</span></div>
+    <div class="pbar"><span>k = 40</span><span class="t"><i style="width:33.1%"></i></span><span class="v">33.1%</span></div>
+    <div class="pbar"><span>k = 120</span><span class="t"><i style="width:70.1%"></i></span><span class="v">70.1%</span></div>
+  </div>
+  <p class="payStat" id="rwStat"></p>
+  <div class="same"><b>Same expected income</b> in both models: only variance and frequency change.</div>
+  <p class="src rwsrc">k = 120 in the current mainnet code, 40 on upstream stormtest; this demo reports k = <span id="rwK">120</span>. Squares = the last finished round&#39;s subblocks coloured by miner, not exact reward shares. Source: <a href="mining-rewards/">One Block, Many Winners</a>.</p>
 </section>
 <section id="sec-prev">
   <h2>Recent summary blocks <span class="m">Each row is one finished round: start summary, its subblocks, sealing summary</span></h2>
@@ -263,6 +358,7 @@ html.kiosk #explain .faqrot .a{color:#dcd7cb;font-size:clamp(17px,1.33vw,38px);l
 </dl></details>
 <section class="note" id="changelog"><b>Changelog</b> <span style="color:#8a93a6;font-size:13px">(newest first, Oslo time)</span>
 <ol>
+<li><time>2 Oct 2026, 14:30</time>A &ldquo;Reward split&rdquo; view (illustrative): who gets paid per block today versus with Tailstorm, drawn from the last finished round&#39;s subblocks. On the normal page it is a tab next to the live DAG; on the office display it alternates with the explainer every 20 s.</li>
 <li><time>2 Oct 2026, 12:30</time>When the live feed is offline or stale, the page now shows a clearly labelled simulated DAG (generated in your browser) instead of an empty view, and switches back to live data automatically when the feed returns.</li>
 <li><time>2 Oct 2026, 04:45</time>New article: <a href="mining-rewards/">&ldquo;One Block, Many Winners: How Tailstorm Decentralizes Mining Rewards on Nexa&rdquo;</a>, with a diagram, linked in the header and the footer.</li>
 <li><time>1 Oct 2026, 18:50</time>On phones, the live DAG now comes first, right under the title, with the stats and the explainer below it.</li>
@@ -684,11 +780,16 @@ function faqShow() {
   if (progress) { progress.style.transition = "none"; progress.style.width = "100%"; requestAnimationFrame(() => { progress.style.transition = "width 16s linear"; progress.style.width = "0%"; }); }
 }
 faqShow();
-setInterval(() => {
-  if (!isKiosk() || !faqItems.length) return;
-  const box = $("faqrot"); box.classList.add("fade");
-  setTimeout(() => { faqI = (faqI + 1) % faqItems.length; faqShow(); box.classList.remove("fade"); }, 650);
-}, 16000);
+let faqT = 0;   // one question every 16 s; paused while the display shows the reward panel instead of the explainer
+function faqSchedule() {
+  clearTimeout(faqT);
+  faqT = setTimeout(() => {
+    faqSchedule();
+    if (!isKiosk() || !faqItems.length || rShow === "reward") return;
+    const box = $("faqrot"); box.classList.add("fade");
+    setTimeout(() => { faqI = (faqI + 1) % faqItems.length; faqShow(); box.classList.remove("fade"); }, 650);
+  }, 16000);
+}
 
 // Display layout: pick the column count that makes the nodes as large as possible inside the svg's box.
 function fitDag(svg, subs, o, step) {
@@ -770,9 +871,64 @@ function render() {
   for (const s of subs) known.add(s.h);
   for (const u of uncles) known.add(u.h);
   if (lastHeight != null && d.height > lastHeight) summaryArrived(d, lastHeight);
+  renderReward(d);
   lastHeight = d.height;
   firstRender = false;
 }
+
+// ---- Reward split panel (illustrative: facts only from the "One Block, Many Winners" article, plus subblock and miner counts)
+function payStatHtml() {   // 1 - 0.99^k for a 1% miner
+  const st = ` <span class="pst">Tailstorm on mainnet: implemented, activation pending.</span>`;
+  if (K === 120) return `A 1% miner gets paid in <b>70.1%</b> of blocks here (k=120, as in the mainnet code) vs <b>1%</b> today; <b>33.1%</b> at k=40 (upstream stormtest).` + st;
+  if (K === 40) return `A 1% miner gets paid in <b>33.1%</b> of blocks here (k=40, as in upstream stormtest) vs <b>1%</b> today; <b>70.1%</b> at k=120 (mainnet code).` + st;
+  return `A 1% miner gets paid in <b>1%</b> of blocks today, <b>33.1%</b> at k=40 (upstream stormtest) and <b>70.1%</b> at k=120 (mainnet code).` + st;
+}
+function perMiner(list) { const c = {}; for (const s of list) if (s && s.m) c[s.m] = (c[s.m] || 0) + 1; return c; }
+let rwKey = null;
+function renderReward(d) {
+  if (!d || !d.cur) return;
+  const b = d.prev && d.prev[0];
+  // closed round: the subblocks the summary included, plus the summary's own miner; no closed round yet: the open round so far
+  const list = b ? (b.subs || []).filter(s => !s.u) : [...(d.cur.subs || []), ...(d.cur.uncles || [])];
+  const key = [mode, K, b ? b.height : "cur" + list.length].join("|");
+  if (key === rwKey) return;                      // rebuild the squares only when the summary height (or k) changes
+  rwKey = key;
+  const c = perMiner(list); if (b && b.m) c[b.m] = (c[b.m] || 0) + 1;
+  const cells = Math.max(K, 2); let h = "";
+  for (let i = 0; i < cells - 1; i++) { const s = list[i]; h += s ? `<i style="background:${MC[s.m] || MC[0]}"></i>` : `<i></i>`; }
+  h += b ? `<i class="sum" style="background:${MC[b.m] || MC[0]}" title="summary block #${b.height}, miner ${b.m || "?"}"></i>` : `<i class="sum" style="background:none" title="next summary block"></i>`;
+  $("rwPieces").innerHTML = h;
+  $("rwOne").style.background = MC[(b && b.m) || 3];
+  const paid = Object.keys(c).length, M = d.miners || 4;
+  $("rwPaid").innerHTML = b ? `<b>${paid} of ${M}</b> miners paid in summary #${b.height}` : `<b>${paid} of ${M}</b> miners have subblocks in this round so far`;
+  $("rwCap").textContent = `${K} pieces = ${K - 1} subblocks + the summary (outlined in gold). Colour = miner; dark = no included subblock (late ones are paid later as uncles).`;
+  $("rwK").textContent = K;
+  $("rwStat").innerHTML = payStatHtml();
+}
+// normal page: "Live DAG | Reward split" tabs above the charts
+let view = "dag";
+function setView(v) {
+  view = v === "reward" ? "reward" : "dag";
+  document.documentElement.classList.toggle("view-reward", view === "reward");
+  $("tab-dag").setAttribute("aria-selected", view === "dag"); $("tab-reward").setAttribute("aria-selected", view === "reward");
+  if (view === "dag") render();
+}
+$("tab-dag").onclick = () => setView("dag"); $("tab-reward").onclick = () => setView("reward");
+document.querySelector(".viewtabs").addEventListener("keydown", e => { if (e.key === "ArrowLeft" || e.key === "ArrowRight") { setView(view === "dag" ? "reward" : "dag"); $(view === "dag" ? "tab-dag" : "tab-reward").focus(); } });
+// display layout: the right column alternates explainer <-> reward panel every 20 s (?rshow=explain|reward holds one)
+const qsR = new URLSearchParams(location.search), rHold = qsR.get("rshow");
+let rShow = "explain", rT = 0;
+function rSet(v) {
+  rShow = v === "reward" ? "reward" : "explain";
+  document.documentElement.classList.toggle("rshow-reward", rShow === "reward");
+  document.querySelectorAll(".rtabs").forEach(t => t.classList.toggle("frozen", !!rHold));
+  document.querySelectorAll(".rtabs span").forEach(sp => { const on = sp.dataset.t === rShow; sp.classList.toggle("on", on); const i = sp.querySelector("i"); i.style.animation = "none"; void i.offsetWidth; i.style.animation = ""; });
+  if (rShow === "reward") clearTimeout(faqT); else { faqShow(); faqSchedule(); }
+  clearTimeout(rT); if (!rHold) rT = setTimeout(() => rSet(isKiosk() && rShow === "explain" ? "reward" : "explain"), 20000);
+}
+document.querySelectorAll(".rtabs span").forEach(sp => sp.addEventListener("click", () => rSet(sp.dataset.t)));
+if (qsR.get("view") === "reward") setView("reward");
+rSet(rHold === "reward" ? "reward" : "explain");
 
 window.addEventListener("resize", () => { clearTimeout(window._rz); window._rz = setTimeout(render, 200); });
 applyLayout(); poll(); setInterval(poll, POLL_MS); setInterval(() => { updateMode(); tick(); }, 1000);
