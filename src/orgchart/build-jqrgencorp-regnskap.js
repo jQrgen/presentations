@@ -9,6 +9,7 @@
 const fs = require("fs");
 const path = require("path");
 const { head, esc } = require("../theme.js");
+const share = require("../share.js");
 const { gate, loadTerms } = require("./grep-gate.js");
 
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
@@ -185,6 +186,7 @@ const NO = `
     <p class="lede">Slik fører jQrgenCorp, et norsk enkeltpersonforetak (ENK), regnskap og MVA med et lite team av AI-agenter i Grok Bot. Agentene leser banken og kvitteringene fra Folio og regnskapet fra Fiken, lager utkast og kontrollerer hverandre. Eieren godkjenner og sender inn selv.</p>
     <p class="updated">Jørgen S. Notland (jQrgen), Oslo · <time datetime="${UPDATED}">2. oktober 2026</time></p>
   </header>
+  ${share.bar({ url: URL, title: TITLE_NO, lang: "no" })}
   <p class="disc"><b>Ansvarsfraskrivelse:</b> Dette er ikke regnskapsråd, skatteråd eller juridisk rådgivning, bare en beskrivelse av hvordan jeg har satt opp mitt eget arbeid. «Regnskapsfører», «revisor» og de andre er AI-roller i en app, ikke autoriserte fagpersoner. Revisoren er en kontrollør som bare kan lese, ikke en statsautorisert eller registrert revisor. Ansvaret for regnskapet og MVA-meldingen ligger hos eieren. Snakk med en autorisert regnskapsfører hvis du er usikker.</p>
   <p>Siden inneholder ingen regnskapstall: ingen beløp, saldoer, kunder eller kontoer. Den beskriver bare oppsettet.</p>
 
@@ -279,6 +281,7 @@ ${AUTO_NO}
     <li>Første gang: gå gjennom hele utkastet selv, og sammenlign med MVA-oppgaven i Fiken før du sender.</li>
   </ul>
   <p class="disc">Dette er ikke regnskapsråd. Agentene er AI-roller, ikke autoriserte regnskapsførere eller revisorer. Eieren har alltid ansvaret og siste ord.</p>
+  ${share.bar({ url: URL, title: TITLE_NO, lang: "no" })}
 </article>`;
 
 // --- English --------------------------------------------------------------------------------------------------
@@ -289,6 +292,7 @@ const EN = `
     <p class="lede">How jQrgenCorp, a Norwegian sole proprietorship (ENK), does its bookkeeping and VAT (MVA) with a small team of AI agents in Grok Bot. The agents read the bank and receipts from Folio and the books from Fiken, draft, and check each other. The owner approves and submits himself.</p>
     <p class="updated">Jørgen S. Notland (jQrgen), Oslo · <time datetime="${UPDATED}">2 October 2026</time></p>
   </header>
+  ${share.bar({ url: URL + "#en", title: TITLE_EN, lang: "en" })}
   <p class="disc"><b>Disclaimer:</b> This is not accounting, tax or legal advice. It only describes how I set up my own work. The "accountant", the "revisor" and the others are AI roles in an app, not licensed professionals. The revisor is a reviewer that can only read, not a state-authorised or registered auditor. The owner is responsible for the books and the VAT return. If in doubt, talk to an authorised accountant.</p>
   <p>This page contains no accounting figures: no amounts, balances, customers or accounts. It only describes the setup.</p>
 
@@ -383,11 +387,12 @@ ${AUTO_EN}
     <li>The first time, review the whole draft yourself, and compare it with the VAT report in Fiken before you submit.</li>
   </ul>
   <p class="disc">This is not accounting advice. The agents are AI roles, not authorised accountants or auditors. The owner is always responsible and has the final word.</p>
+  ${share.bar({ url: URL + "#en", title: TITLE_EN, lang: "en" })}
 </article>`;
 
 const html = head(TITLE_NO).replace('<html lang="en">', '<html lang="nb">')
   .replace("<title>", `<meta name="description" content="${esc(TITLE_EN)}. Bilingual article (Norwegian and English).">\n<link rel="canonical" href="${URL}">\n<title>`)
-  .replace(/text-wrap:\s*bal(?:ance)/g, "text-wrap:pretty").replace("</style>", CSS + "</style>")
+  .replace(/text-wrap:\s*bal(?:ance)/g, "text-wrap:pretty").replace("</style>", CSS + share.CSS + "</style>")
   .replace("<body>", `<body>\n<script>document.documentElement.classList.add("js", location.hash === "#en" ? "show-en" : "show-no")</script>`) + `<div class="band"><div class="inner">
     <a class="name" href="../">Jørgen S. Notland</a><span class="tag">Alle foredrag, artikler og papers · All talks, articles and papers</span>
   </div></div>
@@ -397,6 +402,7 @@ ${NO}
 ${EN}
   <footer class="site">Generert av src/orgchart/build-jqrgencorp-regnskap.js · <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
 </div>
+${share.SCRIPT}
 <script type="module">
 import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
 mermaid.initialize({ startOnLoad: false, theme: "neutral", securityLevel: "strict", flowchart: { htmlLabels: false } });

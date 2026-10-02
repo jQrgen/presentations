@@ -15,11 +15,11 @@ WT=""; cleanup() { [ -n "$WT" ] && git worktree remove --force "$WT" 2>/dev/null
 git worktree prune
 git pull -q --ff-only origin main
 PAGE=docs/jqrgencorp-regnskap
-FILES=(src/orgchart/build-jqrgencorp-regnskap.js src/orgchart/jqrgencorp-regnskap-terms.json src/orgchart/publish-jqrgencorp-regnskap.sh)
+FILES=(src/share.js src/orgchart/build-jqrgencorp-regnskap.js src/orgchart/jqrgencorp-regnskap-terms.json src/orgchart/publish-jqrgencorp-regnskap.sh)
 # 1. build (the builder runs the term gate and the digit gate and removes its output on a hit)
 (cd src && node orgchart/build-jqrgencorp-regnskap.js)
 # 2. term gate again, on the page and the builder (the term list itself is not scanned)
-(cd src && node orgchart/grep-gate.js ../$PAGE orgchart/build-jqrgencorp-regnskap.js --terms orgchart/jqrgencorp-regnskap-terms.json)
+(cd src && node orgchart/grep-gate.js ../$PAGE orgchart/build-jqrgencorp-regnskap.js share.js --terms orgchart/jqrgencorp-regnskap-terms.json)
 # 3. commit only this page's files
 git add "$PAGE" "${FILES[@]}"
 git diff --cached --quiet || git commit -q -m "jQrgenCorp accounting article (NO/EN): Folio MCP + Fiken API + Grok Bot"
