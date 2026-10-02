@@ -9,6 +9,7 @@ PPTX_URL="../Nexa-vs-Bitcoin-Ethereum.pptx" PDF_URL="../Nexa-vs-Bitcoin-Ethereum
 PPTX_URL="../Nexa-vs-Bitcoin-Ethereum-NO.pptx" PDF_URL="../Nexa-vs-Bitcoin-Ethereum-NO.pdf" node site.js no >/dev/null
 cp -R site-en "$D/nexa-vs-bitcoin-ethereum/en"; cp -R site-no "$D/nexa-vs-bitcoin-ethereum/no"
 rm -f "$D/nexa-vs-bitcoin-ethereum/en/nexa-logo.svg" "$D/nexa-vs-bitcoin-ethereum/no/nexa-logo.svg"
+node langpicker.js "$D/nexa-vs-bitcoin-ethereum" "Nexa vs Bitcoin and Ethereum" "Nexa mot Bitcoin og Ethereum" >/dev/null   # index.html: language picker -> en/ or no/
 cp "$WS/Nexa-vs-Bitcoin-Ethereum.pptx" "$WS/Nexa-vs-Bitcoin-Ethereum-NO.pptx" "$D/nexa-vs-bitcoin-ethereum/"
 cp render/Nexa-vs-Bitcoin-Ethereum.pdf render-no/Nexa-vs-Bitcoin-Ethereum-NO.pdf "$D/nexa-vs-bitcoin-ethereum/"
 # Blockchain Game Jam deck: slides/NN.png, .pptx and .pdf live in docs/blockchain-game-jam (rendered from the python-pptx build); the viewer is regenerated
@@ -27,7 +28,7 @@ node home.js data "$D" "$REPO"
 touch "$D/.nojekyll"
 # sources
 mkdir -p "$OUT/src/orgchart"; cp orgchart/*.js orgchart/*.sh "$OUT/src/orgchart/" 2>/dev/null || true
-cp build.js chart.js content-en.js content-no.js site.js site-gamejam.js viewer.js theme.js share.js home.js gl_commit.py package.json build-site.sh "$OUT/src/"
+cp build.js chart.js content-en.js content-no.js site.js site-gamejam.js viewer.js theme.js share.js langpicker.js home.js gl_commit.py package.json build-site.sh "$OUT/src/"
 cp brand/*.svg "$OUT/src/brand/"; cp data/*.json "$OUT/src/data/"
 cat > "$OUT/.gitlab-ci.yml" <<'YML'
 # Mirrors docs/ to GitLab Pages (GitHub Pages serves docs/ directly).
