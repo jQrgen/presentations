@@ -59,5 +59,12 @@
       "url": "https://jqrgen.github.io/presentations/tailstorm/mining-rewards/",
       "date": "2026-10-02"
     }
+  ],
+  "Rostrum dev": [
+    {
+      "title": "Rostrum MR !461: animated architecture page",
+      "url": "https://gitlab.com/nexa/rostrum/-/merge_requests/461",
+      "date": "2026-10-03"
+    }
   ]
 }
