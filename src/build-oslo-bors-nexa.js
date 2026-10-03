@@ -40,6 +40,20 @@ const S = {
   mica: ["Finanstilsynet: kryptoeiendelsloven (MiCA)", "https://www.finanstilsynet.no/tema/kryptoeiendeler-mica/"],
   hvit: ["Lovdata: hvitvaskingsloven (LOV-2018-06-01-23) § 4", "https://lovdata.no/dokument/NL/lov/2018-06-01-23"],
   sbx: ["Finanstilsynet: regulatorisk sandkasse", "https://www.finanstilsynet.no/tema/fintech/finanstilsynets-regulatoriske-sandkasse/"],
+  enxm: ["Euronext: monthly cash market statistics, August 2026 (sheet SM - Oslo, Number of trades - Total, single counted)", "https://live.euronext.com/sites/default/files/statistics/cash/monthly/Cash%20202608.xlsx"],
+  enxd: ["Euronext: daily cash market statistics, 23 March 2026 (sheet Oslo, total trades)", "https://live.euronext.com/sites/default/files/statistics/cash/nextday/2017/Cash%2020260323.xlsx"],
+  hrs: ["Pareto Securities: Børsenes åpningstider (Oslo Børs, kontinuerlig handel 09:00-16:20)", "https://paretosec.no/aksjehandel-pa-nett/annet/borsenes-apningstider"],
+  optiq: ["Euronext: Euronext introduces Optiq, new technology platform (July 2018)", "https://www.euronext.com/en/investor-relations/financial-information/news/euronext-introduces-optiqr-new-technology-platform"],
+  abs: ["Nexa spec: Design and operation of the adaptive blocksize feature", "https://spec.nexa.org/blocks/adaptive-blocksize/"],
+  tail: ["Nexa spec: Tailstorm", "https://spec.nexa.org/blocks/tailstorm/"],
+  scal: ["Nexa: Nexa's scaling strategy, how we enable over 100,000 TPS", "https://nexa.org/articles-database/nexas-scaling-strategy-how-we-enable-over-100000tps"],
+  feat: ["Nexa: Features", "https://nexa.org/features"],
+  expl: ["Nexa Explorer: Transaction Stats (Tx Rate, 24hr)", "https://explorer.nexa.org/tx-stats"],
+  capd: ["Nexa spec: Counterparty and Protocol Discovery (CAPD)", "https://spec.nexa.org/network/capd/"],
+  capdsrc: ["Nexa source code: src/capd/capd.h (CAPD message pool)", "https://gitlab.com/nexa/nexa/-/blob/dev/src/capd/capd.h"],
+  m25: ["ESMA Interactive Single Rulebook: MiFIR article 25, obligation to maintain records", "https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mifir/article-25-obligation-maintain-records"],
+  rts25: ["European Commission: RTS 25 on the accuracy of business clocks, Delegated Regulation (EU) 2017/574", "https://ec.europa.eu/finance/securities/docs/isd/mifid/rts/160607-rts-25-annex_en.pdf"],
+  m27: ["ESMA Interactive Single Rulebook: MiFID II article 27, best execution", "https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mifid-ii/article-27-obligation-execute-orders"],
   emt: ["Finanstilsynet: e-pengetoken", "https://www.finanstilsynet.no/tema/kryptoeiendeler-mica/e-pengetoken/"],
   m48: ["ESMA Interactive Single Rulebook: MiCA article 48, requirements for offers and admission to trading of e-money tokens", "https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mica/article-48-requirements-offer-public-or"],
   m49: ["ESMA Interactive Single Rulebook: MiCA article 49, issuance and redeemability of e-money tokens", "https://www.esma.europa.eu/publications-and-data/interactive-single-rulebook/mica/article-49-issuance-and-redeemability-e"],
@@ -108,7 +122,7 @@ const NO = `
   <p>${tag("no", "fic")} Ingenting i denne boksen har skjedd. Det er en tenkt dag på en tenkt DLT-markedsplass.</p>
   <dl class="day">
     <dt>07:30</dt><dd>Kari åpner aksjeappen. Lommeboken hennes står allerede på mottakerlisten fordi meglerhuset har gjort kundekontrollen sin. Uten den slipper ikke tokenkontrakten aksjene inn, uansett hvor fint hun spør.</dd>
-    <dt>09:00</dt><dd>Åpningsauksjon. Ordrene matches av en regulert handelsplass, ikke av blokkjeden. Blokkjeden er arkivet og oppgjøret, ikke auksjonarius.</dd>
+    <dt>09:00</dt><dd>Åpningsauksjon. Karis kjøpsordre har allerede fløyet ut som en liten CAPD-melding over Nexa-nettverket, utenfor blokkene. Ordrene matches av en regulert handelsplass, ikke av blokkjeden. Blokkjeden er arkivet og oppgjøret, ikke auksjonarius.</dd>
     <dt>09:00 og litt</dt><dd>Handelen gjøres opp: aksjetokens og oppgjørstokens bytter eier i samme transaksjon. Tailstorm gir en forpliktelse omtrent hvert sekund og en oppsummeringsblokk hvert annet minutt, så kaffen rekker så vidt å bli lunken.</dd>
     <dt>12:00</dt><dd>Selskapet deler ut utbytte. Ingen regneark sendes rundt: registeret tar et øyeblikksbilde av hvem som eide aksjetokens på avstemmingsdagen, og utbyttet lander som en NOK-stablecoin på Nexa rett i lommebøkene deres. Kari ser beløpet før lunsjen er spist, og kan bruke det eller løse det inn i kroner hos utstederen. (Hvordan, og hva som er uavklart, står <a href="#utbytte">lenger ned</a>.)</dd>
     <dt>14:15</dt><dd>En bruker mister telefonen og nøklene. Ingen panikk: kontoføreren har myndighet til å flytte aksjene etter en kontrollert prosess, akkurat som i dag. (Hvordan det skal se ut, er et av de åpne spørsmålene lenger ned.)</dd>
@@ -161,6 +175,35 @@ const NO = `
     </tbody>
   </table>
 
+  <h2 id="kapasitet">Holder kapasiteten?</h2>
+  <p>Alle tall er hentet 3. oktober 2026. Kontinuerlig handel på Oslo Børs varer fra 09:00 til 16:20, altså 26 400 sekunder.${R("hrs")}</p>
+  <table>
+    <thead><tr><th>Hva</th><th>Tall</th></tr></thead>
+    <tbody>
+      <tr><td>Oslo Børs, snitt 2025</td><td>${tag("no", "fact")} 26 357 568 handler på 250 handelsdager${R("enxm")}, omtrent 4,0 handler i sekundet.</td></tr>
+      <tr><td>Oslo Børs, januar–august 2026</td><td>${tag("no", "fact")} 20 928 836 handler på 166 dager${R("enxm")}, omtrent 4,8 i sekundet.</td></tr>
+      <tr><td>Travleste dag jeg fant: 23. mars 2026</td><td>${tag("no", "fact")} 231 213 handler${R("enxd")}, omtrent 8,8 i sekundet i snitt over dagen. Toppene innenfor dagen er høyere.</td></tr>
+      <tr><td>Ordremeldinger</td><td>${tag("no", "fact")} Euronexts plattform Optiq håndterte over 14 milliarder meldinger og 18,8 millioner handler fra 25. juni til juli 2018, alle Euronexts aksjemarkeder samlet${R("optiq")}, altså rundt 745 meldinger per handel. ${tag("no", "mine")} Brukt på Oslo blir det et grovt anslag på rundt 3 000 meldinger i sekundet i snitt, og flere på travle dager.</td></tr>
+      <tr><td>Nexa i dag</td><td>${tag("no", "fact")} Blokkstørrelsen tilpasser seg bruken, men har et gulv på 100 KB per blokk, og det kommer en blokk omtrent hvert annet minutt.${R("abs")} Nexa oppgir selv at 100 000 transaksjoner i sekundet er omtrent 20 MB i sekundet, altså rundt 200 byte per transaksjon.${R("scal")} ${tag("no", "mine")} Det gir omtrent 4 transaksjoner i sekundet på gulvet, omtrent like mye som snittet på Oslo Børs og uten margin.</td></tr>
+      <tr><td>Nexa etter Hard Fork 2 (1. november 2026)</td><td>${tag("no", "fact")} Gulvet blir 12 MB per to minutter, med Tailstorm-delblokker omtrent hvert sekund.${R("abs", "tail", "hf2")} ${tag("no", "mine")} Med 200 byte per transaksjon blir det rundt 500 transaksjoner i sekundet.</td></tr>
+      <tr><td>Nexas mål</td><td>${tag("no", "fact")} Over 100 000 transaksjoner i sekundet er et uttalt mål${R("feat")}, ikke noe som er vist i drift.</td></tr>
+      <tr><td>Faktisk bruk nå</td><td>${tag("no", "fact")} Rundt 0,01 til 0,02 transaksjoner i sekundet (24-timers snitt i utforskeren).${R("expl")}</td></tr>
+    </tbody>
+  </table>
+  <p>${tag("no", "mine")} Etter Hard Fork 2 har Nexa på gulvet omtrent 57 ganger snittempoet på den travleste dagen jeg fant, for handler og nettet oppgjør. Forbeholdet er at en ekte levering-mot-betaling-transaksjon med aksjetoken, oppgjørstoken og kovenanter trolig er større enn 200 byte, så den reelle marginen er mindre. Ordremeldingene, rundt 3 000 i sekundet, får derimot ikke plass i blokkene. De trenger en annen kanal.</p>
+
+  <h2 id="capd">Ordrestrømmen på CAPD i stedet for i blokkene</h2>
+  <p>Nexa har en egen kanal for små meldinger som ikke skal i blokkjeden: CAPD (Counterparty and Protocol Discovery).</p>
+  <ul>
+    <li>${tag("no", "fact")} <b>Hva det er.</b> Spesifikasjonen beskriver CAPD som en kortvarig, desentralisert og anonym meldingstjeneste der deltakere kan finne motparter og gjennomføre protokoller med dem, og nevner handel og atomiske bytter som eksempler. Den kjører på Nexas fullnoder, mens klienter som lommebøker sender inn og søker etter meldinger.${R("capd")}</li>
+    <li>${tag("no", "fact")} <b>Ikke på kjeden.</b> Meldingene ligger i et minnebasseng (msgPool) i hver node, ikke i blokker. Spesifikasjonen sier at bassenget typisk er på noen hundre MB og kan stilles inn${R("capd")}; standarden i kildekoden er 100 MB.${R("capdsrc")} Når det trengs bevis for at en melding er levert, viser spesifikasjonen til data i en vanlig transaksjon på kjeden.${R("capd")}</li>
+    <li>${tag("no", "fact")} <b>Arbeidsbevis og prioritet.</b> Hver melding må ha et arbeidsbevis (proof of work) for å stoppe spam. Prioriteten regnes ut fra arbeidsbeviset, alderen og lengden: meldinger over en nominell størrelse på 100 byte får lavere prioritet i forhold til lengden, og prioriteten synker lineært til null etter omtrent ti minutter. Når bassenget er fullt, skyves meldingene med lavest prioritet ut, og hver node bestemmer selv hvilken prioritet den krever for å videresende.${R("capd")}</li>
+    <li>${tag("no", "fact")} <b>Utløp og tilbaketrekking.</b> En melding kan ha et utløpstidspunkt i sekunder etter at den ble laget, og en «rescind»-hash som lar avsenderen trekke den tilbake. Spesifikasjonen anbefaler at meldinger som utløper innen fem minutter, ikke videresendes.${R("capd")}</li>
+    <li>${tag("no", "fact")} <b>Filtrering.</b> De første 16 bytene i en melding kan brukes til å søke, og en klient kan be en node om å varsle hver gang en ny melding treffer søket.${R("capd")}</li>
+    <li>${tag("no", "fact")} <b>Kapasitet.</b> Spesifikasjonen oppgir ingen tall for meldinger i sekundet eller forsinkelse. Den sier at alle «globale» meldinger over en viss prioritet sendes til alle noder, og at deling av meldingene mellom noder (sharding) ikke er implementert.${R("capd")}</li>
+  </ul>
+  <p>${tag("no", "mine")} <b>Slik kunne det virke.</b> Bud, tilbud og kanselleringer sendes som CAPD-meldinger, med for eksempel instrument og side i de 16 søkbare bytene. Handelsplassen abonnerer på dem, matcher ordrene i sin egen motor utenfor kjeden, og bare de ferdige handlene og oppgjørene går på kjeden som transaksjoner. Blokkene får da de rundt 9 handlene i sekundet, mens de rundt 3 000 ordremeldingene i sekundet går i CAPD. Det er et design, ikke noe som finnes i dag. Handelsplassen må uansett ta vare på alle ordrene selv, siden CAPD-meldingene forsvinner fra nodene.</p>
+
   <h2 id="utbytte">Utbytte i NOK-stablecoin, rett i lommeboken</h2>
   <p>${tag("no", "mine")} Hvis aksjene er tokens på Nexa, kan utbyttet også være det: et token i norske kroner som går rett til lommebøkene som holder aksjetokens, i stedet for kroner til en bankkonto. Her er hva reglene sier, hvordan det kunne virke, og hva som ikke er avklart.</p>
 
@@ -196,6 +239,10 @@ const NO = `
     <li>${tag("no", "open")} <b>Endelighet på en åpen kjede.</b> Proof of work gir sannsynlighetsbasert endelighet, mens CSDR krever at systemet definerer et tydelig tidspunkt for når en ordre er ugjenkallelig.${R("a39")} Hvordan det skal forenes, og om en åpen, tillatelsesfri kjede kan godtas, har jeg ikke funnet noe tydelig svar på.</li>
     <li>${tag("no", "open")} <b>Oppgjørsdirektivet.</b> Ifølge forordningens fortale kan et DLT-OS som får unntak fra CSDRs deltakerkrav ikke utpekes etter oppgjørsdirektivet.${R("dlt")} Hva det betyr for rettsvernet ved konkurs, bør avklares.</li>
     <li>${tag("no", "open")} <b>Personopplysninger på en offentlig kjede.</b> Aksjeeierregisteret skal inneholde navn, fødselsdato og adresse.${R("asal")} ${tag("no", "mine")} Det kan ikke ligge i klartekst på en offentlig blokkjede. En løsning er at kjeden bare har pseudonyme adresser, mens verdipapirsentralen har koblingen til personene.</li>
+    <li>${tag("no", "open")} <b>Holder CAPD for ordrestrømmen?</b> Rundt 3 000 meldinger i sekundet i snitt, og topper langt over det, er ikke noe spesifikasjonen sier noe om.${R("capd")} Om CAPD har kapasiteten og tilstrekkelig lav forsinkelse, og hva anbefalingen om ikke å videresende meldinger som utløper innen fem minutter betyr for kortlevde ordre, må testes.</li>
+    <li>${tag("no", "open")} <b>Rettferdighet og rekkefølge.</b> CAPD har ingen felles global rekkefølge på meldingene, og prioriteten følger arbeidsbeviset.${R("capd")} ${tag("no", "mine")} Den som regner mer, eller sitter nær handelsplassens node, kan få ordren sin fram først, og andre kan se ordren før den er matchet. Handelsplassen måtte selv sette tidsstempel og rekkefølge når ordren kommer inn.</li>
+    <li>${tag("no", "open")} <b>MiFID II-kravene.</b> En handelsplass skal ta vare på data om alle ordre i minst fem år${R("m25")}, synkronisere klokkene sine mot UTC med en nøyaktighet som avhenger av systemets forsinkelse (1 millisekund eller 100 mikrosekunder)${R("rts25")}, og meglerne har plikt til beste resultat for kunden.${R("m27")} Hvordan det gjøres med ordre som kommer via et åpent nettverk, er ikke avklart.</li>
+    <li>${tag("no", "open")} <b>Hvem matcher?</b> Matchingen må fortsatt drives av en regulert handelsplass med tillatelse${R("dlt")}, ikke av nodene i nettverket. CAPD kan bare være transportkanalen.</li>
     <li>${tag("no", "open")} <b>Hvem holder nøklene?</b> Hvem som skal ha MINT-, MELT- og RESCRIPT-myndighetene, og hvordan rettskjennelser, arv, tapte nøkler og selskapshendelser håndteres, er designvalg som tilsynet måtte godta.</li>
     <li>${tag("no", "open")} <b>Utbytte i e-pengetoken i stedet for kroner på bankkonto.</b> I bestemmelsene om utbytte jeg har lest, står det ikke hva utbyttet skal betales i.${R("asal8")} Et e-pengetoken regnes som elektroniske penger, men aksjeeieren bytter et krav på sin egen bank mot et krav på tokenutstederen.${R("m48", "m49")} Om det kan regnes som vanlig kontantutbytte, eller om det må behandles som utdeling av noe annet, har jeg ikke funnet svar på.</li>
     <li>${tag("no", "open")} <b>Må aksjeeierne samtykke?</b> Kan generalforsamlingen eller vedtektene bestemme token-utbytte for alle, eller må hver aksjeeier velge det selv? ${tag("no", "mine")} Det tryggeste er trolig et valg: kroner til bankkonto som standard, NOK-token for dem som ber om det.</li>
@@ -225,7 +272,7 @@ const EN = `
   <p>${tag("en", "fic")} Nothing in this box has happened. It is an imagined day on an imagined DLT market.</p>
   <dl class="day">
     <dt>07:30</dt><dd>Kari opens her trading app. Her wallet is already on the allowed list because her broker did its customer checks. Without that, the token contract will not let the shares in, however nicely she asks.</dd>
-    <dt>09:00</dt><dd>Opening auction. Orders are matched by a regulated trading venue, not by the blockchain. The chain is the archive and the settlement, not the auctioneer.</dd>
+    <dt>09:00</dt><dd>Opening auction. Kari's buy order has already flown out as a small CAPD message over the Nexa network, outside the blocks. Orders are matched by a regulated trading venue, not by the blockchain. The chain is the archive and the settlement, not the auctioneer.</dd>
     <dt>09:00 and a bit</dt><dd>The trade settles: share tokens and settlement tokens change hands in the same transaction. Tailstorm gives a commitment about every second and a summary block every two minutes, so the coffee barely has time to go lukewarm.</dd>
     <dt>12:00</dt><dd>The company pays a dividend. No spreadsheets are emailed around: the register takes a snapshot of who held the share tokens on the record date, and the dividend lands as a krone stablecoin on Nexa (a NOK-pegged token), straight in their wallets. Kari sees the amount before lunch is over, and can spend it or redeem it for kroner with the issuer. (How, and what is unsettled, is <a href="#dividend">further down</a>.)</dd>
     <dt>14:15</dt><dd>Someone loses their phone and their keys. No panic: the account operator has the authority to move the shares after a controlled process, just like today. (What that should look like is one of the open questions further down.)</dd>
@@ -278,6 +325,35 @@ const EN = `
     </tbody>
   </table>
 
+  <h2 id="capacity">Is there enough capacity?</h2>
+  <p>All figures were retrieved on 3 October 2026. Continuous trading on Oslo Børs runs from 09:00 to 16:20, which is 26,400 seconds.${R("hrs")}</p>
+  <table>
+    <thead><tr><th>What</th><th>Figure</th></tr></thead>
+    <tbody>
+      <tr><td>Oslo Børs, 2025 average</td><td>${tag("en", "fact")} 26,357,568 trades over 250 trading days${R("enxm")}, about 4.0 trades per second.</td></tr>
+      <tr><td>Oslo Børs, January–August 2026</td><td>${tag("en", "fact")} 20,928,836 trades over 166 days${R("enxm")}, about 4.8 per second.</td></tr>
+      <tr><td>Busiest day I found: 23 March 2026</td><td>${tag("en", "fact")} 231,213 trades${R("enxd")}, about 8.8 per second averaged over the day. Peaks within the day are higher.</td></tr>
+      <tr><td>Order messages</td><td>${tag("en", "fact")} Euronext's Optiq platform handled more than 14 billion messages and 18.8 million trades from 25 June to July 2018, across all Euronext cash markets${R("optiq")}, so about 745 messages per trade. ${tag("en", "mine")} Applied to Oslo, that is a rough estimate of about 3,000 messages per second on average, and more on busy days.</td></tr>
+      <tr><td>Nexa today</td><td>${tag("en", "fact")} The block size adapts to use, but has a floor of 100 KB per block, with a block about every two minutes.${R("abs")} Nexa itself says 100,000 transactions per second is about 20 MB per second, so about 200 bytes per transaction.${R("scal")} ${tag("en", "mine")} That gives about 4 transactions per second at the floor, roughly the Oslo Børs average and with no headroom.</td></tr>
+      <tr><td>Nexa after Hard Fork 2 (1 November 2026)</td><td>${tag("en", "fact")} The floor becomes 12 MB per two minutes, with Tailstorm subblocks about every second.${R("abs", "tail", "hf2")} ${tag("en", "mine")} At 200 bytes per transaction that is about 500 transactions per second.</td></tr>
+      <tr><td>Nexa's goal</td><td>${tag("en", "fact")} More than 100,000 transactions per second is a stated goal${R("feat")}, not something demonstrated in operation.</td></tr>
+      <tr><td>Actual use now</td><td>${tag("en", "fact")} About 0.01 to 0.02 transactions per second (24-hour average on the explorer).${R("expl")}</td></tr>
+    </tbody>
+  </table>
+  <p>${tag("en", "mine")} After Hard Fork 2, Nexa's floor gives roughly 57 times the average trade rate of the busiest day I found, for trades and netted settlement. The caveat is that a real delivery-versus-payment transaction with a share token, a settlement token and covenants is probably larger than 200 bytes, so the real margin is smaller. The order messages, about 3,000 per second, do not fit in the blocks. They need another channel.</p>
+
+  <h2 id="capd-en">The order stream on CAPD instead of in blocks</h2>
+  <p>Nexa has its own channel for small messages that are not meant for the blockchain: CAPD (Counterparty and Protocol Discovery).</p>
+  <ul>
+    <li>${tag("en", "fact")} <b>What it is.</b> The spec describes CAPD as a transient, decentralised, anonymous messaging service that lets participants discover counterparties and run protocols with them, naming trades and atomic swaps as examples. It runs on Nexa full nodes, while clients such as wallets submit and search for messages.${R("capd")}</li>
+    <li>${tag("en", "fact")} <b>Not on chain.</b> Messages sit in a memory pool (msgPool) in each node, not in blocks. The spec says the pool is typically a few hundred MB and configurable${R("capd")}; the default in the source code is 100 MB.${R("capdsrc")} Where proof of delivery is needed, the spec points to data in an ordinary on-chain transaction.${R("capd")}</li>
+    <li>${tag("en", "fact")} <b>Proof of work and priority.</b> Every message must carry proof of work to deter spam. Priority is computed from the proof of work, the age and the length: messages above a nominal size of 100 bytes get proportionally lower priority, and priority falls linearly to zero after about ten minutes. When the pool is full, the lowest-priority messages are pushed out, and each node sets the priority it requires before forwarding.${R("capd")}</li>
+    <li>${tag("en", "fact")} <b>Expiry and rescinding.</b> A message can carry an expiry time in seconds after creation, and a rescind hash that lets the sender withdraw it. The spec recommends not relaying messages that expire within five minutes.${R("capd")}</li>
+    <li>${tag("en", "fact")} <b>Filtering.</b> The first 16 bytes of a message can be searched, and a client can ask a node to notify it whenever a new message matches.${R("capd")}</li>
+    <li>${tag("en", "fact")} <b>Capacity.</b> The spec publishes no figure for messages per second or latency. It says every "global" message above a certain priority is forwarded to every peer, and that sharding messages across nodes is not implemented.${R("capd")}</li>
+  </ul>
+  <p>${tag("en", "mine")} <b>How it could work.</b> Bids, offers and cancellations are broadcast as CAPD messages, with for example the instrument and side in the 16 searchable bytes. The venue subscribes to them, matches orders in its own engine off-chain, and only the final trades and settlements go on chain as transactions. The blocks then carry the roughly 9 trades per second, while the roughly 3,000 order messages per second go over CAPD. This is a design, not something that exists today. The venue would still have to keep every order itself, since CAPD messages disappear from the nodes.</p>
+
   <h2 id="dividend">Dividends in a krone stablecoin, straight to the wallet</h2>
   <p>${tag("en", "mine")} If the shares are tokens on Nexa, the dividend can be one too: a token in Norwegian kroner sent straight to the wallets holding the share tokens, instead of kroner to a bank account. Here is what the rules say, how it could work, and what is not settled.</p>
 
@@ -313,6 +389,10 @@ const EN = `
     <li>${tag("en", "open")} <b>Finality on an open chain.</b> Proof of work gives probabilistic finality, while CSDR requires the system to define a clear moment when an order is irrevocable.${R("a39")} How to reconcile the two, and whether an open, permissionless chain can be accepted, I have not found a clear answer to.</li>
     <li>${tag("en", "open")} <b>The Settlement Finality Directive.</b> According to the regulation's recitals, a DLT SS that is exempted from CSDR's participation rules cannot be designated under that directive.${R("dlt")} What that means for legal protection in an insolvency needs clarifying.</li>
     <li>${tag("en", "open")} <b>Personal data on a public chain.</b> The shareholder register must contain names, dates of birth and addresses.${R("asal")} ${tag("en", "mine")} That cannot sit in clear text on a public blockchain. One answer is that the chain holds only pseudonymous addresses while the CSD holds the link to the people.</li>
+    <li>${tag("en", "open")} <b>Can CAPD carry the order stream?</b> About 3,000 messages per second on average, with peaks well above that, is something the spec says nothing about.${R("capd")} Whether CAPD has the throughput and low enough latency, and what the recommendation not to relay messages expiring within five minutes means for short-lived orders, needs testing.</li>
+    <li>${tag("en", "open")} <b>Fairness and ordering.</b> CAPD has no shared global order of messages, and priority follows proof of work.${R("capd")} ${tag("en", "mine")} Whoever computes more, or sits close to the venue's node, may get their order in first, and others can see an order before it is matched. The venue would have to timestamp and sequence orders itself on arrival.</li>
+    <li>${tag("en", "open")} <b>MiFID II requirements.</b> A trading venue must keep data on all orders for at least five years${R("m25")}, synchronise its clocks to UTC with an accuracy that depends on the system's latency (1 millisecond or 100 microseconds)${R("rts25")}, and brokers have a best-execution duty to their clients.${R("m27")} How to do that with orders arriving over an open network is not settled.</li>
+    <li>${tag("en", "open")} <b>Who matches?</b> Matching must still be run by a licensed, regulated trading venue${R("dlt")}, not by the network's nodes. CAPD can only be the transport.</li>
     <li>${tag("en", "open")} <b>Who holds the keys?</b> Who gets the MINT, MELT and RESCRIPT authorities, and how court orders, inheritance, lost keys and corporate actions are handled, are design choices the supervisor would have to accept.</li>
     <li>${tag("en", "open")} <b>Dividends in an e-money token instead of kroner to a bank account.</b> The dividend provisions I have read do not say what the dividend must be paid in.${R("asal8")} An e-money token is deemed electronic money, but the shareholder swaps a claim on their own bank for a claim on the token issuer.${R("m48", "m49")} Whether that counts as an ordinary cash dividend, or must be treated as a distribution of something else, I have not found an answer to.</li>
     <li>${tag("en", "open")} <b>Must shareholders consent?</b> Can the general meeting or the articles impose a token dividend on everyone, or must each shareholder opt in? ${tag("en", "mine")} The safest is probably a choice: kroner to a bank account by default, the krone token for those who ask.</li>

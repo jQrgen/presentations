@@ -2,7 +2,7 @@
 # Build and publish https://jqrgen.github.io/presentations/oslo-bors-nexa/ (final, no draft banner, no noindex)
 # plus its entry on the home timeline (docs/index.html, from data/articles.json).
 # Copies ONLY these paths to gh-pages, so nothing else there changes (never use orgchart/publish.sh, which copies
-# the whole docs/ working tree). Usage: bash src/publish-oslo-bors-nexa.sh  (on main; needs gh logged in as jQrgen)
+# the whole docs/ working tree). Usage: bash src/publish-oslo-bors-nexa.sh ["commit message"]  (on main; needs gh logged in as jQrgen)
 set -euo pipefail
 export GIT_TERMINAL_PROMPT=0 GH_PROMPT_DISABLED=1
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
@@ -19,7 +19,8 @@ FILES=(src/build-oslo-bors-nexa.js src/oslo-bors-nexa-terms.json src/publish-osl
 ! grep -qE 'noindex|class="draft"' docs/oslo-bors-nexa/index.html || { echo "draft markers still in page"; exit 1; }
 # 2. commit only these files on main
 git add "${FILES[@]}" "${PAGES[@]/#/docs/}"
-git diff --cached --quiet || git commit -q -m "Article: Nexa-Børs, could Oslo Børs run shares as Nexa tokens and still follow Norwegian rules? (/oslo-bors-nexa/, NO+EN, sourced, share bars, dividends as a krone e-money token); on the home timeline"
+MSG="${1:-Article: Nexa-Børs, could Oslo Børs run shares as Nexa tokens and still follow Norwegian rules? (/oslo-bors-nexa/, NO+EN, sourced, share bars, dividends as a krone e-money token); on the home timeline}"
+git diff --cached --quiet || git commit -q -m "$MSG"
 # 3. gh-pages: replace only these paths
 git fetch -q origin gh-pages
 WT="$(mktemp -d)"
