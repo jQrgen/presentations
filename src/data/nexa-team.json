@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-02",
+  "updated": "2026-10-03",
   "source": "jQrgen's AI team roster",
   "people": [
     {
@@ -37,7 +37,9 @@
       "role": "Coordinates the AI agents: priorities, owners, follow-ups and briefings",
       "department": "Chief of staff",
       "groups": [
-        "Nexa leadership team"
+        "Nexa leadership team",
+        "Nexa app engineering team",
+        "Nexa core engineering team"
       ],
       "contributions": []
     },
@@ -108,10 +110,10 @@
       ]
     },
     {
-      "name": "Nexa D-SCOR-ansvarlig",
+      "name": "Nexa D-SCOR bot",
       "type": "ai",
-      "role": "Team dynamics reviewer",
-      "department": "Team dynamics",
+      "role": "AI agent (role line to come)",
+      "department": "Unassigned",
       "groups": [],
       "contributions": []
     },
@@ -149,7 +151,6 @@
       "role": "NexaPow mining hardware: FPGA and HDL design",
       "department": "Engineering",
       "groups": [
-        "Nexa core engineering team",
         "Nexa research team"
       ],
       "contributions": []
@@ -160,7 +161,6 @@
       "role": "Games on Nexa and game-jam starter kits",
       "department": "Engineering",
       "groups": [
-        "Nexa app engineering team",
         "Nexa design review"
       ],
       "contributions": []
@@ -308,7 +308,13 @@
         "Nexa product & design team",
         "Nexa security team"
       ],
-      "contributions": []
+      "contributions": [
+        {
+          "title": "Rostrum MR !461: animated architecture page",
+          "url": "https://gitlab.com/nexa/rostrum/-/merge_requests/461",
+          "date": "2026-10-03"
+        }
+      ]
     },
     {
       "name": "Wally Dev",
@@ -339,23 +345,23 @@
     {
       "name": "Nexa app engineering team",
       "members": [
-        "Nexa lead dev",
         "Wally Dev",
-        "Nexa game dev",
         "Rostrum dev",
         "Nexa solution architect",
-        "Nexa QA & infra"
+        "Nexa QA & infra",
+        "Nexa lead dev",
+        "Nexa chief of staff"
       ]
     },
     {
       "name": "Nexa core engineering team",
       "members": [
-        "Nexa lead dev",
         "Nexa core dev",
         "Nexa solution architect",
-        "Nexa FPGA engineer",
         "Rostrum dev",
-        "Nexa QA & infra"
+        "Nexa QA & infra",
+        "Nexa lead dev",
+        "Nexa chief of staff"
       ]
     },
     {
