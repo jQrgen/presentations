@@ -72,7 +72,7 @@ const html = head("jQrgenCorp: et D-SCOR-inspirert AI-team").replace('<html lang
     <p class="lede">jQrgenCorp er jQrgens (Jørgen S. Notland) selskap. Teamet består av én person, jQrgen, og ${M.length} AI-agenter. Denne siden forklarer hvorfor agentene har fått ulike, utfyllende arbeids- og dialogstiler, og hvordan det skal hjelpe teamet å levere på formålet.</p>
     <p class="updated">1 person · ${M.length} AI-agenter · Sist oppdatert <time datetime="${esc(data.updated)}">${esc(fmt)}</time> · <a href="#english">English summary</a></p>
   </header>
-  ${share.bar({ url: SHARE_URL, title: "jQrgenCorp: et D-SCOR-inspirert AI-team", lang: "no" })}
+  ${share.top({ url: SHARE_URL, title: "jQrgenCorp: et D-SCOR-inspirert AI-team", lang: "no" })}
 
   <h2>Formål</h2>
   <p>jQrgenCorp skal grunnlegge finansielle tjenester i Norge og Europa, særlig blokkjedebaserte. Vi leter etter produkt–marked-match med metodene Y Combinator står for:</p>
@@ -140,7 +140,7 @@ const html = head("jQrgenCorp: et D-SCOR-inspirert AI-team").replace('<html lang
 
   <section class="en" id="english" lang="en">
     <h2>English summary</h2>
-    ${share.bar({ url: SHARE_URL + "#english", title: "jQrgenCorp: a D-SCOR-inspired AI team", lang: "en" })}
+    ${share.top({ url: SHARE_URL + "#english", title: "jQrgenCorp: a D-SCOR-inspired AI team", lang: "en" })}
     <p>jQrgenCorp is jQrgen's (Jørgen S. Notland) company. Its purpose is to found financial services in Norway and Europe, especially blockchain-based ones, finding product-market fit with Y Combinator methods: talk to users, launch fast, do things that don't scale, measure retention and growth, and stay default alive. The team is one person and ${M.length} AI agents. Each agent has been given a D-SCOR-inspired profile (work style and dialogue style, from the Norwegian D-SCOR model) chosen so that the profiles complement each other. The team runs at two speeds: bold explorers who test ideas fast and cheaply, and a conservative core that never cuts corners on money, books or regulation. jQrgen always has the final word on risk. Every agent shares one team value, "Struktur og lojalitet til systemet": follow the agreed structure, roles, owners, routines and approval rules, and speak up if the structure gets in the way. The D-SCOR lead runs a monthly team check and a quarterly internal staff survey about unmet needs in the team; results are never published. The profiles are assigned by design, not measured; the 1–5 risk-appetite scale is our own addition; the team consists of AI agents, the D-SCOR lead is an AI role based on the D-SCOR model, and this is not an official D-SCOR product or certification; jQrgenCorp is not affiliated with or endorsed by D-SCOR AS.</p>
     <ul>${rowsEn}</ul>
   </section>

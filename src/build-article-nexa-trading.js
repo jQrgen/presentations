@@ -88,7 +88,7 @@ ${share.CSS}</style>
 <article>
 <h1>${esc(title)}</h1>
 <p class="byline">${inline(byline)}</p>
-${bar}
+${share.top({ url: URL, title, lang: "en", networks: NETWORKS })}
 ${body.join("\n")}
 ${bar}
 </article>

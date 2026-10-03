@@ -13,7 +13,7 @@ WT=""; cleanup() { [ -n "$WT" ] && git worktree remove --force "$WT" 2>/dev/null
 git worktree prune
 git pull -q --ff-only origin main
 PAGES=(oslo-bors-nexa index.html)
-FILES=(src/build-oslo-bors-nexa.js src/oslo-bors-nexa-terms.json src/publish-oslo-bors-nexa.sh src/data/articles.json)
+FILES=(src/share.js src/social.js src/build-oslo-bors-nexa.js src/oslo-bors-nexa-terms.json src/publish-oslo-bors-nexa.sh src/data/articles.json)
 # 1. build (the builder runs its own banned-terms gate and deletes the page if it fails) + home timeline
 (cd src && node build-oslo-bors-nexa.js --final && node home.js data ../docs https://github.com/jQrgen/presentations >/dev/null)
 ! grep -qE 'noindex|class="draft"' docs/oslo-bors-nexa/index.html || { echo "draft markers still in page"; exit 1; }

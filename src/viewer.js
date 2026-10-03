@@ -59,7 +59,7 @@ function renderViewer(spec) {
     <h1>${esc(spec.pageTitle)}</h1>
     <span class="meta">${esc(spec.meta)}</span>
   </header>${spec.share ? `
-  ${share.bar({ url: spec.share.url, title: spec.share.title || spec.pageTitle, lang: U.lang === "no" || U.lang === "nb" ? "no" : "en" })}` : ""}
+  ${share.top({ url: spec.share.url, title: spec.share.title || spec.pageTitle, lang: U.lang === "no" || U.lang === "nb" ? "no" : "en" })}` : ""}
   <main>
     <section aria-label="${esc(spec.pageTitle)}">
       <figure class="frame" id="frame" tabindex="0">

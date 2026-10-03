@@ -73,7 +73,7 @@ const html = head("Nexa-teamet: et D-SCOR-inspirert AI-team").replace('<html lan
     <p class="lede">jQrgen (Jørgen S. Notland) jobber med Nexa sammen med et team av ${M.length} AI-agenter. Denne siden forklarer hvorfor agentene har fått ulike, utfyllende arbeids- og dialogstiler, og hvordan det skal hjelpe teamet å levere på formålet.</p>
     <p class="updated">1 person · ${M.length} AI-agenter · Sist oppdatert <time datetime="${esc(data.updated)}">${esc(fmt)}</time> · <a href="../nexa-team/">Organisasjonskart</a> · <a href="#english">English summary</a></p>
   </header>
-  ${share.bar({ url: SHARE_URL, title: "Nexa-teamet: et D-SCOR-inspirert AI-team", lang: "no" })}
+  ${share.top({ url: SHARE_URL, title: "Nexa-teamet: et D-SCOR-inspirert AI-team", lang: "no" })}
 
   <h2>Formål</h2>
   <p>Teamet skal hjelpe jQrgen å bygge og markedsføre Nexa for utviklere som vil lage produkter, tjenester eller oppstartsselskaper på Nexa, med Skandinavia først (Oslo, deretter Stockholm og København):</p>
@@ -141,7 +141,7 @@ const html = head("Nexa-teamet: et D-SCOR-inspirert AI-team").replace('<html lan
 
   <section class="en" id="english" lang="en">
     <h2>English summary</h2>
-    ${share.bar({ url: SHARE_URL + "#english", title: "The Nexa team: a D-SCOR-inspired AI team", lang: "en" })}
+    ${share.top({ url: SHARE_URL + "#english", title: "The Nexa team: a D-SCOR-inspired AI team", lang: "en" })}
     <p>jQrgen (Jørgen S. Notland) works on Nexa with a team of ${M.length} AI agents. The team's purpose is to help him build and market Nexa to developers who want to build products, services or startups on it, Scandinavia first (Oslo, then Stockholm and Copenhagen), while keeping the node, consensus, wallet and releases correct and secure. Each agent has been given a D-SCOR-inspired profile (work style and dialogue style, from the Norwegian D-SCOR model) chosen so that the profiles complement each other. The team runs at two speeds: bold explorers who try campaigns, ideas and testnet prototypes quickly, and a conservative core that never cuts corners on consensus, releases, mainnet or security. jQrgen always has the final word on risk. Every agent shares one team value, "Struktur og lojalitet til systemet": follow the agreed structure, roles, owners, routines and approval rules, and speak up if the structure gets in the way. The D-SCOR lead runs a monthly team check and a quarterly internal staff survey about unmet needs in the team; results are never published. The profiles are assigned by design, not measured; the 1–5 risk-appetite scale is our own addition; the team consists of AI agents, the D-SCOR lead is an AI role based on the D-SCOR model, and this is not an official D-SCOR product or certification; the team is not affiliated with or endorsed by D-SCOR AS.</p>
     <ul>${rowsEn}</ul>
   </section>

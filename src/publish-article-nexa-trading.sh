@@ -22,7 +22,7 @@ if [ $ARTICLE_ONLY = 1 ]; then
   FILES=(src/build-article-nexa-trading.js src/articles/nexa-automated-trading.md src/publish-article-nexa-trading.sh)
 else
   PAGES=(articles/nexa-automated-trading nexa-team index.html)
-  FILES=(src/share.js src/build-article-nexa-trading.js src/articles/nexa-automated-trading.md src/publish-article-nexa-trading.sh
+  FILES=(src/share.js src/social.js src/build-article-nexa-trading.js src/articles/nexa-automated-trading.md src/publish-article-nexa-trading.sh
          src/data/articles.json src/data/nexa-team.json src/data/nexa-contributions.json)
 fi
 # 1. build: article (and, unless --article-only, org chart and home timeline)

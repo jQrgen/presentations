@@ -3,7 +3,11 @@
 //   html: share.bar({ url, title, lang: "no" | "en", networks? })   -> a <nav class="share"> with LinkedIn, X, Facebook, email (or the given networks), copy link
 //   css:  share.CSS                                      -> add once to the page's <style>
 //   js:   share.SCRIPT                                   -> add once before </body> (copy-link only; links work without it)
+//   top:  share.top({ url, title, lang, networks? })  -> DEFAULT for the top of an article: the "Følg meg:"/"Follow me:" profile
+//         links from social.js followed by the share bar. Use share.bar (without social links) for the bar at the bottom.
+//   share.CSS already includes social.CSS.
 // Each bar carries its own url/title, so a page can have one bar per language.
+const social = require("./social.js");
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const LABELS = {
   no: { aria: "Del artikkelen", share: "Del:", email: "E-post", copy: "Kopier lenke", copied: "Lenken er kopiert", body: "Kanskje interessant for deg:" },
@@ -32,7 +36,11 @@ function bar({ url, title, lang = "en", networks }) {
   return `<nav class="share" aria-label="${esc(L.aria)}"><span class="share-label">${esc(L.share)}</span>${a}<button type="button" class="share-copy" data-url="${esc(url)}" data-done="${esc(L.copied)}">${esc(L.copy)}</button><span class="share-status" role="status" aria-live="polite"></span></nav>`;
 }
 
-const CSS = `
+function top({ url, title, lang = "en", networks }) {
+  return social.links({ lang }) + "\n  " + bar({ url, title, lang, networks });
+}
+
+const CSS = social.CSS + `
 .share{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:14px 0}
 .share-label{font-size:13px;color:var(--muted,#4B5563);margin-right:2px}
 .share a,.share button{font:inherit;font-size:13.5px;line-height:1.2;color:var(--ink,#000);background:var(--paper,#fff);border:1px solid var(--line,#000);padding:5px 10px;text-decoration:none;cursor:pointer}
@@ -52,4 +60,4 @@ document.addEventListener("click", function (e) {
 });
 </script>`;
 
-module.exports = { bar, links, CSS, SCRIPT, LABELS };
+module.exports = { top, bar, links, CSS, SCRIPT, LABELS };

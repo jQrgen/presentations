@@ -1,7 +1,8 @@
 // Reusable "follow me" links for Jørgen S. Notland (jQrgen): plain links, no icons from third parties, no scripts, no tracking.
 //   const social = require("./social.js");        // from src/ (or require("../social.js") from src/orgchart/)
 //   html: social.links({ lang: "no" | "en" })      -> a <nav class="social"> to put under the byline
-//   css:  social.CSS                               -> add once to the page's <style>
+//   css:  social.CSS                               -> add once to the page's <style> (already part of share.CSS)
+// Default for articles: share.top({ url, title, lang }) in share.js renders these links plus the share bar.
 // Only profiles confirmed from jQrgen's own sources are listed (see "source" on each entry). Do not add guessed handles.
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const PROFILES = [

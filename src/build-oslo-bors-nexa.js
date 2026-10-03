@@ -114,7 +114,7 @@ const NO = `
     <p class="lede">Et tankeeksperiment med fotnoter: hva skjer hvis aksjer og obligasjoner på en norsk markedsplass blir tokens på blokkjeden Nexa, og alt fortsatt skal skje etter boka? Litt lek, mye lovtekst, og tydelig merking av hva som er fakta, hva som er min lesning og hva ingen vet ennå.</p>
     <p class="updated">Jørgen S. Notland (jQrgen) · kilder sjekket <time datetime="${CHECKED}">3. oktober 2026</time> · <a href="#en" data-l="en">English</a></p>
   </header>
-  ${share.bar({ url: URL, title: TITLE_NO, lang: "no" })}
+  ${share.top({ url: URL, title: TITLE_NO, lang: "no" })}
   <p class="disc"><b>Ikke juridisk rådgivning.</b> Dette er en populærvitenskapelig drøfting, ikke juridisk, finansiell eller investeringsrådgivning, og ingen plan eller søknad. «Nexa-Børs» finnes ikke, og verken Oslo Børs, Euronext eller Finanstilsynet har noe med denne teksten å gjøre. Lovene endrer seg; sjekk alltid gjeldende tekst og spør en advokat.</p>
   <p class="legend">Merking: ${tag("no", "fact")} med kildehenvisning, ${tag("no", "mine")} er min egen tolkning, ${tag("no", "open")} er noe som ikke er avklart, ${tag("no", "fic")} er oppdiktet for moro skyld.</p>
 
@@ -264,7 +264,7 @@ const EN = `
     <p class="lede">A thought experiment with footnotes: what if shares and bonds on a Norwegian market became tokens on the Nexa blockchain, and everything still had to go by the book? A bit of play, a lot of legal text, and clear labels for what is fact, what is my reading, and what nobody knows yet.</p>
     <p class="updated">Jørgen S. Notland (jQrgen) · sources checked <time datetime="${CHECKED}">3 October 2026</time> · <a href="#no" data-l="no">Norsk</a></p>
   </header>
-  ${share.bar({ url: URL + "#en", title: TITLE_EN, lang: "en" })}
+  ${share.top({ url: URL + "#en", title: TITLE_EN, lang: "en" })}
   <p class="disc"><b>Not legal advice.</b> This is a popular-science discussion, not legal, financial or investment advice, and not a plan or an application. "Nexa-Børs" does not exist, and Oslo Børs, Euronext and Finanstilsynet have nothing to do with this text. Laws change; always check the current text and ask a lawyer.</p>
   <p class="legend">Labels: ${tag("en", "fact")} with a source, ${tag("en", "mine")} is my own interpretation, ${tag("en", "open")} is something not settled, ${tag("en", "fic")} is made up for fun.</p>
 
