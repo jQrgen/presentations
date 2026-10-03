@@ -1,4 +1,8 @@
 #!/bin/bash
+# DISABLED (3 Oct 2026): this article was published at 03:12 without a traceable approval from jQrgen and was taken down.
+# Kept here for history only. Do not run it until jQrgen has approved publication himself; then move it back to src/
+# (REPO below assumes src/) and remove this guard.
+echo "oslo-bors-nexa is an unapproved draft: publishing needs jQrgen's explicit approval" >&2; exit 1
 # Build and publish https://jqrgen.github.io/presentations/oslo-bors-nexa/ (final, no draft banner, no noindex)
 # plus its entry on the home timeline (docs/index.html, from data/articles.json).
 # Copies ONLY these paths to gh-pages, so nothing else there changes (never use orgchart/publish.sh, which copies
