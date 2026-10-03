@@ -1,0 +1,9 @@
+{
+  "_note": "Banned terms for the Nexa-Børs article (build-oslo-bors-nexa.js). The article may cite regulatory thresholds from the DLT Pilot Regime, but must never carry figures or names tied to jQrgen, his companies or counterparties, and no health data. Case-insensitive substring match; never weaken a term to dodge a false positive, change the text instead.",
+  "terms": [
+    "jQrgenCorp", "Folio", "Fiken", "B.U.", "Incorporated", "919057343", "919 057", "org.nr", "orgnr",
+    "Bare Bitcoin", "Bitmynt", "Firi", "privat uttak", "forskuddsskatt", "restskatt",
+    "NOK ", " kr ", "kr.", "saldo:", "balance:", "IBAN", "kontonummer", "account number", "fakturanr", "invoice number",
+    "pouch", "colectomy", "colitis", "gastro", "ulcerative", "ileal", "IBD", "Crohn", "stoma", "diagnos", "helse", "health", "sykdom", "sykemeld"
+  ]
+}
