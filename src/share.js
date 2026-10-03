@@ -1,6 +1,6 @@
 // Reusable share buttons for article pages: plain links (no third-party scripts, no tracking, no counters).
 //   const share = require("./share.js");          // from src/ (or require("../share.js") from src/orgchart/)
-//   html: share.bar({ url, title, lang: "no" | "en" })   -> a <nav class="share"> with LinkedIn, X, Facebook, email, copy link
+//   html: share.bar({ url, title, lang: "no" | "en", networks? })   -> a <nav class="share"> with LinkedIn, X, Facebook, email (or the given networks), copy link
 //   css:  share.CSS                                      -> add once to the page's <style>
 //   js:   share.SCRIPT                                   -> add once before </body> (copy-link only; links work without it)
 // Each bar carries its own url/title, so a page can have one bar per language.
@@ -10,19 +10,24 @@ const LABELS = {
   en: { aria: "Share this article", share: "Share:", email: "Email", copy: "Copy link", copied: "Link copied", body: "You might find this interesting:" },
 };
 
-function links(url, title, lang = "en") {
+// Default set: LinkedIn, X, Facebook, email. Pass networks (keys, in order) to choose, e.g. ["x", "linkedin", "reddit", "hackernews"].
+const DEFAULT_NETWORKS = ["linkedin", "x", "facebook", "email"];
+function links(url, title, lang = "en", networks = DEFAULT_NETWORKS) {
   const L = LABELS[lang] || LABELS.en, u = encodeURIComponent(url), t = encodeURIComponent(title);
-  return [
-    ["linkedin", "LinkedIn", `https://www.linkedin.com/sharing/share-offsite/?url=${u}`],
-    ["x", "X", `https://x.com/intent/post?text=${t}&url=${u}`],
-    ["facebook", "Facebook", `https://www.facebook.com/sharer/sharer.php?u=${u}`],
-    ["email", L.email, `mailto:?subject=${t}&body=${encodeURIComponent(L.body + "\n" + url)}`],
-  ];
+  const all = {
+    linkedin: ["linkedin", "LinkedIn", `https://www.linkedin.com/sharing/share-offsite/?url=${u}`],
+    x: ["x", "X", `https://x.com/intent/post?text=${t}&url=${u}`],
+    facebook: ["facebook", "Facebook", `https://www.facebook.com/sharer/sharer.php?u=${u}`],
+    reddit: ["reddit", "Reddit", `https://www.reddit.com/submit?url=${u}&title=${t}`],
+    hackernews: ["hackernews", "Hacker News", `https://news.ycombinator.com/submitlink?u=${u}&t=${t}`],
+    email: ["email", L.email, `mailto:?subject=${t}&body=${encodeURIComponent(L.body + "\n" + url)}`],
+  };
+  return networks.map((k) => all[k]).filter(Boolean);
 }
 
-function bar({ url, title, lang = "en" }) {
+function bar({ url, title, lang = "en", networks }) {
   const L = LABELS[lang] || LABELS.en;
-  const a = links(url, title, lang).map(([k, label, href]) =>
+  const a = links(url, title, lang, networks).map(([k, label, href]) =>
     `<a class="share-${k}" href="${esc(href)}"${k === "email" ? "" : ' target="_blank" rel="noopener noreferrer"'}>${esc(label)}</a>`).join("");
   return `<nav class="share" aria-label="${esc(L.aria)}"><span class="share-label">${esc(L.share)}</span>${a}<button type="button" class="share-copy" data-url="${esc(url)}" data-done="${esc(L.copied)}">${esc(L.copy)}</button><span class="share-status" role="status" aria-live="polite"></span></nav>`;
 }

@@ -29,7 +29,13 @@
         "Nexa leadership team",
         "Nexa go-to-market team"
       ],
-      "contributions": []
+      "contributions": [
+        {
+          "title": "Article: \"Not Exchange HFT: Building Automated Trading Products on Nexa\"",
+          "url": "https://jqrgen.github.io/presentations/articles/nexa-automated-trading/",
+          "date": "2026-10-03"
+        }
+      ]
     },
     {
       "name": "Nexa chief of staff",
@@ -190,6 +196,11 @@
         "Nexa design review"
       ],
       "contributions": [
+        {
+          "title": "Article: \"Not Exchange HFT: Building Automated Trading Products on Nexa\"",
+          "url": "https://jqrgen.github.io/presentations/articles/nexa-automated-trading/",
+          "date": "2026-10-03"
+        },
         {
           "title": "Tailstorm mining-rewards article: \"One Block, Many Winners\"",
           "url": "https://jqrgen.github.io/presentations/tailstorm/mining-rewards/",

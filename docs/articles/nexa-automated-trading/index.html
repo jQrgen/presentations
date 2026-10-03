@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Not Exchange HFT: Building Automated Trading Products on Nexa · Jørgen S. Notland</title>
+<meta name="description" content="Fast, cheap, on-chain settlement for automated and algorithmic trading products: what Nexa gives you today, what changes with Tailstorm, and where the limits are.">
+<meta name="author" content="Jørgen S. Notland">
+<link rel="canonical" href="https://jqrgen.github.io/presentations/articles/nexa-automated-trading/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Jørgen S. Notland">
+<meta property="og:title" content="Not Exchange HFT: Building Automated Trading Products on Nexa">
+<meta property="og:description" content="Fast, cheap, on-chain settlement for automated and algorithmic trading products: what Nexa gives you today, what changes with Tailstorm, and where the limits are.">
+<meta property="og:url" content="https://jqrgen.github.io/presentations/articles/nexa-automated-trading/">
+<meta property="og:image" content="https://jqrgen.github.io/presentations/articles/nexa-automated-trading/cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Not Exchange HFT: Building Automated Trading Products on Nexa">
+<meta property="og:locale" content="en_GB">
+<meta property="article:published_time" content="2026-10-03">
+<meta property="article:author" content="Jørgen S. Notland">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@jQrgensn">
+<meta name="twitter:creator" content="@jQrgensn">
+<meta name="twitter:title" content="Not Exchange HFT: Building Automated Trading Products on Nexa">
+<meta name="twitter:description" content="Fast, cheap, on-chain settlement for automated and algorithmic trading products: what Nexa gives you today, what changes with Tailstorm, and where the limits are.">
+<meta name="twitter:image" content="https://jqrgen.github.io/presentations/articles/nexa-automated-trading/cover.png">
+<meta name="twitter:image:alt" content="Not Exchange HFT: Building Automated Trading Products on Nexa">
+<style>
+:root{
+  color-scheme:light;
+  --ground:#E5E7EB; --paper:#FFFFFF; --band:#000000; --band-ink:#FFFFFF;
+  --ink:#000000; --ink-2:#1F2937; --muted:#4B5563; --line:#000000; --hair:#D1D5DB;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink)}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.band{background:var(--band);color:var(--band-ink)}
+.band .inner{max-width:1080px;margin:0 auto;padding:22px 24px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px}
+.band .name{font-size:22px;font-weight:400;letter-spacing:.01em;color:var(--band-ink);text-decoration:none}
+.band nav{display:flex;flex-wrap:wrap;gap:4px 22px;margin-left:auto}
+.band nav a{color:var(--band-ink);text-decoration:none;font-size:15px;padding:4px 0;border-bottom:2px solid transparent;opacity:.8}
+.band nav a:hover{opacity:1}
+.band nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--band-ink)}
+.page{max-width:1080px;margin:0 auto;padding:36px 24px 72px}
+h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:pretty}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+.count{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.year{display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;margin-top:36px}
+@media (max-width:700px){.year{grid-template-columns:1fr;gap:8px}}
+.year h2{font-size:30px;font-weight:400;margin:0;letter-spacing:-.02em;font-variant-numeric:tabular-nums;position:sticky;top:12px}
+.year ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.item{display:grid;grid-template-columns:minmax(200px,2fr) 3fr;background:var(--paper);border:1px solid var(--line)}
+.item.no-thumb{grid-template-columns:1fr}
+@media (max-width:700px){.item{grid-template-columns:1fr}}
+.thumb{margin:0;background:#000;aspect-ratio:16/9;border-right:1px solid var(--line)}
+@media (max-width:700px){.thumb{border-right:0;border-bottom:1px solid var(--line)}}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px}
+.kind{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:pretty}
+.body h3 a{color:var(--ink);text-decoration:none}
+.body h3 a:hover{text-decoration:underline}
+.where{margin:0;font-size:14px;color:var(--muted)}
+.where .date{color:var(--ink-2)}
+.authors{margin:0;font-size:14px;color:var(--ink-2)}
+.desc{margin:2px 0 0;color:var(--ink-2);max-width:66ch;font-size:15px}
+.cites{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.cites b{font-weight:600}
+.cites span{color:var(--muted)}
+.links{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.links a{display:inline-block;color:var(--ink);text-decoration:none;font-size:14px;padding:5px 10px;border:1px solid var(--line);background:var(--paper)}
+.links a.primary{background:var(--band);color:var(--band-ink)}
+.links a:hover{text-decoration:underline}
+.note{margin:6px 0 0;font-size:13px;color:var(--muted)}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+
+article{background:var(--paper);border:1px solid var(--line);padding:32px 36px 36px;max-width:760px;margin:0 auto}
+@media (max-width:700px){article{padding:22px 18px 26px}}
+article h1{font-size:32px;line-height:1.2}
+article .byline{margin:0 0 4px;color:var(--muted);font-size:15px}
+article h2{font-size:22px;font-weight:500;margin:30px 0 8px}
+article p,article li{max-width:68ch;color:var(--ink-2);font-size:17px;line-height:1.6}
+article ul{padding-left:22px}
+article li{margin:6px 0}
+article code{font-size:.92em;background:var(--ground);padding:1px 4px}
+
+.share{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:14px 0}
+.share-label{font-size:13px;color:var(--muted,#4B5563);margin-right:2px}
+.share a,.share button{font:inherit;font-size:13.5px;line-height:1.2;color:var(--ink,#000);background:var(--paper,#fff);border:1px solid var(--line,#000);padding:5px 10px;text-decoration:none;cursor:pointer}
+.share a:hover,.share button:hover{background:var(--band,#000);color:var(--band-ink,#fff)}
+.share a:focus-visible,.share button:focus-visible{outline:2px solid var(--ink,#000);outline-offset:2px}
+.share-status{font-size:13px;color:var(--muted,#4B5563)}
+</style>
+</head>
+<body>
+<div class="band"><div class="inner">
+    <a class="name" href="../../">Jørgen S. Notland</a>
+    <nav aria-label="Sections"><a href="../../">Talks, articles and papers</a></nav>
+  </div></div>
+<main class="page">
+<article>
+<h1>Not Exchange HFT: Building Automated Trading Products on Nexa</h1>
+<p class="byline">By jQrgen (Jørgen S. Notland), 3 Oct 2026</p>
+<nav class="share" aria-label="Share this article"><span class="share-label">Share:</span><a class="share-x" href="https://x.com/intent/post?text=Not%20Exchange%20HFT%3A%20Building%20Automated%20Trading%20Products%20on%20Nexa&amp;url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Farticles%2Fnexa-automated-trading%2F" target="_blank" rel="noopener noreferrer">X</a><a class="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Farticles%2Fnexa-automated-trading%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="share-reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Farticles%2Fnexa-automated-trading%2F&amp;title=Not%20Exchange%20HFT%3A%20Building%20Automated%20Trading%20Products%20on%20Nexa" target="_blank" rel="noopener noreferrer">Reddit</a><a class="share-hackernews" href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Farticles%2Fnexa-automated-trading%2F&amp;t=Not%20Exchange%20HFT%3A%20Building%20Automated%20Trading%20Products%20on%20Nexa" target="_blank" rel="noopener noreferrer">Hacker News</a><button type="button" class="share-copy" data-url="https://jqrgen.github.io/presentations/articles/nexa-automated-trading/" data-done="Link copied">Copy link</button><span class="share-status" role="status" aria-live="polite"></span></nav>
+<p>Let's get the honest part out of the way. Real high-frequency trading runs on co-located servers next to an exchange's matching engine, where speed is measured far below a second. No proof-of-work blockchain, Nexa included, works at that speed.</p>
+<p>So this post isn't about that. It's about a narrower idea I find more useful: <strong>fast, cheap, on-chain settlement for automated and algorithmic trading products.</strong> That covers order matching that settles on-chain, market-making bots, token swaps, and trades that settle at payment speed. If that's what you're building, here is what Nexa gives you today, what changes with Tailstorm, and where the limits are.</p>
+<h2>What I mean by &quot;high-frequency-style&quot;</h2>
+<p>In this post, &quot;high-frequency-style&quot; means a product that makes many small, automated trades and cares about settlement in seconds to minutes, not fractions of a second. Think of a bot that re-quotes a token pair, a swap service, or a point-of-sale app that converts on the fly. If your edge depends on being first by a fraction of a second, this isn't your venue.</p>
+<h2>Settlement speed today and with Tailstorm</h2>
+<p><strong>Today</strong>, Nexa mainnet produces ordinary blocks about every 2 minutes.</p>
+<p><strong>Tailstorm</strong> is implemented in the node software, not active on mainnet or testnet; part of the planned Hard Fork 2, with no activation date set yet. The Hard Fork 2 overview in the source tree says the fork is &quot;still under active development. Feature scope and activation times may change before release.&quot; Both the released and the development code use a far-future placeholder activation time, and an earlier date still shown on the spec site is out of date. Treat any date as provisional.</p>
+<p>Tailstorm comes from peer-reviewed research by Keller, Glickenhaus, Bissias and Griffith (AFT 2023). Its focus is fast, reliable confirmations and fair mining. The paper also notes that putting transactions in every subblock improves throughput. In Nexa, though, capacity is still set by the block size rules (see Capacity), so don't read Tailstorm as a transactions-per-second upgrade. Nexa's implementation also differs from the paper: it doesn't use the paper's reward discounting, so the paper's fairness results don't carry over directly.</p>
+<p>Here's the part that matters for trading. With Tailstorm, each 2-minute block, on average, is built from many smaller proof-of-work pieces, called subblocks. A transaction can show up in a subblock within seconds. That is a strong early signal, but not final: until the next summary block, a conflicting double spend can still win. For full security the paper recommends waiting one more summary block after the one that includes the transaction.</p>
+<p>The current development code sets k = 120, about one subblock a second. That's a design target, not a measurement. That isn't a final mainnet value; one forum post cited about 40. Subblock transactions also don't change chain state on their own. Only the summary block does.</p>
+<p>The Tailstorm paper suggests a few subblock confirmations can be enough for small, time-sensitive amounts. That argument depends on the paper's depth-based reward discount. Nexa's current code splits rewards by a score instead, so it's still an open question whether Nexa keeps that property. For a trading product, that suggests tiers. Use subblock confirmations to update your UI or risk view quickly. Treat them as enough only for small amounts, and only as the paper's suggestion, not a Nexa guarantee. Settle anything that matters after a summary block, and wait one more summary block for full security.</p>
+<h2>Unconfirmed transactions (0-conf)</h2>
+<p>An unconfirmed transaction is only a promise that a node has seen it. It can still be double-spent until it is in a block: a conflicting transaction can be mined instead. It is reasonable for small, low-risk payments, but it does not guarantee settlement.</p>
+<p>The Nexa node includes double-spend proofs, and they are on by default. When a node sees a second spend of the same coin from a standard single-key address, it rejects the conflicting transaction and announces a compact proof to its peers, rate-limited. What gets relayed is the proof announcement, not the double-spend transaction itself. That helps you <em>detect</em> a conflict sooner; it doesn't prevent one. By default, a node keeps the first version it sees and rejects a transaction that conflicts with one already in its mempool. But that's each node's policy, not a network-wide guarantee.</p>
+<h2>Fees</h2>
+<p>Fees are set by policy, not by an auction you can bid in real time. By default, a node relays transactions paying at least 1,000 satoshis per 1,000 bytes. Amounts are counted in satoshis, the base unit; 1 NEX = 100 satoshis, so that's 10 NEX per kB. This is node policy that each operator can change (the <code>relay.minRelayTxFee</code> setting), not a consensus rule, and miners choose what they include. The default dust threshold is 546 satoshis per output.</p>
+<p>What a trade costs depends on its size in bytes. I'm not quoting a per-trade figure, because we haven't measured a typical token-swap transaction yet.</p>
+<h2>Capacity</h2>
+<p>These numbers come from the spec and node code, not marketing. Nexa's maximum block size adapts: it's 10 times the larger of the 90-day and 365-day median block sizes, with a 2 MB minimum on mainnet today and a 1,000 MB hard cap. Under Hard Fork 2, that minimum would rise to k × 100 KB, which is 12 MB at k = 120. The default maximum standard transaction size is 100,000 bytes. A higher limit means room to grow, not demonstrated throughput. I'm not quoting a transactions-per-second figure.</p>
+<h2>Building blocks for trading products</h2>
+<p>This is where Nexa is interesting for developers. Each of these is in the spec or the code:</p>
+<ul>
+  <li><strong>Native tokens (Group Tokens).</strong> Tokens are enforced by consensus as part of the transaction outputs, not by a smart contract you have to audit.</li>
+  <li><strong>Partially signed transactions.</strong> Nexa's signature hash types let a signer commit to only the first N inputs or outputs, or to specific outputs. Another party can then add their side of a trade without asking the first signer to re-sign. This is the building block for offers and swaps. A &quot;retargetable&quot; range type, planned for Hard Fork 2, would let signed outputs be moved within a transaction.</li>
+  <li><strong>Introspection.</strong> Scripts can read the transaction's own inputs and outputs (for example, output values and output scripts). That lets a contract check &quot;this trade pays me at least X of token Y&quot;. There is also <code>OP_PUSH_TX_STATE</code> for data the node computes during validation.</li>
+  <li><strong>Read-only inputs.</strong> A transaction can reference a coin (UTXO) without spending it, for example to read published data.</li>
+  <li><strong>Counterparty discovery (CAPD).</strong> CAPD is a best-effort, proof-of-work-protected peer-to-peer message pool built into the node; messages aren't stored on-chain. Its spec explicitly lists trades and atomic swaps as uses, so you can publish and find offers without a central server.</li>
+</ul>
+<p>Put together, you can sketch an order book where offers are partially signed transactions advertised over CAPD. A taker completes a trade by adding their inputs and outputs, and settlement is a single on-chain transaction. That's a design you could build: no public reference implementation exists yet.</p>
+<h2>What Nexa doesn't do well for trading</h2>
+<ul>
+  <li><strong>Latency.</strong> An exchange matches orders far faster than any blockchain can settle. Subblocks would take seconds, and full settlement takes minutes.</li>
+  <li><strong>Public mempool.</strong> Your transaction is visible to the network before it's confirmed. Others can see your order and try to get ahead of it, the same front-running and ordering risk (sometimes called MEV) that every public chain has.</li>
+  <li><strong>No co-location and no ordering guarantees.</strong> Within a block, transactions are sorted by transaction ID by rule, so you can't buy a position in the block, but whoever builds the block still decides which transactions go in and which wait. There's no matching engine to sit next to.</li>
+  <li><strong>Global network variance.</strong> Propagation delays differ by region and connection. The Tailstorm paper itself notes that its analysis assumes equal delays for all miners, and that real networks aren't like that.</li>
+  <li><strong>Status risk.</strong> Tailstorm isn't active on mainnet or testnet, and has no activation date. If your product depends on subblock speed, plan for it to arrive with Hard Fork 2, not before.</li>
+</ul>
+<p>None of this is financial advice, and nothing here is a promise of returns.</p>
+<h2>Start building</h2>
+<p>If that fits your product, start here:</p>
+<ul>
+  <li>Spec: <a href="https://spec.nexa.org">https://spec.nexa.org</a> (Tailstorm, CAPD, signature hash types, Group Tokens)</li>
+  <li>Source: <a href="https://gitlab.com/nexa/nexa">https://gitlab.com/nexa/nexa</a></li>
+</ul>
+<p>I'm especially keen to hear from teams in Scandinavia working on swaps, market-making tooling or payment-speed settlement.</p>
+<nav class="share" aria-label="Share this article"><span class="share-label">Share:</span><a class="share-x" href="https://x.com/intent/post?text=Not%20Exchange%20HFT%3A%20Building%20Automated%20Trading%20Products%20on%20Nexa&amp;url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Farticles%2Fnexa-automated-trading%2F" target="_blank" rel="noopener noreferrer">X</a><a class="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Farticles%2Fnexa-automated-trading%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="share-reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Farticles%2Fnexa-automated-trading%2F&amp;title=Not%20Exchange%20HFT%3A%20Building%20Automated%20Trading%20Products%20on%20Nexa" target="_blank" rel="noopener noreferrer">Reddit</a><a class="share-hackernews" href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fjqrgen.github.io%2Fpresentations%2Farticles%2Fnexa-automated-trading%2F&amp;t=Not%20Exchange%20HFT%3A%20Building%20Automated%20Trading%20Products%20on%20Nexa" target="_blank" rel="noopener noreferrer">Hacker News</a><button type="button" class="share-copy" data-url="https://jqrgen.github.io/presentations/articles/nexa-automated-trading/" data-done="Link copied">Copy link</button><span class="share-status" role="status" aria-live="polite"></span></nav>
+</article>
+<footer class="site">Source: <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
+</main>
+<script>
+document.addEventListener("click", function (e) {
+  var b = e.target.closest && e.target.closest(".share-copy"); if (!b) return;
+  var url = b.getAttribute("data-url"), st = b.parentNode.querySelector(".share-status");
+  var done = function () { if (st) { st.textContent = b.getAttribute("data-done"); setTimeout(function () { st.textContent = ""; }, 2500); } };
+  var fallback = function () { var i = document.createElement("input"); i.value = url; document.body.appendChild(i); i.select(); try { document.execCommand("copy"); done(); } catch (x) { window.prompt("", url); } i.remove(); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, fallback); else fallback();
+});
+</script>
+</body>
+</html>

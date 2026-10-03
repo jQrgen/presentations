@@ -51,6 +51,11 @@
       "title": "Tailstorm mining-rewards article: \"One Block, Many Winners\"",
       "url": "https://jqrgen.github.io/presentations/tailstorm/mining-rewards/",
       "date": "2026-10-02"
+    },
+    {
+      "title": "Article: \"Not Exchange HFT: Building Automated Trading Products on Nexa\"",
+      "url": "https://jqrgen.github.io/presentations/articles/nexa-automated-trading/",
+      "date": "2026-10-03"
     }
   ],
   "Nexa designer": [
@@ -64,6 +69,13 @@
     {
       "title": "Rostrum MR !461: animated architecture page",
       "url": "https://gitlab.com/nexa/rostrum/-/merge_requests/461",
+      "date": "2026-10-03"
+    }
+  ],
+  "Marketing strategy": [
+    {
+      "title": "Article: \"Not Exchange HFT: Building Automated Trading Products on Nexa\"",
+      "url": "https://jqrgen.github.io/presentations/articles/nexa-automated-trading/",
       "date": "2026-10-03"
     }
   ]
