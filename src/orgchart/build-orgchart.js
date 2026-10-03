@@ -61,6 +61,8 @@ const LEADS = new Set(["Nexa lead dev", "Nexa product manager", "Nexa chief scie
 const PEOPLE = [{ name: "jQrgen", fullName: "Jørgen S. Notland", type: "human", role: "CEO" }];
 // renamed agents: the chart is keyed by role name; an agent whose profile title is one of these is placed under that role
 const TITLE_ALIASES = { "Nexa lead developer": "Nexa lead dev", "Senior Rostrum dev": "Rostrum dev" };
+// renamed agents without a title: profile name -> role name (used only when no other agent already holds that role)
+const NAME_ALIASES = { "Nexa D-SCOR bot": "Nexa D-SCOR-ansvarlig" };
 // public display names, curated by jQrgen (role name -> name shown on the page). Any other personal name is not published.
 const DISPLAY_NAMES = { "Nexa lead dev": "Andrew Stone" };
 // one colour per team (always shown with its text label); teams beyond this list cycle through the palette
@@ -131,8 +133,9 @@ function snapshot() {
   const named = new Set(["Nexa chief of staff", ...DEPARTMENTS.flatMap(([, n]) => n)]);
   // an agent the user has given a personal name keeps its org-chart role through its title (e.g. title "Nexa chief of staff"):
   // the chart is keyed by role, so it is placed and shown under that role name; the personal name is not published
+  const taken = new Set(Object.values(all).map((p) => p.name));
   for (const [d, p0] of Object.entries(all)) {
-    const t = TITLE_ALIASES[p0.title] || p0.title;
+    const t = TITLE_ALIASES[p0.title] || (NAME_ALIASES[p0.name] && !taken.has(NAME_ALIASES[p0.name]) ? NAME_ALIASES[p0.name] : p0.title);
     const p = !named.has(p0.name) && named.has(t) ? { ...p0, name: t } : p0;
     if (named.has(p.name) || nexaName(p.name) || inNexaGroup.has(d)) agents[d] = p;
   }
