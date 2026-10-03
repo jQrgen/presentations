@@ -54,11 +54,17 @@ This is where Nexa is interesting for developers. Each of these is in the spec o
 
 Put together, you can sketch an order book where offers are partially signed transactions advertised over CAPD. A taker completes a trade by adding their inputs and outputs, and settlement is a single on-chain transaction. That's a design you could build: no public reference implementation exists yet.
 
+## MEV: what Nexa does and doesn't protect against
+
+Does Tailstorm fix MEV? No, and I won't claim it does. Nexa already removes one kind of MEV without it: transactions inside a block are sorted by transaction ID, so a miner can't sell or exploit position within a block. And because Nexa uses UTXOs, a fully signed trade is tied to the exact coins it spends, so a front-runner can make it fail but can't force it through at a worse price.
+
+Tailstorm is implemented but not active on mainnet or testnet, with no activation date. If it were active, my reasoning (not a measured result) is that faster subblocks and blocks built by many miners might make censorship by a single miner harder. The Tailstorm paper doesn't study MEV, though. The mempool stays public, miners still choose and add transactions, and front-running across blocks remains possible.
+
 ## What Nexa doesn't do well for trading
 
 - **Latency.** An exchange matches orders far faster than any blockchain can settle. Subblocks would take seconds, and full settlement takes minutes.
-- **Public mempool.** Your transaction is visible to the network before it's confirmed. Others can see your order and try to get ahead of it, the same front-running and ordering risk (sometimes called MEV) that every public chain has.
-- **No co-location and no ordering guarantees.** Within a block, transactions are sorted by transaction ID by rule, so you can't buy a position in the block, but whoever builds the block still decides which transactions go in and which wait. There's no matching engine to sit next to.
+- **Public mempool.** Your transaction is visible to the network before it's confirmed. Others can see your order and try to get ahead of it in an earlier block, the front-running risk (part of what's called MEV) that every public chain has. Canonical ordering doesn't stop that, and Tailstorm wouldn't either (see MEV above).
+- **No co-location, and inclusion is the miner's choice.** Canonical ordering already removes reordering within a block: transactions are sorted by transaction ID, so you can't buy a position in the block. But whoever builds the block still decides which transactions go in and which wait, and can add their own, so front-running across blocks remains possible. There's no matching engine to sit next to.
 - **Global network variance.** Propagation delays differ by region and connection. The Tailstorm paper itself notes that its analysis assumes equal delays for all miners, and that real networks aren't like that.
 - **Status risk.** Tailstorm isn't active on mainnet or testnet, and has no activation date. If your product depends on subblock speed, plan for it to arrive with Hard Fork 2, not before.
 

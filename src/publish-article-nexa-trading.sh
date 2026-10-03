@@ -2,7 +2,9 @@
 # Build and publish the article https://jqrgen.github.io/presentations/articles/nexa-automated-trading/
 # plus the pages it touches: the home timeline (docs/index.html, from data/articles.json) and the Nexa team org chart
 # (docs/nexa-team, 'Public work' from data/nexa-contributions.json), with the same build and grep gates as orgchart/publish.sh.
-# Usage: bash src/publish-article-nexa-trading.sh   (from anywhere, on main; needs gh logged in as jQrgen)
+# Usage: bash src/publish-article-nexa-trading.sh [--article-only]   (from anywhere, on main; needs gh logged in as jQrgen)
+#   --article-only: build, commit and publish ONLY the article's own paths (src/articles/..., the builder, docs/articles/nexa-automated-trading);
+#                   no org chart or home-timeline rebuild, so roster changes waiting in the org chart are not swept in.
 # Like publish-jqrgencorp-regnskap.sh it copies ONLY these paths to gh-pages, so nothing else there changes
 # (orgchart/publish.sh copies the whole docs/ working tree, untracked drafts included).
 set -euo pipefail
@@ -14,24 +16,32 @@ git diff --cached --quiet || { echo "something is already staged; commit or unst
 WT=""; cleanup() { [ -n "$WT" ] && git worktree remove --force "$WT" 2>/dev/null || true; git worktree prune; }; trap cleanup EXIT
 git worktree prune
 git pull -q --ff-only origin main
-PAGES=(articles/nexa-automated-trading nexa-team index.html)
-FILES=(src/share.js src/build-article-nexa-trading.js src/articles/nexa-automated-trading.md src/publish-article-nexa-trading.sh
-       src/data/articles.json src/data/nexa-team.json src/data/nexa-contributions.json)
-# 1. build: article, org chart, home timeline
-(cd src && node build-article-nexa-trading.js && node orgchart/build-orgchart.js && node home.js data ../docs https://github.com/jQrgen/presentations >/dev/null)
+ARTICLE_ONLY=0; [ "${1:-}" = "--article-only" ] && ARTICLE_ONLY=1
+if [ $ARTICLE_ONLY = 1 ]; then
+  PAGES=(articles/nexa-automated-trading)
+  FILES=(src/build-article-nexa-trading.js src/articles/nexa-automated-trading.md src/publish-article-nexa-trading.sh)
+else
+  PAGES=(articles/nexa-automated-trading nexa-team index.html)
+  FILES=(src/share.js src/build-article-nexa-trading.js src/articles/nexa-automated-trading.md src/publish-article-nexa-trading.sh
+         src/data/articles.json src/data/nexa-team.json src/data/nexa-contributions.json)
+fi
+# 1. build: article (and, unless --article-only, org chart and home timeline)
+(cd src && node build-article-nexa-trading.js)
+[ $ARTICLE_ONLY = 1 ] || (cd src && node orgchart/build-orgchart.js && node home.js data ../docs https://github.com/jQrgen/presentations >/dev/null)
 # 2. gates: the shared public-page term list on the article; the org chart's own gates as in publish.sh
-(cd src && node orgchart/grep-gate.js ../docs/articles/nexa-automated-trading build-article-nexa-trading.js articles/nexa-automated-trading.md share.js \
-  && node orgchart/grep-gate.js ../docs/nexa-team data/nexa-team.json data/nexa-contributions.json orgchart/build-orgchart.js orgchart/publish.sh \
+(cd src && node orgchart/grep-gate.js ../docs/articles/nexa-automated-trading build-article-nexa-trading.js articles/nexa-automated-trading.md share.js)
+[ $ARTICLE_ONLY = 1 ] || (cd src && node orgchart/grep-gate.js ../docs/nexa-team data/nexa-team.json data/nexa-contributions.json orgchart/build-orgchart.js orgchart/publish.sh \
   && node orgchart/grep-gate.js ../docs/nexa-team data/nexa-team.json data/nexa-contributions.json --terms orgchart/nexa-team-dscor-terms.json)
 # 3. commit only these files on main
 git add "${FILES[@]}" "${PAGES[@]/#/docs/}"
-git diff --cached --quiet || git commit -q -m "Article: Not Exchange HFT: Building Automated Trading Products on Nexa (/articles/nexa-automated-trading/, share bar X/LinkedIn/Reddit/HN/copy link, OG + Twitter card); on the home timeline; credited on the org chart (Marketing strategy, Nexa media & communications)"
+if [ $ARTICLE_ONLY = 1 ]; then MSG="${ARTICLE_MSG:-Article nexa-automated-trading: update (article paths only)}"; else MSG="Article: Not Exchange HFT: Building Automated Trading Products on Nexa (/articles/nexa-automated-trading/, share bar X/LinkedIn/Reddit/HN/copy link, OG + Twitter card); on the home timeline; credited on the org chart (Marketing strategy, Nexa media & communications)"; fi
+git diff --cached --quiet || git commit -q -m "$MSG"
 # 4. gh-pages: replace only these paths
 git fetch -q origin gh-pages
 WT="$(mktemp -d)"
 git worktree add -q "$WT" -B gh-pages origin/gh-pages
 for p in "${PAGES[@]}"; do rm -rf "$WT/$p"; mkdir -p "$(dirname "$WT/$p")"; cp -R "$REPO/docs/$p" "$WT/$p"; done
-(cd "$WT" && git add -A "${PAGES[@]}" && { git diff --cached --quiet || git commit -q -m "Publish articles/nexa-automated-trading, nexa-team, index.html (only these paths)"; })
+(cd "$WT" && git add -A "${PAGES[@]}" && { git diff --cached --quiet || git commit -q -m "Publish ${PAGES[*]} (only these paths)"; })
 if [ -z "$(git rev-list origin/main..main)" ] && [ -z "$(git rev-list origin/gh-pages..gh-pages)" ]; then echo "unchanged, nothing to publish"; exit 0; fi
 git push -q --atomic origin main gh-pages
 gh api -X POST repos/jQrgen/presentations/pages/builds >/dev/null
