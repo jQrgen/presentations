@@ -42,6 +42,7 @@ section{background:var(--panel);border:1px solid var(--line);border-radius:12px;
 section h2{margin:0 0 4px;font-size:16px;font-weight:650}
 section h2 .m{color:var(--muted);font-weight:400;font-size:13px;margin-left:8px}.roundShort{display:none}.swipeHint{display:none}
 svg{display:block;width:100%;height:auto}
+.dagScroll{width:100%;overflow-x:auto;overflow-y:hidden}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:6px 0 2px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .sw{width:12px;height:12px;border-radius:50%;display:inline-block}
@@ -596,7 +597,7 @@ html.kiosk.ls-isstale .esth{display:none}
   <h2><span class="roundLong">This round: subblocks since the last summary block</span><span class="roundShort">Round subblocks</span> <span class="m" id="cur-m"></span></h2>
   <div class="legend" id="legend"></div>
   <div id="curSwipe" class="swipeHint" aria-hidden="true">swipe → to explore the DAG</div>
-  <div id="curScroll" class="dagScroll"><svg id="cur" viewBox="0 0 1200 200"></svg></div>
+  <div id="curScroll" class="dagScroll"><svg id="cur" viewBox="0 0 1200 200" preserveAspectRatio="xMinYMin meet"></svg></div>
 </section>
 <section id="sec-split" aria-label="Live reward split per miner"></section>
 <section id="sec-reward" class="rw" role="tabpanel" aria-label="Reward split: who gets paid per block">
@@ -899,19 +900,38 @@ function drawDag(svg, subs, o) {
   for (const s of subs) put(depth.get(s.h), s.h);
   const last = maxD;
   put(last + 1, "CLOSE");
-  const totalCols = last + 2, cols = o.oneRow ? totalCols : Math.min(o.cols, totalCols), rows = Math.ceil(totalCols / cols);
+  const totalCols = last + 2;
+  // Fixed pitch from the left. Spreading columns across o.W pins the tail to the
+  // right edge and recenters every earlier subblock as the round grows.
+  const padX = o.r * 2.4, stepX = o.r * (o.step || (o.mini ? 2.8 : 3.3));
+  const cols = o.oneRow ? totalCols : Math.max(1, Math.min(o.cols || totalCols, totalCols));
+  const rows = Math.ceil(totalCols / cols);
   let maxLane = 1; for (let r = 0; r < rows; r++) for (let c = r * cols; c < (r + 1) * cols; c++) maxLane = Math.max(maxLane, (colItems.get(c) || []).length);
-  const padX = o.r * 2.4, stepX = (o.W - 2 * padX) / Math.max(1, cols - 1);
   const laneH = o.r * 2.5, rowH = maxLane * laneH + o.r * 1.4, padY = Math.max(o.r * 1.4, 24);
+  const contentW = padX + Math.max(0, cols - 1) * stepX + padX;
   const H = padY * 2 + (rows - 1) * rowH + (maxLane - 1) * laneH;
-  if (o.dry) return {H};
+  if (o.dry) return {H, W: contentW};
+  const viewW = Math.max(o.W || 0, contentW);
   svg.innerHTML = ""; defs(svg);
-  svg.setAttribute("viewBox", `0 0 ${o.W} ${H}`);
+  svg.setAttribute("viewBox", `0 0 ${viewW} ${H}`);
+  // xMinYMin: the whole drawing stays flush top-left. The default xMidYMid meet centers it in the panel.
+  svg.setAttribute("preserveAspectRatio", "xMinYMin meet");
+  if (o.scroll) {
+    if (contentW > (o.W || 0) + 1) {
+      svg.style.width = Math.ceil(contentW) + "px";
+      svg.style.height = Math.ceil(H) + "px";
+      svg.style.maxWidth = "none";
+    } else {
+      svg.style.width = "";
+      svg.style.height = "";
+      svg.style.maxWidth = "";
+    }
+  }
   const xy = new Map();
   for (const [c, items] of colItems) {
     const row = Math.floor(c / cols); const cc = c % cols;
-    const x = padX + cc * stepX, yc = padY + row * rowH + (maxLane - 1) * laneH / 2;
-    items.forEach((k, i) => xy.set(k, [x, yc + (i - (items.length - 1) / 2) * laneH]));
+    const x = padX + cc * stepX, yTop = padY + row * rowH;
+    items.forEach((k, i) => xy.set(k, [x, yTop + i * laneH]));
   }
   const gE = el("g", {}, svg), gN = el("g", {}, svg);
   const sq = o.r * 1.15, B = xy.get("BASE"), C = xy.get("CLOSE");
@@ -1068,22 +1088,15 @@ function faqSchedule() {
   }, 16000);
 }
 
-// Display layout: pick the column count that makes the nodes as large as possible inside the svg's box.
+// Display layout: wrap at a fixed column pitch so the chain stays left-anchored.
+// Do not rescale or re-pick columns to fill the panel — that recenters the DAG as the round grows.
 function fitDag(svg, subs, o, step) {
   const cw = svg.clientWidth, ch = svg.clientHeight;
-  if (!cw || !ch) return drawDag(svg, subs, o);
-  if (o.oneRow) return drawDag(svg, subs, {...o, W: cw, cols: 999});
-  let best = null;
-  for (let cols = 6; cols <= 70; cols++) {
-    const W = o.r * 4.8 + (cols - 1) * o.r * step, {H} = drawDag(svg, subs, {...o, W, cols, dry: true});
-    const s = Math.min(cw / W, ch / H);
-    if (!best || s > best.s) best = {s, W, cols};
-  }
-  /* v3: move the row break to where the DAG is narrowest, so few edges cross between rows (kept within 15% of the best scale) */
-  { const {byH, depth} = depths(subs); const cross = cols => { let n = 0; for (const s of subs) for (const p of s.p) { const ps = byH.get(p); if (ps && Math.floor(depth.get(ps.h) / cols) !== Math.floor(depth.get(s.h) / cols)) n++; } return n; };
-    let pick = best; for (let cols = Math.max(6, best.cols - 6); cols <= best.cols + 6; cols++) { const W = o.r * 4.8 + (cols - 1) * o.r * step, {H} = drawDag(svg, subs, {...o, W, cols, dry: true}); const sc = Math.min(cw / W, ch / H);
-      if (sc >= best.s * 0.85 && (cross(cols) < cross(pick.cols) || (cross(cols) === cross(pick.cols) && sc > pick.s))) pick = {s: sc, W, cols}; }
-    drawDag(svg, subs, {...o, W: pick.W, cols: pick.cols}); }
+  const pitch = step || o.step || 3.3;
+  if (!cw || !ch) return drawDag(svg, subs, {...o, step: pitch});
+  const padX = o.r * 2.4, stepX = o.r * pitch;
+  const fitCols = Math.max(1, Math.floor((cw - 2 * padX) / stepX) + 1);
+  drawDag(svg, subs, {...o, oneRow: false, cols: fitCols, W: cw, step: pitch});
 }
 
 function summaryArrived(d, oldHeight) {
@@ -1120,8 +1133,8 @@ function render() {
   const cols = w < 520 ? 8 : w < 800 ? 13 : 21;
   const curSvg = $("cur");
   curSvg.style.width = mobile ? `${W}px` : "";
-  const curO = {W, cols, r: mobile ? 10 : (w < 520 ? 12 : 14), ghost: true, oneRow: true, base: d.cur.base, uncles, animate: true, tip: d.dagtip, mini: false};
-  if (KI) fitDag(curSvg, subs, {...curO, oneRow: false}, 3.3);   /* v3: wrap to use the height */ else drawDag(curSvg, subs, curO);
+  const curO = {W, cols, r: mobile ? 10 : (w < 520 ? 12 : 14), ghost: true, oneRow: true, step: 3.3, scroll: true, base: d.cur.base, uncles, animate: true, tip: d.dagtip, mini: false};
+  if (KI) fitDag(curSvg, subs, {...curO, oneRow: false, scroll: false}, 3.3);   /* wrap to the panel width; stay top-left */ else drawDag(curSvg, subs, curO);
   if (mobile && (firstRender || fresh)) requestAnimationFrame(() => { const sc = $("curScroll"); sc.scrollLeft = sc.scrollWidth; });
   const box = $("prev"); box.innerHTML = "";
   const pv = (d.prev || []).slice(0, KI ? 1 : undefined);   /* v3: kiosk shows only the newest finished round */
@@ -1143,8 +1156,8 @@ function render() {
       const svg = document.createElementNS(NS, "svg"); scroll.appendChild(svg);
       const wide = w >= 800, miniW = mobile ? Math.max(1000, (st.depth + 2) * 18) : W;
       svg.style.width = mobile ? `${miniW}px` : "";
-      const pO = {W: miniW, cols: wide ? 42 : 14, r: mobile ? 9 : 8, ghost: false, oneRow: true, mini: true, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash, m: b.m}, uncles: unc, labelRight: mobile ? miniW - 4 : null};
-      if (KI) fitDag(svg, all, {...pO, oneRow: false, r: 10}, 2.8);   /* v3: one larger mini-DAG */ else drawDag(svg, all, pO);
+      const pO = {W: miniW, cols: wide ? 42 : 14, r: mobile ? 9 : 8, ghost: false, oneRow: true, step: 2.8, scroll: true, mini: true, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash, m: b.m}, uncles: unc, labelRight: mobile ? miniW - 4 : null};
+      if (KI) fitDag(svg, all, {...pO, oneRow: false, scroll: false, r: 10}, 2.8);   /* one larger mini-DAG, still flush left */ else drawDag(svg, all, pO);
     } else if (b.mdv === 2) {
       div.insertAdjacentHTML("beforeend", `<div style="color:var(--muted);font-size:13px;padding:4px 0">The node's recent-DAG view no longer holds subblock details for this group.</div>`);
     }
