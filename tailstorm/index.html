@@ -911,21 +911,19 @@ function drawDag(svg, subs, o) {
   const contentW = padX + Math.max(0, cols - 1) * stepX + padX;
   const H = padY * 2 + (rows - 1) * rowH + (maxLane - 1) * laneH;
   if (o.dry) return {H, W: contentW};
-  const viewW = Math.max(o.W || 0, contentW);
+  // lockBox (kiosk): viewBox is the panel itself, 1:1, so a growing round cannot
+  // rescale or recenter. Otherwise the viewBox is at least the panel wide and the
+  // element is sized in px so the browser does not meet-scale the origin inward.
+  const viewW = o.lockBox ? o.W : Math.max(o.W || 0, contentW);
+  const viewH = o.lockBox ? o.Hbox : H;
   svg.innerHTML = ""; defs(svg);
-  svg.setAttribute("viewBox", `0 0 ${viewW} ${H}`);
-  // xMinYMin: the whole drawing stays flush top-left. The default xMidYMid meet centers it in the panel.
+  svg.setAttribute("viewBox", `0 0 ${viewW} ${viewH}`);
+  // xMinYMin: depth 0 stays at the top-left. xMidYMid meet would center the round.
   svg.setAttribute("preserveAspectRatio", "xMinYMin meet");
   if (o.scroll) {
-    if (contentW > (o.W || 0) + 1) {
-      svg.style.width = Math.ceil(contentW) + "px";
-      svg.style.height = Math.ceil(H) + "px";
-      svg.style.maxWidth = "none";
-    } else {
-      svg.style.width = "";
-      svg.style.height = "";
-      svg.style.maxWidth = "";
-    }
+    svg.style.width = Math.ceil(viewW) + "px";
+    svg.style.height = Math.ceil(viewH) + "px";
+    svg.style.maxWidth = "none";
   }
   const xy = new Map();
   for (const [c, items] of colItems) {
@@ -979,6 +977,9 @@ function drawDag(svg, subs, o) {
   };
   for (const s of subs) { const [x, y] = xy.get(s.h); node(s, x, y, s.u && o.closing ? "out" : null); }
   for (const u of uncles) { const [x, y] = xy.get("U:" + u.h); node(u, x, y, "in"); }
+  // Keep the round's first column in the visible top-left. Do not follow the tip.
+  const sc = svg.closest(".dagScroll");
+  if (sc) { sc.scrollLeft = 0; sc.scrollTop = 0; }
 }
 
 let selHash = null, infoTimer = 0;
@@ -1095,8 +1096,8 @@ function fitDag(svg, subs, o, step) {
   const pitch = step || o.step || 3.3;
   if (!cw || !ch) return drawDag(svg, subs, {...o, step: pitch});
   const padX = o.r * 2.4, stepX = o.r * pitch;
-  const fitCols = Math.max(1, Math.floor((cw - 2 * padX) / stepX) + 1);
-  drawDag(svg, subs, {...o, oneRow: false, cols: fitCols, W: cw, step: pitch});
+  const fitCols = Math.max(1, Math.floor((Math.max(cw, padX * 2 + stepX) - 2 * padX) / stepX) + 1);
+  drawDag(svg, subs, {...o, oneRow: false, cols: fitCols, W: cw, Hbox: ch, lockBox: true, scroll: false, step: pitch});
 }
 
 function summaryArrived(d, oldHeight) {
@@ -1129,13 +1130,12 @@ function render() {
   $("legend").innerHTML = legendHtml(mobile ? null : d.per_miner_5min) + `<span class="progressTrack"><i style="width:${Math.min(100, shownN / (K - 1) * 100)}%"></i><b>${progressLabel}</b></span>` + (!KI ? `<span class="hintLegend">Tap or click any subblock to see its details.</span>` : "");
   $("legend2").innerHTML = legendHtml(null) + `<span class="lx">dashed red = left out of this summary, included later as an uncle</span>`;
   $("cur-m").textContent = KI ? `on top of summary #${d.height} · ${shownN}/${K - 1} · depth ${bs.depth}` : `on top of summary #${d.height} (${d.tip}…) · ${shownN}/${K - 1} · depth ${bs.depth} · next summary #${d.height + 1} when full`;
-  const w = $("cur").parentNode.clientWidth, W = mobile ? Math.max(1100, (bs.depth + 2) * 22) : Math.max(300, w);
+  const w = $("cur").parentNode.clientWidth || 300, W = Math.max(300, w);
   const cols = w < 520 ? 8 : w < 800 ? 13 : 21;
   const curSvg = $("cur");
-  curSvg.style.width = mobile ? `${W}px` : "";
   const curO = {W, cols, r: mobile ? 10 : (w < 520 ? 12 : 14), ghost: true, oneRow: true, step: 3.3, scroll: true, base: d.cur.base, uncles, animate: true, tip: d.dagtip, mini: false};
-  if (KI) fitDag(curSvg, subs, {...curO, oneRow: false, scroll: false}, 3.3);   /* wrap to the panel width; stay top-left */ else drawDag(curSvg, subs, curO);
-  if (mobile && (firstRender || fresh)) requestAnimationFrame(() => { const sc = $("curScroll"); sc.scrollLeft = sc.scrollWidth; });
+  if (KI) fitDag(curSvg, subs, {...curO, oneRow: false, scroll: false}, 3.3);   /* panel box, depth 0 pinned top-left */ else drawDag(curSvg, subs, curO);
+  requestAnimationFrame(() => { const sc = $("curScroll"); if (sc) { sc.scrollLeft = 0; sc.scrollTop = 0; } });
   const box = $("prev"); box.innerHTML = "";
   const pv = (d.prev || []).slice(0, KI ? 1 : undefined);   /* v3: kiosk shows only the newest finished round */
   for (let i = 0; i < pv.length; i++) {
@@ -1154,9 +1154,8 @@ function render() {
     if (all.length) {
       const scroll = document.createElement("div"); scroll.className = "dagScroll"; div.appendChild(scroll);
       const svg = document.createElementNS(NS, "svg"); scroll.appendChild(svg);
-      const wide = w >= 800, miniW = mobile ? Math.max(1000, (st.depth + 2) * 18) : W;
-      svg.style.width = mobile ? `${miniW}px` : "";
-      const pO = {W: miniW, cols: wide ? 42 : 14, r: mobile ? 9 : 8, ghost: false, oneRow: true, step: 2.8, scroll: true, mini: true, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash, m: b.m}, uncles: unc, labelRight: mobile ? miniW - 4 : null};
+      const wide = w >= 800;
+      const pO = {W, cols: wide ? 42 : 14, r: mobile ? 9 : 8, ghost: false, oneRow: true, step: 2.8, scroll: true, mini: true, base: {height: b.height - 1, hash: b.prev}, closing: {height: b.height, hash: b.hash, m: b.m}, uncles: unc, labelRight: null};
       if (KI) fitDag(svg, all, {...pO, oneRow: false, scroll: false, r: 10}, 2.8);   /* one larger mini-DAG, still flush left */ else drawDag(svg, all, pO);
     } else if (b.mdv === 2) {
       div.insertAdjacentHTML("beforeend", `<div style="color:var(--muted);font-size:13px;padding:4px 0">The node's recent-DAG view no longer holds subblock details for this group.</div>`);
