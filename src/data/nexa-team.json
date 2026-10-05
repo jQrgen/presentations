@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-03",
+  "updated": "2026-10-05",
   "source": "jQrgen's AI team roster",
   "people": [
     {
@@ -20,6 +20,32 @@
   ],
   "members": [
     {
+      "name": "Dagur Bot",
+      "type": "ai",
+      "role": "AI agent (role line to come)",
+      "department": "Unassigned",
+      "groups": [
+        "Nexa app engineering team",
+        "Nexa core engineering team",
+        "Nexa product & design team",
+        "Nexa security team"
+      ],
+      "contributions": []
+    },
+    {
+      "name": "jQrgen bot",
+      "type": "ai",
+      "role": "AI agent (role line to come)",
+      "department": "Unassigned",
+      "groups": [
+        "Nexa app engineering team",
+        "Nexa product & design team",
+        "Nexa security team",
+        "Nexa design review"
+      ],
+      "contributions": []
+    },
+    {
       "name": "Marketing strategy",
       "type": "ai",
       "role": "Developer marketing plan, messaging and campaigns",
@@ -36,6 +62,16 @@
           "date": "2026-10-03"
         }
       ]
+    },
+    {
+      "name": "Myrt",
+      "type": "ai",
+      "role": "AI agent (role line to come)",
+      "department": "Unassigned",
+      "groups": [
+        "Nexa News"
+      ],
+      "contributions": []
     },
     {
       "name": "Nexa chief of staff",
@@ -116,10 +152,10 @@
       ]
     },
     {
-      "name": "Nexa D-SCOR bot",
+      "name": "Nexa D-SCOR-ansvarlig",
       "type": "ai",
-      "role": "AI agent (role line to come)",
-      "department": "Unassigned",
+      "role": "Team dynamics reviewer",
+      "department": "Team dynamics",
       "groups": [],
       "contributions": []
     },
@@ -209,6 +245,26 @@
       ]
     },
     {
+      "name": "Nexa News editor",
+      "type": "ai",
+      "role": "AI agent (role line to come)",
+      "department": "Unassigned",
+      "groups": [
+        "Nexa News"
+      ],
+      "contributions": []
+    },
+    {
+      "name": "Nexa News researcher",
+      "type": "ai",
+      "role": "AI agent (role line to come)",
+      "department": "Unassigned",
+      "groups": [
+        "Nexa News"
+      ],
+      "contributions": []
+    },
+    {
       "name": "Nexa Presentations",
       "type": "ai",
       "role": "Talks, pitch decks and these pages",
@@ -251,6 +307,14 @@
         "Nexa product & design team",
         "Nexa design review"
       ],
+      "contributions": []
+    },
+    {
+      "name": "Nexa Pulse",
+      "type": "ai",
+      "role": "AI agent (role line to come)",
+      "department": "Unassigned",
+      "groups": [],
       "contributions": []
     },
     {
@@ -307,38 +371,6 @@
         "Nexa leadership team"
       ],
       "contributions": []
-    },
-    {
-      "name": "Rostrum dev",
-      "type": "ai",
-      "role": "Rostrum, Nexa's Electrum-protocol indexing server",
-      "department": "Engineering",
-      "groups": [
-        "Nexa app engineering team",
-        "Nexa core engineering team",
-        "Nexa product & design team",
-        "Nexa security team"
-      ],
-      "contributions": [
-        {
-          "title": "Rostrum MR !461: animated architecture page",
-          "url": "https://gitlab.com/nexa/rostrum/-/merge_requests/461",
-          "date": "2026-10-03"
-        }
-      ]
-    },
-    {
-      "name": "Wally Dev",
-      "type": "ai",
-      "role": "Wally Wallet on Android, desktop and iOS",
-      "department": "Engineering",
-      "groups": [
-        "Nexa app engineering team",
-        "Nexa product & design team",
-        "Nexa security team",
-        "Nexa design review"
-      ],
-      "contributions": []
     }
   ],
   "groups": [
@@ -356,8 +388,8 @@
     {
       "name": "Nexa app engineering team",
       "members": [
-        "Wally Dev",
-        "Rostrum dev",
+        "jQrgen bot",
+        "Dagur Bot",
         "Nexa solution architect",
         "Nexa QA & infra",
         "Nexa lead dev",
@@ -369,7 +401,7 @@
       "members": [
         "Nexa core dev",
         "Nexa solution architect",
-        "Rostrum dev",
+        "Dagur Bot",
         "Nexa QA & infra",
         "Nexa lead dev",
         "Nexa chief of staff"
@@ -380,8 +412,8 @@
       "members": [
         "Nexa product manager",
         "Nexa designer",
-        "Wally Dev",
-        "Rostrum dev",
+        "jQrgen bot",
+        "Dagur Bot",
         "Nexa solution architect",
         "Nexa DevRel & BON grants"
       ]
@@ -412,8 +444,8 @@
         "Nexa security & audit",
         "Nexa lead dev",
         "Nexa core dev",
-        "Wally Dev",
-        "Rostrum dev",
+        "jQrgen bot",
+        "Dagur Bot",
         "Nexa solution architect"
       ]
     },
@@ -422,10 +454,18 @@
       "members": [
         "Nexa designer",
         "Nexa Presentations",
-        "Wally Dev",
+        "jQrgen bot",
         "Nexa game dev",
         "Nexa media & communications",
         "Nexa product manager"
+      ]
+    },
+    {
+      "name": "Nexa News",
+      "members": [
+        "Myrt",
+        "Nexa News researcher",
+        "Nexa News editor"
       ]
     }
   ]
