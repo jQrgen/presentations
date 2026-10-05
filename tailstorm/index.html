@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nexa Tailstorm: live DAG (stormtest demo)</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect x=%272%27 y=%272%27 width=%2712%27 height=%2712%27 rx=%272%27 fill=%27%23e0b341%27/%3E%3C/svg%3E">
-<meta name="description" content="Live view of a Tailstorm DAG on a private Nexa stormtest chain: subblocks, parents and summary blocks, updating every few seconds.">
+<meta name="description" content="Live view of a Tailstorm DAG on a private Nexa stormtest chain: subblocks, parents and summary blocks, updating about every second.">
 <style>
 :root{--bg:#0a0c10;--panel:#12151c;--panel2:#181c25;--line:#262b36;--text:#e7e3d8;--muted:#8d93a1;--gold:#e0b341;--gold2:#f5d27a;--golddim:#6f5a22;--sub:#9fb3c8;--ok:#5fbf7f;--warn:#e8704f}
 *{box-sizing:border-box}
@@ -651,7 +651,7 @@ html.kiosk.ls-isstale .esth{display:none}
 </ol></section>
 <footer>
   Source: a Nexa node (<code>-stormtest</code>) running Tailstorm, read via <code>gettailstorminfo</code>, <code>getbestdagtiphash</code>, <code>getsubblock</code> and <code>getblock</code>.
-  k = 120 is the value in the current code for mainnet, and the demo uses the same value; it isn't a final activation setting. Four miner loops each mine on their own node; the nodes relay to each other through a ~1.2 s delay proxy. A publisher reading node 1 builds a snapshot every ~3 s and serves it through an outbound Cloudflare quick tunnel; this page polls it every 3 s.
+  k = 120 is the value in the current code for mainnet, and the demo uses the same value; it isn't a final activation setting. Four miner loops each mine on their own node; the nodes relay to each other through a ~1.2 s delay proxy. A publisher reading node 1 builds a snapshot about every 1–2 s and serves it through an outbound Cloudflare quick tunnel; this page polls it every ~1 s.
   <span id="src"></span><br>
   Read the explainer: <a href="https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9" rel="noopener">&ldquo;Seconds, Not Minutes: What Tailstorm Means for Developers Building on Nexa&rdquo;</a> on Medium, and the <a href="https://x.com/jQrgensn/status/2105689136757604437" rel="noopener">thread on X</a>.<br>
   How miners get paid: <a href="mining-rewards/">&ldquo;One Block, Many Winners: How Tailstorm Decentralizes Mining Rewards on Nexa&rdquo;</a>.<br>
@@ -663,7 +663,7 @@ html.kiosk.ls-isstale .esth{display:none}
 <script>
 "use strict";
 const GIST = "8eb96c91e7354760a1c0394652c4bbf7";
-const POLL_MS = 3000, STALE_S = 20;
+const POLL_MS = 1000, STALE_S = 20;
 let K = 120;   // updated from the feed's k
 const $ = id => document.getElementById(id);
 const NS = "http://www.w3.org/2000/svg";
@@ -1227,7 +1227,7 @@ const ageOf = j => j && j.ts ? Math.max(0, Math.round(Date.now()/1000 - j.ts)) :
 const isStale = j => { const a = ageOf(j); return a == null || a > STALE_S || j.ok === false; };
 function head(j, starting) {
   const a = ageOf(j);
-  return `<div class="ls-head"><h2>Reward split<span class="okv">: who got paid</span> <span class="ls-live"><span class="okv">LIVE</span><span class="stv">STALE</span></span></h2><div class="ls-upd"><span class="stv">⚠ Data is stale, last update <span class="ls-age">${a ?? "–"}</span> s ago · </span>Last updated <b class="tn">${hms(j && j.ts)}</b><span class="full okv"> · every 3 s</span></div></div>
+  return `<div class="ls-head"><h2>Reward split<span class="okv">: who got paid</span> <span class="ls-live"><span class="okv">LIVE</span><span class="stv">STALE</span></span></h2><div class="ls-upd"><span class="stv">⚠ Data is stale, last update <span class="ls-age">${a ?? "–"}</span> s ago · </span>Last updated <b class="tn">${hms(j && j.ts)}</b><span class="full okv"> · every ~1 s</span></div></div>
 <div class="ls-tags"><span class="ls-tag">stormtest testnet · 4 simulated miners</span><span class="ls-tag amt">NEX = testnet NEXA, no market value</span></div>
 <div class="ls-stale" role="status">Data is stale, last update <span class="ls-age">${a ?? "–"}</span> s ago (${hms(j && j.ts)}). Finished rounds are final; the live round is paused.</div>`;
 }
@@ -1304,7 +1304,11 @@ function render(j) {
   const stale = isStale(j);
   document.documentElement.classList.toggle("ls-isstale", !!(j && stale));
   s.querySelectorAll(".ls-age").forEach(e => e.textContent = ageOf(j) ?? "–");
-  const key = j ? (j.rewards ? "r" + j.seq + "|" + j.ts : "n") : "none";
+  const c = j && j.rewards && j.rewards.current;
+  const by = (c && c.subblocks_by_miner) || {};
+  const bySig = Object.keys(by).sort().map(m => m + ":" + by[m]).join(",");
+  const curSig = c ? [(c.subblocks ?? ""), (c.uncles ?? ""), (c.next_summary_height ?? ""), bySig].join("|") : "";
+  const key = j ? (j.rewards ? "r" + j.seq + "|" + j.ts + "|" + curSig : "n") : "none";
   if (key === lastKey) return;
   lastKey = key;
   try {
