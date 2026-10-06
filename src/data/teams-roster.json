@@ -1,35 +1,10 @@
 {
-  "updated": "2026-10-02",
+  "updated": "2026-10-06",
   "source": "jQrgen's AI agent roster (ids, teams and public names only)",
   "teams": [
     {
       "name": "Personal health team",
-      "members": [
-        {
-          "id": "d77b0e24-721f-43f1-b1df-895871971563",
-          "name": "Fastlege"
-        },
-        {
-          "id": "aef0a6e5-5dda-4769-a594-eb6c540d1164",
-          "name": "Lege 2"
-        },
-        {
-          "id": "61d77712-38b4-4333-832f-423f7ece4983",
-          "name": "Nutritionist"
-        },
-        {
-          "id": "fd5c438a-a008-4d84-8db7-42a335ff16a1",
-          "name": "Personal trainer"
-        },
-        {
-          "id": "1a0fab0a-7eb5-4e42-a543-f0e28e728c53",
-          "name": "Kenyan run coach"
-        },
-        {
-          "id": "9f4094f5-2dbf-4013-8468-88a097458e5d",
-          "name": "Padel coach"
-        }
-      ]
+      "members": []
     },
     {
       "name": "Personal finance",
@@ -55,59 +30,30 @@
     },
     {
       "name": "Philosophers' symposium",
-      "members": [
-        {
-          "id": "409f7345-b4b5-45dc-8fe5-2180cc377e4c",
-          "name": "Sokrates"
-        },
-        {
-          "id": "1431fde6-c59d-4097-9917-79ac29f06f61",
-          "name": "Marcus Aurelius"
-        },
-        {
-          "id": "83b8dd9a-b582-4890-9f9c-53eb4d6f5678",
-          "name": "Nietzsche"
-        },
-        {
-          "id": "6dccc79e-1637-4735-b6af-804bfe28c156",
-          "name": "Hannah Arendt"
-        },
-        {
-          "id": "1bf6b464-698e-40be-ac3f-5978ffcab7e5",
-          "name": "Arne Næss"
-        },
-        {
-          "id": "680befcc-f236-40de-a77d-7f0930ecb7d0",
-          "name": "Grok Bot"
-        }
-      ]
+      "members": []
     },
     {
       "name": "Trading",
       "members": [
         {
           "id": "c63239ab-d6f9-41e1-b7f9-145c6e8722c9",
-          "name": "Trading strategist"
+          "name": "Screener"
         },
         {
           "id": "cdebf3c8-a41e-44ad-885c-9a927bb8fa22",
-          "name": "DEX trader"
+          "name": "Gate"
         },
         {
           "id": "392bcfe4-ea15-4f84-ab39-4d76a8cadd93",
-          "name": "On-chain analyst"
+          "name": "Cartographer"
         },
         {
           "id": "7178889a-2ed9-482b-8d16-4f4a939325c5",
-          "name": "Risk manager"
+          "name": "Risk Officer"
         },
         {
           "id": "7208d9c1-eb70-4b34-806a-89ba02ad8e3f",
-          "name": "Quant dev"
-        },
-        {
-          "id": "680befcc-f236-40de-a77d-7f0930ecb7d0",
-          "name": "Grok Bot"
+          "name": "Auditor"
         }
       ]
     },
@@ -153,6 +99,10 @@
         {
           "id": "680befcc-f236-40de-a77d-7f0930ecb7d0",
           "name": "Grok Bot"
+        },
+        {
+          "id": "72c4083d-ffdf-4fec-9f7c-a89521ca99a3",
+          "name": "jQrgenCorp markedsansvarlig"
         }
       ],
       "subteams": [
