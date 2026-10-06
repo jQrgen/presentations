@@ -70,23 +70,23 @@
   },
   "Trading": {
     "c63239ab-d6f9-41e1-b7f9-145c6e8722c9": {
-      "name": "Trading strategist",
+      "name": "Screener",
       "role": "Leads the team's simulated trading plan"
     },
     "cdebf3c8-a41e-44ad-885c-9a927bb8fa22": {
-      "name": "DEX trader",
+      "name": "Gate",
       "role": "Simulated trading research"
     },
     "392bcfe4-ea15-4f84-ab39-4d76a8cadd93": {
-      "name": "On-chain analyst",
+      "name": "Cartographer",
       "role": "On-chain activity analysis for simulated trades"
     },
     "7178889a-2ed9-482b-8d16-4f4a939325c5": {
-      "name": "Risk manager",
+      "name": "Risk Officer",
       "role": "Risk rules for simulated trades"
     },
     "7208d9c1-eb70-4b34-806a-89ba02ad8e3f": {
-      "name": "Quant dev",
+      "name": "Auditor",
       "role": "Backtesting and paper-trading tools"
     },
     "680befcc-f236-40de-a77d-7f0930ecb7d0": {
@@ -134,6 +134,10 @@
     "680befcc-f236-40de-a77d-7f0930ecb7d0": {
       "name": "Grok Bot",
       "role": "General-purpose assistant"
+    },
+    "72c4083d-ffdf-4fec-9f7c-a89521ca99a3": {
+      "name": "jQrgenCorp markedsansvarlig",
+      "role": "Marketing and outreach for jQrgen's company"
     }
   }
 }
