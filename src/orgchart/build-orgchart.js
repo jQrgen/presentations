@@ -47,7 +47,7 @@ const DEPARTMENTS = [
   ["Engineering", ["Nexa lead dev", "Nexa core dev", "Nexa solution architect", "Rostrum dev", "Wally Dev", "Nexa game dev", "Nexa FPGA engineer", "Nexa QA & infra"]],
   ["Product & Design", ["Nexa product manager", "Nexa designer"]],
   ["Research", ["Nexa chief scientist", "Nexa research liaison"]],
-  ["Go-to-market", ["Marketing strategy", "Nexa media & communications", "Nexa DevRel & BON grants", "Nexa community manager", "Nexa conferences", "Nexa Presentations"]],
+  ["Go-to-market", ["Marketing strategy", "Nexa media & communications", "Nexa DevRel & BON grants", "Nexa community manager", "Nexa conferences", "Nexa Presentations", "Nexa News editor", "Nexa News researcher", "Nexa Pulse"]],
   ["Security & audit (independent)", ["Nexa security & audit"]],
   ["Advisor", ["Nexa strategist"]],
   ["Team dynamics", ["Nexa D-SCOR-ansvarlig"]],
@@ -62,7 +62,7 @@ const PEOPLE = [{ name: "jQrgen", fullName: "Jørgen S. Notland", type: "human",
 // renamed agents: the chart is keyed by role name; an agent whose profile title is one of these is placed under that role
 const TITLE_ALIASES = { "Nexa lead developer": "Nexa lead dev", "Senior Rostrum dev": "Rostrum dev" };
 // renamed agents without a title: profile name -> role name (used only when no other agent already holds that role)
-const NAME_ALIASES = { "Nexa D-SCOR bot": "Nexa D-SCOR-ansvarlig" };
+const NAME_ALIASES = { "Nexa D-SCOR bot": "Nexa D-SCOR-ansvarlig", "Myrt": "Nexa chief of staff" }; // Myrt: chief of staff for all teams, incl. Nexa (2026-10-05)
 // public display names, curated by jQrgen (role name -> name shown on the page). Any other personal name is not published.
 const DISPLAY_NAMES = { "Nexa lead dev": "Andrew Stone" };
 // one colour per team (always shown with its text label); teams beyond this list cycle through the palette
@@ -96,6 +96,9 @@ const SUMMARY = {
   "Nexa conferences": "Developer conferences, hackathons and meetups, Scandinavia first",
   "Nexa QA & infra": "Testing, CI and release checklists, test infrastructure and deploys",
   "Nexa D-SCOR-ansvarlig": "Team dynamics reviewer",
+  "Nexa News editor": "Edits and publishes stories for Nexa News",
+  "Nexa News researcher": "Researches and fact-checks stories for Nexa News",
+  "Nexa Pulse": "Regular updates on what is happening around Nexa",
 };
 
 // ---- the Nexa D-SCOR page (built by orgchart/build-nexa-team-dscor.js); linked from the header and from the D-SCOR-ansvarlig card
