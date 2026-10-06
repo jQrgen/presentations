@@ -3,19 +3,6 @@
   "source": "jQrgen's AI agent roster (ids, teams and public names only)",
   "teams": [
     {
-      "name": "Personal health team",
-      "members": []
-    },
-    {
-      "name": "Personal finance",
-      "members": [
-        {
-          "id": "5939c31a-84ad-4943-b00f-fa915cbba5a9",
-          "name": "Personal finance"
-        }
-      ]
-    },
-    {
       "name": "Personal dev team",
       "members": [
         {
@@ -29,8 +16,13 @@
       ]
     },
     {
-      "name": "Philosophers' symposium",
-      "members": []
+      "name": "Personal finance",
+      "members": [
+        {
+          "id": "5939c31a-84ad-4943-b00f-fa915cbba5a9",
+          "name": "Personal finance"
+        }
+      ]
     },
     {
       "name": "Trading",
@@ -38,10 +30,6 @@
         {
           "id": "c63239ab-d6f9-41e1-b7f9-145c6e8722c9",
           "name": "Screener"
-        },
-        {
-          "id": "cdebf3c8-a41e-44ad-885c-9a927bb8fa22",
-          "name": "Gate"
         },
         {
           "id": "392bcfe4-ea15-4f84-ab39-4d76a8cadd93",
@@ -52,8 +40,20 @@
           "name": "Risk Officer"
         },
         {
+          "id": "cdebf3c8-a41e-44ad-885c-9a927bb8fa22",
+          "name": "Gate"
+        },
+        {
+          "id": "f178e093-e640-4fe0-8d7d-bc3d6f44a057",
+          "name": "Exit Clerk"
+        },
+        {
           "id": "7208d9c1-eb70-4b34-806a-89ba02ad8e3f",
           "name": "Auditor"
+        },
+        {
+          "id": "680befcc-f236-40de-a77d-7f0930ecb7d0",
+          "name": "Grok Bot"
         }
       ]
     },
@@ -81,10 +81,6 @@
           "name": "jQrgenCorp admin"
         },
         {
-          "id": "80394431-abca-40f3-94aa-fb98045004dc",
-          "name": "jQrgenCorp D-SCOR-ansvarlig"
-        },
-        {
           "id": "b2b9975e-3419-4263-b6c5-9cd916d63a54",
           "name": "jQrgenCorp accountant"
         },
@@ -97,15 +93,55 @@
           "name": "jQrgenCorp tax & compliance"
         },
         {
-          "id": "680befcc-f236-40de-a77d-7f0930ecb7d0",
-          "name": "Grok Bot"
+          "id": "39c08e66-6e65-4cbc-99f3-2034aaade3b3",
+          "name": "jQrgenCorp advokat"
+        },
+        {
+          "id": "85436465-4474-4b33-8e7b-a0544008a8ce",
+          "name": "Bokforlag forlegger"
+        },
+        {
+          "id": "a60fe820-d53c-46b7-bf8d-a2b0c579b6bf",
+          "name": "Bokforlag redaktør"
+        },
+        {
+          "id": "12af4087-385b-426e-b4f1-7161477a7fb7",
+          "name": "Bokforlag researcher"
+        },
+        {
+          "id": "6c78d739-5628-4244-8231-297252ab0f0f",
+          "name": "Bokforlag forfatter"
+        },
+        {
+          "id": "d8be80fa-ec74-404c-98b5-5afe2dc86495",
+          "name": "Bokforlag forfatter BU"
         },
         {
           "id": "72c4083d-ffdf-4fec-9f7c-a89521ca99a3",
           "name": "jQrgenCorp markedsansvarlig"
+        },
+        {
+          "id": "80394431-abca-40f3-94aa-fb98045004dc",
+          "name": "jQrgenCorp D-SCOR-ansvarlig"
+        },
+        {
+          "id": "680befcc-f236-40de-a77d-7f0930ecb7d0",
+          "name": "Grok Bot"
         }
       ],
       "subteams": [
+        {
+          "name": "Ledelse",
+          "label": "leadership",
+          "memberIds": [
+            "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2",
+            "ad1d3ecd-77fe-4d7a-8138-1cea4def9d71",
+            "336aff5a-0e5b-4fa1-a6ae-aa7cc7443e57",
+            "0a932575-0225-4f92-abf8-7216fc5d62e6",
+            "747093be-e915-4aef-a2e9-47804a4db1a5",
+            "680befcc-f236-40de-a77d-7f0930ecb7d0"
+          ]
+        },
         {
           "name": "Regnskap",
           "label": "accounting",
@@ -119,16 +155,78 @@
           ]
         },
         {
-          "name": "Ledelse",
-          "label": "leadership",
+          "name": "Juridisk",
+          "label": "legal",
           "memberIds": [
             "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2",
             "ad1d3ecd-77fe-4d7a-8138-1cea4def9d71",
             "336aff5a-0e5b-4fa1-a6ae-aa7cc7443e57",
-            "0a932575-0225-4f92-abf8-7216fc5d62e6",
-            "747093be-e915-4aef-a2e9-47804a4db1a5",
-            "680befcc-f236-40de-a77d-7f0930ecb7d0"
+            "ed2061ee-5d2c-4cf9-a610-fc2b8da9ceab",
+            "39c08e66-6e65-4cbc-99f3-2034aaade3b3"
           ]
+        },
+        {
+          "name": "Bokforlag",
+          "label": "Nerd Bok publishing",
+          "memberIds": [
+            "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2",
+            "85436465-4474-4b33-8e7b-a0544008a8ce",
+            "a60fe820-d53c-46b7-bf8d-a2b0c579b6bf",
+            "12af4087-385b-426e-b4f1-7161477a7fb7",
+            "6c78d739-5628-4244-8231-297252ab0f0f",
+            "d8be80fa-ec74-404c-98b5-5afe2dc86495"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Nordic Crypto",
+      "members": [
+        {
+          "id": "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2",
+          "name": "Myrt"
+        },
+        {
+          "id": "0b7181d5-ca61-4c5a-b03b-a2d36324219f",
+          "name": "Nordic Crypto redaktør"
+        },
+        {
+          "id": "6031f46c-6299-4632-8089-d160c7cd050d",
+          "name": "Nordic Crypto undersøker"
+        }
+      ]
+    },
+    {
+      "name": "Kryptonytt",
+      "members": [
+        {
+          "id": "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2",
+          "name": "Myrt"
+        },
+        {
+          "id": "be648fad-5436-409d-a59e-1d71706044b7",
+          "name": "Kryptonytt redaktør"
+        },
+        {
+          "id": "b0176596-95cb-45bf-a836-fb3f3e472f58",
+          "name": "Kryptonytt undersøker"
+        }
+      ]
+    },
+    {
+      "name": "Nexa News",
+      "members": [
+        {
+          "id": "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2",
+          "name": "Myrt"
+        },
+        {
+          "id": "bbc26f9d-5e28-45b8-8892-307ba6b1cf5b",
+          "name": "Nexa News editor"
+        },
+        {
+          "id": "67ddae5d-34e9-4af8-9012-092b76d6947a",
+          "name": "Nexa News researcher"
         }
       ]
     }

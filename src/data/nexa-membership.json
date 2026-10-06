@@ -1,0 +1,54 @@
+{
+  "_note": "Curated membership for the Nexa org chart (read by orgchart/build-orgchart.js). Edit by hand; group chats are no longer read. agents: agent id -> the org-chart role it holds (the chart is keyed by role name; departments, role lines and display names live in build-orgchart.js). Only agents listed here are published, and only under their role name. groups: the Nexa teams (formerly group chats) in display order, as agent ids. Seeded 2026-10-06 from the public Nexa team graph (2026-10-05); the chief of staff seat is held by Myrt. The personal Trading desk and Nexa News are not on this chart (see the all-teams page).",
+  "agents": {
+    "2dea702d-d3be-4bef-9582-9c870a23ed88": "Nexa lead dev",
+    "ba4f01bb-0dff-4401-8941-371ada41b3c4": "Nexa product manager",
+    "54c82f3b-c1f0-4429-b790-e52b88d96d61": "Nexa chief scientist",
+    "4d093e02-dc78-4d80-856f-a5dac773cf8a": "Marketing strategy",
+    "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2": "Nexa chief of staff",
+    "3d435abd-acfb-4edf-8604-42ead1ea3a67": "Nexa strategist",
+    "a5ffb8fc-3724-47d4-b8fc-6c1c1ae52cb2": "Wally Dev",
+    "9c832739-b21d-4ff4-9390-51e607479e29": "Rostrum dev",
+    "4dfa7b10-9434-43b6-b810-d2cc91b614d1": "Nexa solution architect",
+    "96bc1630-8988-4e43-bdc8-92f8aaa9af11": "Nexa QA & infra",
+    "c39de99e-d070-4912-9ad1-4db3ba502664": "Nexa core dev",
+    "73953de2-6fbe-4e15-b777-35324909d642": "Nexa designer",
+    "17035db8-76e7-4be3-8920-8e91d3dfd76f": "Nexa DevRel & BON grants",
+    "a65006c2-0c05-4f16-9952-18befe9781b8": "Nexa research liaison",
+    "5d317a8e-ac5a-4578-abcf-319e6551fa09": "Nexa FPGA engineer",
+    "f51cbe5e-920b-41f3-833f-07abda1b2694": "Nexa media & communications",
+    "c205b542-93ab-45ab-a587-469ad6d64137": "Nexa community manager",
+    "4bd4afff-736d-4454-8275-9dbff92f836e": "Nexa conferences",
+    "477f26a4-2f8e-413c-87d4-2e8a899631f1": "Nexa Presentations",
+    "7d14cb80-abf4-4f7d-945b-080bd9ba185a": "Nexa security & audit",
+    "cd0758b8-be82-4041-8a16-450af107a8d9": "Nexa game dev",
+    "a9080ea1-4511-442e-b994-e86bc8669446": "Nexa Pulse",
+    "939b6844-8a83-4d40-8252-24f9da352466": "Nexa D-SCOR-ansvarlig"
+  },
+  "groups": [
+    { "name": "Nexa leadership team", "members": [
+      "2dea702d-d3be-4bef-9582-9c870a23ed88", "ba4f01bb-0dff-4401-8941-371ada41b3c4", "54c82f3b-c1f0-4429-b790-e52b88d96d61",
+      "4d093e02-dc78-4d80-856f-a5dac773cf8a", "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2", "3d435abd-acfb-4edf-8604-42ead1ea3a67"] },
+    { "name": "Nexa app engineering team", "members": [
+      "a5ffb8fc-3724-47d4-b8fc-6c1c1ae52cb2", "9c832739-b21d-4ff4-9390-51e607479e29", "4dfa7b10-9434-43b6-b810-d2cc91b614d1",
+      "96bc1630-8988-4e43-bdc8-92f8aaa9af11", "2dea702d-d3be-4bef-9582-9c870a23ed88", "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2"] },
+    { "name": "Nexa core engineering team", "members": [
+      "c39de99e-d070-4912-9ad1-4db3ba502664", "4dfa7b10-9434-43b6-b810-d2cc91b614d1", "9c832739-b21d-4ff4-9390-51e607479e29",
+      "96bc1630-8988-4e43-bdc8-92f8aaa9af11", "2dea702d-d3be-4bef-9582-9c870a23ed88", "4329f9ea-c8d9-46f2-a542-b4bbb9deb9e2"] },
+    { "name": "Nexa product & design team", "members": [
+      "ba4f01bb-0dff-4401-8941-371ada41b3c4", "73953de2-6fbe-4e15-b777-35324909d642", "a5ffb8fc-3724-47d4-b8fc-6c1c1ae52cb2",
+      "9c832739-b21d-4ff4-9390-51e607479e29", "4dfa7b10-9434-43b6-b810-d2cc91b614d1", "17035db8-76e7-4be3-8920-8e91d3dfd76f"] },
+    { "name": "Nexa research team", "members": [
+      "54c82f3b-c1f0-4429-b790-e52b88d96d61", "a65006c2-0c05-4f16-9952-18befe9781b8", "c39de99e-d070-4912-9ad1-4db3ba502664",
+      "5d317a8e-ac5a-4578-abcf-319e6551fa09"] },
+    { "name": "Nexa go-to-market team", "members": [
+      "4d093e02-dc78-4d80-856f-a5dac773cf8a", "f51cbe5e-920b-41f3-833f-07abda1b2694", "17035db8-76e7-4be3-8920-8e91d3dfd76f",
+      "c205b542-93ab-45ab-a587-469ad6d64137", "4bd4afff-736d-4454-8275-9dbff92f836e", "477f26a4-2f8e-413c-87d4-2e8a899631f1"] },
+    { "name": "Nexa security team", "members": [
+      "7d14cb80-abf4-4f7d-945b-080bd9ba185a", "2dea702d-d3be-4bef-9582-9c870a23ed88", "c39de99e-d070-4912-9ad1-4db3ba502664",
+      "a5ffb8fc-3724-47d4-b8fc-6c1c1ae52cb2", "9c832739-b21d-4ff4-9390-51e607479e29", "4dfa7b10-9434-43b6-b810-d2cc91b614d1"] },
+    { "name": "Nexa design review", "members": [
+      "73953de2-6fbe-4e15-b777-35324909d642", "477f26a4-2f8e-413c-87d4-2e8a899631f1", "a5ffb8fc-3724-47d4-b8fc-6c1c1ae52cb2",
+      "cd0758b8-be82-4041-8a16-450af107a8d9", "f51cbe5e-920b-41f3-833f-07abda1b2694", "ba4f01bb-0dff-4401-8941-371ada41b3c4"] }
+  ]
+}

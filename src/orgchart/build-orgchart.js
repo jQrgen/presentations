@@ -4,8 +4,9 @@
 //   node orgchart/build-orgchart.js --render   # render only, from src/data/nexa-team.json
 //   options: --agents <dir> (default /home/box/agent-data/agents), --out <docsDir> (default ../docs)
 //
-// Roster source: <agents>/*/profile.json (name, description). A directory with group.json is a group chat
-// (memberIds = agent directory names). Only Nexa team agents are published; ids, paths and descriptions are not.
+// Roster source: the hand-curated src/data/nexa-membership.json (agent id -> role; Nexa teams as agent ids). From
+// <agents>/*/profile.json only the "name" is read (does the agent still exist?); group chats are not read. Only curated
+// Nexa agents are published, under their role name; ids, paths, personal names and descriptions are not.
 // The snapshot keeps its "updated" date unless the published content changes, so re-running is idempotent.
 const fs = require("fs");
 const path = require("path");
@@ -18,15 +19,18 @@ const SRC = path.join(__dirname, "..");
 const DOCS = path.resolve(arg("--out", path.join(SRC, "..", "docs")));
 const SNAP = path.join(SRC, "data", "nexa-team.json");
 const CONTRIB = path.join(SRC, "data", "nexa-contributions.json"); // hand-maintained, keyed by role name
+const MEMBERSHIP = path.join(SRC, "data", "nexa-membership.json");    // hand-curated: who holds which role, and the teams
+const TEAMS_MEMBERSHIP = path.join(SRC, "data", "teams-membership.json"); // all-teams page: its notPublic ids are never shown here either
 
 // ---- who is not part of the Nexa team (private / generic bots and their group)
 // Privacy: an ALLOWLIST decides who is published; these ids are a second safety net (ids only, so no private names live in this public file).
 const EXCLUDE_IDS = new Set(["680befcc-f236-40de-a77d-7f0930ecb7d0", "207cf11b-c754-45d8-b61a-404d9cb352f2",
   "1a0fab0a-7eb5-4e42-a543-f0e28e728c53", "61d77712-38b4-4333-832f-423f7ece4983", "9f4094f5-2dbf-4013-8468-88a097458e5d",
   "aef0a6e5-5dda-4769-a594-eb6c540d1164", "d77b0e24-721f-43f1-b1df-895871971563", "fd5c438a-a008-4d84-8db7-42a335ff16a1",
-  // jQrgen's personal Trading team (moved out of Nexa 2026-10-01; shown on the all-teams chart instead): its group chat and five bots
+  // jQrgen's personal Trading team (moved out of Nexa 2026-10-01; shown on the all-teams chart instead): its group chat and its bots
   "693435ee-ebea-474a-bb19-ba2839ef9adc", "c63239ab-d6f9-41e1-b7f9-145c6e8722c9", "cdebf3c8-a41e-44ad-885c-9a927bb8fa22",
   "392bcfe4-ea15-4f84-ab39-4d76a8cadd93", "7178889a-2ed9-482b-8d16-4f4a939325c5", "7208d9c1-eb70-4b34-806a-89ba02ad8e3f",
+  "f178e093-e640-4fe0-8d7d-bc3d6f44a057", // Trading desk exit step (added 2026-10-06)
   // former Nexa Team Lead, merged into Nexa chief of staff 2026-10-01
   "ba1a19a3-12dc-49bc-abdc-aa1b46bc554f"]);
 const EXCLUDE_NAMES = new Set(["Grok Bot"].map((n) => n.toLowerCase()));
@@ -47,7 +51,7 @@ const DEPARTMENTS = [
   ["Engineering", ["Nexa lead dev", "Nexa core dev", "Nexa solution architect", "Rostrum dev", "Wally Dev", "Nexa game dev", "Nexa FPGA engineer", "Nexa QA & infra"]],
   ["Product & Design", ["Nexa product manager", "Nexa designer"]],
   ["Research", ["Nexa chief scientist", "Nexa research liaison"]],
-  ["Go-to-market", ["Marketing strategy", "Nexa media & communications", "Nexa DevRel & BON grants", "Nexa community manager", "Nexa conferences", "Nexa Presentations", "Nexa News editor", "Nexa News researcher", "Nexa Pulse"]],
+  ["Go-to-market", ["Marketing strategy", "Nexa media & communications", "Nexa DevRel & BON grants", "Nexa community manager", "Nexa conferences", "Nexa Presentations", "Nexa Pulse"]],
   ["Security & audit (independent)", ["Nexa security & audit"]],
   ["Advisor", ["Nexa strategist"]],
   ["Team dynamics", ["Nexa D-SCOR-ansvarlig"]],
@@ -59,17 +63,12 @@ const ADVISOR_DEPTS = ["Advisor"];
 const LEADS = new Set(["Nexa lead dev", "Nexa product manager", "Nexa chief scientist", "Marketing strategy"]);
 // the CEO card (jQrgen is the only human)
 const PEOPLE = [{ name: "jQrgen", fullName: "Jørgen S. Notland", type: "human", role: "CEO" }];
-// renamed agents: the chart is keyed by role name; an agent whose profile title is one of these is placed under that role
-const TITLE_ALIASES = { "Nexa lead developer": "Nexa lead dev", "Senior Rostrum dev": "Rostrum dev" };
-// renamed agents without a title: profile name -> role name (used only when no other agent already holds that role)
-const NAME_ALIASES = { "Nexa D-SCOR bot": "Nexa D-SCOR-ansvarlig", "Myrt": "Nexa chief of staff" }; // Myrt: chief of staff for all teams, incl. Nexa (2026-10-05)
+// which agent holds which role (renames included) is curated by agent id in src/data/nexa-membership.json
 // public display names, curated by jQrgen (role name -> name shown on the page). Any other personal name is not published.
-const DISPLAY_NAMES = { "Nexa lead dev": "Andrew Stone" };
+// Myrt holds the Nexa chief of staff seat (chief of staff for all of jQrgen's teams, 2026-10-05).
+const DISPLAY_NAMES = { "Nexa lead dev": "Andrew Stone", "Nexa chief of staff": "Myrt" };
 // one colour per team (always shown with its text label); teams beyond this list cycle through the palette
 const TEAM_COLOURS = ["#B91C1C", "#1D4ED8", "#047857", "#7C3AED", "#B45309", "#0E7490", "#BE185D", "#4D7C0F", "#374151"];
-// group chats in display order
-const GROUP_ORDER = ["Nexa leadership team", "Nexa app engineering team", "Nexa core engineering team", "Nexa product & design team",
-  "Nexa research team", "Nexa go-to-market team", "Nexa security team", "Nexa design review"];
 
 // ---- one-line role summaries (curated). A new agent with no line here gets a neutral placeholder and a warning;
 // profile descriptions are never published.
@@ -96,8 +95,6 @@ const SUMMARY = {
   "Nexa conferences": "Developer conferences, hackathons and meetups, Scandinavia first",
   "Nexa QA & infra": "Testing, CI and release checklists, test infrastructure and deploys",
   "Nexa D-SCOR-ansvarlig": "Team dynamics reviewer",
-  "Nexa News editor": "Edits and publishes stories for Nexa News",
-  "Nexa News researcher": "Researches and fact-checks stories for Nexa News",
   "Nexa Pulse": "Regular updates on what is happening around Nexa",
 };
 
@@ -120,42 +117,44 @@ const PENDING = "AI agent (role line to come)";
 const contributions = (name) => [...(CONTRIBS[name] || [])].sort((a, b) => b.date.localeCompare(a.date)).map(({ title, url, date }) => ({ title, url, date }));
 
 // ---- snapshot
+// Who is on the chart, under which role, and in which teams comes ONLY from the curated src/data/nexa-membership.json
+// (agent id -> role name; teams as lists of agent ids). Group chats are not read: deleting one never removes anyone.
+// From the agent directories only each profile's "name" is read, to check that a curated agent still exists and to warn
+// about Nexa-named agents nobody has curated yet. Curated agents that no longer exist are dropped.
 function snapshot() {
-  const dirs = fs.readdirSync(AGENTS).filter((d) => fs.existsSync(path.join(AGENTS, d, "profile.json")));
-  const agents = {}, groups = [];
-  const all = {};
-  for (const d of dirs) {
-    if (EXCLUDE_IDS.has(d)) continue;
-    const p = JSON.parse(fs.readFileSync(path.join(AGENTS, d, "profile.json"), "utf8"));
-    if (denied(p.name)) continue;
-    const g = path.join(AGENTS, d, "group.json");
-    if (fs.existsSync(g)) { if (nexaName(p.name)) groups.push({ name: p.name, ids: JSON.parse(fs.readFileSync(g, "utf8")).memberIds || [] }); }
-    else all[d] = p;
+  const mem = JSON.parse(fs.readFileSync(MEMBERSHIP, "utf8"));
+  const teamsMem = fs.existsSync(TEAMS_MEMBERSHIP) ? JSON.parse(fs.readFileSync(TEAMS_MEMBERSHIP, "utf8")) : {};
+  const notPublic = new Set(((teamsMem.notPublic || {}).ids || []).map(String));
+  const onTeamsPage = new Set((teamsMem.membership || []).flatMap((e) => (e.members || []).map((m) => String(m.id))));
+  const names = {}; // id -> current agent name (memory only, never written)
+  for (const d of fs.readdirSync(AGENTS)) {
+    const pf = path.join(AGENTS, d, "profile.json");
+    if (!fs.existsSync(pf) || fs.existsSync(path.join(AGENTS, d, "group.json"))) continue;
+    names[d] = String(JSON.parse(fs.readFileSync(pf, "utf8")).name || "").trim(); // name only
   }
-  const inNexaGroup = new Set(groups.flatMap((g) => g.ids));
-  const named = new Set(["Nexa chief of staff", ...DEPARTMENTS.flatMap(([, n]) => n)]);
-  // an agent the user has given a personal name keeps its org-chart role through its title (e.g. title "Nexa chief of staff"):
-  // the chart is keyed by role, so it is placed and shown under that role name; the personal name is not published
-  const taken = new Set(Object.values(all).map((p) => p.name));
-  for (const [d, p0] of Object.entries(all)) {
-    const t = TITLE_ALIASES[p0.title] || (NAME_ALIASES[p0.name] && !taken.has(NAME_ALIASES[p0.name]) ? NAME_ALIASES[p0.name] : p0.title);
-    const p = !named.has(p0.name) && named.has(t) ? { ...p0, name: t } : p0;
-    if (named.has(p.name) || nexaName(p.name) || inNexaGroup.has(d)) agents[d] = p;
+  const agents = {}; // id -> role name
+  const gone = [];
+  for (const [id, roleName] of Object.entries(mem.agents || {})) {
+    if (!names[id]) { gone.push(`${roleName} (${id})`); continue; }
+    if (EXCLUDE_IDS.has(id) || notPublic.has(id) || denied(names[id])) { console.warn(`WARNING: ${id} (${roleName}) is curated for the Nexa chart but excluded from it; skipped`); continue; }
+    agents[id] = roleName;
   }
-  const deptOf = {}; DEPARTMENTS.forEach(([dep, names]) => names.forEach((n) => (deptOf[n] = dep)));
-  const gl = groups.map((g) => ({ name: g.name, members: g.ids.filter((id) => agents[id]).map((id) => agents[id].name) }))
-    .filter((g) => g.members.length)
-    .sort((a, b) => ((GROUP_ORDER.indexOf(a.name) + 1) || 99) - ((GROUP_ORDER.indexOf(b.name) + 1) || 99) || a.name.localeCompare(b.name));
-  const members = Object.values(agents).map((p) => ({
-    name: p.name,
-    ...(DISPLAY_NAMES[p.name] ? { displayName: DISPLAY_NAMES[p.name] } : {}),
+  if (gone.length) console.log(`note: ${gone.length} curated Nexa agent(s) no longer exist and are dropped: ${gone.join(", ")}`);
+  const uncurated = Object.keys(names).filter((id) => nexaName(names[id]) && !mem.agents[id] && !onTeamsPage.has(id) && !notPublic.has(id) && !EXCLUDE_IDS.has(id));
+  if (uncurated.length) console.warn(`WARNING: ${uncurated.length} Nexa-named agent(s) are in neither nexa-membership.json nor teams-membership.json and are left off: ${uncurated.map((id) => `${names[id]} (${id})`).join("; ")}`);
+  const deptOf = {}; DEPARTMENTS.forEach(([dep, ns]) => ns.forEach((n) => (deptOf[n] = dep)));
+  const gl = (mem.groups || []).map((g) => ({ name: g.name, members: [...new Set(g.members.filter((id) => agents[id]).map((id) => agents[id]))] }))
+    .filter((g) => g.members.length);
+  const members = [...new Set(Object.values(agents))].map((name) => ({
+    name,
+    ...(DISPLAY_NAMES[name] ? { displayName: DISPLAY_NAMES[name] } : {}),
     type: "ai",
-    role: SUMMARY[p.name] || PENDING,
-    department: p.name === "Nexa chief of staff" ? "Chief of staff" : deptOf[p.name] || "Unassigned",
-    ...(LEADS.has(p.name) ? { lead: true } : {}),
-    ...(INDEPENDENT.has(p.name) ? { independent: true } : {}),
-    groups: gl.filter((g) => g.members.includes(p.name)).map((g) => g.name),
-    contributions: contributions(p.name),
+    role: SUMMARY[name] || PENDING,
+    department: name === "Nexa chief of staff" ? "Chief of staff" : deptOf[name] || "Unassigned",
+    ...(LEADS.has(name) ? { lead: true } : {}),
+    ...(INDEPENDENT.has(name) ? { independent: true } : {}),
+    groups: gl.filter((g) => g.members.includes(name)).map((g) => g.name),
+    contributions: contributions(name),
   })).sort((a, b) => a.name.localeCompare(b.name));
   const todo = members.filter((m) => m.role === PENDING || m.department === "Unassigned");
   if (todo.length) console.warn(`WARNING: ${todo.length} Nexa agent(s) need a hand-written SUMMARY line and/or a DEPARTMENTS entry in orgchart/build-orgchart.js: ${todo.map((m) => `${m.name} (${m.role === PENDING ? "no role line" : "ok"}, ${m.department})`).join("; ")}`);
@@ -316,14 +315,14 @@ function render() {
     <p class="lede">This team is AI agents run by jQrgen (Jørgen S. Notland), CEO and the only human on the chart. The Nexa chief of staff, Security &amp; audit (independent) and the team dynamics reviewer report directly to him; the four teams (Engineering, Product &amp; Design, Research and Go-to-market) report to him through the chief of staff, and the strategist advises him. The agents mirror the human roles on <a href="https://nexa.org/team" rel="noopener">nexa.org/team</a>, plus roles he added: Strategist, DevRel &amp; BON grants, Product manager, Security &amp; audit and Game dev. It is not the real Nexa staff list; for the people behind Nexa, see nexa.org/team.</p>
     ${by(DSCOR_LEAD) ? `<p class="dscor"><b>D-SCOR.</b> The team's D-SCOR-inspired work and dialogue styles are on the <a href="${DSCOR_URL}">Nexa team D-SCOR page</a>. The ${esc(DSCOR_LEAD)} (team dynamics reviewer) is an AI role based on the D-SCOR model, not a certified D-SCOR adviser. This is not an official D-SCOR product or D-SCOR certification, and the team is not affiliated with or endorsed by D-SCOR AS.</p>` : ""}
     <p class="legend"><span class="k">${BADGE.human} a person</span><span class="k">${BADGE.ai} an AI agent, not a person</span><span class="k"><i class="ln" aria-hidden="true"></i> solid line: reports to (the CEO, or the chief of staff for the four teams)</span><span class="k"><i class="ln dash" aria-hidden="true"></i> dashed line: advises, not a report</span><span class="k"><span class="ind">Independent</span> reports to the CEO outside the chief of staff's line</span></p>
-    <p class="updated">1 human · ${data.members.length} AI agents · <a href="#teams">${data.groups.length} teams</a> (AI agent group chats) · Last updated <time datetime="${esc(data.updated)}">${esc(fmt)}</time></p>
+    <p class="updated">1 human · ${data.members.length} AI agents · <a href="#teams">${data.groups.length} teams</a> (AI agent working groups) · Last updated <time datetime="${esc(data.updated)}">${esc(fmt)}</time></p>
   </header>
   <div class="org" role="group" aria-label="Org chart">
     ${(data.people || []).map((h) => `<div class="node top human">${BADGE.human}<div class="n">${esc(h.name)}${h.fullName ? ` (${esc(h.fullName)})` : ""}</div><div class="r">${esc(h.role)}</div></div>`).join("")}
     <div class="vline"></div>
     <div class="depts tier">${ADVISOR_DEPTS.map((d) => tierCol(d, "adv", rel("advisor", "Advisor: advises the CEO and the leadership team (dashed line, not a report)"))).join("")}
       <section class="dept cos" aria-label="Nexa chief of staff">${rel("", "Reports to the CEO")}
-        ${lead ? `<div class="node top ai">${BADGE.ai}<div class="n">${esc(lead.name)}</div><div class="r">${esc(lead.role)}</div>${tags(lead)}</div>` : ""}
+        ${lead ? `<div class="node top ai">${BADGE.ai}<div class="n">${esc(shown(lead.name))}</div>${lead.displayName ? `<div class="rk">${esc(lead.name)}</div>` : ""}<div class="r">${esc(lead.role)}</div>${tags(lead)}</div>` : ""}
         <div class="down" aria-hidden="true"></div>
       </section>${DIRECT_DEPTS.map((d) => { const ind = data.members.some((m) => m.department === d && m.independent);
         return tierCol(d, ind ? "dir ind" : "dir", rel(ind ? "independent" : "", ind ? "Reports directly to the CEO, independent of the chief of staff" : "Reports directly to the CEO")); }).join("")}
@@ -334,7 +333,7 @@ function render() {
     </div>
   </div>
   <h2 class="sec" id="teams">Teams</h2>
-  <p class="sub">Each team is an AI agent group chat; memberships are read from the group chats when the page is built. Many agents sit on several teams: the chips show where else each one is.</p>
+  <p class="sub">Each team is a working group of AI agents; memberships are curated by hand in src/data/nexa-membership.json. Many agents sit on several teams: the chips show where else each one is.</p>
   <div class="groups">${data.groups.map((g) => `
     <section class="group" style="--tc:${teamCol[g.name]}"><h3>${esc(g.name)}</h3><p class="c">${g.members.length} members</p><ul class="chips">${g.members.map((n) => {
       const others = ((by(n) || {}).groups || []).filter((t) => t !== g.name);

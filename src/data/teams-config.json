@@ -1,58 +1,34 @@
 {
-  "_note": "Which teams the /teams/ page shows and how sync-teams.js finds their members: groupId = a group chat's agent id (preferred, survives renames), group = group chat name, ids = agent ids, names = exact agent names, namePattern = regex on agent names. A team may have subteams (each matched the same way); team members are the union of the team's own matches and its subteams. Only agent names, group memberIds and ids are read from the roster; descriptions are never read.",
+  "_note": "Which teams the /teams/ page shows, in order, with their sub-team labels. Membership is NOT here: it is curated by hand in teams-membership.json (team, optional sub-team, agent ids). Group chats are never required; hintGroups maps a still-existing group chat (by its agent id) to a team/sub-team, and sync-teams.js only uses it to SUGGEST where an uncurated agent may belong. A missing group chat never removes anyone. Private teams (health, private life) are not public teams and must not be added here.",
   "top": {
     "name": "jQrgen",
     "fullName": "Jørgen S. Notland",
     "role": "Runs all the teams"
   },
   "teams": [
-    {
-      "name": "Personal health team",
-      "groupId": "207cf11b-c754-45d8-b61a-404d9cb352f2"
-    },
-    {
-      "name": "Personal finance",
-      "names": [
-        "Personal finance"
-      ]
-    },
-    {
-      "name": "Personal dev team",
-      "namePattern": "^Personal (dev|web dev)\\b"
-    },
-    {
-      "name": "Philosophers' symposium",
-      "groupId": "2cbe022d-b3e8-4e16-a3bf-9bc46e695514"
-    },
-    {
-      "name": "Trading",
-      "groupId": "693435ee-ebea-474a-bb19-ba2839ef9adc",
-      "ids": [
-        "c63239ab-d6f9-41e1-b7f9-145c6e8722c9",
-        "cdebf3c8-a41e-44ad-885c-9a927bb8fa22",
-        "392bcfe4-ea15-4f84-ab39-4d76a8cadd93",
-        "7178889a-2ed9-482b-8d16-4f4a939325c5",
-        "7208d9c1-eb70-4b34-806a-89ba02ad8e3f"
-      ]
-    },
+    { "name": "Personal dev team" },
+    { "name": "Personal finance" },
+    { "name": "Trading", "label": "personal desk, simulated only" },
     {
       "name": "jQrgenCorp",
-      "namePattern": "^jQrgenCorp\\b",
       "subteams": [
-        {
-          "name": "Regnskap",
-          "label": "accounting",
-          "groupId": "13d63222-bc17-4204-9dc5-9429e8af3fbd"
-        },
-        {
-          "name": "Ledelse",
-          "label": "leadership",
-          "groupId": "5ba11eea-59ad-4ca0-bd70-39ec4e4f50e9"
-        }
+        { "name": "Ledelse", "label": "leadership" },
+        { "name": "Regnskap", "label": "accounting" },
+        { "name": "Juridisk", "label": "legal" },
+        { "name": "Bokforlag", "label": "Nerd Bok publishing" }
       ],
       "otherLabel": "Other jQrgenCorp agents"
-    }
+    },
+    { "name": "Nordic Crypto", "label": "news site" },
+    { "name": "Kryptonytt", "label": "news site" },
+    { "name": "Nexa News", "label": "news site" }
   ],
+  "hintGroups": {
+    "5ba11eea-59ad-4ca0-bd70-39ec4e4f50e9": { "team": "jQrgenCorp", "subteam": "Ledelse" },
+    "13d63222-bc17-4204-9dc5-9429e8af3fbd": { "team": "jQrgenCorp", "subteam": "Regnskap" },
+    "b510e90a-d8e6-4f8e-8383-20619e1350cf": { "team": "jQrgenCorp", "subteam": "Bokforlag" },
+    "693435ee-ebea-474a-bb19-ba2839ef9adc": { "team": "Trading" }
+  },
   "links": [
     {
       "name": "Nexa team",

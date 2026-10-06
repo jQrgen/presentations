@@ -6,6 +6,7 @@
 #              and a page that is not on gh-pages yet needs jQrgen's own approval before its first publication.
 #   --dry-run  do everything except the push: build, commit in temp worktrees, run every gate, and print exactly
 #              which paths would change on main and on gh-pages.
+# gh-pages is never rebuilt from docs/: it also carries pages published from other branches (e.g. tailstorm/, preview/).
 # How it works (same scoping idea as publish-jqrgencorp-regnskap.sh, but nothing is read from or written to a working tree):
 #   1. fetch main and gh-pages explicitly and record their SHAs (MBASE, GBASE)
 #   2. build the org chart inside a fresh temp worktree of MBASE (committed inputs only), commit only its output there
@@ -26,7 +27,7 @@ DRY=0; PAGES=()
 for a in "$@"; do
   case "$a" in
     -n|--dry-run) DRY=1 ;;
-    -h|--help) sed -n '2,17p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,18p' "$0"; exit 0 ;;
     -*) echo "unknown option: $a" >&2; exit 2 ;;
     *) PAGES+=("${a%/}") ;;
   esac
@@ -178,10 +179,16 @@ while :; do
   done <<< "$MCHANGED"
   while IFS= read -r f; do [[ -z "$f" ]] || inside "$f" || { echo "abort: gh-pages change outside ${PAGES[*]}: $f" >&2; exit 1; }; done <<< "$GCHANGED"
   for p in "${PAGES[@]}"; do diff -r -q "$MWT/docs/$p" "$GWT/$p" >/dev/null || { echo "abort: gh-pages $p differs from main docs/$p" >&2; exit 1; }; done
+  # 4a'. top level: every gh-pages entry outside the listed pages (e.g. tailstorm/, preview/, published from other branches)
+  #      keeps its exact tree/blob id; print the top-level paths before and after
+  others() { G ls-tree "$1" | while IFS=$'\t' read -r meta name; do inside "$name/" || printf '%s\t%s\n' "$meta" "$name"; done; }
+  say "gh-pages $(G rev-parse --short "$GBASE") top-level paths before:"; G ls-tree "$GBASE" | sed 's/^/    /'
+  diff <(others "$GBASE") <(others "$(git -C "$GWT" rev-parse HEAD)") >/dev/null || { echo "abort: a top-level gh-pages path outside ${PAGES[*]} would change" >&2; exit 1; }
+  say "gh-pages top-level paths after (only ${PAGES[*]} may differ):"; G ls-tree "$(git -C "$GWT" rev-parse HEAD)" | sed 's/^/    /'
 
   # 4b. every gate, once, on the exact trees that get pushed (gate code and term lists from the fetched main)
   GATE=(node "$MWT/src/orgchart/grep-gate.js")
-  ON_GHP=("${PAGES[@]/#/$GWT/}"); ON_MAIN=("${DOCPATHS[@]/#/$MWT/}" "$MWT/src/data/nexa-team.json" "$MWT/src/data/nexa-contributions.json")
+  ON_GHP=("${PAGES[@]/#/$GWT/}"); ON_MAIN=("${DOCPATHS[@]/#/$MWT/}" "$MWT/src/data/nexa-team.json" "$MWT/src/data/nexa-contributions.json" "$MWT/src/data/nexa-membership.json")
   "${GATE[@]}" "${ON_GHP[@]}" "${ON_MAIN[@]}" "$MWT/src/orgchart/build-orgchart.js" "$MWT/src/orgchart/publish.sh"   # privacy terms (forbidden-terms.json)
   "${GATE[@]}" "${ON_GHP[@]}" "${ON_MAIN[@]}" --terms "$MWT/src/orgchart/nexa-team-dscor-terms.json"                 # D-SCOR terms
   node "$TMP/approval-gate.js" "$SITE" "$GWT" "${PAGES[@]}"                                                           # drafts + links

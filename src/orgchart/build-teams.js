@@ -2,7 +2,8 @@
 //   node orgchart/build-teams.js   [--out <docsDir>] (default ../docs)
 //
 // Inputs (all in the repo, nothing is read from agent profiles here):
-//   src/data/teams-roster.json  ids, teams and public names, written by orgchart/sync-teams.js
+//   src/data/teams-roster.json  ids, teams and public names, written by orgchart/sync-teams.js (membership is curated
+//                               in src/data/teams-membership.json, never taken from group chats)
 //   src/data/teams-roles.json   hand-written generic role lines (and display-name overrides), by team then agent id
 //   src/data/teams-config.json  team order, the person at the top, link cards (e.g. the Nexa chart)
 // The page shows only name, team and role line. Agents with no curated role line are left off (with a warning).
@@ -31,14 +32,14 @@ const teams = roster.teams
   .map((t) => {
     const members = shown(t), byId = Object.fromEntries(members.map((m) => [m.id, m]));
     const tc = cfg.teams.find((c) => c.name === t.name) || {};
-    // subteams (e.g. jQrgenCorp: Regnskap, Ledelse); team members in no subteam go to a final "other" group
+    // subteams (e.g. jQrgenCorp: Ledelse, Regnskap, Juridisk, Bokforlag); team members in no subteam go to a final "other" group
     let subteams = (t.subteams || []).map((s) => ({ name: s.name, label: s.label, members: s.memberIds.map((id) => byId[id]).filter(Boolean) })).filter((s) => s.members.length);
     if (t.subteams && t.subteams.length) {
       const inSub = new Set(t.subteams.flatMap((s) => s.memberIds));
       const rest = members.filter((m) => !inSub.has(m.id));
       if (rest.length) subteams.push({ name: tc.otherLabel || "Other", members: rest });
     }
-    return { name: t.name, members, subteams };
+    return { name: t.name, label: tc.label, members, subteams };
   })
   .filter((t) => t.members.length);
 const nAgents = new Set(teams.flatMap((t) => t.members.map((m) => m.id))).size;
@@ -87,7 +88,20 @@ const CSS = `
 .depts.subs{gap:8px}
 .dept.subteam h4{margin:0;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;line-height:1.3;background:var(--paper);color:var(--ink);border:1px solid var(--ink);border-bottom:6px solid var(--tc);padding:6px 8px;text-align:center}
 .dept.subteam h4 small{display:block;font-size:10.5px;font-weight:400;letter-spacing:.02em;text-transform:none;color:var(--muted)}
+.dept.spine{flex:0 0 14px;align-self:stretch}
+.dept.spine::after{height:auto;bottom:0}
+.wide-row{position:relative;padding-top:40px;margin-top:-1px}
+.wide-row::before{content:"";position:absolute;left:7px;top:0;height:20px;border-left:1px solid var(--line)}
+.wide-row::after{content:"";position:absolute;left:7px;right:50%;top:20px;border-top:1px solid var(--line)}
+.wide-row .stub{position:absolute;left:50%;top:20px;height:20px;border-left:1px solid var(--line)}
+.wide-row>.dept{padding-top:0}
+.wide-row>.dept::before,.wide-row>.dept::after{display:none}
+.wide-row>.dept>h3{max-width:420px;margin:0 auto}
+.wide-row+.wide-row{margin-top:24px}
 @media (max-width:980px){
+  .dept.spine,.wide-row::before,.wide-row::after,.wide-row .stub{display:none}
+  .wide-row{padding-top:18px}
+  .wide-row>.dept>h3{max-width:none}
   .depts{flex-direction:column;gap:18px}
   .dept{padding-top:0}
   .dept::before,.dept::after{display:none}
@@ -103,9 +117,18 @@ const card = (m) => `<li><div class="node ai">${BADGE.ai}<div class="n">${esc(m.
 const plural = (n) => `${n} AI agent${n === 1 ? "" : "s"}`;
 // a team with subteams branches again under its header, the same way the teams branch under jQrgen
 const subCol = (s) => `<section class="dept subteam" aria-label="${esc(s.name)}"><h4>${esc(s.name)}<small>${s.label ? esc(s.label) + " · " : ""}${plural(s.members.length)}</small></h4><ol>${s.members.map(card).join("")}</ol></section>`;
-const teamCols = teams.map((t, i) => `
-      <section class="dept${t.subteams.length ? " has-subs" : ""}" style="--tc:${COLOURS[i % COLOURS.length]}" aria-label="${esc(t.name)}"><h3>${esc(t.name)}<small>${plural(t.members.length)}${t.subteams.length ? ` · ${t.subteams.length} sub-teams` : ""}</small></h3>
-        ${t.subteams.length ? `<div class="vline"></div><div class="depts subs">${t.subteams.map(subCol).join("")}</div>` : `<ol>${t.members.map(card).join("")}</ol>`}</section>`).join("");
+// a team with 3+ sub-teams is too wide for one column: it gets its own full-width row under the others, joined to the
+// same line from jQrgen by a spine down the left edge (on narrow screens everything simply stacks)
+const isWide = (t) => t.subteams.length >= 3;
+const teamCol = (t, i) => `
+      <section class="dept${t.subteams.length ? " has-subs" : ""}" style="--tc:${COLOURS[i % COLOURS.length]}" aria-label="${esc(t.name)}"><h3>${esc(t.name)}<small>${t.label ? esc(t.label) + " · " : ""}${plural(t.members.length)}${t.subteams.length ? ` · ${t.subteams.length} sub-teams` : ""}</small></h3>
+        ${t.subteams.length ? `<div class="vline"></div><div class="depts subs">${t.subteams.map(subCol).join("")}</div>` : `<ol>${t.members.map(card).join("")}</ol>`}</section>`;
+const teamCols = teams.map((t, i) => (isWide(t) ? "" : teamCol(t, i))).join("");
+const wideRows = teams.map((t, i) => (isWide(t) ? `
+    <div class="wide-row"><div class="stub" aria-hidden="true"></div>${teamCol(t, i)}
+    </div>` : "")).join("");
+const spine = wideRows ? `
+      <div class="dept spine" aria-hidden="true"></div>` : "";
 const linkCols = (cfg.links || []).map((l, i) => `
       <section class="dept linked" style="--tc:${COLOURS[(teams.length + i) % COLOURS.length]}" aria-label="${esc(l.name)}"><h3>${esc(l.name)}<small>own org chart</small></h3>
         <ol><li><div class="node link">${BADGE.link}<div class="n">${esc(l.name)}</div><div class="r">${esc(l.role)}</div><a class="go" href="${esc(l.url)}">Open the ${esc(l.name)} org chart \u2192</a></div></li></ol></section>`).join("");
@@ -124,8 +147,8 @@ const html = head("jQrgen's AI teams: org chart").replace(/text-wrap:\s*bal(?:an
   <div class="org" role="group" aria-label="Org chart">
     <div class="node top human">${BADGE.human}<div class="n">${esc(top.name)}${top.fullName ? ` (${esc(top.fullName)})` : ""}</div><div class="r">${esc(top.role)}</div></div>
     <div class="vline"></div>
-    <div class="depts">${teamCols}${linkCols}
-    </div>
+    <div class="depts">${spine}${teamCols}${linkCols}
+    </div>${wideRows}
   </div>
   <footer class="site">Generated by src/orgchart/build-teams.js from src/data/teams-roster.json and src/data/teams-roles.json · <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
 </div>

@@ -25,7 +25,10 @@
       "role": "Developer marketing plan, messaging and campaigns",
       "department": "Go-to-market",
       "lead": true,
-      "groups": [],
+      "groups": [
+        "Nexa leadership team",
+        "Nexa go-to-market team"
+      ],
       "contributions": [
         {
           "title": "Article: \"Not Exchange HFT: Building Automated Trading Products on Nexa\"",
@@ -36,10 +39,15 @@
     },
     {
       "name": "Nexa chief of staff",
+      "displayName": "Myrt",
       "type": "ai",
       "role": "Coordinates the AI agents: priorities, owners, follow-ups and briefings",
       "department": "Chief of staff",
-      "groups": [],
+      "groups": [
+        "Nexa leadership team",
+        "Nexa app engineering team",
+        "Nexa core engineering team"
+      ],
       "contributions": []
     },
     {
@@ -48,7 +56,10 @@
       "role": "Protocol and consensus research, papers, design reviews",
       "department": "Research",
       "lead": true,
-      "groups": [],
+      "groups": [
+        "Nexa leadership team",
+        "Nexa research team"
+      ],
       "contributions": [
         {
           "title": "Tailstorm explainer article on Medium (technical review and edits)",
@@ -67,7 +78,9 @@
       "type": "ai",
       "role": "Community channels, updates and developer feedback",
       "department": "Go-to-market",
-      "groups": [],
+      "groups": [
+        "Nexa go-to-market team"
+      ],
       "contributions": []
     },
     {
@@ -75,7 +88,9 @@
       "type": "ai",
       "role": "Developer conferences, hackathons and meetups, Scandinavia first",
       "department": "Go-to-market",
-      "groups": [],
+      "groups": [
+        "Nexa go-to-market team"
+      ],
       "contributions": []
     },
     {
@@ -83,7 +98,11 @@
       "type": "ai",
       "role": "Full node, consensus, Tailstorm, block size and releases",
       "department": "Engineering",
-      "groups": [],
+      "groups": [
+        "Nexa core engineering team",
+        "Nexa research team",
+        "Nexa security team"
+      ],
       "contributions": [
         {
           "title": "Tailstorm explainer article on Medium (k-value fact check)",
@@ -110,7 +129,10 @@
       "type": "ai",
       "role": "Design across the team, with design thinking",
       "department": "Product & Design",
-      "groups": [],
+      "groups": [
+        "Nexa product & design team",
+        "Nexa design review"
+      ],
       "contributions": [
         {
           "title": "\"One block, many winners\" Tailstorm rewards diagram",
@@ -124,7 +146,10 @@
       "type": "ai",
       "role": "Builder onboarding, tutorials and BON grants",
       "department": "Go-to-market",
-      "groups": [],
+      "groups": [
+        "Nexa product & design team",
+        "Nexa go-to-market team"
+      ],
       "contributions": []
     },
     {
@@ -132,7 +157,9 @@
       "type": "ai",
       "role": "NexaPow mining hardware: FPGA and HDL design",
       "department": "Engineering",
-      "groups": [],
+      "groups": [
+        "Nexa research team"
+      ],
       "contributions": []
     },
     {
@@ -140,7 +167,9 @@
       "type": "ai",
       "role": "Games on Nexa and game-jam starter kits",
       "department": "Engineering",
-      "groups": [],
+      "groups": [
+        "Nexa design review"
+      ],
       "contributions": []
     },
     {
@@ -150,7 +179,12 @@
       "role": "Lead developer: technical direction, architecture, roadmap, protocol changes",
       "department": "Engineering",
       "lead": true,
-      "groups": [],
+      "groups": [
+        "Nexa leadership team",
+        "Nexa app engineering team",
+        "Nexa core engineering team",
+        "Nexa security team"
+      ],
       "contributions": []
     },
     {
@@ -158,7 +192,10 @@
       "type": "ai",
       "role": "Announcements, posts, newsletters, content calendar",
       "department": "Go-to-market",
-      "groups": [],
+      "groups": [
+        "Nexa go-to-market team",
+        "Nexa design review"
+      ],
       "contributions": [
         {
           "title": "Article: \"Not Exchange HFT: Building Automated Trading Products on Nexa\"",
@@ -173,27 +210,14 @@
       ]
     },
     {
-      "name": "Nexa News editor",
-      "type": "ai",
-      "role": "Edits and publishes stories for Nexa News",
-      "department": "Go-to-market",
-      "groups": [],
-      "contributions": []
-    },
-    {
-      "name": "Nexa News researcher",
-      "type": "ai",
-      "role": "Researches and fact-checks stories for Nexa News",
-      "department": "Go-to-market",
-      "groups": [],
-      "contributions": []
-    },
-    {
       "name": "Nexa Presentations",
       "type": "ai",
       "role": "Talks, pitch decks and these pages",
       "department": "Go-to-market",
-      "groups": [],
+      "groups": [
+        "Nexa go-to-market team",
+        "Nexa design review"
+      ],
       "contributions": [
         {
           "title": "Tailstorm live DAG page",
@@ -223,7 +247,11 @@
       "role": "Developer product roadmap: wallet, SDKs, APIs, docs",
       "department": "Product & Design",
       "lead": true,
-      "groups": [],
+      "groups": [
+        "Nexa leadership team",
+        "Nexa product & design team",
+        "Nexa design review"
+      ],
       "contributions": []
     },
     {
@@ -239,7 +267,10 @@
       "type": "ai",
       "role": "Testing, CI and release checklists, test infrastructure and deploys",
       "department": "Engineering",
-      "groups": [],
+      "groups": [
+        "Nexa app engineering team",
+        "Nexa core engineering team"
+      ],
       "contributions": []
     },
     {
@@ -247,7 +278,9 @@
       "type": "ai",
       "role": "Research partnerships with universities",
       "department": "Research",
-      "groups": [],
+      "groups": [
+        "Nexa research team"
+      ],
       "contributions": []
     },
     {
@@ -256,7 +289,9 @@
       "role": "Independent security reviews, threat models and audit prep",
       "department": "Security & audit (independent)",
       "independent": true,
-      "groups": [],
+      "groups": [
+        "Nexa security team"
+      ],
       "contributions": []
     },
     {
@@ -264,7 +299,12 @@
       "type": "ai",
       "role": "Reference architectures and integrations for builders",
       "department": "Engineering",
-      "groups": [],
+      "groups": [
+        "Nexa app engineering team",
+        "Nexa core engineering team",
+        "Nexa product & design team",
+        "Nexa security team"
+      ],
       "contributions": []
     },
     {
@@ -272,9 +312,124 @@
       "type": "ai",
       "role": "Advisor: overall strategy, positioning, Scandinavia-first plan and goals",
       "department": "Advisor",
-      "groups": [],
+      "groups": [
+        "Nexa leadership team"
+      ],
+      "contributions": []
+    },
+    {
+      "name": "Rostrum dev",
+      "type": "ai",
+      "role": "Rostrum, Nexa's Electrum-protocol indexing server",
+      "department": "Engineering",
+      "groups": [
+        "Nexa app engineering team",
+        "Nexa core engineering team",
+        "Nexa product & design team",
+        "Nexa security team"
+      ],
+      "contributions": []
+    },
+    {
+      "name": "Wally Dev",
+      "type": "ai",
+      "role": "Wally Wallet on Android, desktop and iOS",
+      "department": "Engineering",
+      "groups": [
+        "Nexa app engineering team",
+        "Nexa product & design team",
+        "Nexa security team",
+        "Nexa design review"
+      ],
       "contributions": []
     }
   ],
-  "groups": []
+  "groups": [
+    {
+      "name": "Nexa leadership team",
+      "members": [
+        "Nexa lead dev",
+        "Nexa product manager",
+        "Nexa chief scientist",
+        "Marketing strategy",
+        "Nexa chief of staff",
+        "Nexa strategist"
+      ]
+    },
+    {
+      "name": "Nexa app engineering team",
+      "members": [
+        "Wally Dev",
+        "Rostrum dev",
+        "Nexa solution architect",
+        "Nexa QA & infra",
+        "Nexa lead dev",
+        "Nexa chief of staff"
+      ]
+    },
+    {
+      "name": "Nexa core engineering team",
+      "members": [
+        "Nexa core dev",
+        "Nexa solution architect",
+        "Rostrum dev",
+        "Nexa QA & infra",
+        "Nexa lead dev",
+        "Nexa chief of staff"
+      ]
+    },
+    {
+      "name": "Nexa product & design team",
+      "members": [
+        "Nexa product manager",
+        "Nexa designer",
+        "Wally Dev",
+        "Rostrum dev",
+        "Nexa solution architect",
+        "Nexa DevRel & BON grants"
+      ]
+    },
+    {
+      "name": "Nexa research team",
+      "members": [
+        "Nexa chief scientist",
+        "Nexa research liaison",
+        "Nexa core dev",
+        "Nexa FPGA engineer"
+      ]
+    },
+    {
+      "name": "Nexa go-to-market team",
+      "members": [
+        "Marketing strategy",
+        "Nexa media & communications",
+        "Nexa DevRel & BON grants",
+        "Nexa community manager",
+        "Nexa conferences",
+        "Nexa Presentations"
+      ]
+    },
+    {
+      "name": "Nexa security team",
+      "members": [
+        "Nexa security & audit",
+        "Nexa lead dev",
+        "Nexa core dev",
+        "Wally Dev",
+        "Rostrum dev",
+        "Nexa solution architect"
+      ]
+    },
+    {
+      "name": "Nexa design review",
+      "members": [
+        "Nexa designer",
+        "Nexa Presentations",
+        "Wally Dev",
+        "Nexa game dev",
+        "Nexa media & communications",
+        "Nexa product manager"
+      ]
+    }
+  ]
 }
