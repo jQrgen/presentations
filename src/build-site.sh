@@ -23,6 +23,8 @@ node orgchart/build-orgchart.js --render --out "$D" >/dev/null
 cp talk1/render/deck.pdf "$D/talks/files/patch.pdf"; cp pages/public/patch/cover.png "$D/talks/files/patch-cover.png"
 cp oldtalks/tobm-2017.pdf "$D/talks/files/tobm-2017.pdf"; cp oldtalks/tobm-2017-cover.png "$D/talks/files/tobm-2017-cover.png"
 cp oldtalks/bitcoin-securities-2018.pdf "$D/talks/files/bitcoin-securities-2018.pdf"; cp oldtalks/bitcoin-securities-2018-cover.png "$D/talks/files/bitcoin-securities-2018-cover.png"
+# Exeter 2025 lecture slides and NexScript lab workbook are committed in docs/talks/files
+cp "$WS/docs/talks/files/exeter-2025-lecture-slides.pdf" "$WS/docs/talks/files/exeter-2025-lecture-slides-cover.png" "$WS/docs/talks/files/exeter-2025-nexscript-lab-workbook.pdf" "$D/talks/files/"
 # pages
 node home.js data "$D" "$REPO"
 touch "$D/.nojekyll"

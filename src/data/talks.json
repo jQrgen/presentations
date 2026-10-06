@@ -182,11 +182,21 @@
     "meta": "University of Exeter",
     "place": "Exeter, UK",
     "description": "Guest lecture at the University of Exeter with a hands-on NexScript lab workbook.",
+    "thumb": "files/exeter-2025-lecture-slides-cover.png",
     "links": [
       {
-        "label": "Slides and NexScript lab workbook (Canva)",
-        "href": "https://www.canva.com/design/DAGhS0ha2K0/Qpl25msN84VShN0hs67UyA/view",
+        "label": "Lecture slides (PDF)",
+        "href": "files/exeter-2025-lecture-slides.pdf",
         "primary": true
+      },
+      {
+        "label": "NexScript lab workbook for the computer lab (PDF)",
+        "href": "files/exeter-2025-nexscript-lab-workbook.pdf",
+        "primary": true
+      },
+      {
+        "label": "Slides and NexScript lab workbook (Canva)",
+        "href": "https://www.canva.com/design/DAGhS0ha2K0/Qpl25msN84VShN0hs67UyA/view"
       },
       {
         "label": "Article on Medium",
