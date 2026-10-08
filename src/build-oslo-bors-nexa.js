@@ -14,7 +14,7 @@ const DOCS = path.resolve(arg("--out", path.join(__dirname, "..", "docs")));
 const URL = "https://jqrgen.github.io/presentations/oslo-bors-nexa/";
 const CHECKED = "2026-10-03";
 const TITLE_NO = "Nexa-Børs: kunne Oslo Børs kjørt aksjer som Nexa-tokens, og fortsatt fulgt norske regler?";
-const TITLE_EN = "Nexa-Børs: could Oslo Børs run shares as Nexa tokens, and still follow Norwegian rules?";
+const TITLE_EN = "Nexa Exchange: could the Oslo Stock Exchange run shares as Nexa tokens and still follow Norwegian rules?";
 
 // --- sources (shared by both languages) -----------------------------------------------------------------------
 const S = {
@@ -265,10 +265,10 @@ const EN = `
     <p class="updated">Jørgen S. Notland (jQrgen) · sources checked <time datetime="${CHECKED}">3 October 2026</time> · <a href="#no" data-l="no">Norsk</a></p>
   </header>
   ${share.top({ url: URL + "#en", title: TITLE_EN, lang: "en" })}
-  <p class="disc"><b>Not legal advice.</b> This is a popular-science discussion, not legal, financial or investment advice, and not a plan or an application. "Nexa-Børs" does not exist, and Oslo Børs, Euronext and Finanstilsynet have nothing to do with this text. Laws change; always check the current text and ask a lawyer.</p>
+  <p class="disc"><b>Not legal advice.</b> This is a popular-science discussion, not legal, financial or investment advice, and not a plan or an application. "Nexa Exchange" does not exist, and the Oslo Stock Exchange (Oslo Børs), Euronext and Finanstilsynet have nothing to do with this text. Laws change; always check the current text and ask a lawyer.</p>
   <p class="legend">Labels: ${tag("en", "fact")} with a source, ${tag("en", "mine")} is my own interpretation, ${tag("en", "open")} is something not settled, ${tag("en", "fic")} is made up for fun.</p>
 
-  <h2>A trading day on Nexa-Børs</h2>
+  <h2>A trading day on the Nexa Exchange</h2>
   <p>${tag("en", "fic")} Nothing in this box has happened. It is an imagined day on an imagined DLT market.</p>
   <dl class="day">
     <dt>07:30</dt><dd>Kari opens her trading app. Her wallet is already on the allowed list because her broker did its customer checks. Without that, the token contract will not let the shares in, however nicely she asks.</dd>
@@ -306,11 +306,11 @@ const EN = `
     </tbody>
   </table>
 
-  <h2>Why not just Oslo Børs, straight away?</h2>
+  <h2>Why not just the Oslo Stock Exchange, straight away?</h2>
   <ul>
-    <li>${tag("en", "fact")} Euronext operates two EU regulated markets in Oslo, Oslo Børs and Euronext Expand. Euronext Growth is a multilateral trading facility (MTF).${R("enx")}</li>
+    <li>${tag("en", "fact")} Euronext operates two EU regulated markets in Oslo, the Oslo Stock Exchange (Oslo Børs) and Euronext Expand. Euronext Growth is a multilateral trading facility (MTF).${R("enx")}</li>
     <li>${tag("en", "fact")} The DLT Pilot Regime covers MTFs and settlement systems, not regulated markets, and caps the size of issuers.${R("dlt")}</li>
-    <li>${tag("en", "mine")} So Oslo Børs itself cannot simply "switch to Nexa" under today's pilot, and the largest companies are too big anyway. A realistic route is a separate DLT MTF or DLT TSS for smaller issuers and bonds, with a CSD keeping the register.</li>
+    <li>${tag("en", "mine")} So the Oslo Stock Exchange itself cannot simply "switch to Nexa" under today's pilot, and the largest companies are too big anyway. A realistic route is a separate DLT MTF or DLT TSS for smaller issuers and bonds, with a CSD keeping the register.</li>
   </ul>
 
   <h2>What needs a permission</h2>
@@ -326,15 +326,15 @@ const EN = `
   </table>
 
   <h2 id="capacity">Is there enough capacity?</h2>
-  <p>All figures were retrieved on 3 October 2026. Continuous trading on Oslo Børs runs from 09:00 to 16:20, which is 26,400 seconds.${R("hrs")}</p>
+  <p>All figures were retrieved on 3 October 2026. Continuous trading on the Oslo Stock Exchange runs from 09:00 to 16:20, which is 26,400 seconds.${R("hrs")}</p>
   <table>
     <thead><tr><th>What</th><th>Figure</th></tr></thead>
     <tbody>
-      <tr><td>Oslo Børs, 2025 average</td><td>${tag("en", "fact")} 26,357,568 trades over 250 trading days${R("enxm")}, about 4.0 trades per second.</td></tr>
-      <tr><td>Oslo Børs, January–August 2026</td><td>${tag("en", "fact")} 20,928,836 trades over 166 days${R("enxm")}, about 4.8 per second.</td></tr>
+      <tr><td>Oslo Stock Exchange, 2025 average</td><td>${tag("en", "fact")} 26,357,568 trades over 250 trading days${R("enxm")}, about 4.0 trades per second.</td></tr>
+      <tr><td>Oslo Stock Exchange, January–August 2026</td><td>${tag("en", "fact")} 20,928,836 trades over 166 days${R("enxm")}, about 4.8 per second.</td></tr>
       <tr><td>Busiest day I found: 23 March 2026</td><td>${tag("en", "fact")} 231,213 trades${R("enxd")}, about 8.8 per second averaged over the day. Peaks within the day are higher.</td></tr>
       <tr><td>Order messages</td><td>${tag("en", "fact")} Euronext's Optiq platform handled more than 14 billion messages and 18.8 million trades from 25 June to July 2018, across all Euronext cash markets${R("optiq")}, so about 745 messages per trade. ${tag("en", "mine")} Applied to Oslo, that is a rough estimate of about 3,000 messages per second on average, and more on busy days.</td></tr>
-      <tr><td>Nexa today</td><td>${tag("en", "fact")} The block size adapts to use, but has a floor of 100 KB per block, with a block about every two minutes.${R("abs")} Nexa itself says 100,000 transactions per second is about 20 MB per second, so about 200 bytes per transaction.${R("scal")} ${tag("en", "mine")} That gives about 4 transactions per second at the floor, roughly the Oslo Børs average and with no headroom.</td></tr>
+      <tr><td>Nexa today</td><td>${tag("en", "fact")} The block size adapts to use, but has a floor of 100 KB per block, with a block about every two minutes.${R("abs")} Nexa itself says 100,000 transactions per second is about 20 MB per second, so about 200 bytes per transaction.${R("scal")} ${tag("en", "mine")} That gives about 4 transactions per second at the floor, roughly the Oslo Stock Exchange average and with no headroom.</td></tr>
       <tr><td>Nexa after Hard Fork 2 (1 November 2026)</td><td>${tag("en", "fact")} The floor becomes 12 MB per two minutes, with Tailstorm subblocks about every second.${R("abs", "tail", "hf2")} ${tag("en", "mine")} At 200 bytes per transaction that is about 500 transactions per second.</td></tr>
       <tr><td>Nexa's goal</td><td>${tag("en", "fact")} More than 100,000 transactions per second is a stated goal${R("feat")}, not something demonstrated in operation.</td></tr>
       <tr><td>Actual use now</td><td>${tag("en", "fact")} About 0.01 to 0.02 transactions per second (24-hour average on the explorer).${R("expl")}</td></tr>
@@ -403,7 +403,7 @@ const EN = `
   <h2>Sources</h2>
   ${sources("en")}
   ${share.bar({ url: URL + "#en", title: TITLE_EN, lang: "en" })}
-  <p class="disc">Not legal advice. "Nexa-Børs" is a thought experiment. What is labelled "My reading" and "Open question" is my own assessment, not settled law.</p>
+  <p class="disc">Not legal advice. "Nexa Exchange" is a thought experiment. What is labelled "My reading" and "Open question" is my own assessment, not settled law.</p>
 </article>`;
 
 const DRAFT = FINAL ? "" : `\n  <p class="draft" role="note">UTKAST, ikke publisert · DRAFT, not published</p>`;
