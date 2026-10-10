@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nexa tokens explained: groups, authorities and the token description document · Jørgen S. Notland</title>
+<meta name="description" content="A developer tutorial on Nexa's native tokens: group IDs, amounts, subgroups and NFTs, authority flags, the signed token description document, and the pitfalls, with spec and source references.">
+<meta name="author" content="Jørgen S. Notland">
+<link rel="canonical" href="https://jqrgen.com/presentations/articles/nexa-tokens-explained/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Jørgen S. Notland">
+<meta property="og:title" content="Nexa tokens explained: groups, authorities and the token description document">
+<meta property="og:description" content="A developer tutorial on Nexa's native tokens: group IDs, amounts, subgroups and NFTs, authority flags, the signed token description document, and the pitfalls, with spec and source references.">
+<meta property="og:url" content="https://jqrgen.com/presentations/articles/nexa-tokens-explained/">
+<meta property="og:locale" content="en_GB">
+<meta property="article:published_time" content="2026-10-10">
+<meta property="article:author" content="Jørgen S. Notland">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@jQrgensn">
+<meta name="twitter:creator" content="@jQrgensn">
+<meta name="twitter:title" content="Nexa tokens explained: groups, authorities and the token description document">
+<meta name="twitter:description" content="A developer tutorial on Nexa's native tokens: group IDs, amounts, subgroups and NFTs, authority flags, the signed token description document, and the pitfalls, with spec and source references.">
+<style>
+:root{
+  color-scheme:light;
+  --ground:#E5E7EB; --paper:#FFFFFF; --band:#000000; --band-ink:#FFFFFF;
+  --ink:#000000; --ink-2:#1F2937; --muted:#4B5563; --line:#000000; --hair:#D1D5DB;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink)}
+a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.band{background:var(--band);color:var(--band-ink)}
+.band .inner{max-width:1080px;margin:0 auto;padding:22px 24px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px}
+.band .name{font-size:22px;font-weight:400;letter-spacing:.01em;color:var(--band-ink);text-decoration:none}
+.band nav{display:flex;flex-wrap:wrap;gap:4px 22px;margin-left:auto}
+.band nav a{color:var(--band-ink);text-decoration:none;font-size:15px;padding:4px 0;border-bottom:2px solid transparent;opacity:.8}
+.band nav a:hover{opacity:1}
+.band nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--band-ink)}
+.page{max-width:1080px;margin:0 auto;padding:36px 24px 72px}
+h1{font-size:30px;font-weight:500;letter-spacing:-.01em;margin:0 0 8px;text-wrap:pretty}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+.count{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.year{display:grid;grid-template-columns:96px 1fr;gap:20px;align-items:start;margin-top:36px}
+@media (max-width:700px){.year{grid-template-columns:1fr;gap:8px}}
+.year h2{font-size:30px;font-weight:400;margin:0;letter-spacing:-.02em;font-variant-numeric:tabular-nums;position:sticky;top:12px}
+.year ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+.item{display:grid;grid-template-columns:minmax(200px,2fr) 3fr;background:var(--paper);border:1px solid var(--line)}
+.item.no-thumb{grid-template-columns:1fr}
+@media (max-width:700px){.item{grid-template-columns:1fr}}
+.thumb{margin:0;background:#000;aspect-ratio:16/9;border-right:1px solid var(--line)}
+@media (max-width:700px){.thumb{border-right:0;border-bottom:1px solid var(--line)}}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.body{padding:16px 22px 18px;display:flex;flex-direction:column;gap:6px}
+.kind{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.body h3{font-size:19px;font-weight:500;letter-spacing:-.01em;margin:0;text-wrap:pretty}
+.body h3 a{color:var(--ink);text-decoration:none}
+.body h3 a:hover{text-decoration:underline}
+.where{margin:0;font-size:14px;color:var(--muted)}
+.where .date{color:var(--ink-2)}
+.authors{margin:0;font-size:14px;color:var(--ink-2)}
+.desc{margin:2px 0 0;color:var(--ink-2);max-width:66ch;font-size:15px}
+.cites{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.cites b{font-weight:600}
+.cites span{color:var(--muted)}
+.links{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px}
+.links a{display:inline-block;color:var(--ink);text-decoration:none;font-size:14px;padding:5px 10px;border:1px solid var(--line);background:var(--paper)}
+.links a.primary{background:var(--band);color:var(--band-ink)}
+.links a:hover{text-decoration:underline}
+.note{margin:6px 0 0;font-size:13px;color:var(--muted)}
+footer.site{margin-top:48px;font-size:13px;color:var(--muted)}
+footer.site a{color:inherit}
+
+article{background:var(--paper);border:1px solid var(--line);padding:32px 36px 36px;max-width:760px;margin:0 auto}
+@media (max-width:700px){article{padding:22px 18px 26px}}
+article h1{font-size:32px;line-height:1.2}
+article .byline{margin:0 0 4px;color:var(--muted);font-size:15px}
+article h2{font-size:22px;font-weight:500;margin:30px 0 8px}
+article p,article li{max-width:68ch;color:var(--ink-2);font-size:17px;line-height:1.6}
+article ul{padding-left:22px}
+article li{margin:6px 0}
+article code{font-size:.92em;background:var(--ground);padding:1px 4px}
+article h3{font-size:18px;font-weight:600;margin:22px 0 6px}
+article hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+article ol{padding-left:24px}
+article li>ul,article li>ol{margin:4px 0}
+article pre{background:var(--ground);border:1px solid var(--line);padding:12px 14px;overflow-x:auto;font-size:13.5px;line-height:1.5}
+article pre code{background:none;padding:0;font-size:inherit}
+article .tbl{overflow-x:auto;margin:14px 0}
+article table{border-collapse:collapse;font-size:14.5px;line-height:1.45;color:var(--ink-2)}
+article th,article td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+article th{background:var(--ground);font-weight:600}
+
+.social{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:6px 0 0;font-size:13.5px}
+.social-label{color:var(--muted,#4B5563)}
+.social a{color:var(--ink,#000);text-decoration:underline;text-underline-offset:2px}
+.social a:hover{text-decoration-thickness:2px}
+.social a:focus-visible{outline:2px solid var(--ink,#000);outline-offset:2px}
+
+.share{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:14px 0}
+.share-label{font-size:13px;color:var(--muted,#4B5563);margin-right:2px}
+.share a,.share button{font:inherit;font-size:13.5px;line-height:1.2;color:var(--ink,#000);background:var(--paper,#fff);border:1px solid var(--line,#000);padding:5px 10px;text-decoration:none;cursor:pointer}
+.share a:hover,.share button:hover{background:var(--band,#000);color:var(--band-ink,#fff)}
+.share a:focus-visible,.share button:focus-visible{outline:2px solid var(--ink,#000);outline-offset:2px}
+.share-status{font-size:13px;color:var(--muted,#4B5563)}
+</style>
+</head>
+<body>
+<div class="band"><div class="inner">
+    <a class="name" href="../../">Jørgen S. Notland</a>
+    <nav aria-label="Sections"><a href="../../">Talks, articles and papers</a></nav>
+  </div></div>
+<main class="page">
+<article>
+<h1>Nexa tokens explained: groups, authorities and the token description document</h1>
+<p class="byline">By jQrgen (Jørgen S. Notland), 10 Oct 2026</p>
+<nav class="social" aria-label="Jørgen online"><span class="social-label">Follow me:</span><a class="social-x" href="https://x.com/jqrgensn" rel="me noopener noreferrer" target="_blank">X</a><a class="social-github" href="https://github.com/jQrgen" rel="me noopener noreferrer" target="_blank">GitHub</a><a class="social-gitlab" href="https://gitlab.com/jQrgen" rel="me noopener noreferrer" target="_blank">GitLab</a><a class="social-medium" href="https://jqrgen.medium.com/" rel="me noopener noreferrer" target="_blank">Medium</a></nav>
+  <nav class="share" aria-label="Share this article"><span class="share-label">Share:</span><a class="share-x" href="https://x.com/intent/post?text=Nexa%20tokens%20explained%3A%20groups%2C%20authorities%20and%20the%20token%20description%20document&amp;url=https%3A%2F%2Fjqrgen.com%2Fpresentations%2Farticles%2Fnexa-tokens-explained%2F" target="_blank" rel="noopener noreferrer">X</a><a class="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fjqrgen.com%2Fpresentations%2Farticles%2Fnexa-tokens-explained%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="share-reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fjqrgen.com%2Fpresentations%2Farticles%2Fnexa-tokens-explained%2F&amp;title=Nexa%20tokens%20explained%3A%20groups%2C%20authorities%20and%20the%20token%20description%20document" target="_blank" rel="noopener noreferrer">Reddit</a><a class="share-hackernews" href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fjqrgen.com%2Fpresentations%2Farticles%2Fnexa-tokens-explained%2F&amp;t=Nexa%20tokens%20explained%3A%20groups%2C%20authorities%20and%20the%20token%20description%20document" target="_blank" rel="noopener noreferrer">Hacker News</a><button type="button" class="share-copy" data-url="https://jqrgen.com/presentations/articles/nexa-tokens-explained/" data-done="Link copied">Copy link</button><span class="share-status" role="status" aria-live="polite"></span></nav>
+<hr>
+<p>This is a developer tutorial on Nexa's native tokens (&quot;groups&quot;). I checked the claims against the spec pages and source code listed below. Anything I could not confirm is marked <strong>[UNVERIFIED]</strong>, and there is a list of open points at the end.</p>
+<h2>Sources</h2>
+<div class="tbl"><table>
+<thead><tr><th>Short name</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>SPEC-GROUP</td><td><a href="https://spec.nexa.org/tokens/grouptokens/">https://spec.nexa.org/tokens/grouptokens/</a></td></tr>
+<tr><td>SPEC-TDD</td><td><a href="https://spec.nexa.org/tokens/tokenDescription/">https://spec.nexa.org/tokens/tokenDescription/</a></td></tr>
+<tr><td>SPEC-NFT</td><td><a href="https://spec.nexa.org/tokens/nft/">https://spec.nexa.org/tokens/nft/</a></td></tr>
+<tr><td>SPEC-TMPL</td><td><a href="https://spec.nexa.org/addresses/scriptTemplates/">https://spec.nexa.org/addresses/scriptTemplates/</a></td></tr>
+<tr><td>SPEC-UTXO</td><td><a href="https://spec.nexa.org/addresses/Script-Template-Examples/how-tokens-are-stored-inside-a-utxo/">https://spec.nexa.org/addresses/Script-Template-Examples/how-tokens-are-stored-inside-a-utxo/</a></td></tr>
+<tr><td>LNK</td><td>libnexakotlin at commit <code>0d06593d</code>: <a href="https://gitlab.com/nexa/libnexakotlin/-/blob/0d06593d03be0d890de7b9208621214e7ae0f932/libnexakotlin/src/commonMain/kotlin/">libnexakotlin/src/commonMain/kotlin/</a> on gitlab.com/nexa/libnexakotlin</td></tr>
+<tr><td>WALLY</td><td>Wally wallet at commit <code>4934ac4d</code>: <a href="https://gitlab.com/wallywallet/wallet/-/blob/4934ac4d534fcd9cf6687af094dea15e49e543d3/shared/src/commonMain/kotlin/assets.kt">shared/src/commonMain/kotlin/assets.kt</a> on gitlab.com/wallywallet/wallet</td></tr>
+</tbody></table></div>
+<p>File:line references such as <code>token.kt:249-253</code> point into those directories at those commits. The main libnexakotlin files are <a href="https://gitlab.com/nexa/libnexakotlin/-/blob/0d06593d03be0d890de7b9208621214e7ae0f932/libnexakotlin/src/commonMain/kotlin/token.kt">token.kt</a>, <a href="https://gitlab.com/nexa/libnexakotlin/-/blob/0d06593d03be0d890de7b9208621214e7ae0f932/libnexakotlin/src/commonMain/kotlin/wallet.kt">wallet.kt</a>, <a href="https://gitlab.com/nexa/libnexakotlin/-/blob/0d06593d03be0d890de7b9208621214e7ae0f932/libnexakotlin/src/commonMain/kotlin/iWallet.kt">iWallet.kt</a>, <a href="https://gitlab.com/nexa/libnexakotlin/-/blob/0d06593d03be0d890de7b9208621214e7ae0f932/libnexakotlin/src/commonMain/kotlin/script.kt">script.kt</a>, <a href="https://gitlab.com/nexa/libnexakotlin/-/blob/0d06593d03be0d890de7b9208621214e7ae0f932/libnexakotlin/src/commonMain/kotlin/primitives.kt">primitives.kt</a> and <a href="https://gitlab.com/nexa/libnexakotlin/-/blob/0d06593d03be0d890de7b9208621214e7ae0f932/libnexakotlin/src/commonMain/kotlin/blockchainFactory.kt">blockchainFactory.kt</a>; the test referenced is <a href="https://gitlab.com/nexa/libnexakotlin/-/blob/0d06593d03be0d890de7b9208621214e7ae0f932/libnexakotlin/src/commonTest/kotlin/groupTokenTests.kt">groupTokenTests.kt</a>.</p>
+<hr>
+<h2>1. What is a Nexa token?</h2>
+<p>Nexa has <strong>native, consensus-level tokens</strong> called <em>Group Tokenization</em>. Miners validate token amounts the same way they validate NEX. Tokens do not depend on a smart contract or on a layer-2 data-carrier protocol (SPEC-GROUP, &quot;Introduction&quot;).</p>
+<ul>
+  <li><strong>Where the token lives:</strong> it is stored in the output's locking script. In Nexa, groups exist <strong>only in TEMPLATE-type outputs</strong> (script templates). The locking script fields are <code>[group id, group amount, template hash, hidden-args hash, visible args…]</code> (SPEC-TMPL &quot;Locking Script&quot;; SPEC-UTXO). If the first field is <code>OP_0</code>, the output has no group, and the amount field is left out.</li>
+  <li><strong>OP_GROUP:</strong> this is <strong>not</strong> an opcode in Nexa. SPEC-GROUP says: <em>&quot;Any references to adding 'OP_GROUP' to other outputs refers to the proposal to add this functionality to Bitcoin Cash and should be ignored.&quot;</em> The group is simply the first data push of a template output.</li>
+  <li><strong>Amount:</strong> this is a separate field in each output. It is a <strong>2-, 4- or 8-byte unsigned little-endian</strong> quantity (SPEC-GROUP &quot;For all outputs&quot;). See also <code>OP.groupAmount</code> in LNK <code>script.kt:1397-1411</code> and the parse check in <code>script.kt:2210-2213</code>. The NEX satoshi <code>amount</code> of the output is a separate value. Each token output still carries some NEX (dust): <code>txOutputFor(...)</code> uses <code>coinAmount ?: dust(cs)</code> (<code>blockchainFactory.kt:163-180</code>).</li>
+  <li><strong>Real example from SPEC-UTXO:</strong> <code>20 &lt;32-byte groupid …0000&gt; 08 &lt;00046bf414000000&gt; 51 14 &lt;20-byte args hash&gt;</code> This is the group id, an 8-byte amount, well-known template 1 (P2PKT), and the hidden-args hash.</li>
+  <li><strong>Consensus rule:</strong> for every group, the inputs must equal the outputs, unless an input in that group can mint or melt (SPEC-GROUP &quot;Transaction Validation algorithm&quot;).</li>
+</ul>
+<p><strong>Comparison with other token systems</strong></p>
+<div class="tbl"><table>
+<thead><tr><th></th><th>Nexa groups</th><th>Colored coins (OP_RETURN protocols, e.g. SLP)</th><th>ERC-20</th><th>BCH CashTokens</th></tr></thead>
+<tbody>
+<tr><td>Validated by miners</td><td>Yes</td><td>No (indexers/wallets)</td><td>Yes, but via contract code</td><td>Yes</td></tr>
+<tr><td>Where the amount lives</td><td>UTXO script template field</td><td>Off-chain interpretation of OP_RETURN</td><td>Contract storage mapping</td><td>UTXO token prefix</td></tr>
+<tr><td>Issuance control</td><td>Authority UTXOs (MINT/MELT/…)</td><td>Protocol-specific</td><td>Arbitrary contract code</td><td>Minting/mutable NFT capabilities</td></tr>
+<tr><td>Metadata</td><td>Genesis OP_RETURN + signed off-chain TDD</td><td>Protocol-specific</td><td>Contract <code>name()</code>/<code>symbol()</code> etc.</td><td>Off-chain BCMR registries</td></tr>
+</tbody></table></div>
+<p>The CashTokens and ERC-20 columns are general background knowledge. I did not check them against primary sources for this article <strong>[UNVERIFIED for those columns]</strong>.</p>
+<hr>
+<h2>2. What a token is made of, field by field</h2>
+<h3>2.1 Group ID</h3>
+<ul>
+  <li><strong>Size:</strong> at least 32 bytes and at most 520 bytes (the stack element limit). See <code>GroupId.GROUP_ID_MIN_SIZE = 32</code> and <code>GROUP_ID_MAX_SIZE = 520</code> in LNK <code>primitives.kt:213-214</code>. SPEC-TMPL defines Group ID as <em>&quot;a data string of 32 bytes or more&quot;</em>. One older part of SPEC-GROUP says &quot;20 or 32 bytes&quot;. That text comes from the BCH-era draft and conflicts with SPEC-TMPL, SPEC-UTXO and the code. The code accepts 32–520 bytes.</li>
+  <li><strong>Derivation (wallet side, LNK <code>wallet.kt:7053-7073</code> <code>findGroupId</code>):</strong>
+    <ol><li>Serialize the <strong>first input's outpoint</strong>.</li><li>If there is a genesis OP_RETURN, append it as a variable-sized byte vector.</li><li>Append a uint64 <code>nonce</code>. Its top authority bits are replaced by the requested authority flags: <code>(nonce and ALL_AUTHORITIES.inv()) or authorityFlags</code>.</li><li>Compute <code>hash = hash256(...)</code> (double SHA-256).</li><li>Increment the nonce until the <strong>last two bytes of the hash</strong> (<code>hash[30]&lt;&lt;8 | hash[31]</code>) equal the requested <strong>GroupIdFlags</strong>.</li></ol><p>The genesis authority output then carries <code>authorityFlags or nonce</code> as its amount (<code>wallet.kt:7088-7090</code>). This explains why &quot;normal&quot; group IDs end in <code>…0000</code>, e.g. NiftyArt <code>cacf…b90000</code> (SPEC-TDD test vector). I did not find a primary spec page that states the consensus check for this derivation. The description above comes from the code <strong>[consensus rule UNVERIFIED in spec]</strong>.</p></li>
+  <li><strong>Group ID flags</strong> are stored in the last byte of the 32-byte ID (LNK <code>primitives.kt:201-206, 268-286</code>):
+    <ul><li><code>COVENANT = 1</code>: <em>&quot;output script template must match input&quot;</em> (<code>isCovenanted()</code>).</li><li><code>HOLDS_NEX = 2</code>: a &quot;fenced&quot; group. The NEX in group inputs and outputs must add up, and the token quantity field <strong>must be 0</strong>. The output's NEX amount is used as the quantity (<code>isFenced()</code>, and <code>script.kt:2216-2220</code>).</li></ul></li>
+  <li><strong>Addresses:</strong> a group ID can also be written as a Nexa address. The spec says it uses cashaddr type 2 (SPEC-GROUP &quot;Definitions&quot;; e.g. <code>nexa:tr9v70…</code>). <code>GroupId(String)</code> accepts either the address form or hex (<code>primitives.kt:228-241</code>).</li>
+</ul>
+<h3>2.2 Quantity</h3>
+<ul>
+  <li>This is a signed 64-bit value in the code. A <strong>negative value (top bit set) means the output is an authority</strong>, and the token quantity is then 0 (<code>script.kt:2209-2215</code>). Normal token outputs therefore hold up to 2^63−1 units.</li>
+</ul>
+<h3>2.3 Subgroups</h3>
+<ul>
+  <li>A subgroup ID is <code>parentGroupId (32 bytes) + extra bytes</code> (<code>GroupId.subgroup()</code> at <code>primitives.kt:263-266</code>; <code>isSubgroup()</code>, <code>parentGroup()</code> and <code>subgroupData()</code> at <code>primitives.kt:255-261</code>).</li>
+  <li><strong>Maximum extra data:</strong> 520 − 32 = <strong>488 bytes</strong>. This follows from <code>GROUP_ID_MAX_SIZE</code> in the code. I did not find an explicit spec statement of this limit.</li>
+  <li>Subgroups are how Nexa does NFTs and SFTs (see §5). A subgroup is created by a holder of the parent's <strong>SUBGROUP</strong> authority (see §4).</li>
+</ul>
+<h3>2.4 Authority outputs and flags</h3>
+<p>Authority flags are stored in the 64-bit amount field (LNK <code>primitives.kt:332-345</code>):</p>
+<div class="tbl"><table>
+<thead><tr><th>Flag</th><th>Bit value</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>AUTHORITY</code></td><td><code>0x8000000000000000</code></td><td>Marks this output as an authority, not a token amount</td></tr>
+<tr><td><code>MINT</code></td><td><code>0x4000000000000000</code></td><td>Can create tokens</td></tr>
+<tr><td><code>MELT</code></td><td><code>0x2000000000000000</code></td><td>Can destroy tokens</td></tr>
+<tr><td><code>BATON</code></td><td><code>0x1000000000000000</code></td><td>Can create <strong>new authority outputs</strong> (pass on or copy authority)</td></tr>
+<tr><td><code>RESCRIPT</code></td><td><code>0x0800000000000000</code></td><td>Can move tokens/authorities to a different script (relevant for covenanted groups)</td></tr>
+<tr><td><code>SUBGROUP</code></td><td><code>0x0400000000000000</code></td><td>Can create subgroups</td></tr>
+<tr><td><code>ALL_AUTHORITIES</code></td><td>OR of all the above</td><td></td></tr>
+</tbody></table></div>
+<p>The lower bits of the authority amount hold the genesis <strong>nonce</strong> (<code>wallet.kt:7089</code>). <code>GroupInfo.isAuthority()</code> is at <code>primitives.kt:376</code>. The per-flag meanings above come from the code (names, comments, and how <code>txCompleter</code> uses them at <code>wallet.kt:3738-3890</code>). spec.nexa.org does not have a normative page listing these bits <strong>[exact consensus semantics of RESCRIPT/BATON UNVERIFIED in spec]</strong>.</p>
+<h3>2.5 Token genesis info (on-chain)</h3>
+<p>This is an <code>OP_RETURN</code> output in the genesis transaction (SPEC-TDD &quot;Token Genesis Information&quot;). Each field is a separate push. <code>OP_FALSE</code> means the field is empty.</p>
+<pre><code>OP_RETURN 88888888 &lt;ticker&gt; &lt;name&gt; &lt;uri&gt; &lt;32-byte doc hash&gt; [decimal_places]</code></pre>
+<ul>
+  <li><code>88888888</code> is the type identifier.</li>
+  <li>Ticker and name are UTF-8. If they differ from the TDD, <strong>the on-chain value wins</strong>.</li>
+  <li><code>decimal_places</code> is a script number, for display only. Clients should support 0–18 decimal places. If the field is missing, decimals = 0.</li>
+  <li>In the code, see <code>SatoshiScript.makeTokenDesc()</code> at <code>script.kt:2466-2480</code> and <code>GroupDescriptor.buildGenesisData()</code> at <code>token.kt:454-477</code>.</li>
+  <li>The OP_RETURN is part of the group ID hash preimage (<code>wallet.kt:7060</code>). <strong>You cannot change it after genesis.</strong></li>
+</ul>
+<h3>2.6 Token Description Document (off-chain)</h3>
+<p>This is a signed JSON file hosted at <code>&lt;uri&gt;</code>. The genesis commits to it with a SHA-256 hash. Details are in §3.</p>
+<hr>
+<h2>3. The Token Description Document (TDD) in detail</h2>
+<h3>3.1 Exact format (SPEC-TDD)</h3>
+<p>The file is an I-JSON <strong>array</strong> with two elements: a dictionary, then a base64 signature string.</p>
+<pre><code class="language-json">[{
+  &quot;ticker&quot;: &quot;string, required&quot;,
+  &quot;name&quot;: &quot;string, optional&quot;,
+  &quot;summary&quot;: &quot;string, optional&quot;,
+  &quot;description&quot;: &quot;string, optional&quot;,
+  &quot;legal&quot;: &quot;string, optional&quot;,
+  &quot;creator&quot;: &quot;string, optional&quot;,
+  &quot;contact&quot;: { &quot;method&quot;: &quot;string, optional&quot;, &quot;method2&quot;: &quot;string, optional&quot; },
+  &quot;icon&quot;: &quot;string, optional, URI.&quot;,
+  &quot;category&quot;:&quot;string, optional&quot;
+ },
+&quot;&lt;signature&gt;&quot;]</code></pre>
+<ul>
+  <li><strong>ticker:</strong> should be 6 characters or fewer.</li>
+  <li><strong>legal:</strong> put the full contract text here, not a link.</li>
+  <li><strong>contact:</strong> defined methods are <code>address</code>, <code>email</code>, <code>phone</code>, <code>twitter.com</code> and <code>facebook.com</code>. You can add your own; use a domain name or a protocol name with its colon.</li>
+  <li><strong>icon:</strong> a relative URI resolves against the TDD's domain. The icon is <strong>not hash-committed</strong>, so it can change after genesis. <em>&quot;You MUST NOT repurpose this field to store an NFT image.&quot;</em></li>
+  <li><strong>category:</strong> e.g. <code>coin</code>, <code>NFT</code>, <code>ticket</code>, <code>coupon</code>, <code>security</code>, <code>item</code>. Subcategories are dot-separated, e.g. <code>coin.wrapped fiat</code>.</li>
+  <li><em>&quot;Authors may add additional fields not defined in this document to the initial dictionary.&quot;</em></li>
+</ul>
+<p>libnexakotlin parses the file into <code>TokenDesc</code> (<code>token.kt:76-101</code>). It parses with <code>ignoreUnknownKeys = true</code> (<code>token.kt:231-233</code>), so it keeps only <code>ticker, name, summary, description, legal, creator, category, contact, icon</code> plus the NFT extensions <code>nftId</code> and <code>nftUrl</code> (<code>token.kt:87-89</code>). <code>nftId</code>/<code>nftUrl</code> are libnexakotlin extensions. I did not find them on the SPEC-TDD page.</p>
+<h3>3.2 What is hashed, and how</h3>
+<ul>
+  <li><strong>Hash input:</strong> the exact bytes of the dictionary, <em>from <code>{</code> to the matching <code>}</code> inclusive</em>. Do not re-serialize or reformat it. SPEC-TDD: <em>&quot;Do not change spacing or parse to JSON and then encode back to a string.&quot;</em></li>
+  <li><strong>Algorithm:</strong> single <strong>SHA-256</strong>. SPEC-TDD: &quot;SHA256 of dictionary&quot;; NiftyArt example <code>sha256sum nifty.json</code>. Code: <code>td.tddHash = libnexa.sha256(signedSlice)</code>, where <code>signedSlice = s.slice(s.indexOf(&quot;{&quot;) .. s.lastIndexOf(&quot;}&quot;))</code> (<code>token.kt:249-253</code>).
+    <ul><li>Note that the code slices from the <strong>first <code>{</code> to the last <code>}</code></strong> in the whole file. If your signature string or trailing text contains braces, the slice will be wrong.</li></ul></li>
+  <li><strong>Trailing newline:</strong> remove it when you build the file. The spec says to <code>truncate -s -1</code>.</li>
+  <li><strong>On-chain byte order:</strong> in the NiftyArt genesis tx in SPEC-TDD, the OP_RETURN pushes <code>0b4abe…91fab0</code>. That is the <strong>byte-reversed</strong> form of the <code>sha256sum</code> output <code>b0fa91…4a0b</code>. Rostrum's <code>document_hash</code> shows the non-reversed form. libnexakotlin's <code>makeTokenDesc</code> takes a <code>Hash256</code> and pushes <code>.hash</code>, which is Hash256's internal byte order (<code>script.kt:2466-2474</code>). <code>GroupDescriptor.buildGenesisData()</code> pushes the raw <code>sha256</code> bytes (<code>token.kt:473</code>). <strong>[UNVERIFIED]</strong> Whether these two code paths produce the same byte order is not confirmed. Test against the NiftyArt vector before you mint.</li>
+</ul>
+<h3>3.3 Signature</h3>
+<ul>
+  <li><strong>Who signs:</strong> the address that the <strong>genesis authority output is locked to</strong>. Use a pubkey-recoverable script such as P2PKT or P2PKH. Sign the genesis tx with SIGHASH ALL so nobody can malleate the OP_RETURN (SPEC-TDD &quot;Token Genesis Transaction Recommendations&quot;).</li>
+  <li><strong>Algorithm:</strong> the Satoshi <code>signmessage</code> algorithm: double-SHA-256 of <code>&quot;Bitcoin Signed Message:\n&quot;+msg</code>, a recoverable ECDSA signature, then base64.</li>
+  <li><strong>In the code:</strong>
+    <ul><li>Signing: <code>wallet.signMessage(tdd.signedSlice, genesisAddr)</code> → <code>Codec.encode64</code>, then the final string <code>&quot;[&quot; + doc + &quot;,\n\&quot;&quot; + sig + &quot;\&quot;\n]&quot;</code> (<code>token.kt:479-491</code>; also <code>makeTokenDescriptionDoc</code> at <code>token.kt:177-184</code>).</li><li>Verification: <code>libnexa.recoverPubkeyFromSignedMessage(signedSlice, sig)</code> (<code>token.kt:264</code>), then <code>signedBy(address)</code> compares the recovered pubkey against a P2PKT/template args hash or a P2PKH hash160 (<code>token.kt:192-216</code>).</li><li><code>decodeTokenDescDoc(grpId, doc, genesisTx)</code> finds the genesis authority output's address (<code>token.kt:280-299</code>).</li></ul></li>
+  <li><strong>Why the signature matters:</strong> without it, anyone can create a new group that points at your URL and impersonate your token (SPEC-TDD).</li>
+</ul>
+<h3>3.4 How a wallet fetches and verifies the TDD (libnexakotlin <code>getTokenInfo</code>, <code>token.kt:303-440</code>)</h3>
+<ol>
+  <li>Ask a P2P full node for token info (<code>get1TokenInfo</code>). If none supports it, ask Rostrum: <code>getTokenGenesisInfo</code> (<code>token.kt:338-401</code>).</li>
+  <li>Fetch the URI with <code>Url(uri).readText(5000 ms timeout)</code> (<code>token.kt:361</code>, <code>token.kt:414</code>).</li>
+  <li>Parse the document, recover the pubkey, and check that the signer is the genesis authority's address. If so, set <code>tddAddr</code> (<code>token.kt:374-375</code>, <code>418</code>).</li>
+  <li><strong>Hash check is done by Wally, not by <code>getTokenInfo</code>:</strong> WALLY <code>assets.kt:1019-1020</code> caches the TDD only if <code>tg.document_hash == td.tddHash.toHex()</code>. If it doesn't match, the TDD is still returned but not cached as good (<code>assets.kt:1026-1029</code>). Wally does not reject the document, so check your own UI logic.</li>
+</ol>
+<h3>3.5 Can the URL be IPFS?</h3>
+<ul>
+  <li><strong>Spec:</strong> <em>&quot;The <code>&lt;uri&gt;</code> field supports http and https protocols&quot;</em> (SPEC-TDD, &quot;URI&quot;). IPFS is not mentioned.</li>
+  <li><strong>libnexakotlin:</strong>
+    <ul><li><strong>Full-node path:</strong> only fetches if the URI starts with <code>http:</code> or <code>https:</code> (<code>token.kt:357</code>). An <code>ipfs://</code> URI is silently skipped, and you get only the ticker and name from genesis.</li><li><strong>Rostrum path:</strong> rejects blank, non-absolute, local and <code>file:</code> URLs, except on regtest (<code>token.kt:412</code>). It does not explicitly reject <code>ipfs://</code>, but it then calls the HTTP-client <code>Url.readText</code>. <strong>[UNVERIFIED]</strong> I expect that call to fail on a non-HTTP scheme, which would surface as an exception or a <code>TokenDataException</code>.</li><li><code>grep -i ipfs</code> finds <strong>no matches</strong> in libnexakotlin <code>commonMain</code> or in Wally <code>shared/src</code>.</li></ul></li>
+  <li><strong>What works:</strong> an <strong>HTTPS IPFS gateway URL</strong> (e.g. <code>https://&lt;gateway&gt;/ipfs/&lt;CID&gt;/token.json</code>) is an ordinary https URL, so it works. The hash plus signature protects integrity even if the gateway is untrusted. The gateway's availability is still your dependency. Also, NFT lookups derive <code>/raw/&lt;id&gt;</code> and <code>/public/&lt;id&gt;</code> paths from the TDD URL's host (WALLY <code>assets.kt:896-912</code>). A public gateway host won't serve those paths, so Wally falls back to niftyart.cash and nexa.space.</li>
+  <li><strong>What doesn't work:</strong> <code>ipfs://</code> URIs.</li>
+</ul>
+<hr>
+<h2>4. &quot;Is it like a JSON object I can put any data string I want into?&quot;</h2>
+<p><strong>Short answer: partly.</strong> The on-chain token is <strong>not</strong> a free-form JSON object. It is a fixed binary structure: a group ID, an amount, and template fields. Free-form data can go in a few specific places:</p>
+<div class="tbl"><table>
+<thead><tr><th>Place</th><th>Free-form?</th><th>Limits / rules</th></tr></thead>
+<tbody>
+<tr><td>Group ID (32 bytes)</td><td><strong>No.</strong> It is a hash of outpoint + OP_RETURN + nonce, with flag bits</td><td>Exactly 32 bytes for the parent group</td></tr>
+<tr><td>Amount</td><td><strong>No.</strong> It is a number or authority flags</td><td>2/4/8 bytes</td></tr>
+<tr><td><strong>Subgroup bytes</strong></td><td><strong>Yes, arbitrary bytes</strong></td><td>Up to 488 bytes (520 − 32, from the code). For spec-conforming NFTs these bytes MUST be the double SHA-256 of the NFT zip (SPEC-NFT)</td></tr>
+<tr><td>Genesis OP_RETURN</td><td>Fixed field order and meaning. The values are free UTF-8 text</td><td>Ticker, name and URI strings, a 32-byte hash, decimals. Max OP_RETURN size <strong>[UNVERIFIED]</strong>: I did not find Nexa's standardness limit in the sources I checked. The data is also immutable</td></tr>
+<tr><td>NFT OP_RETURN <code>88888889</code></td><td>Fixed fields: title, hash, URL, optional public-zip hash</td><td>Same as above</td></tr>
+<tr><td><strong>TDD JSON dictionary</strong></td><td><strong>Yes.</strong> Defined fields, <em>plus any additional fields you add</em></td><td>Hash-committed and signed, so it is immutable once genesis is mined. Stays off-chain. Wally/libnexakotlin ignore unknown keys</td></tr>
+<tr><td><strong>NFT zip <code>info.json</code></strong></td><td><strong>Yes.</strong> <code>data: {…}</code> is explicitly &quot;application-specific&quot;, and <code>bindata</code> is hex</td><td>Zip ≤ 50 MB recommended. <code>cardf</code>/<code>cardb</code> ≤ 2 MB each. Never re-zip the file</td></tr>
+</tbody></table></div>
+<p>So the off-chain TDD and the NFT <code>info.json</code> are the &quot;JSON objects you can put anything in&quot;. The chain commits only to their hash.</p>
+<hr>
+<h2>5. Authorities and lifecycle walkthrough</h2>
+<ul>
+  <li><strong>Creating authorities:</strong> the genesis tx creates one authority output, with <code>ALL_AUTHORITIES</code> by default (<code>iWallet.kt:699</code>).</li>
+  <li><strong>Passing authority on (BATON):</strong> an authority input that has BATON can create new authority outputs for the same group. In libnexakotlin, <code>txCompleter</code> brings the authority back to the wallet when BATON is set (<code>wallet.kt:3828</code>, <code>3889</code>). It also has a <code>NO_BATON_AUTHORITIES</code> flag (<code>wallet.kt:3775</code>).</li>
+  <li><strong>Destroying authorities:</strong> spend the authority output without recreating it. For example, send its NEX to a plain, ungrouped output.</li>
+  <li><strong>Fixed supply:</strong> mint the full supply, then destroy <em>every</em> authority output that carries MINT. Do not forget copies made with BATON. Keeping MELT allows only burns. The rule that nothing can mint without a MINT authority follows from the inputs-equal-outputs rule in SPEC-GROUP.</li>
+</ul>
+<p><strong>Walkthrough with nexa-cli (SPEC-GROUP RPCs)</strong></p>
+<ol>
+  <li>Create the token: <code>token new [address] NIFTY NiftyArt https://…/nifty.json &lt;sha256&gt;</code>. It returns the <code>groupIdentifier</code>, the tx and <code>tokenDescriptorSigningAddress</code>.</li>
+  <li>Sign the TDD: <code>signmessage &lt;signingAddr&gt; &quot;$(cat nifty.json)&quot;</code>. Then wrap it as <code>[dict, &quot;sig&quot;]</code> and host it.</li>
+  <li>Mint: <code>token mint &lt;group&gt; &lt;addr&gt; 100000</code></li>
+  <li>Transfer: <code>token send &lt;group&gt; &lt;addr&gt; 42</code></li>
+  <li>Melt: <code>token melt &lt;group&gt; &lt;addr&gt; 100</code></li>
+  <li>Renew or delegate authority: build a tx that spends a BATON authority and outputs new authority outputs. I did not confirm a dedicated <code>token authority create</code> RPC on spec.nexa.org <strong>[UNVERIFIED]</strong>.</li>
+  <li>Create an NFT: spend a SUBGROUP authority and output to <code>parent+hash256(zip)</code> with quantity 1 (see the Kotlin code below).</li>
+</ol>
+<hr>
+<h2>6. NFTs on Nexa</h2>
+<ul>
+  <li><strong>An NFT is a subgroup</strong> whose extra bytes are the <strong>double SHA-256 of a <code>.zip</code> file</strong> (SPEC-NFT &quot;As a subgroup&quot;).</li>
+  <li><strong>Zip contents:</strong>
+    <ul><li><code>info.json</code>, with fields <code>niftyVer</code> (&quot;2&quot;), <code>title</code>, <code>author</code>, <code>keywords</code>, <code>info</code>, <code>license</code> (all mandatory) and <code>series</code>, <code>appuri</code>, <code>category</code>, <code>bindata</code>, <code>data</code> (optional)</li><li><code>cardf.&lt;ext&gt;</code>, <code>cardb.&lt;ext&gt;</code>, <code>public.&lt;ext&gt;</code> and <code>owner.&lt;ext&gt;</code></li><li>Supported image and video formats are listed in SPEC-NFT.</li></ul></li>
+  <li><strong>Optional genesis OP_RETURN:</strong> <code>88888889 &lt;title&gt; &lt;hash256(zip)&gt; &lt;url&gt; [hash256(public zip)]</code>.</li>
+  <li><strong>Marketplace routes:</strong> <code>/token/{id}</code>, <code>/raw/{id}?chalby=…</code> and <code>/public/{id}</code>. Note that a <code>/public</code> file's hash will <em>not</em> match the group ID.</li>
+  <li><strong>How Wally finds and displays an NFT</strong> (WALLY):
+    <ol><li>It tries <code>td.nftUrl</code> first.</li><li>Then it tries <code>&lt;TDD host&gt;/raw/&lt;id&gt;</code> and <code>/public/&lt;id&gt;</code>.</li><li>Then it falls back to <code>niftyart.cash</code> and <code>nexa.space</code> (<code>assets.kt:94-105</code>, <code>896-912</code>, <code>1066-1067</code>).</li><li>It checks <code>hash256(zip) == subgroupData()</code>. It also accepts plain <code>sha256</code> as a &quot;nonstandard&quot; fallback (<code>assets.kt</code> ~1089-1101).</li><li>It shows the <code>cardf*</code> file as the front, <code>cardb*</code> as the back, and reads <code>info.json</code> (<code>assets.kt:485-568</code>).</li><li>Fungible tokens show the ticker, name and icon from the TDD (or from genesis if no TDD is available).</li></ol></li>
+</ul>
+<hr>
+<h2>7. Kotlin examples (libnexakotlin)</h2>
+<p>These APIs exist in the code at the cited lines. Wallet setup is omitted.</p>
+<pre><code class="language-kotlin">// 1. Build genesis OP_RETURN with a TDD commitment            (token.kt:443-477)
+val tddDict = &quot;&quot;&quot;{&quot;ticker&quot;:&quot;DEMO&quot;,&quot;name&quot;:&quot;Demo Token&quot;,&quot;summary&quot;:&quot;test&quot;}&quot;&quot;&quot;  // exact bytes!
+val gd = GroupDescriptor(ticker = &quot;DEMO&quot;, name = &quot;Demo Token&quot;,
+                         docUri = &quot;https://example.com/demo.json&quot;, doc = tddDict, decimals = 2)
+val opRet: SatoshiScript = gd.buildGenesisData()
+
+// 2. Create the group; returns unsent tx + GroupId           (iWallet.kt:699, wallet.kt:7083-7093)
+val authAddr = wallet.getnewaddress()
+val (genesisTx, gid) = wallet.newToken(authAddr, opRet, GroupIdFlags.NONE.v)  // default ALL_AUTHORITIES
+wallet.send(genesisTx)
+
+// 3. Signed TDD to host at docUri, signed by the genesis address  (token.kt:479-491)
+val tddFile: String? = gd.buildTokenDescriptionDoc(wallet, authAddr)
+
+// 4. Mint                                                    (iWallet.kt:712, wallet.kt:7096-7101)
+wallet.send(wallet.mintTokens(wallet.getnewaddress(), gid, 1_000_000L))
+
+// 5. Transfer tokens                                         (iWallet.kt:551-557)
+wallet.send(42L, PayAddress(&quot;nexa:...&quot;), gid)
+
+// 6. NFT as a subgroup                                       (primitives.kt:263, iWallet.kt:1156)
+val zip: ByteArray = /* your .nft zip bytes */ byteArrayOf()
+val nftGid = gid.subgroup(libnexa.hash256(zip))
+wallet.send(wallet.createSubgroup(wallet.getnewaddress(), nftGid, 1UL, null))
+
+// 7. Inspect an output                                       (script.kt:2192, primitives.kt:350, 376)
+val gi = someOutput.script.groupInfo(someOutput.amount)
+if (gi?.isAuthority() == true) println(GroupAuthorityFlags.toString(gi.authorityFlags))
+
+// 8. Fetch + verify a TDD                                    (token.kt:303)
+val td = getTokenInfo(gid, { /* ElectrumClient */ TODO() }, null)
+val ok = td.tddHash?.toHex() == td.genesisInfo?.document_hash &amp;&amp; td.tddAddr != null</code></pre>
+<pre><code class="language-kotlin">// PSEUDOCODE (no dedicated melt / authority-renew helper found in libnexakotlin)
+// melt: tx inputs = tokens + MELT authority; outputs = fewer tokens (+ authority back if BATON)
+// renew: input = authority with BATON; outputs = N new authority outputs with chosen flag subsets
+// burn mint: spend every MINT authority to ungrouped outputs only</code></pre>
+<p><code>wallet.send(tx)</code> is in <code>iWallet.kt:654</code>. Note that <code>wallet.getnewaddress()</code> is used in <code>groupTokenTests.kt:206</code>.</p>
+<hr>
+<h2>8. Pitfalls and security notes</h2>
+<ol>
+  <li><strong>The TDD hash breaks on whitespace.</strong> A trailing newline, editor reformatting, or re-encoding the JSON will all break it. libnexakotlin slices from the first <code>{</code> to the last <code>}</code>.</li>
+  <li><strong>Genesis data is permanent.</strong> The ticker, name, URI, hash and decimals are part of the group ID preimage. If they are wrong, you must create a new group (SPEC-TDD).</li>
+  <li><strong>Lock the genesis authority to a P2PKT/P2PKH address,</strong> otherwise TDD signature verification is impossible. Sign the genesis tx with SIGHASH ALL.</li>
+  <li><strong>Wally does not hard-fail on a hash mismatch.</strong> It only skips caching (WALLY <code>assets.kt:1020-1029</code>). Show unverified metadata as untrusted in your UI.</li>
+  <li><strong>Use http(s) only; <code>ipfs://</code> is not fetched.</strong> Use https rather than http, to prevent man-in-the-middle attacks on the domain binding.</li>
+  <li><strong>The <code>icon</code> URL is not committed.</strong> It can change at any time, so never use it as NFT content.</li>
+  <li><strong>Wallets should not show reserved tickers</strong> (NEX, ISO-4217 currency codes, stock tickers); SPEC-TDD recommends showing <code>???</code> instead.</li>
+  <li><strong>BATON copies authority.</strong> For a provably fixed supply, audit <em>every</em> authority UTXO.</li>
+  <li><strong>HOLDS_NEX groups need a 0 token quantity.</strong> COVENANT groups need the same script template on output as on input (RESCRIPT is needed to change it).</li>
+  <li><strong>Never re-zip an NFT.</strong> Its hash is its identity.</li>
+  <li><strong>Each token output needs dust NEX.</strong> Fees are paid in NEX.</li>
+</ol>
+<hr>
+<h2>Not verified</h2>
+<ul>
+  <li>The consensus-level rules for the group ID / nonce / flags derivation, and the exact consensus meaning of the BATON and RESCRIPT bits. These come from the code only.</li>
+  <li>The maximum OP_RETURN size for genesis data.</li>
+  <li>Whether <code>makeTokenDesc</code> and <code>GroupDescriptor.buildGenesisData</code> push the hash in the same byte order.</li>
+  <li>How <code>Url.readText</code> behaves with <code>ipfs://</code> (likely failure).</li>
+  <li>An RPC for renewing authorities.</li>
+  <li>The ERC-20 and CashTokens comparison details.</li>
+</ul>
+<nav class="share" aria-label="Share this article"><span class="share-label">Share:</span><a class="share-x" href="https://x.com/intent/post?text=Nexa%20tokens%20explained%3A%20groups%2C%20authorities%20and%20the%20token%20description%20document&amp;url=https%3A%2F%2Fjqrgen.com%2Fpresentations%2Farticles%2Fnexa-tokens-explained%2F" target="_blank" rel="noopener noreferrer">X</a><a class="share-linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fjqrgen.com%2Fpresentations%2Farticles%2Fnexa-tokens-explained%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="share-reddit" href="https://www.reddit.com/submit?url=https%3A%2F%2Fjqrgen.com%2Fpresentations%2Farticles%2Fnexa-tokens-explained%2F&amp;title=Nexa%20tokens%20explained%3A%20groups%2C%20authorities%20and%20the%20token%20description%20document" target="_blank" rel="noopener noreferrer">Reddit</a><a class="share-hackernews" href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fjqrgen.com%2Fpresentations%2Farticles%2Fnexa-tokens-explained%2F&amp;t=Nexa%20tokens%20explained%3A%20groups%2C%20authorities%20and%20the%20token%20description%20document" target="_blank" rel="noopener noreferrer">Hacker News</a><button type="button" class="share-copy" data-url="https://jqrgen.com/presentations/articles/nexa-tokens-explained/" data-done="Link copied">Copy link</button><span class="share-status" role="status" aria-live="polite"></span></nav>
+</article>
+<footer class="site">Source: <a href="https://github.com/jQrgen/presentations">github.com/jQrgen/presentations</a></footer>
+</main>
+<script>
+document.addEventListener("click", function (e) {
+  var b = e.target.closest && e.target.closest(".share-copy"); if (!b) return;
+  var url = b.getAttribute("data-url"), st = b.parentNode.querySelector(".share-status");
+  var done = function () { if (st) { st.textContent = b.getAttribute("data-done"); setTimeout(function () { st.textContent = ""; }, 2500); } };
+  var fallback = function () { var i = document.createElement("input"); i.value = url; document.body.appendChild(i); i.select(); try { document.execCommand("copy"); done(); } catch (x) { window.prompt("", url); } i.remove(); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, fallback); else fallback();
+});
+</script>
+</body>
+</html>
