@@ -4,7 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nexa Tailstorm: live DAG (stormtest demo)</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect x=%272%27 y=%272%27 width=%2712%27 height=%2712%27 rx=%272%27 fill=%27%23e0b341%27/%3E%3C/svg%3E">
+<link rel="icon" href="assets/logo/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="assets/logo/nexa-stormtest.svg">
+<link rel="apple-touch-icon" href="assets/logo/nexa-stormtest-192.png">
 <meta name="description" content="Live view of a Tailstorm DAG on a private Nexa stormtest chain: subblocks, parents and summary blocks, updating about every second.">
 <style>
 :root{--bg:#0a0c10;--panel:#12151c;--panel2:#181c25;--line:#262b36;--text:#e7e3d8;--muted:#8d93a1;--gold:#e0b341;--gold2:#f5d27a;--golddim:#6f5a22;--sub:#9fb3c8;--ok:#5fbf7f;--warn:#e8704f}
@@ -12,7 +14,7 @@
 html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 a{color:var(--gold2)}
 .wrap{max-width:1280px;margin:0 auto;padding:22px 18px 40px}
-header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 h1{margin:0;font-size:26px;font-weight:700;letter-spacing:.2px}
 h1 .g{color:var(--gold)}
 .tag{font-size:12px;color:var(--gold);border:0;background:#e0b3411a;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.08em}
@@ -540,10 +542,12 @@ html.kiosk .ls-upd{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:
 html.kiosk.ls-isstale .esth{display:none}
 
 </style>
+<style>.netlogo{width:44px;height:44px;flex:none}html.kiosk .netlogo{width:3.2vw;height:3.2vw}</style>
 </head>
 <body>
 <div class="wrap">
 <header>
+  <img class="netlogo" src="assets/logo/nexa-stormtest.svg" alt="Nexa stormtest network logo" title="Nexa stormtest (test network variant of the Nexa logo)" width="44" height="44">
   <h1><span class="g">Nexa Tailstorm</span> · <span class="liveword">live</span><span class="simword">simulated</span> blocks</h1>
   <span class="tag">STORMTEST DEMO · 4 TEST MINERS</span>
   <span class="rd" id="explainer">Read the explainer: <a href="https://jqrgen.medium.com/seconds-not-minutes-what-tailstorm-means-for-developers-building-on-nexa-741c166935a9" rel="noopener">article on Medium</a> · <a href="https://x.com/jQrgensn/status/2105689136757604437" rel="noopener">thread on X</a> · <a href="mining-rewards/">How Tailstorm decentralizes mining rewards</a></span>
