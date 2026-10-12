@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-06",
+  "updated": "2026-10-12",
   "source": "jQrgen's AI team roster",
   "people": [
     {
@@ -329,19 +329,6 @@
         "Nexa security team"
       ],
       "contributions": []
-    },
-    {
-      "name": "Wally Dev",
-      "type": "ai",
-      "role": "Wally Wallet on Android, desktop and iOS",
-      "department": "Engineering",
-      "groups": [
-        "Nexa app engineering team",
-        "Nexa product & design team",
-        "Nexa security team",
-        "Nexa design review"
-      ],
-      "contributions": []
     }
   ],
   "groups": [
@@ -359,7 +346,6 @@
     {
       "name": "Nexa app engineering team",
       "members": [
-        "Wally Dev",
         "Rostrum dev",
         "Nexa solution architect",
         "Nexa QA & infra",
@@ -383,7 +369,6 @@
       "members": [
         "Nexa product manager",
         "Nexa designer",
-        "Wally Dev",
         "Rostrum dev",
         "Nexa solution architect",
         "Nexa DevRel & BON grants"
@@ -415,7 +400,6 @@
         "Nexa security & audit",
         "Nexa lead dev",
         "Nexa core dev",
-        "Wally Dev",
         "Rostrum dev",
         "Nexa solution architect"
       ]
@@ -425,7 +409,6 @@
       "members": [
         "Nexa designer",
         "Nexa Presentations",
-        "Wally Dev",
         "Nexa game dev",
         "Nexa media & communications",
         "Nexa product manager"
