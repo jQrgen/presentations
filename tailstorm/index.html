@@ -668,6 +668,9 @@ html.kiosk.ls-isstale .esth{display:none}
 <script>
 "use strict";
 const GIST = "8eb96c91e7354760a1c0394652c4bbf7";
+// stable endpoints on stormtest-1 (Caddy, real TLS), used when the quick-tunnel pointer is unreachable or blocked
+const FALLBACK = ["https://stormtest.jqrgen.com", "https://128-140-8-11.sslip.io"];
+let fbIdx = 0, lastBad = null;
 const POLL_MS = 1000, STALE_S = 20;
 let K = 120;   // updated from the feed's k
 const $ = id => document.getElementById(id);
@@ -692,11 +695,11 @@ const hhmmss = t => t ? new Date(t * 1000).toLocaleTimeString([], {hour: "2-digi
 async function getPointer() {
   lastPointerAt = Date.now();
   try {
-    const r = await fetch(`https://api.github.com/gists/${GIST}`, {cache: "no-store"});
+    const r = await tfetch(`https://api.github.com/gists/${GIST}`, 8000);
     if (r.ok) { const j = await r.json(); const p = JSON.parse(j.files["tunnel.json"].content); if (p.url) return p.url; }
   } catch (e) {}
   try {
-    const r = await fetch(`https://gist.githubusercontent.com/jQrgen/${GIST}/raw/tunnel.json?cb=${Date.now()}`, {cache: "no-store"});
+    const r = await tfetch(`https://gist.githubusercontent.com/jQrgen/${GIST}/raw/tunnel.json?cb=${Date.now()}`, 8000);
     if (r.ok) { const p = await r.json(); if (p.url) return p.url; }
   } catch (e) {}
   return null;
@@ -707,7 +710,12 @@ const tfetch = (u, ms) => fetch(u, {cache: "no-store", signal: (window.AbortSign
 async function poll() {
   if (busy) return; busy = true;
   try {
-    if (!dataUrl) { const u = await getPointer(); if (u) dataUrl = u.replace(/\/$/, "") + "/dag.json"; }
+    if (!dataUrl) {
+      let u = null;
+      if (Date.now() - lastPointerAt > 60000) { u = await getPointer(); if (u && u.replace(/\/$/, "") + "/dag.json" === lastBad) u = null; }
+      if (!u) u = FALLBACK[fbIdx++ % FALLBACK.length];
+      dataUrl = u.replace(/\/$/, "") + "/dag.json";
+    }
     if (!dataUrl) throw new Error("no pointer");
     const r = await tfetch(dataUrl + (dataUrl.includes("?") ? "&" : "?") + "t=" + Date.now());
     if (!r.ok) throw new Error("HTTP " + r.status);
@@ -724,7 +732,7 @@ async function poll() {
   } catch (e) {
     fails++;
     // the tunnel URL changes when the publisher restarts: re-read the pointer (at most once a minute)
-    if (fails >= 3 && Date.now() - lastPointerAt > 60000 && !new URLSearchParams(location.search).get("src")) dataUrl = null;
+    if (fails >= 2 && !new URLSearchParams(location.search).get("src")) { lastBad = dataUrl; dataUrl = null; fails = 0; }
   }
   busy = false;
   updateMode();
