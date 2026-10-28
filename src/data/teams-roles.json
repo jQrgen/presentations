@@ -17,6 +17,10 @@
     }
   },
   "Trading": {
+    "340aa3f1-3b7e-4de8-ad6a-30ad5a9d12dd": {
+      "name": "Cauldron Trader",
+      "role": "Runs jQrgen's personal trading desk"
+    },
     "c63239ab-d6f9-41e1-b7f9-145c6e8722c9": {
       "name": "Screener",
       "role": "First desk step: scans for simulated trade ideas"

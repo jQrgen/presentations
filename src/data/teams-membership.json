@@ -17,6 +17,7 @@
     {
       "team": "Trading",
       "members": [
+        { "id": "340aa3f1-3b7e-4de8-ad6a-30ad5a9d12dd", "name": "Cauldron Trader" },
         { "id": "c63239ab-d6f9-41e1-b7f9-145c6e8722c9", "name": "Screener" },
         { "id": "392bcfe4-ea15-4f84-ab39-4d76a8cadd93", "name": "Cartographer" },
         { "id": "7178889a-2ed9-482b-8d16-4f4a939325c5", "name": "Risk Officer" },
